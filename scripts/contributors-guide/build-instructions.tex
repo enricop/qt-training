@@ -1,0 +1,67 @@
+\subsection{Build Instructions}
+
+\begin{slide}[fragile]
+  \frametitle{Prequisites}
+  \begin{itemize}
+    \item Installing required packages on Debian/Ubuntu:
+    \item[] \begin{shell}
+apt-get install texlive-science texlive-pictures
+apt-get install texlive-latex-extra texlive-formats-extra
+apt-get install latex-beamer pdfjam transfig graphicsmagick
+    \end{shell}
+    \item[] {\footnotesize (Use TexLive 2009 for best compatibility.)}
+    \item Obtain the source from gitorious:
+    \item[] \begin{shell}
+git clone git@gitorious.org:qt-training/course-material.git
+    \end{shell}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametile{Building Training Modules}
+  \begin{itemize}
+    \item Building separate modules:
+    \item[] \begin{shell}
+cd course-material/slides
+pdflatex fundamentals/fundamentals.tex
+    \end{shell}
+    {\footnotesize(For correct table of contents and page numbers call the above command a second time.)}
+    \item Building entire courses:
+    \item[] \begin{shell}
+cd course-material/slides
+pdflatex courses/essential-widgets.tex
+    \end{shell}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}
+  \frametitle{Customization}
+  \begin{itemize}
+    \item Customize the title page: slides/config.tex
+    \item Customize the background:
+    \begin{itemize}
+      \item images/titlepage-background.png
+      \item images/background.png
+    \end{itemize}
+    \item Change fonts and styles: slides/beamerthemeQtTraining.sty
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Print Production}
+  \begin{itemize}
+    \item Beamer slides are generate in 4:3 format
+    \item Size of a slide: 128mm x 96mm (5.04in x 3.78in)
+    \item Creating handouts using pdfjam:
+    \item[] \begin{shell}
+pdfnup \
+  --nup "2x2" \
+  --offset ".0cm -.25cm" \
+  --delta ".1cm .2cm" \
+  --frame true \
+  --scale 0.9 \
+  contributors-guide.pdf --outfile contributors-guide-handout.pdf
+    \end{shell}
+    {\footnotesize (The handouts are meant to scale to both A4 and US Letter.)}
+  \end{itemize}
+\end{slide}

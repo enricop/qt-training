@@ -1,0 +1,157 @@
+\subsection{Formatting Slides}
+
+\begin{slide}
+  \frametitle{Manual Text Formatting}
+  \begin{itemize}
+    \item Font styles:
+    \item[]
+      \begin{tabular}{l | l}
+        \footnotesize{\texttt{\textbackslash textit\{Italics\} }} & \textit{Italics ...}  \\
+        \footnotesize{\texttt{\textbackslash textbf\{Bold\}    }} & \textbf{Bold ...}     \\
+        \footnotesize{\texttt{\textbackslash texttt\{Teletype\}}} & \texttt{Teletype ...} \\
+      \end{tabular}
+    \item Font sizes:
+    \item[]
+      \begin{tabular}{l | c}
+        \footnotesize{\texttt{\textbackslash footnotesize\{sample text\}}} & \footnotesize{sample text} \\
+        \footnotesize{\texttt{\textbackslash small\{sample text\}       }} & \small{sample text}        \\
+        \footnotesize{\texttt{\textbackslash normalsize\{sample text\}  }} & \normalsize{sample text}   \\
+        \footnotesize{\texttt{\textbackslash large\{sample text\}       }} & \large{sample text}        \\
+        \footnotesize{\texttt{\textbackslash Large\{sample text\}       }} & \Large{sample text}        \\
+        \footnotesize{\texttt{\textbackslash LARGE\{sample text\}       }} & \LARGE{sample text}        \\
+        \footnotesize{\texttt{\textbackslash huge\{sample text\}        }} & \huge{sample text}         \\
+        \footnotesize{\texttt{\textbackslash Huge\{sample text\}        }} & \Huge{sample text}         \\
+      \end{tabular}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Semantic Text Discrimination}
+  \begin{itemize}
+    \item Custom control sequences for referencing C++ symbols:
+      \begin{tabular}{l|l}
+        \footnotesize{\verb^\iCls{QWidget}^} & \footnotesize{\iCls{QWidget}} \\
+        \footnotesize{\verb^\iClsFn{QWidget}{show}^} & \footnotesize{\iClsFn{QWidget}{show}} \\
+        \footnotesize{\verb^\iClsFnPar{QWidget}{setVisible}{bool}^} & \footnotesize{\iClsFnPar{QWidget}{setVisible}{bool}} \\
+        \footnotesize{\verb^\hClsFn{QWidget}{show}^} & \footnotesize{\hClsFn{QWidget}{show}} \\
+        \footnotesize{\verb^\iConcept{Dynamic Linking}^} & \footnotesize{\iConcept{Dynamic Linking}}\\
+        \footnotesize{\verb^About ...\xConcept{Dynamic Linking}^} & \footnotesize{About ...\xConcept{Dynamic Linking}}\\
+      \end{tabular}
+    %\item Emphasing Inlined:
+    %  \verb^\emph{Manual text formatting should be avoided!}^
+    %\item[] \emph{Manual text formatting should be avoided!}
+    \item Emphasis:
+      \begin{verbatim}
+\begin{block}{}
+{\emph{Manual text formatting should be avoided!}}
+\end{block} \end{verbatim}
+    \item[] \begin{block}{} {\emph{Manual text formatting should be avoided!}}
+      \end{block}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}
+  \frametitle{Referencing Resources}
+  \begin{itemize}
+    \item Referencing Qt resources:
+    \item[]
+    \begin{tabular}{l | l}
+      \footnotesize{\texttt{\textbackslash qthome\{<path>\}\{<Title>\}}} & \qthome{<path>}{<Title>}                           \\
+      \footnotesize{\texttt{\textbackslash doc\{doc-file.html\}\{<Title>\}           }} & \doc{doc-file.html}{<Title>}        \\
+      \footnotesize{\texttt{\textbackslash doccreator\{doc-file.html\}\{<Title>\}    }} & \doccreator{doc-file.html}{<Title>} \\
+    \end{tabular}
+    \item Referencing training resources:
+    \item[]
+    \begin{tabular}{l | l}
+      \footnotesize{\texttt{\textbackslash demo\{<path>\}}} & \demo{<path>} \\
+    \end{tabular}
+    % TODO: web URIs!
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Adding Images}
+  \begin{itemize}
+    \item Custom commands:
+    \item[]
+      \begin{tabular}{l|l}
+        \footnotesize{\verb^\centeredImageFullHeight{<path>}^} & fill entire slide  \\
+        \footnotesize{\verb^\flushedImage{<path>}^           } & embed in text flow \\
+        \footnotesize{\verb^\flushedImageDoubleWidth{<path>}^} & scaled by 2        \\
+      \end{tabular}
+    \item Adding spaces:
+    \item[]
+    \begin{tabular}{l|l}
+      \footnotesize{\verb^\vspace{1cm}^} & vertical space   \\
+      \footnotesize{\verb^\hspace{1cm}^} & horizontal space \\
+    \end{tabular}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Embedding Source Code}
+  \begin{itemize}
+    \item Embedding C++ code:
+      {\footnotesize
+        \begin{verbatim}
+\begin{slide}[fragile]
+  \begin{itemize}
+    \item[]
+      \begin{cpp}
+QWidget *widget = new QWidget;
+// etc...
+      \end{cpp}
+      % etc...\end{verbatim}
+      }
+    \item Custom environments: "cpp", "qmake", "shell", "xml"
+    \item Example:
+      \begin{cpp}
+QWidget *widget = new QWidget;
+// etc...
+      \end{cpp}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Step by Step: Hello World in Qt}
+  \begin{itemize}
+  \item[]
+    \begin{cpp}
+#include <QtGui>
+    \end{cpp}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Step by Step: Hello World in Qt}
+  \begin{itemize}
+  \item[]
+    \begin{cpp}
+#include <QtGui>
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    return app.exec();
+}
+    \end{cpp}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Step by Step: Hello World in Qt}
+  \begin{itemize}
+  \item[]
+    \begin{cpp}
+#include <QtGui>
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QLabel label("Hello, world!");
+    label.show();
+    return app.exec();
+}
+    \end{cpp}
+  \end{itemize}
+\end{slide}

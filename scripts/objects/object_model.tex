@@ -1,0 +1,245 @@
+\subsection{Common Features of Qt's Object Model}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1244}
+  \frametitle{Qt's C++ Object Model - \iCls{QObject}}
+  \begin{itemize}
+  \item \iCls{QObject} is the heart of Qt's object model
+  \item Adds features to C++, like ...
+    \begin{itemize}
+    \item Signals and slots
+    \item Properties
+    \item Event handling
+    \item Memory management
+    \item ...
+   \end{itemize}
+ \item Some features are standard C++
+    \begin{itemize}
+    \item Some use Qt's meta-object system 
+    \end{itemize}
+  \item \iCls{QObject} has no visual representation
+
+ \end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{0550} \label{parent_child} \frametitle{Object Tree}
+  \xConcept{Parent/child relationship}
+\begin{itemize}
+  \item \iCls{QObjects} organize themselves in object trees
+    \begin{itemize}
+    \item Based on parent-child relationship
+    \end{itemize}
+  \flushedImage{ooo/reference}
+  \item \texttt{QObject(QObject *parent = 0)}
+    \begin{itemize}
+    \item Parent adds object to list of children
+    \item Parent owns children
+    \end{itemize}
+  \item Construction/Destruction
+    \begin{itemize}
+   \item Tree can be constructured in any order
+    \item Tree can be destroyed in any order
+      \begin{itemize}
+      \item if object has parent: object first removed from parent
+      \item if object has children: deletes each child first
+      \item No object is deleted twice
+      \end{itemize}
+    \end{itemize}
+ \end{itemize}
+ \medskip
+  \textit{Note: Parent-child relationship is NOT inheritance}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{0552}\frametitle{Creating Objects}
+  \xConcept{QObject!allocating}
+ \begin{itemize}
+
+ \item \textbf{On Heap} - \iCls{QObject} with parent:
+   \begin{itemize}
+   \begin{cpp}
+QLabel *label = new QLabel("Some Text", parent);
+    \end{cpp}
+\item \texttt{QLayout::addWidget()} and \texttt{QWidget::setLayout()} reparent children automatically
+    \end{itemize}
+
+    \item \textbf{On Stack} - \texttt{QObject} without parent:
+    \begin{itemize}
+    \item \texttt{QFile}, usually local to a function
+    \item \texttt{QApplication} (local to \texttt{main()})
+    \item Top level \texttt{QWidget}s: \texttt{QMainWindow}
+    \end{itemize}
+    \medskip
+\item \textbf{On Stack} - "value" types  \doc{qvariant.html\#Type-enum}{\texttt{QVariant::Type}}
+    \begin{itemize}    
+     \begin{cpp}
+QString name;
+QStringList list;
+QColor color;
+    \end{cpp}
+    \item Do not inherit QObject
+    \item Passed by value everywhere
+    \item Exception: QString is implicitly shared (COW strategy)
+          % which is different from std::string (nowadays deep-copied for simplicity)
+   \end{itemize}
+\item \textbf{Stack or Heap} - \texttt{QDialog} - depending on lifetime 
+  \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+\begin{slide}{1243}
+  \frametitle{Qt's Widget Model - \texttt{QWidget}}
+ \flushedImage{ooo/qobject-inherited}
+  \begin{itemize}
+ \item \textbf{Derived from \texttt{QObject}}
+    \begin{itemize}
+    \item Adds visual representation
+    \end{itemize}
+  \item \textbf{Base of user interface objects}
+  \item \textbf{Receives events}
+    \begin{itemize}
+    \item e.g. mouse, keyboard events
+    \end{itemize}
+  \item \textbf{Paints itself on screen}
+    \begin{itemize}
+    \item Using styles
+    \end{itemize}
+
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{0551}\frametitle{Object Tree and QWidget}
+  \begin{itemize}
+  \item \textbf{\texttt{new QWidget(0)}}
+    \begin{itemize}
+    \item Widget with no parent $=$ "window"
+    \end{itemize}
+  \item \textbf{QWidget's children}
+    \begin{itemize}
+    \item Positioned in parent's coordinate system
+    \item Clipped by parent's boundaries
+    \end{itemize}
+  \item \textbf{QWidget parent }
+    \begin{itemize}
+    \item Propagates state changes
+      \begin{itemize}
+      \item hides/shows children when it is hidden/shown itself
+      \item enables/disables children when it is enabled/disabled itself
+      \end{itemize}
+    \end{itemize}
+  \item \textbf{\textit{Tristate} mechanism}
+    \begin{itemize}
+      \item For hide/show and enable/disable, ensures that e.g. an
+        explicitly hidden child is not shown when the parent is shown.
+      \item \demo{objects/ex-showhide}
+      \end{itemize}
+ \end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{0553}\frametitle{Widgets that contain other widgets}
+  \xConcept{Geometry Management!Basic}
+  \flushedImage{objects/images/widgetGrouping}
+  
+  \begin{itemize}
+  \item Container Widget
+    \begin{itemize}
+    \item Aggregates other child-widgets
+    \end{itemize}
+  \item Use layouts for aggregation
+    \begin{itemize}
+    \item In this example: \iCls{QHBoxLayout} and \\ \iCls{QVBoxLayout}
+    \item Note: Layouts are \emph{not} widgets
+    \end{itemize}
+  \item Layout Process
+    \begin{itemize}
+    \item Add widgets to layout
+    \item Layouts may be nested
+    \item Set layout on container widget
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{0555}
+  \frametitle{Example Container Widget}
+  \begin{cpp}
+// container (window) widget creation
+QWidget container;          // top-level widget on stack 
+QLabel* label = new QLabel("Note:", container);
+QTextEdit* edit = new QTextEdit(container);
+QPushButton* clear = new QPushButton("Clear", container);
+QPushButton* save = new QPushButton("Save", container);
+    \end{cpp} 
+  \flushedImage{objects/images/widgetGrouping}
+   \begin{cpp}
+// widget layout
+QVBoxLayout* outer = new QVBoxLayout();
+outer->addWidget(label);
+outer->addWidget(edit);
+QHBoxLayout* inner = new QHBoxLayout();
+inner->addWidget(clear);
+inner->addWidget(save);
+    \end{cpp} 
+  \begin{cpp}
+container.setLayout(outer);
+outer->addLayout(inner); // nesting layouts
+    \end{cpp}
+  \demo{objects/ex-simplelayout}
+\end{slide}
+
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{976}
+  \frametitle{Questions And Answers}\label{parentChildQuestions}
+  \begin{questionize}
+  \item What is an object tree?
+  \item Which pointers to QObjects do you need to keep around?
+  \item What does it mean when a QWidget has no parent?
+%   \item What is \texttt{qmake}, and when is it a good idea to use it?
+  \item Allocate on heap or stack? \\ \texttt{QWidget; QStringList;
+      QApplication; QString; QFile}
+%   \item Name places where you can find answers about Qt problems
+  \item Name some layout managers and when to use them
+  \item What does it mean to nest layouts?
+ \end{questionize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{0564}\frametitle{Lab: Your first Qt Application}
+  \label{first_app}
+  \xProject{Your first Qt Application}
+  \flushedImage{objects/images/firstApplication}
+  \begin{itemize}
+  \item \textbf{Implement the application shown here}
+    \begin{itemize}
+   \item Search the widgets
+      \begin{itemize}    
+      \item \doc{gallery-windowsvista.html}{Qt Widget Gallery}
+      \item ... and choose your os style
+      \end{itemize}
+    \item Layouts: \texttt{QHBoxLayout, QVBoxLayout}
+      \begin{itemize}
+      \item See previous slides how to use them
+      \end{itemize}
+    \end{itemize}
+  \item \textbf{Optionally}
+    \begin{itemize} 
+    \item Provide a window title
+    \item Add Edit, Remove buttons
+      \begin{itemize}
+      \item  On the right of list
+      \end{itemize}
+    \item Use group box to provide list caption
+    \end{itemize}
+ \end{itemize}
+  \medskip
+  \lab{objects/lab-firstapp} \newline
+\end{slide}

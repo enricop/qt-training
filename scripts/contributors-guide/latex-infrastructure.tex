@@ -1,0 +1,33 @@
+\subsection{LaTeX Infrastructure}
+
+\begin{slide}
+  \frametitle{Anatomy of a Training Module}
+  \begin{itemize}
+    \item context.tex
+    \begin{itemize}
+      \item States objectives and includes all subsections
+      \item Defines a section (of a training course)
+    \end{itemize}
+    \item{} [subsection].tex
+    \begin{itemize}
+      \item Single subsection (about 8 slides)
+      \item There should be about 3-4 subsection files
+    \end{itemize}
+    \item{} [module name].tex ... tex file to build this module stand-alone
+    \item subfolder "ooo" ... LibreOffice vector graphics
+    \item subfolder "images" ... all other images
+  \end{itemize}
+\end{slide}
+
+\begin{slide}
+  \frametitle{Global Helper Files}
+  \begin{itemize}
+    \item config.tex ... build configuration (add to .gitignore)
+    \item base.tex ... custom escape sequences and helper commands
+    \item frontpage.tex ... generates the front page
+    \item disclaimer.tex ... trademark disclaimers
+    \item handout.tex ... needed for generation of handouts
+    \item beamerthemeQtTraining.sty ... global theme file (styles, fonts, etc.)
+    \item picins.sty, version.sty ... aux. theme files
+  \end{itemize}
+\end{slide}

@@ -1,0 +1,18 @@
+% this is the driver for printout
+\documentclass[handout,t]{beamer}
+\input{config}
+\input{base}
+
+\setboolean{qt-fancy-footer}{true}
+% Highlighting in {alltt}, printing style:
+\newcommand{\highlight}[1]{\textbf{#1}}
+
+%------------ PAGES ----------------------------------------
+\makeindex{Concepts}
+\makeindex{Classes}
+\makeindex{Examples}
+\makeindex{Projects}
+\begin{document}
+\input{pages.tex}
+\end{document}
+

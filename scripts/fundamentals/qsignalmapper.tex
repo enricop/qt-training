@@ -1,0 +1,32 @@
+\subsection{QSignalMapper}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0480}\frametitle{QSignalMapper}
+\label{qsignalmapper}
+\begin{itemize}
+  \item Beginners often try to do the following:
+\begin{verbatim}
+connect( button, SIGNAL( clicked() ), 
+         this, SLOT( action(7) ) );
+\end{verbatim}
+  \item THIS IS WRONG! \iConcept{connect} is only a tool for
+    \textit{connecting}, it is not possible to pass arguments to the slot
+    when connecting.
+  \item The above can however be obtained using the class
+    \iCls{QSignalMapper}.
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0481}\frametitle{QSignalMapper}
+\small
+\begin{alltt}
+\iCls{QPushButton}* but1 = new QPushButton("Button 1", this);
+QPushButton* but2 = new QPushButton("Button 2", this);
+\iCls{QSignalMapper}* mapper = new QSignalMapper( this );
+mapper->setMapping( but1, 1 );
+mapper->setMapping( but2, 2 );
+connect(but1, SIGNAL(clicked()), mapper, SLOT(map()));
+connect(but2, SIGNAL(clicked()), mapper, SLOT(map()));
+connect(mapper, SIGNAL(mapped(int)), this, SLOT(action(int)));
+\end{alltt}
+\end{slide}

@@ -1,0 +1,347 @@
+\subsection{Plug-ins}
+\label{plugins}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0365}\frametitle{Conceptual View}
+\xConcept{Plug-ins!Concept}
+\begin{itemize}
+\item A plugin is a dynamically loadable module (\texttt{.dll} on Microsoft
+  Windows, \texttt{.so} on UNIX, and \texttt{.dylib} on Macintosh).
+\item A host application loads the plugins into its address space, and can
+  control when they are supposed to do their job.
+\end{itemize}
+% \image{figures/pluginview} %PENDING(blackie) Readd
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0366}
+\frametitle{Overview}
+\begin{itemize}
+\item It is possible to extend Qt in several ways using plugins, these
+  include plugins for the image loader, styles, new SQL drivers, and
+  plugins for Qt designer.
+\item It is also possible to develop a plugin mechanism for your
+  own application using building blocks from Qt.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0367}\frametitle{Extending Qt with Plugins}
+\begin{itemize}
+\item Developing a plugin for Qt consists of three steps:
+  \begin{enumerate}
+  \item Inherit an abstract base class and implement it.
+  \item Add a factory macro to your implementation file.
+  \item Set up an appropriate QMake file.
+\end{enumerate}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0368}\frametitle{Extending Qt with Plugins - Step 1}
+\xConcept{Plug-ins!Qt's own}
+\begin{itemize}
+\item The following base classes exist: \iCls{QAccessibleBridgePlugin},
+  \iCls{QAccessiblePlugin}, \iCls{QDecorationPlugin},
+  \iCls{QGfxDriverPlugin}, \iCls{QIconEnginePlugin},
+  \iCls{QImageIOPlugin}, \iCls{QInputContextPlugin},
+  \iCls{QKbdDriverPlugin}, \iCls{QMouseDriverPlugin},
+  \iCls{QPictureFormatPlugin}, \iCls{QSqlDriverPlugin},
+  \iCls{QStylePlugin}, \iCls{QTextCodecPlugin}.
+\item To implement e.g. a new style, you must inherit
+  \iCls{QStylePlugin}, and implement the two pure virtual methods
+  \iClsFn{QStylePlugin}{keys} and \iClsFn{QStylePlugin}{create}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0369}\frametitle{Extending Qt with Plugins - Step 2}
+\xConcept{Plug-ins!Exporting}
+\begin{itemize}
+\item In your implementation file, you must add the macro
+  \iCls{Q\_EXPORT\_PLUGIN}, passing the class name as a parameter.
+\item This allows Qt to load the macro from the dynamic library, into which
+  it will be compiled.
+\item Example: \texttt{Q\_EXPORT\_PLUGIN(MyStylePlugin)}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0370} 
+\frametitle{Extending Qt with Plugins - Step 3}
+\xConcept{Plug-ins!QMake}\xConcept{QMake!Plug-ins}
+\begin{itemize}
+\item The QMake project file should contain the following two lines:
+\begin{alltt}
+  TEMPLATE = lib
+  CONFIG += plugin
+\end{alltt}
+\item The QMake project file should place the dynamic library in a special
+  directory, as specified on the next page.
+\item Do so using one of QMake's \texttt{DESTDIR} or \texttt{INSTALL}
+  variables.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0371}\frametitle{Searching for Plugins}
+\xConcept{Plug-ins!Searching for}
+\xConcept{Plug-ins!Loading}
+\begin{itemize}
+\item Qt will search for plugins in several different directory trees:
+  \begin{itemize}
+  \item The directory of the application executable. (As returned from \iClsFn{QCoreApplication}{applicationDirPath}).
+  \item The directory returned by
+    \iClsFnPar{QLibraryInfo}{location}{QLibraryInfo::PluginsPath} - usually
+    \texttt{plugins}.
+  \item Directories added by \iClsFn{QCoreApplication}{addLibraryPath} or
+    set by \iClsFn{QCoreApplication}{setLibraryPaths}
+  \end{itemize}
+
+\item Each plugin type has its own subdirectory, style plugins are e.g.\ located in
+  \texttt{styles} subdirectory: \texttt{plugins/styles/}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0372}
+\frametitle{The Build Key}
+\xConcept{Plug-ins!The Build Key}
+\begin{itemize}
+\item To avoid that Qt loads a plugin not compatible with the
+  application, a build key is compiled into the plugin.
+\item The following aspects are compared between the
+  current Qt version and the plugin:
+  \begin{itemize}
+  \item The Qt version.
+  \item The architecture, operating system, and compiler.
+  \item The compilation flags for Qt. 
+  \item An optional string that can be specified when running Qt's
+    configure script (\texttt{--buildkey} option).
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0373}
+\frametitle{Extending Your Own Applications Using Plugins}
+\xConcept{Plug-ins!Extending your own App.}
+\begin{itemize}
+\item Using the building blocks from Qt, it is easy to develop
+  your own plugin mechanism, which allows your application to be extended
+  using plugins. 
+\item There are two sides to plugins:
+  \begin{itemize}
+  \item Making the application ready for plugins.
+  \item Implementing actual plugins.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0374}
+\frametitle{Offering and Loading Plugins}
+\begin{itemize}
+\item Steps to making the application extensible with plugins:
+  \begin{enumerate}
+  \item Define a set of interfaces (classes with pure virtual functions).
+  \item Use the \iCls{Q\_DECLARE\_INTERFACE()} macro to tell Qt about the
+    interface.
+  \item Use \iCls{QPluginLoader} in the application to load the plugin.
+  \item Use \texttt{qobject\_cast()} to test whether a plugin implements a
+    certain interface. (see \pageHyperlink{casting}).
+  \end{enumerate}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0375}
+\frametitle{Interface Example}
+\xExample{Plug-Ins!Interface}
+\begin{alltt}\small
+class FilterInterface
+\{
+public:
+    virtual QStringList filters() const = 0;
+    virtual QImage filterImage(const QString &filter, 
+                               const QImage &image,
+                               QWidget *parent) = 0;
+\};
+
+Q_DECLARE_INTERFACE(FilterInterface,
+    "com.trolltech.PlugAndPaint.FilterInterface/1.0")
+  \end{alltt}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0376}\frametitle{Offering and Loading Plugins}
+\begin{itemize}
+\item The interface may only contain pure virtual classes, otherwise we
+  would have to deal with exporting symbols to get it working on Windows
+  and newer GCC's.
+\item The first argument to the \iCls{Q\_DECLARE\_INTERFACE()} is the
+  class name implementing the interface.
+\item The second argument must be a unique string identifying the
+  interface.
+\item The interface may not inherit \iCls{QObject}, as this, among other
+  things, would make the class non-pure virtual.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0377}
+\frametitle{Loading Plugins Example}
+\xExample{Plug-Ins!Loading}
+  \begin{alltt}\small
+foreach (QString fileName, pluginsDir.entryList(QDir::Files)) \{
+    QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+    QObject* plugin = loader.instance();
+    if (plugin) \{
+        FilterInterface* iFilter =
+              qobject_cast<FilterInterface*>(plugin);
+        if (iFilter)
+            \ldots
+    \}
+\}
+\end{alltt}
+\end{slide}
+
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0378}
+\frametitle{Implementing Actual Plugins}
+\xConcept{Plug-ins!Implementing}
+\begin{itemize}
+\item Steps to implement an actual plugin:
+  \begin{enumerate}
+  \item Create a class inheriting from QObject and the required interface.
+  \item Use \iCls{Q\_INTERFACES()} to tell Qt about the implemented interface.
+  \item Export the plugin using \iCls{Q\_EXPORT\_PLUGIN}
+  \item Build the plugin using a suitable \texttt{.pro} file.
+ \end{enumerate}
+\end{itemize}
+\end{slide}
+
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0379}
+\frametitle{Example Plugin}
+\xExample{Plug-Ins!Example plug-in}
+  \begin{alltt}\small
+class ExtraFiltersPlugin : public QObject, 
+                           public FilterInterface
+\{
+    Q_OBJECT
+    Q_INTERFACES(FilterInterface)
+
+public:
+    QStringList filters() const;
+    QImage filterImage(const QString &filter, 
+                       const QImage &image,
+                       QWidget *parent);
+\};
+  \end{alltt}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0380}\frametitle{Implementing Actual Plugins}
+\begin{itemize}
+\item In case the plugin implemented several interfaces, simply list them as a
+  space-separated list using \iCls{Q\_INTERFACES}.
+\item The interface class may not inherit \iCls{QObject}, but the actual
+  plugin must.
+\item In one of the implementation files for the plugin, the following code
+  must be placed: \texttt{Q\_EXPORT\_PLUGIN(ExtraFiltersPlugin)}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0381}\frametitle{Signals/Slots}
+\xConcept{Plug-ins!Signal/Slots}
+\xConcept{Signals and Slots!Plug-ins}
+\begin{itemize}
+\item Interfaces may not inherit \iCls{QObject}, so you can expect that
+  it is not possible to use signal/slots with interfaces.
+\item The introspection of QObject works, however, with dynamic types
+  rather than static types, so even if you only have a pointer to a
+  QObject, you can actually connect to signals of the real type of the object.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0382}
+\frametitle{Signals/Slots}
+\begin{itemize}
+\item 
+\begin{alltt}
+class FilterInterface
+\{
+public:
+     ...
+    // slots:
+    virtual void someSlot() = 0;
+    // signals:
+    // void someSignal();
+\};
+\end{alltt}
+\item The above is only an informal contract that the users of the interface
+  must fulfill.
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0383} \frametitle{\iConcept{Casting} using qobject\_cast et. al.}
+\label{casting}
+\begin{itemize}
+\item C++ has four casting operators \iConcept{static\_cast},
+  \iConcept{dynamic\_cast}, \iConcept{const\_cast},
+  \iConcept{reinterpret\_cast}.
+\item \iConcept{dynamic\_cast} can check if what is being casted
+  to actually is of the given type:
+\begin{alltt}
+X* a = dynamic\_cast<X*>( b );
+if ( a )
+  \ldots
+\end{alltt}
+\item \texttt{dynamic\_cast} does, however, not work across dynamic library
+  boundaries on all compilers/platforms.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0384}\frametitle{Casting using qobject\_cast et. al.}
+\begin{itemize}
+\item Qt comes with \iConcept{qobject\_cast}, \iConcept{qvariant\_cast}, and
+  \iConcept{qstyleoption\_cast}. 
+\item These cast methods use internals from the
+  respective classes to do the cast, and thus solve the dynamic library
+  boundary problems.
+\item Example:
+\begin{alltt}
+\iCls{QPushButton}* button = qobject_cast<QPushButton *>(obj);
+if ( button )
+  \ldots
+\end{alltt}
+\item \pleaseNote the casting functions only work within their respective
+  classes, thus you can only use \texttt{qobject\_cast} with
+  \iCls{QObject} subclasses.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0385}\frametitle{Project Task: Add Plugins to the Paint Program}
+\xProject{Plug-Ins}
+\begin{itemize}
+\item In the handout directory \emph{other-topics/lab-plugins}, you
+  can find a slightly modified version of the, by now well-known, paint
+  program.
+\item Add plugin capabilities to the application and implement circle
+  drawing in the plugin.
+\item Optional: Develop other plugins, e.g. a house drawing plugin.
+\end{itemize}
+\end{slide}

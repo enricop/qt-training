@@ -1,0 +1,11 @@
+*.aux
+*.log
+*.nav
+*.out
+*.pdf
+*.pdfsync
+*.snm
+*.toc
+*.vrb
+Makefile
+.svn/

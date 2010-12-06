@@ -1,0 +1,121 @@
+\newcommand{\slideId}{NO ID}
+\mode<presentation>
+
+
+%\usefonttheme{structurebold}  
+\useinnertheme{circles}
+
+\definecolor{qtdarkgreen}{RGB}{2,76,28}
+\definecolor{qtlightgreen}{RGB}{68,165,28}
+\definecolor{nokiadarkgray}{RGB}{54,53,52}
+\definecolor{qtlightgray}{RGB}{208,208,208}
+
+
+\usecolortheme[RGB={2,76,28}]{structure}  
+
+
+\setbeamertemplate{blocks}[rounded][shadow=true]
+% \setbeamercolor{block title}{bg=qtlightgreen!30}
+% \setbeamercolor{block body}{bg=qtlightgreen!10}
+% \setbeamercolor{normal text}{fg=nokiadarkgray}
+% \setbeamercolor{blocks}{qtdarkgreen}
+
+
+
+
+\setbeamertemplate{footline} {
+\usebeamerfont{page number in head/foot}
+ \usebeamercolor[fg]{page number in head/foot}
+%\makebox[20mm][c]{\raisebox{1mm}{\includegraphics[scale=0.1, keepaspectratio]{diagrams/qt-logo}}}
+\hspace{0mm}
+\makebox[75mm][c]{\raisebox{4mm}{\insertsectionhead \hspace{5mm}
+    \insertsubsectionhead}}
+\hspace{0mm}
+\makebox[10mm][r]{\raisebox{4mm}{
+    \ifthenelse{\boolean{show-page-numbers}}{\insertframenumber/\inserttotalframenumber}{\strut}
+    \ifthenelse{\boolean{show-slide-id}}{~(\slideId)}{\strut}
+  } 
+}
+\hspace{0mm}
+%\makebox[20mm][c]{\raisebox{1mm}{\includegraphics[scale=0.125, keepaspectratio]{diagrams/nokia-logo}}}
+}
+%%% Footer
+% \setbeamertemplate{footline}{
+%   \ifthenelse{\equal{\arabic{page}}{1}}{
+%  %%% Footer on First page
+%   \hspace*{5mm}\raisebox{2mm}{\includegraphics[scale=0.04, keepaspectratio]{diagrams/qt-logo}}
+%   \hspace{20mm}
+%   \fontseries{eb}\fontsize{8pt}{10pt} \selectfont
+%   \usebeamercolor[fg]{page number in head/foot}%
+%   \raisebox{4.5mm}{Nokia, Qt Development Frameworks}
+%   \hspace{20mm}
+%   \raisebox{4.5mm}{\includegraphics[scale=0.1, keepaspectratio]{diagrams/nokia-logo}}
+%   }{%
+%   %%% Footer for normal pages
+%   \usebeamerfont{page number in head/foot}%
+%   \setcounter{page}{\theframenumber}% This is needed to make the index match.
+%   \ifthenelse{\boolean{qt-fancy-footer}}{%
+%     %%% Footer for slides
+%     \hspace{5mm}\raisebox{3mm}{\includegraphics[scale=0.025, keepaspectratio]{diagrams/qt-logo.pdf}}
+%     % \fontfamily{cmss}
+%     \fontseries{eb}\fontsize{8pt}{10pt} \selectfont
+%     \hspace{92mm}\raisebox{2mm}{\includegraphics[scale=0.15, keepaspectratio]{diagrams/nokia-logo.pdf}}
+%     \hspace{-\textwidth}
+%     \hspace{25mm}
+%     \usebeamercolor[fg]{page number in head/foot}%
+%     \raisebox{5mm}{\insertsectionhead \hspace{5mm} \insertsubsectionhead}
+%     \raisebox{5mm}{% 
+%         \ifthenelse{\boolean{show-page-numbers}} {\insertframenumber/\inserttotalframenumber}{\strut}
+%         \ifthenelse{\boolean{show-slide-id}}{~(\slideId)}{\strut}}           
+%     \hspace{5mm} %<- this space is important                                                                
+%  }{%
+%     %%% Footer for handout
+%     \color{black}%
+%     \hspace{5mm}\raisebox{2mm}{\ifthenelse{\equal{\customer}{}}{\courseTitle}{\courseTitle\ --\ \customer}}%
+%     \hfill\raisebox{2mm}{--\ \insertframenumber\ --}\hspace{5mm}\strut%
+% }}}
+
+% left margin for text on frames
+%\setbeamersize{text margin left=5mm}
+\setlength{\leftmargini}{1em}
+\setlength{\leftmarginii}{1em}
+\setlength{\leftmarginiii}{1em}
+
+\setbeamertemplate{frametitle}
+{
+  \vspace{3mm}
+  \begin{centering}
+    \insertframetitle\par
+  \end{centering}
+}
+
+% Let items not yet shown be grayed out rather than hidden.
+\setbeamercovered{transparent=15}
+
+% \setbeamertemplate{section in toc}{
+%   \hspace{2em}\color{qtdarkgreen}$\Rightarrow$
+%   \hspace{1em}\color{nokiadarkgray}\inserttocsection\par
+% }
+
+% \setbeamertemplate{subsection in toc}{
+%   \hspace{2em}\color{qtdarkgreen}$\Rightarrow$
+%   \hspace{1em}\color{nokiadarkgray}\inserttocsubsectionnumber~\inserttocsubsection\par
+% }
+
+\setbeamertemplate{sections/subsections in toc}[ball unnumbered]
+% \setbeamertemplate{section in toc}[circle]
+% \setbeamertemplate{subsection in toc}[circle]
+
+
+\setbeamercolor{itemize subitem}{fg=structure.fg!60}
+\setbeamercolor{itemize subsubitem}{fg=structure.fg!30}
+\setbeamercolor{alerted text}{fg=qtlightgreen}
+
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamerfont{itemize items}{series=\bfseries}
+
+
+
+\mode
+<all>

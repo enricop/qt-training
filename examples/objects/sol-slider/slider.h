@@ -1,0 +1,36 @@
+#ifndef SLIDER_H
+#define SLIDER_H
+
+#include <QtGui>
+
+class QLabel;
+class QSlider;
+
+class Slider : public QWidget
+{
+    Q_OBJECT
+public:
+    Slider(Qt::Orientation orient = Qt::Horizontal, QWidget *parent = 0);
+
+    int value() const;
+    int minimum() const;
+    int maximum() const;
+
+public slots:
+    void setValue(int value);
+    void setRange(int min, int max);
+    void setMinimum(int min);
+    void setMaximum(int max);
+
+signals:
+    void valueChanged(int);
+
+protected:
+    int maxWidth(int min, int max) const;
+
+private:
+    QSlider *m_slider;
+    QLabel *m_display;
+};
+
+#endif // SLIDER_H

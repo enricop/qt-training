@@ -1,0 +1,110 @@
+\subsection{Handling Events in Qt}
+
+%----------------------------------------------------------------------
+\begin{slide}{970}
+\frametitle{Event Processing}
+\label{events_introduction}
+
+\begin{block}{Qt is an event-driven UI toolkit}
+\iClsFn{QApplication}{exec} runs the \textit{event loop}
+\end{block}
+\begin{enumerate}
+\item \textbf{Generate Events}
+  \begin{itemize}
+  \item by input devices: keyboard, mouse, etc.
+  \item by Qt itself (e.g. timers)
+  \end{itemize}
+\item \textbf{Queue Events}
+  \begin{itemize}
+  \item by event loop
+  \end{itemize}
+\item \textbf{Dispatch Events}
+  \begin{itemize}
+  \item by \iCls{QApplication} to receiver: \iCls{QObject}
+    \begin{itemize}
+    \item \textit{Key events sent to widget with focus}
+    \item \textit{Mouse events sent to widget under cursor}
+    \end{itemize}
+ \end{itemize}
+\item \textbf{Handle Events}
+  \begin{itemize}
+  \item by \iCls{QObject} event handler methods
+  \end{itemize}
+\end{enumerate}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1080}
+\frametitle{Event Handling}
+
+\begin{itemize}
+\item QObject::event(QEvent *event)
+  \begin{itemize}
+  \item Handles all events for this object
+ \end{itemize}
+\item Specialized event handlers
+  \begin{itemize}
+  \item \iClsFn{QWidget}{mousePressEvent} for mouse clicks
+  \item \iClsFn{QWidget}{keyPressEvent} for key presses     
+ \end{itemize}
+\item Accepting an Event
+  \begin{itemize}
+  \item \lstinline{event->accept()} / \lstinline{event->ignore()}
+    \begin{itemize}
+    \item Accepts or ignores the event
+    \item Accepted is the default.
+    \end{itemize}
+  \end{itemize}
+\item Event propagation
+  \begin{itemize}
+  \item Happens if event is ignored
+  \item Might be propagated to parent widget
+  \end{itemize}
+\end{itemize}
+\demo{objects/ex-allevents}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1083}
+\frametitle{Example of Event Handling}
+
+\begin{itemize}
+\item \iCls{QCloseEvent} delivered to top level widgets (windows)
+\item Accepting event allows window to close
+\item Ignoring event keeps window open
+\item[]
+\begin{cpp}
+void MyWidget::closeEvent(QCloseEvent *event) {
+  if (maybeSave()) {
+    writeSettings();
+    event->accept(); // close window
+  } else {
+    event->ignore(); // keep window
+  }
+}
+\end{cpp}  
+\end{itemize}
+\demo{objects/ex-closeevent}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1088}
+\frametitle{Events and Signals}
+Signals and slots are used instead of events:
+
+\begin{itemize}
+\item To communicate between components.
+\item In cases where there is a well-defined sender and receiver.
+  \begin{itemize}
+  \item For example: a button and a slot to handle clicks.
+  \end{itemize}
+\item For some events, there is no sender in Qt.
+  \begin{itemize}
+  \item For example: redraw, keyboard and mouse events.
+  \end{itemize}
+\item To describe high level logic and control flow.
+\end{itemize}
+
+Developers can create custom events if they need to.
+\end{slide}

@@ -1,0 +1,77 @@
+\subsection{Developing a Hello World Application}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1227}
+  \frametitle{``Hello World'' in Qt}
+  \flushedImageDoubleWidth{fundamentals/images/helloWorld}
+  \medskip
+  \begin{itemize}
+  \item [] \begin{cpp}
+// main.cpp
+
+#include <QtGui>
+
+int main(int argc, char *argv[])
+{
+  QApplication app(argc, argv);
+  QPushButton button("Hello world");
+  button.show();
+  return app.exec();
+}
+  \end{cpp}
+ \item[]
+ \item Program consists of
+    \begin{itemize}
+    \item \texttt{main.cpp} - application code
+    \item \texttt{helloworld.pro} - project file
+    \end{itemize}
+  \end{itemize}
+\demo{fundamentals/ex-helloworld}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1226}
+\frametitle{Project File - \texttt{helloworld.pro}}
+\begin{itemize}
+\item \texttt{helloworld.pro} file
+  \begin{itemize}
+  \item lists source and header files
+  \item provides project configuration
+ \end{itemize}
+\begin{qmake}
+# File: helloworld.pro
+SOURCES  = main.cpp
+HEADERS +=          # No headers used
+\end{qmake}
+\item Assignment to variables
+  \begin{itemize}
+  \item Possible operators \texttt{=, +=, -=}
+  \end{itemize}
+\end{itemize}
+\doc{qmake-tutorial.html}{qmake tutorial}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1225}
+  \frametitle{Using qmake}
+  \begin{itemize}
+  \item \texttt{qmake} tool
+    \begin{itemize}
+    \item Creates cross-platform make-files
+    \end{itemize}
+  \item Build project using qmake
+  \item[] \begin{shell}
+cd helloworld
+qmake helloworld.pro # creates Makefile
+make                 # compiles and links application
+./helloworld         # executes application
+  \end{shell}
+\item Tip: \texttt{qmake -project}
+  \begin{itemize}
+  \item Creates default project file based on directory content
+  \end{itemize}
+\end{itemize}
+\doc{qmake-manual.html}{qmake Manual}
+\begin{center}\emph{Qt Creator does it all for you}\end{center}
+\end{slide}
+

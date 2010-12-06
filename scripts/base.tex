@@ -1,0 +1,442 @@
+\usepackage{ifthen}
+\usepackage{alltt}
+\usepackage{comment}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{bold-extra}
+\usepackage{version}
+\usepackage{graphicx}
+\usepackage{pgfpages}
+\usepackage{picins}
+\usepackage{makeidx}
+\usepackage{multind}
+\usepackage{xspace}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\usepackage[scaled]{beramono}
+\usepackage[utf8]{inputenc}
+\usepackage{pdfsync}
+\usepackage{listings}
+%\usepackage{multimedia}
+
+\usetheme{QtTraining}
+
+\definecolor{code_bg}{RGB}{255, 255, 204}
+
+
+\lstdefinelanguage[Qt]{C++}[]{C++}%
+  { keywordsprefix=Q
+  }
+
+\lstdefinelanguage{qmake}%
+  { morekeywords={SOURCES,HEADERS,RESOURCES,FORMS},
+    morestring=[b]",
+    sensitive=true,
+    comment=[l]\#,
+ }
+
+\lstset{ %
+  language=[Qt]C++,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\bfseries,
+  stringstyle=\color{blue},
+  commentstyle=\color{qtlightgreen}, 
+  %numbers=left,
+  %numberstyle=\tiny,
+  %stepnumber=1,
+  %numbersep=10pt, 
+  showspaces=false,
+  showstringspaces=false,
+  frame=l, 
+  framerule=1pt,
+  framesep=4pt,
+  %rulecolor=\color{black!30},
+rulecolor=\color{qtlightgreen},
+  aboveskip=1mm,
+  belowskip=1mm,
+  showlines=false,
+} 
+
+\lstnewenvironment{cpp}{\lstset{language=[Qt]C++}}{}
+\lstnewenvironment{qmake}{\lstset{language=qmake}}{}
+\lstnewenvironment{shell}{\lstset{language=bash}}{}
+\lstnewenvironment{xml}{\lstset{language=html}}{}
+
+
+\newcommand{\inputqml}[1]{%
+\setlength{\lineskip}{0pt}
+\footnotesize
+\input{#1}
+\normalsize
+}
+
+\newenvironment{qml}{%
+\setlength{\lineskip}{0pt}
+\footnotesize
+}{%
+}
+
+\newcommand{\qthome}[2]{\href{http://qt.nokia.com/#1}{\beamerbutton{See #2}}}  
+\newcommand{\doc}[2]{\href{http://qt.nokia.com/doc/latest/#1}{\beamerbutton{See #2 Documentation}}}  
+\newcommand{\wiki}[2]{\href{http://en.wikipedia.org/wiki/#1}{\beamerbutton{See #2 Wikipedia Article}}}  
+\newcommand{\doccreator}[2]{\href{http://doc.qt.nokia.com/qtcreator/#1}{\beamerbutton{See #2 Documentation}}}  
+\newcommand{\demo}[1]{\href{run:#1}{\beamerbutton{Demo #1}}}  
+\newcommand{\qtdemo}[1]{\href{run:#1}{\beamerbutton{Demo \$QTDIR/#1}}}  
+\newcommand{\lab}[1]{\href{run:#1}{\beamerbutton{Lab #1}}}
+\newcommand\externalLink[1]{{\sffamily\color{blue}{\href{#1}{#1}}}}
+\newcommand\externalNamedLink[2]{{\sffamily\color{blue}{\href{#1}{#2}}}}
+
+
+\date{}
+
+\sloppy
+\newenvironment{answers}[2]{%
+\begin{frame}[fragile]
+\begin{center}
+#1\\(page #2)
+\end{center}
+\tiny
+}{%
+\end{frame}}
+
+%----------------------------------------------------------------------
+
+% setup for two column printing.
+\setlength{\columnseprule}{1pt}
+\setlength{\columnsep}{20pt}
+
+%----------------------------------------------------------------------
+\newcommand{\secTitle}{}
+\newcommand{\setSectionTitle}[1]{\def\secTitle{#1}\section{#1}}
+\newcommand{\sectionTitle}{\secTitle}
+
+\newcommand{\contentHyperlink}[2]{\hyperlink{#2}{#1 (page~\pageref{#2})}}
+\newcommand{\pageHyperlink}[1]{\hyperlink{#1}{page~\pageref{#1}}}
+\newcommand{\itop}[2]{\item \contentHyperlink{#1}{#2}}
+\newcommand{\itopStar}[2]{\item<*> \contentHyperlink{#1}{#2}}
+\newcommand{\showHyperlink}[2]{\textcolor[rgb]{0,0,1}{\hyperlink{#1}{#2}}}
+
+%----------------------------------------------------------------------
+\newcommand{\qtThree}{$^{qt3}$}
+\newcommand{\qt}[2]{$^{\mathrm{(Qt\,#1.#2)}}$}
+\def\strikethrough#1{%
+{%
+  \setbox0=\hbox{#1}%
+  \dimen0=\ht0 \dimen1=\dp0
+  \setbox1=\vbox{
+       \box0 \vskip-\dimen1\vskip-0.8ex \hrule
+   }%
+   \ht1=\dimen0 \dp1=\dimen1
+   \box1
+  }%
+}
+
+% These aren't really up to date currently
+%\newcommand{\notQtopia}{$^{\tiny \hbox{\strikethrough{Qtopia}}}$}
+%\newcommand{\Qtopia}{$^{\tiny \hbox{Qtopia}}$}
+\newcommand{\notQtopia}{}
+\newcommand{\Qtopia}{}
+%----------------------------------------------------------------------
+\newcommand{\pleaseNote}{\underline{\textbf{Note:}}\ }
+
+%----------------------------------------------------------------------
+%% All this is really magic to me, I found from pdfinfo slides.pdf that:
+%% Page size:      362.835 x 272.126 pts
+%% If I device 362.835 with the screen width, I get the magic
+%% \paperToScreenFactor factor. Don't ask why or how I got to doing that!
+
+%% Note: The \includegraphics command takes the resolution (dots-per-inch)
+%% into account, so screenshots from higher resolution sources will be
+%% scaled down even further.
+
+\ifthenelse{\equal{\screenwidth}{1024}}{
+  \newcommand{\paperToScreenFactor}{0.35433}
+  \newcommand{\doublePaperToScreenFactor}{0.70866}
+}{
+  \ifthenelse{\equal{\screenwidth}{1280}}{
+    \newcommand{\paperToScreenFactor}{0.28346}
+    \newcommand{\doublePaperToScreenFactor}{0.56692}
+  }{
+  \ifthenelse{\equal{\screenwidth}{1400}}{
+    \newcommand{\paperToScreenFactor}{0.25916}
+    \newcommand{\doublePaperToScreenFactor}{0.51833}
+    }{
+    \error{Unknown resolution, acceptable screen width are 1024, 1280, and
+      1400}
+    }}
+}
+
+\newcommand{\flushedImage}[1]{\parpic[r]{\includegraphics[origin=t,scale=\paperToScreenFactor]{#1}}}
+\newcommand{\flushedImageDoubleWidth}[1]{\parpic[r]{\includegraphics[origin=t,scale=\doublePaperToScreenFactor]{#1}}}
+\newcommand{\image}[1]{\includegraphics[scale=\paperToScreenFactor]{#1}}
+\newcommand{\imageDoubleWidth}[1]{\includegraphics[scale=\doublePaperToScreenFactor]{#1}}
+\newcommand{\imageFullWidth}[1]{\includegraphics[width=0.75\pdfpagewidth,keepaspectratio]{#1}}
+\newcommand{\centeredImage}[1]{\strut\hfill\includegraphics[scale=\paperToScreenFactor]{#1}\hfill\strut}
+\newcommand{\centeredImageDoubleWidth}[1]{\strut\hfill\includegraphics[scale=\doublePaperToScreenFactor]{#1}\hfill\strut}
+\newcommand{\centeredImageFullWidth}[1]{\strut\hfill\includegraphics[width=0.75\pdfpagewidth,keepaspectratio]{#1}\hfill\strut}
+\newcommand{\centeredImageFullHeight}[1]{\strut\hfill\includegraphics[height=0.6\pdfpageheight,keepaspectratio]{#1}\hfill\strut}
+\newcommand{\inlinedImage}[1]{\includegraphics[height=0.5cm]{#1}\strut}
+
+% Open Office images do not need to be scale down, they are vector
+% graphics, so we can use the same size for all resolutions.
+\newcommand{\oooFlushedImage}[1]{\parpic[r]{\includegraphics[origin=t,scale=0.354331054688]{ooo/#1}}}
+\newcommand{\oooImage}[1]{\includegraphics[scale=0.354331054688]{ooo/#1}}
+\newcommand{\oooCenteredImage}[1]{\strut\hfill\includegraphics[scale=0.354331054688]{ooo/#1}\hfill\strut}
+
+\definecolor{exampletitlecolor}{rgb}{0.9,0.9,1.0}
+\newcommand{\exampletitle}[1]{\colorbox{exampletitlecolor}{\parbox{1.0\textwidth}{#1}}}
+
+
+% Syntax coloring definitions
+\definecolor{keyword}{rgb}{0.9,0.2,0.2}
+\definecolor{class}{rgb}{0.0,0.0,0.9}
+\definecolor{number}{rgb}{0.9,0.5,0.0}
+\definecolor{type}{rgb}{0.6,0.6,0.0}
+\definecolor{comment}{rgb}{0.2,0.5,0.2}
+\definecolor{string}{rgb}{0.2,0.5,0.9}
+\definecolor{operator}{rgb}{0.5,0.5,0.5}
+
+% ----------- Notes (the boolean is set in setup.tex)
+\ifthenelse{\boolean{with-notes}}{
+  \includeversion{note}
+}
+{%else
+  \excludeversion{note}
+}
+\excludeversion{EXCLUDE}
+
+\newenvironment{instructors-notes}{%
+\setbeamertemplate{headline} {\includegraphics[width=\textwidth]{images/comment-small}}
+\setbeamertemplate{footline} {\includegraphics[width=\textwidth]{images/comment-small}}
+    \begin{frame}[fragile,environment=instructors-notes]
+}{%
+\end{frame}}
+
+% --------------- Watermark ---------------------------------------------
+\ifthenelse{\boolean{eval-version}}{%
+\let\evaltitle\frametitle
+\renewcommand{\frametitle}[1]{\evaltitle{#1}%
+  \begin{picture}(0,0)%
+    \put(0,0){%
+      \rotatebox{-25}{\textcolor[gray]{0.80}{\fontsize{15mm}{15mm}\selectfont Evaluation Copy}}}%
+    \put(0,-20){%
+      \rotatebox{-25}{\textcolor[gray]{0.70}{\fontsize{2mm}{2mm}\selectfont If you are being taught out of this training material or have been sold it, please contact qt-info@nokia.com}}}%
+  \end{picture}%
+}}{}
+
+
+%% ------------ Title of the course ----------------------------------------
+\newcommand{\frontpageTitleFormat}{\fontfamily{NokiaLarge}\fontseries{b}\fontsize{24pt}{28.8pt} \selectfont }
+
+%------------ Setup of index command -----------------------
+\newcommand{\classsep}{::}
+\newcommand{\pointerStar}{*\xspace}
+\newcommand{\programmingLanguage}{C++\xspace}
+\newcommand{\pointerAmpersand}{\&}
+\newcommand{\pointerDeref}{->}
+
+%%% \newcommand{\capitalise}[1]{\capitalizefoo#1\end} \def\capitalizefoo#1#2\end{\uppercase{#1}\lowercase{#2}}
+\newcommand{\possibleEmptyConcat}[2]{\ifthenelse{\equal{#1}{}}{#2}{#1 #2}}
+\newcommand{\xConcept}[1]{\index{Concepts}{#1}}
+\newcommand{\xCls}[1]{\index{Classes}{#1}}
+\newcommand{\xNs}[1]{\index{Classes}{#1 (namespace)}}
+\newcommand{\xNsCls}[2]{\index{Classes}{#1 (namespace)!#2}\index{Classes}{#2 (#1)}}
+\newcommand{\xClsFn}[2]{\index{Classes}{#1!#2}\index{Classes}{#2 (#1)}}
+\newcommand{\xNsFn}[2]{\index{Classes}{#1 (namespace)!#2}\index{Classes}{#2 (#1)}}
+\newcommand{\xNsClsFn}[3]{\index{Classes}{#1 (namespace)!#2!#3}\index{Classes}{#2 (#1)!#3}\index{Classes}{#3 (#1\classsep#2)}}
+%PENDING(blackie): have the extra section?
+%\newcommand{\xClsSig}[2]{\index{Classes}{#1!#2 (signal)}\index{Classes}{#2 (#1, signal)}\index{Classes}{Signals!#1!#2}\index{Classes}{Signals!#2!#1}}
+\newcommand{\xClsSig}[2]{\index{Classes}{#1!#2 (signal)}\index{Classes}{#2 (signal on #1)}}
+\newcommand{\xNsClsSig}[3]{\index{Classes}{#1 (namespace)!#2!#3 (signal)}\index{Classes}{#2 (#1)!#3 (signal)}\index{Classes}{#3 (signal on #1\classsep#2)}}
+%PENDING(blackie): have the extra section?
+%\newcommand{\xClsSlt}[2]{\index{Classes}{#1!#2 (slot)}\index{Classes}{#2 (#1, slot)}\index{Classes}{Slots!#1!#2}\index{Classes}{Slots!#2!#1}}
+\newcommand{\xClsSlt}[2]{\index{Classes}{#1!#2 (slot)}\index{Classes}{#2 (slot on #1)}}
+\newcommand{\xNsClsSlt}[3]{\index{Classes}{#1 (namespace)!#2!#3 (slot)}\index{Classes}{#2 (#1)!#3 (slot)}\index{Classes}{#3 (slot on #1\classsep#2)}}
+\newcommand{\xMacro}[1]{\index{Classes}{#1 (macro)}}
+\newcommand{\xExample}[1]{\index{Examples}{#1}}
+\newcommand{\xProject}[1]{\index{Projects}{#1}}
+
+\newcommand{\iConcept}[2][]{#1{#2}\xConcept{#2}}
+\newcommand{\iMacro}[2][\texttt]{#1{#2}\xMacro{#2}}
+\newcommand{\iMacroPar}[3][\texttt]{#1{#2(#3)}\xMacro{#2}}
+\newcommand{\iExample}[1]{\emph{#1}\xExample{#1}}
+\newcommand{\iProject}[1]{\emph{#1}\xProject{#1}}
+
+% \iCls*
+\newcommand{\iCls}[2][\texttt]{#1{#2}\xCls{#2}}
+\newcommand{\iClsFn}[3][\texttt]{#1{#2\classsep#3()}\xClsFn{#2}{#3}}
+\newcommand{\iClsSig}[3][\texttt]{#1{#2\classsep#3()}\xClsSig{#2}{#3}}
+\newcommand{\iClsSlt}[3][\texttt]{#1{#2\classsep#3()}\xClsSlt{#2}{#3}}
+\newcommand{\iClsEnum}[3][\texttt]{#1{#2\classsep#3}\xClsFn{#2}{#3}}
+\newcommand{\iClsFnPar}[4][\texttt]{#1{#2\classsep#3(#4)}\xClsFn{#2}{#3}}
+\newcommand{\iClsSigPar}[4][\texttt]{#1{#2\classsep#3(#4)}\xClsSig{#2}{#3}}
+\newcommand{\iClsSltPar}[4][\texttt]{#1{#2\classsep#3(#4)}\xClsSlt{#2}{#3}}
+
+% \iClsT*
+\newcommand{\iClsT}[2][T]{\texttt{#2<#1>}\xCls{#2}}
+\newcommand{\iClsTFn}[3][T]{\texttt{#2<#1>\classsep#3()}\xClsFn{#2}{#3}}
+\newcommand{\iClsTSig}[3][T]{\texttt{#2<#1>\classsep#3()}\xClsSig{#2}{#3}}
+\newcommand{\iClsTSlt}[3][T]{\texttt{#2<#1>\classsep#3()}\xClsSlt{#2}{#3}}
+\newcommand{\iClsTEnum}[3][T]{\texttt{#2<#1>\classsep#3}\xClsFn{#2}{#3}}
+\newcommand{\iClsTFnPar}[4][T]{\texttt{#2<#1>\classsep#3(#4)}\xClsFn{#2}{#3}}
+\newcommand{\iClsTSigPar}[4][T]{\texttt{#2<#1>\classsep#3(#4)}\xClsSig{#2}{#3}}
+\newcommand{\iClsTSltPar}[4][T]{\texttt{#2<#1>\classsep#3(#4)}\xClsSlt{#2}{#3}}
+
+% \iNs*
+\newcommand{\iNs}[2][\texttt]{#1{#2}\xNs{#2}}
+\newcommand{\iNsFn}[3][\texttt]{#1{#2\classsep#3()}\xNsFn{#2}{#3}}
+\newcommand{\iNsEnum}[3][\texttt]{#1{#2\classsep#3}\xNsFn{#2}{#3}}
+\newcommand{\iNsFnPar}[4][\texttt]{#1{#2\classsep#3(#4)}\xNsFn{#2}{#3}}
+
+% \iNsCls*
+\newcommand{\iNsCls}[3][\texttt]{#1{#2\classsep#3}\xNsCls{#2}{#3}}
+\newcommand{\iNsClsFn}[4][\texttt]{#1{#2\classsep#3\classsep#4()}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\iNsClsSig}[4][\texttt]{#1{#2\classsep#3\classsep#4()}\xNsClsSig{#2}{#3}{#4}}
+\newcommand{\iNsClsSlt}[4][\texttt]{#1{#2\classsep#3\classsep#4()}\xNsClsSlt{#2}{#3}{#4}}
+\newcommand{\iNsClsEnum}[4][\texttt]{#1{#2\classsep#3\classsep#4}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\iNsClsFnPar}[5][\texttt]{#1{#2\classsep#3\classsep#4(#5)}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\iNsClsSigPar}[5][\texttt]{#1{#2\classsep#3\classsep#4(#5)}\xClsSig{#2}{#3}{#4}}
+\newcommand{\iNsClsSltPar}[5][\texttt]{#1{#2\classsep#3\classsep#4(#5)}\xClsSlt{#2}{#3}{#4}}
+
+% like \iCls*, but hide the class:
+\newcommand{\hClsFn}[3][\texttt]{#1{#3()}\xClsFn{#2}{#3}}
+\newcommand{\hClsSig}[3][\texttt]{#1{#3()}\xClsSig{#2}{#3}}
+\newcommand{\hClsSlt}[3][\texttt]{#1{#3()}\xClsSlt{#2}{#3}}
+\newcommand{\hClsEnum}[3][\texttt]{#1{#3}\xClsFn{#2}{#3}}
+\newcommand{\hClsFnPar}[4][\texttt]{#1{#3(#4)}\xClsFn{#2}{#3}}
+\newcommand{\hClsSigPar}[4][\texttt]{#1{#3(#4)}\xClsSig{#2}{#3}}
+\newcommand{\hClsSltPar}[4][\texttt]{#1{#3(#4)}\xClsSlt{#2}{#3}}
+
+% like \iNs*, but hide the namespace:
+\newcommand{\hNsFn}[3][\texttt]{#1{#3()}\xNsFn{#2}{#3}}
+\newcommand{\hNsEnum}[3][\texttt]{#1{#3}\xNsFn{#2}{#3}}
+\newcommand{\hNsFnPar}[4][\texttt]{#1{#3(#4)}\xNsFn{#2}{#3}}
+
+% like \iNsCls*, but hide namespace (but not class):
+\newcommand{\hNsCls}[3][\texttt]{#1{#3}\xNsCls{#2}{#3}}
+\newcommand{\hNsClsFn}[4][\texttt]{#1{#3\classsep#4()}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\hNsClsSig}[4][\texttt]{#1{#3\classsep#4()}\xNsClsSig{#2}{#3}{#4}}
+\newcommand{\hNsClsSlt}[4][\texttt]{#1{#3\classsep#4()}\xNsClsSlt{#2}{#3}{#4}}
+\newcommand{\hNsClsEnum}[4][\texttt]{#1{#3\classsep#4}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\hNsClsFnPar}[5][\texttt]{#1{#3\classsep#4(#5)}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\hNsClsSigPar}[5][\texttt]{#1{#3\classsep#4(#5)}\xNsClsSig{#2}{#3}{#4}}
+\newcommand{\hNsClsSltPar}[5][\texttt]{#1{#3\classsep#4(#5)}\xNsClsSlt{#2}{#3}{#4}}
+
+% like \iNsCls*, but hide namespace /and/ class:
+\newcommand{\hhNsClsFn}[4][\texttt]{#1{#4()}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\hhNsClsSig}[4][\texttt]{#1{#4()}\xNsClsSig{#2}{#3}{#4}}
+\newcommand{\hhNsClsSlt}[4][\texttt]{#1{#4()}\xNsClsSlt{#2}{#3}{#4}}
+\newcommand{\hhNsClsEnum}[4][\texttt]{#1{#4}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\hhNsClsFnPar}[5][\texttt]{#1{#4(#5)}\xNsClsFn{#2}{#3}{#4}}
+\newcommand{\hhNsClsSigPar}[5][\texttt]{#1{#4(#5)}\xNsClsSig{#2}{#3}{#4}}
+\newcommand{\hhNsClsSltPar}[5][\texttt]{#1{#4(#5)}\xNsClsSlt{#2}{#3}{#4}}
+
+\newcommand{\iClsVar}{\iClsEnum}
+\newcommand{\hClsVar}{\hClsEnum}
+\newcommand{\iClsTypedef}{\iClsEnum}
+\newcommand{\hClsTypedef}{\hClsEnum}
+
+\newcommand{\iNsVar}{\iNsEnum}
+\newcommand{\hNsVar}{\hNsEnum}
+\newcommand{\iNsTypedef}{\iNsEnum}
+\newcommand{\hNsTypedef}{\hNsEnum}
+
+\newcommand{\iNsClsVar}{\iNsClsEnum}
+\newcommand{\hNsClsVar}{\hNsClsEnum}
+\newcommand{\hhNsClsVar}{\hhNsClsEnum}
+\newcommand{\iNsClsTypedef}{\iNsClsEnum}
+\newcommand{\hNsClsTypedef}{\hNsClsEnum}
+\newcommand{\hhNsClsTypedef}{\hhNsClsEnum}
+
+% expands to "example $QTDIR/examples/#1"
+\newcommand{\qtexample}[1]{example \emph{\$QTDIR/examples/\iExample{#1}}}
+% expands to "handout/#1"
+\newcommand{\projecthandout}[1]{\emph{handout/#1}}
+% expands to "solutions/#1"
+\newcommand{\projectsolution}[1]{\emph{solutions/#1}}
+
+%-------------------------- Review commands--------------------------------------------
+\newcommand{\reviewTT}{%
+  \begin{picture}(0,0)%
+    \put(313,40){%
+      \rotatebox{-90}{\textcolor{red}{\fontsize{10mm}{10mm}\selectfont
+          Qt REVIEW}}%
+      }%
+  \end{picture}%
+  \par
+ \vspace{-6mm}
+}
+
+\newboolean{ignore-slide}
+\excludeversion{EXCLUDE}
+%--------------------------- Slide environment -------------------------------------------
+\newenvironment{slide}[2][1]{%
+  \renewcommand{\slideId}{#2}
+  \ifthenelse{\equal{#1}{1}}{
+    \begin{frame}[environment=slide]
+      }{
+    \begin{frame}[#1,environment=slide]
+  }
+}%
+{\end{frame}}
+
+\AtBeginSection[] % Do nothing for \section*
+{
+  \begin{frame}<beamer>  
+    \frametitle{Module: \secname}
+     \tableofcontents[sectionstyle=hide,subsectionstyle=show/show/hide]
+ \end{frame}
+}
+
+\AtBeginSubsection[] % Do nothing for \subsection*
+{
+  \begin{frame}<beamer>
+    \frametitle{Module: \secname}
+    \medskip
+    \tableofcontents[sectionstyle=hide,subsectionstyle=show/shaded/hide]  
+  \end{frame}
+}
+
+\AtBeginPart
+{
+  \begin{frame}<beamer>
+    \frametitle{\insertshortpart}
+    \tableofcontents[sectionstyle=show,subsectionstyle=hide]      
+  \end{frame}
+}
+
+
+\newcommand{\todo}[1]{\begin{minipage}{3cm}
+        \tiny{#1} \end{minipage}}
+
+
+\newenvironment{questionize}{\begin{itemize}[<+>]}{\end{itemize}}
+
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/background}}
+
+% Highlighting in {alltt}, slides style:
+\newcommand{\highlight}[1]{\textcolor{red}{#1}}
+
+\newcommand{\correct}{\textcolor{qtdarkgreen}{$\surd$}}
+\newcommand{\incorrect}{\textcolor{red}{$X$}}
+\newcommand{\incorrecttext}[1]{\textcolor{red}{\strikethrough{#1}}}
+
+\newcommand{\ok}{\textcolor{qtdarkgreen}{$OK$}}
+\newcommand{\new}{\textcolor{qtdarkgreen}{$NEW$}}
+\newcommand{\notok}{\textcolor{red}{$NOK$}}
+\newcommand{\work}{\textcolor{yellow}{$WORK$}}
+\newcommand{\unknown}{\textcolor{orange}{$???$}}
+\newcommand{\delete}{\textcolor{red}{$DEL$}}
+
+\newcommand{\consolecode}[1]{%
+\vspace*{0.25em}
+\fcolorbox{gray}{darkgray}{\begin{minipage}{\columnwidth - \leftmargin}
+\textcolor{white}{\texttt{#1}}
+\end{minipage}}
+\vspace*{0.25em}}
+
+\newcommand{\qc}[2]{\textcolor{#1}{#2}}
+\newcommand{\qic}[2]{{\small\texttt{\textcolor{#1}{#2}}}}
+\newcommand{\qtt}[1]{\texttt{#1}}

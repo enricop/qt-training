@@ -1,0 +1,329 @@
+\subsection{Object Communication using Signals \& Slots}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0795}\frametitle{Callbacks}
+  \begin{block}{General Problem}
+    How do you get from "the user clicks a button" to your business logic?
+  \end{block}
+  \begin{itemize}
+ \item Possible solutions
+    \begin{itemize}
+    \item Callbacks
+      \begin{itemize}
+      \item Based on function pointers
+      \item Not type-safe
+     \end{itemize}
+    \item Observer Pattern (Listener)
+      \begin{itemize}
+      \item Based on interface classes
+      \item Needs listener registraction
+      \item Many interface classes
+      \end{itemize}
+    \end{itemize}
+  \item Qt uses
+    \begin{itemize}
+    \item Signals and slots for high-level (semantic) callbacks
+    \item Virtual methods for low-level (syntactic) events.
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0796}\frametitle{Signals \& Slots}
+  \xConcept{Signals and Slots} \xConcept{MOC}
+  \label{signals_and_slots}
+  \begin{itemize}
+  \item Object Communication
+    \begin{itemize}
+    \item \textbf{Signal} - \textit{emitted to notify other objects}
+    \item \textbf{Slot} - \textit{method called in response to signal}
+   \end{itemize}
+  \item Provides type-safe callbacks
+  \item After getting used to it, they are
+    \begin{itemize}
+    \item easier to use than message maps,
+    \item more secure than callbacks,
+    \item more flexible than virtual methods
+    \end{itemize}
+  \item Fosters component-based programming
+ \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+% I have to shrink these pages in 1024x768, there are no way we can fit it
+% in otherwise.
+% \ifthenelse{\equal{\screenwidth}{1024}}{
+%   \renewcommand{\paperToScreenFactor}{0.28346484375}
+%   \renewcommand{\doublePaperToScreenFactor}{0.566929687}
+% }{}
+
+\begin{slide}[fragile]{0797}\frametitle{Connecting Signals to Slots}
+\begin{overprint}
+  \onslide<1| handout:0> \centeredImageFullHeight{objects/images/signal-slot-cpp-step1}
+  \onslide<2| handout:0> \centeredImageFullHeight{objects/images/signal-slot-cpp-step2}
+  \onslide<3| handout:0> \centeredImageFullHeight{objects/images/signal-slot-cpp-step3}
+  \onslide<4| handout:0> \centeredImageFullHeight{objects/images/signal-slot-cpp-step4}
+  \onslide<5| handout:0> \centeredImageFullHeight{objects/images/signal-slot-cpp-step5}
+  \onslide<6| handout:0> \centeredImageFullHeight{objects/images/signal-slot-cpp-step6}
+  \onslide<7| handout:0> \centeredImageFullHeight{objects/images/signal-slot-cpp-step7}
+  \onslide<8| handout:1> \centeredImageFullHeight{objects/images/signal-slot-cpp-all} \\ \demo{objects/ex-connect}
+
+\end{overprint}
+\end{slide}
+
+% \ifthenelse{\equal{\screenwidth}{1024}}{
+%   \renewcommand{\paperToScreenFactor}{0.354331054688}
+%   \renewcommand{\doublePaperToScreenFactor}{0.708662109}
+% }{}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0798}\frametitle{Custom Slots}
+ \label{codeForSlots1}
+\xConcept{connect}
+\xConcept{Q\_OBJECT}
+\begin{itemize}
+\item File: \textbf{myclass.h} 
+  \begin{cpp}
+class MyClass : public QObject 
+{
+  Q_OBJECT // marker for moc
+  // ...
+public slots:
+  void setValue(int value); // a custom slot
+};
+  \end{cpp}
+\item File: \textbf{myclass.cpp}
+  \begin{cpp}
+void MyClass::setValue(int value) {
+  // slot implementation
+}
+
+  \end{cpp}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{07981}\frametitle{Custom Signals}
+\label{codeForSignals1}
+\xConcept{Q\_OBJECT}
+\begin{itemize}
+\item File: \textbf{myclass.h} 
+  \begin{cpp}
+class MyClass : public QObject 
+{
+  Q_OBJECT // marker for moc                       
+  // ...
+signals:
+  void valueChanged(int value); // a custom signal
+};
+  \end{cpp}
+\item File: \textbf{myclass.cpp}
+  \begin{cpp}
+// No implementation for a signal
+
+  \end{cpp}
+\item Sending a signal
+\begin{cpp}
+emit valueChanged(value);
+\end{cpp}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+
+\begin{slide}[fragile]{0799}\frametitle{\texttt{Q\_OBJECT} - flag for MOC}
+\begin{itemize}
+\item \textbf{\texttt{Q\_OBJECT}}
+  \begin{itemize}
+  \item Enhances QObject with meta-object information
+  \item Required for Signals \& Slots
+  \item \textbf{moc} creates meta-object information
+    \begin{itemize}
+    \item[] \begin{shell}
+moc -o moc_myclass.cpp myclass.h
+c++ -c myclass.cpp; c++ -c moc_myclass.cpp
+c++ -o myapp moc_myclass.o myclass.o
+    \end{shell}
+   \end{itemize}
+ \item \texttt{qmake} takes care of moc files for you
+ \end{itemize}
+\item \textbf{Analyze definition of} 
+  \begin{itemize}
+  \item \texttt{Q\_OBJECT}
+  \item \texttt{signals} and \texttt{slots}
+  \item \texttt{emit}
+  \item At \textit{\texttt{\$QTDIR/src/corelib/kernel/qobjectdefs.h}}
+  \end{itemize}        
+\item \textbf{Look at moc generated files}
+  \begin{itemize}
+  \item \demo{objects/ex-signalslots}
+  \end{itemize} 
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0802}\frametitle{Back to the Original Problem}
+  \xConcept{connect}
+  \begin{block}{We asked some slides ago...}
+    How to react to a button being clicked?
+  \end{block}
+\begin{itemize}
+\item Solution:
+  \begin{itemize}
+  \item \emph{Implement a slot in your widget}
+  \item \emph{Connect the button's clicked signal to the slot}
+  \end{itemize}
+\item Connect statement
+\begin{lstlisting}
+connect(sender, signal, receiver, slot);
+\end{lstlisting}
+
+\item Example
+\begin{cpp}
+connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
+\end{cpp}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0807}
+\frametitle{Lab: Connect to Click}
+\label{project_signal_slot}
+\xProject{Color Tester}
+\flushedImageDoubleWidth{objects/images/colorTester}
+\begin{itemize}
+\item \textbf{Create an application as shown here}
+  \begin{itemize}
+  \item Clicking on ``Select Color'' \\
+    updates label with color's name.
+  \end{itemize}
+\item \textbf{Hints}
+  \begin{itemize}
+  \item \iClsFn{QColorDialog}{getColor} to fetch a color
+  \item \iClsFn{QColor}{name} to get the color name
+ \end{itemize}
+\item \textbf{Optional}
+  \begin{itemize}
+  \item In \iCls{QColorDialog}, honor the user clicking
+    ``cancel'', and provide it with the current color to start from.
+  \item Set the selected color as the label's background (Hint: see \iCls{QPalette})
+  \end{itemize}
+\end{itemize}
+\vfill
+\lab{objects/lab-selectcolor}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\subsection{Signal/Slot Variations}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0803}\frametitle{Variations of Signal/Slot
+    Connections}
+  \begin{center}
+ \begin{tabular}{|c|c|c|}
+\hline
+\textbf{Signal(s)}                & \textbf{Connect to}   & \textbf{Slot(s)} \\\hline
+\hline
+one & \correct & many \\\hline
+many & \correct & one \\\hline
+one & \correct & another signal \\\hline
+  \end{tabular}
+\end{center}
+\begin{itemize}
+\item Signal to Signal connection
+ \item[] \begin{cpp}
+connect(bt, SIGNAL(clicked()), this, SIGNAL(okSignal()));
+  \end{cpp}
+
+\item \textbf{Not} allowed to name parameters
+\begin{tabbing}
+connect( \=m\_slider, \=SIGNAL( valueChanged( int \incorrecttext{value} ) )\\
+         \>this,      \>SLOT( setValue( int \incorrecttext{newValue} ) ) )
+  \end{tabbing}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1957}
+  \frametitle{Making the Connection}
+  \begin{block}{Rule for Signal/Slot Connection}
+    Can ignore arguments, but not create values from nothing
+  \end{block}
+  \begin{center}
+    
+ \begin{tabular}{r|c|l}
+\textbf{Signal}                &    & \textbf{Slot} \\
+\hline
+\multirow{3}{*}{rangeChanged(int,int)} & \uncover<2->{\correct} & setRange(int,int) \\
+ & \uncover<3->{\correct} & setValue(int) \\
+ & \uncover<4->{\correct} & updateUi() \\
+\hline
+
+\multirow{3}{*}{valueChanged(int)}     & \uncover<5->{\correct} & setValue(int) \\
+ & \uncover<6->{\correct} & updateUi() \\
+ & \uncover<7->{\incorrect} & setRange(int,int) \\ 
+ & \uncover<8->{\incorrect} & setValue(float) \\
+\hline                                   
+
+textChanged(QString) & \uncover<9->{\incorrect} & setValue(int) \\
+\hline
+
+\multirow{2}{*}{clicked()}  & \uncover<10->{\correct} & updateUi() \\
+& \uncover<11->{\incorrect} & setValue(int) \\
+
+  \end{tabular}
+  \end{center}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0806}\frametitle{Questions And Answers}\label{signalSlotsQuestions}
+\begin{questionize}
+\item How do you connect a signal to a slot?
+\item How would you implement a slot?
+\item Name some possible signal/slot connection combinations?
+\item How would you emit a signal?
+\item Do you need a class to implement a slot?
+\item Can you return a value from a slot?
+\item When do you need to run \texttt{qmake}?
+\item Where do you place the \texttt{Q\_OBJECT} macro and when do you
+need it?
+\end{questionize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0808}
+\frametitle{Lab: Source Compatibility}
+\label{project_slider_with_indicator}
+\flushedImageDoubleWidth{objects/images/SliderWithValue}
+ \begin{itemize}
+  \item \textbf{Implement custom slider}
+    \begin{itemize}
+    \item API compatible with \iCls{QSlider}
+    \item Shows current value of slider
+    \end{itemize}
+ \item \textbf{To create custom slider}
+    \begin{itemize}
+    \item use \iCls{QSlider} and \iCls{QLabel}
+    \end{itemize}
+  \item \textbf{To test slider}
+    \begin{itemize}
+    \item \texttt{main.cpp} provides test code
+    \item \iCls{QLCDNumber} is part of test code
+    \end{itemize}
+  \item \textbf{Optional:}
+    \begin{itemize}
+    \item  Discuss pros and cons of inheriting from
+      QSlider instead of using an instance in a layout.
+    \end{itemize}
+  \end{itemize}
+  \vfill
+  \lab{objects/lab-slider}
+  
+\end{slide}

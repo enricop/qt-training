@@ -1,0 +1,25 @@
+% this is the driver for presentations
+\documentclass[t]{beamer}
+\input{config}
+\input{base}
+
+% General course title
+\title{Qt Essentials - OpenSource Edition}
+
+\begin{document}
+
+\input{frontpage}
+
+\begin{slide}{1441}
+  \frametitle{Part 1}
+  \tableofcontents[part=1]
+\end{slide}
+
+\part{Part 1}
+\input{fundamentals/content}
+\input{objects/content}
+%\input{coretypes/content}
+
+\input{disclaimer.tex}
+
+\end{document}
