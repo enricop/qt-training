@@ -2,10 +2,16 @@
 *.log
 *.nav
 *.out
-*.pdf
+slides/*.pdf
 *.pdfsync
 *.snm
 *.toc
 *.vrb
 Makefile
+*.o
+*.so
+*.dll
+*.a
+moc_*
+*.moc
 .svn/
