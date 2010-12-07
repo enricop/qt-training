@@ -18,11 +18,28 @@
   \end{itemize}
 \end{slide}
 
-\begin{slide}
+\begin{slide}[fragile]
   \frametitle{C++ Coding Conventions}
   \begin{itemize}
-    \item Follows \externalNamedLink{http://qt.gitorious.org/qt/pages/CodingConventions}{Qt Coding Conventions}
+    \item Follow \externalNamedLink{http://qt.gitorious.org/qt/pages/CodingConventions}{Qt Coding Conventions}
     \item In addition: Follow the style of the official Qt examples
     \item Exception: Data members are prefixed with "m\_"
+    \begin{cpp}
+class ExampleWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    ExampleWidget(QWidget *parent = 0)
+        : QWidget(parent)
+    {}
+
+    int x() const { return m_x; }
+    void setX(int x) { m_x = x; }
+
+private:
+    int m_x;
+};
+    \end{cpp}
   \end{itemize}
 \end{slide}

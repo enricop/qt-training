@@ -41,31 +41,41 @@
     %  \verb^\emph{Manual text formatting should be avoided!}^
     %\item[] \emph{Manual text formatting should be avoided!}
     \item Emphasis:
-      \begin{verbatim}
+      {\footnotesize\begin{verbatim}
 \begin{block}{}
 {\emph{Manual text formatting should be avoided!}}
-\end{block} \end{verbatim}
+\end{block} \end{verbatim}}
     \item[] \begin{block}{} {\emph{Manual text formatting should be avoided!}}
       \end{block}
   \end{itemize}
 \end{slide}
 
-\begin{slide}
+\begin{slide}[fragile]
   \frametitle{Referencing Resources}
   \begin{itemize}
-    \item Referencing Qt resources:
+    \item Qt resources:
     \item[]
-    \begin{tabular}{l | l}
-      \footnotesize{\texttt{\textbackslash qthome\{<path>\}\{<Title>\}}} & \qthome{<path>}{<Title>}                           \\
-      \footnotesize{\texttt{\textbackslash doc\{doc-file.html\}\{<Title>\}           }} & \doc{doc-file.html}{<Title>}        \\
-      \footnotesize{\texttt{\textbackslash doccreator\{doc-file.html\}\{<Title>\}    }} & \doccreator{doc-file.html}{<Title>} \\
+    \begin{tabular}{l|l}
+      \footnotesize{\verb^\qthome{<path>}{<Title>}^}            & \qthome{<path>}{<Title>}            \\
+      \footnotesize{\verb^\doc{doc-file.html}{<Title>}^}        & \doc{doc-file.html}{<Title>}        \\
+      \footnotesize{\verb^\doccreator{doc-file.html}{<Title>}^} & \doccreator{doc-file.html}{<Title>} \\
     \end{tabular}
-    \item Referencing training resources:
+    \item Training resources:
     \item[]
-    \begin{tabular}{l | l}
-      \footnotesize{\texttt{\textbackslash demo\{<path>\}}} & \demo{<path>} \\
+    \begin{tabular}{l|l}
+      \footnotesize{\verb^\demo{<path>}^} & \demo{<path>} \\
     \end{tabular}
-    % TODO: web URIs!
+    \item External resources:
+    \item[]
+    \begin{tabular}{l|l}
+      \footnotesize{\verb^\externalLink{http://qt.nokia.com}^} & \externalLink{http://qt.nokia.com} \\
+    \end{tabular}
+    \begin{tabular}{l|l}
+      \footnotesize{\verb^\externalNamedLink{http://qt.nokia.com}{Qt Nokia}^} & \externalNamedLink{http://qt.nokia.com}{Qt Nokia} \\
+    \end{tabular}
+    \begin{tabular}{l|l}
+      \footnotesize{\verb^\wiki{Qt_(framework)}{Qt Framework}^} & \wiki{Qt_(framework)}{Qt Framework} \\
+    \end{tabular}
   \end{itemize}
 \end{slide}
 
