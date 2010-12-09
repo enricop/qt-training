@@ -16,3 +16,4 @@ moc_*
 *.moc
 .svn/
 config.tex
+.~locak*
