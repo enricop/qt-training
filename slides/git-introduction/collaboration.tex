@@ -1,0 +1,94 @@
+\subsection{Collaborating}
+
+\begin{slide}[fragile]
+  \frametitle{Setup your Identity}
+  \begin{enumerate}
+    \item Get yourself a face: gravatar.com
+    \item Generate a ssh key pair:
+    \item[]
+    \consolecode{%
+ssh-keygen -t rsa
+}
+    \begin{itemize}
+      \item private key (claim identity): \verb+~/.ssh/id_rsa+
+      \item public key (verify identity): \verb+~/.ssh/id_rsa.pub+
+    \end{itemize}
+    \item Create an account with your git hosting site:
+      \begin{itemize}
+        \item berlios.de
+        \item github.com
+        \item gitorious.org
+        \item savannah.gnu.org
+        \item sf.net
+        \item repo.or.cz
+      \end{itemize}
+    \item Upload your public key to the hosting site
+  \end{enumerate}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Go Public}
+  \begin{enumerate}
+    \item Create a new project on your git hosting site
+    \item Setup your local git repository
+    \item[]
+    \consolecode{%
+git remote add public \textbackslash\\
+git@gitorious.org:myblog/myblog.git
+}
+    \item Be sure to commit your latest changes at this point
+    \item Push your code to the public
+    \item[]
+    \consolecode{%
+git push public master
+}
+  \end{enumerate}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Collaborate}
+  \begin{itemize}
+    \item Patches, pull requests (merge requests) and pushing directly
+    \item Exchanging patches:
+    \begin{itemize}
+      \item[]
+      \consolecode{%
+A: git show <ref-spec> > a\_patch.patch
+}
+      \consolecode{%
+B: git apply a\_patch.patch
+}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Fork It!}
+  \begin{itemize}
+    \item Cloning, publishing clone and requesting a merge:
+    \begin{enumerate}
+      \item[]
+      \item Use the clone button, which basically does:
+      \consolecode{%
+githost: git clone {-}{-}bare <src> <public-clone>
+}
+      \item Cloning the public to your private machine
+      \consolecode{%
+A: git clone <public-clone-URI>
+}
+      \item Modifying the clone, committing changes, pushing changes
+      \consolecode{%
+A: \$EDIT main.cpp \&\&
+git commit -a \&\&
+git push
+}
+      \item Tell B and ask him to pull (fetch and merge)
+      \consolecode{%
+B: git remote add clone\_of\_a <public-clone-URI> \#once\\
+B: git fetch clone\_of\_a\\
+B: git diff clone\_of\_a/master\\
+B: git merge clone\_of\_a/master
+}
+    \end{enumerate}
+  \end{itemize}
+\end{slide}

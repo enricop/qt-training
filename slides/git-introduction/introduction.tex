@@ -1,0 +1,91 @@
+\subsection{Introduction}
+
+\begin{slide}[fragile]
+  \frametitle{Git can't succeed!}
+  \begin{itemize}
+    \item From the source: File commit.c: Line 151:
+    \item[]
+      \begin{cpp}
+if (buf[0] == '#' || buf[0] == '\0')
+    return NULL;
+if ((len + 1) % 41)
+    goto bad_graft_data;
+i = (len + 1) / 41 - 1;
+graft = xmalloc(sizeof(*graft) + 20 * i);
+graft->nr_parent = i;
+if (get_sha1_hex(buf, graft->sha1))
+    goto bad_graft_data;
+for (i = 40; i < len; i += 41) {
+    if (buf[i] != ' ')
+        goto bad_graft_data;
+    if (get_sha1_hex(buf + i + 1, graft->parent[i/41]))
+        goto bad_graft_data;
+      \end{cpp}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{1,2,3,4,5,6!}
+  \begin{itemize}
+    \item From the source: File commit.c: Line 69:
+    \item[]
+      \begin{cpp}
+if (buf + 6 >= tail)
+    return 0;
+if (memcmp(buf, "author", 6))
+    return 0;
+while (buf < tail && *buf++ != '\n')
+    /* nada */;
+if (buf + 9 >= tail)
+    return 0;
+if (memcmp(buf, "committer", 9))
+    return 0;
+while (buf < tail && *buf++ != '>')
+    /* nada */;
+      \end{cpp}
+    \item Commit id: f80b6de4eca9c4c4abfe9407736311de27726e53
+  \end{itemize}
+\end{slide}
+
+\begin{slide}
+  \frametitle{Yet, it succeeds}
+  \begin{itemize}
+    \item All basic git commands: Written in plain C
+    \item More than 500 goto statements (as of 8th Dec 2010)
+    \item Lots of raw pointer hacks
+    \item String lengths frequently computed by hand
+    \item Shockingly successful!
+    \item Success factors?
+    \begin{itemize}
+      \item Huge open community
+      \item Designed after real world use-cases
+      \item Peer reviews
+      \item No rules (Of course you can use gotos for looping!-)
+      \item Performance
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}
+  \frametitle{Backgrounder}
+  \begin{itemize}
+    \item "git" ... British English slang, WordNet: a person who is deemed to be despicable or contemptible
+    \item Started in 2005 a new SCM for kernel.org
+    \item Wikipedia:
+    \begin{itemize}
+      \item ...development of Git began on April 3, 2005...
+      \item ....became self-hosting as of April 7...
+      \item ...first merge of multiple branches was done on April 18...
+      \item On June 16, the kernel 2.6.12 release was managed...
+    \end{itemize}
+    \item Features:
+    \begin{itemize}
+      \item Distributed: .git subdir contains full repository
+      \item Most efficient SCM so far
+      \item Cryptographic security by cascaded hashing
+      \item Many independent tools (*nix style CLI oriented design)
+      \item Lazy garbage collected
+      \item Very efficient packing of patches
+    \end{itemize}
+  \end{itemize}
+\end{slide}

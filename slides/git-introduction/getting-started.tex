@@ -1,0 +1,116 @@
+\subsection{Getting Started}
+
+\begin{slide}[fragile]
+  \frametitle{Minimal Setup}
+  \begin{itemize}
+    \item Let's create a small application...
+    \item[]
+    \consolecode{%
+mkdir MyBlog\\
+cd MyBlog\\
+git init
+    }
+    \item Pooring down the first lines of code
+    \item As always: Commit frequently, so you can go back...
+    \item[]
+    \consolecode{%
+touch main.cpp MyBlog.hpp MyBlog.cpp \\
+qmake \\
+git status \\
+git add *.*pp \\
+git commit -m "Done smth." \\
+}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Under the Hood}
+  \begin{itemize}
+    \item Git is a patch/commit database...
+    \item[]
+    \consolecode{%
+ls .git\\
+cat .git/refs/heads/master\\
+git log|head
+}
+    \item Everything goes into a single .git subdirectory
+    \item Cloning means copying the entire database
+    \item Commit = Patch + Contributor Info + Message + Hash
+    \item Commit history is a tree
+    \begin{itemize}
+      \item Heads: Pointers to the leafs/ends of the commit tree
+      \item Each commit identified by SH1 Id (40 chars, the hash)
+      \item Tags: Names for Hashes
+      \item Default head: "master"
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Configuring Git}
+  \begin{itemize}
+    \item Telling git how it should behave, once...
+    \item Git keeps track of trees and locations here:
+    \item[]
+    \consolecode{%
+cat \$MYPROJECT/.git/config
+}
+    \item User specific setup (identity and preferences):
+    \item[]
+    \consolecode{%
+cat 1> \textasciitilde/.gitconfig\\
+{[}user{]}\\
+    name = Frank Mertens\\
+    email = ext-frank.mertens{@}nokia.com\\
+\emph{Ctrl-D}}
+    \item Optional: gpg setup (if needed)
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Setting up Console Colors}
+  \begin{itemize}
+  \item Generate color escapes if writing to TTY or pipe...
+  \item[]
+    \consolecode{%
+cat 1>{>} \textasciitilde/.gitconfig\\
+{[}color{]}\\
+    diff = auto\\
+    status = auto\\
+    branch = auto\\
+\emph{Ctrl-D}}
+  \item And tell GNU less:
+  \item[]
+    \consolecode{%
+cat 1>{>} \textasciitilde/.gitconfig\\
+{[}core{]}\\
+    pager = less -FRSX\\
+    editor = vi\\
+\emph{Ctrl-D}}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]
+  \frametitle{Reverting Changes}
+  \begin{itemize}
+    \item Uncommitted:
+    \begin{itemize}
+      \item[]
+      \item Delete affecting files and do:
+      \item[]
+      \consolecode{%
+git checkout
+}
+      \item Or reset the index (and implicitly restore working tree):
+      \item[]
+      \consolecode{%
+git reset -{-}hard HEAD
+}
+    \end{itemize}
+    \item Committed: Revert the commit
+    \item[]
+    \consolecode{%
+git revert <commit-id>
+}
+  \end{itemize}
+\end{slide}
