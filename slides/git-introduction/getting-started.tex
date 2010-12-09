@@ -33,23 +33,37 @@ ls .git\\
 cat .git/refs/heads/master\\
 git log|head
 }
-    \item Everything goes into a single .git subdirectory
+    \item The entire repository is contained in the .git subdirectory
     \item Cloning means copying the entire database
     \item Commit = Patch + Contributor Info + Message + Hash
     \item Commit history is a tree
     \begin{itemize}
       \item Heads: Pointers to the leafs/ends of the commit tree
       \item Each commit identified by SH1 Id (40 chars, the hash)
-      \item Tags: Names for Hashes
+      \item Tags: Names for hashes
       \item Default head: "master"
     \end{itemize}
   \end{itemize}
 \end{slide}
 
 \begin{slide}[fragile]
+  \frametitle{Git Terms}
+  \centeredImageFullHeight{git-introduction/ooo/simple_terms}
+  \begin{itemize}
+     \item Active branch (which is checked out): {\footnotesize{\verb+.git/HEAD+}}
+     \item The default branch is called "master": {\footnotesize{\verb+.git/refs/heads/master+}}
+     \item Remote tracking branches: {\footnotesize{\verb+.git/refs/remotes+}}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}
+  \frametitle{Example Tree}
+  \centeredImage{git-introduction/images/gitk_qt_47}
+\end{slide}
+
+\begin{slide}[fragile]
   \frametitle{Configuring Git}
   \begin{itemize}
-    \item Telling git how it should behave, once...
     \item Git keeps track of trees and locations here:
     \item[]
     \consolecode{%
