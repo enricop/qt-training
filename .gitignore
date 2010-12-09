@@ -15,3 +15,4 @@ Makefile
 moc_*
 *.moc
 .svn/
+config.tex
