@@ -10,6 +10,7 @@
 \newboolean{with-notes}
 \newboolean{show-slide-id}
 \newboolean{show-page-numbers}
+\newboolean{cc-license}
 
 
 %======================================================================
@@ -22,20 +23,17 @@
 \producer{\small{Qt Essentials - Training Course}}
 
 % Presented for Customer or Presented by Trainer
-%\customer{Presented by Trainer, Company}
+\customer{Visit us at \url{http://qt.nokia.com/training}}
 
 % Indicator for material version
 \material{
   Produced by Nokia, Qt Development Frameworks\\
   \medskip
   \tiny{\textit{Material based on Qt 4.7, created on \today\\}}
-  %% Comment out for distribution under creative commons license:
-  % \medskip\medskip
-  % \href{http://creativecommons.org/licenses/by-sa/3.0/}{\includegraphics[scale=0.5, keepaspectratio]{legal/ccsa.png}}
 }
 
 % Partner company logo and name
-%\partner{\includegraphics[height=2cm]{images/company} \\ The Partner}
+% \partner{\includegraphics[height=2cm]{images/company} \\ The Partner}
 
 
 %======================================================================
@@ -53,6 +51,9 @@
 
 %% Should we show slide-id's in the title?
 \setboolean{show-slide-id}{false}
+
+%% Is material under Creative Commons-license? (Please adhere to license restrictions of certain modules)
+\setboolean{cc-license}{true}
 
 %% What is the screen resolution
 \newcommand{\screenwidth}{1400}

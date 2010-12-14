@@ -440,3 +440,13 @@ rulecolor=\color{qtlightgreen},
 \newcommand{\qc}[2]{\textcolor{#1}{#2}}
 \newcommand{\qic}[2]{{\small\texttt{\textcolor{#1}{#2}}}}
 \newcommand{\qtt}[1]{\texttt{#1}}
+
+% cc-license fixed configuration. Automatically applied if in config.tex cc-license is set to true
+
+\ifthenelse{\boolean{cc-license}}
+  {
+  \customer{}
+  \partner{\includegraphics[height=2cm]{images/qt-logo} \\ http://qt.nokia.com}
+  }
+  {
+  }

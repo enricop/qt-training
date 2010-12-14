@@ -37,7 +37,13 @@
   } 
 }
 \hspace{0mm}
-%\makebox[20mm][c]{\raisebox{1mm}{\includegraphics[scale=0.125, keepaspectratio]{diagrams/nokia-logo}}}
+\ifthenelse{\boolean{cc-license}} 
+  {
+  \makebox[15mm][c]{\raisebox{3mm}{\includegraphics[scale=0.2, keepaspectratio]{images/by-sa}}}
+  } % else 
+  { 
+  \makebox[20mm][c]{\raisebox{1mm}{\includegraphics[scale=0.125, keepaspectratio]{diagrams/nokia-logo}}}
+  }
 }
 %%% Footer
 % \setbeamertemplate{footline}{
