@@ -17,7 +17,7 @@ TOPLEVEL = "../.."
 
 # automatically fix license headers / license distribution
 # WARNING: Setting AUTFIX to "True" may destroy your files!
-AUTOFIX = False
+AUTOFIX = True
 
 import os, sys
 
@@ -107,8 +107,9 @@ for root, dirs, files in os.walk(TOPLEVEL):
                 errorCount = errorCount + 1
         uncoveredCopyright = False
         for lc in copyrights:
-            if lc >= len(header):
-                print "Warning: Uncovered copyright statement in %s:%d" % (path, lc)
+            if missingHeader or lc >= len(header):
+                print "Error: Uncovered copyright statement in %s:%d" % (path, lc)
+                errorCount = errorCount + 1
                 uncoveredCopyright = True
         if AUTOFIX and missingHeader:
             lines = open(path, 'r').readlines()
@@ -128,16 +129,25 @@ for root, dirs, files in os.walk(TOPLEVEL):
                         ya = y
                     elif yb == -1:
                         yb = y
+                    else: # separators used in code
+                        ya = -1
+                        yb = -1
                         break
                 y = y + 1
-            if ya != -1 and yb != -1:
+            if ya != -1 and yb != -1 and ya < 2:
                 for y in range(ya, yb + 1):
                     lines.pop(ya)
                     if ya < len(lines):
                         if lines[ya] == "\n":
                             lines.pop(ya)
-                if uncoveredCopyright <= yb:
-                    uncoveredCopyright = False
+                if uncoveredCopyright:
+                    coveredCount = 0
+                    for lc in copyrights:
+                        if lc <= yb:
+                            coveredCount = coveredCount + 1
+                    if coveredCount == len(copyrights):
+                        uncoveredCopyright = False
+                        autofixCount = autofixCount + 1
                 print "Fix: Deleted existing header from %s" % path
             # add new header
             if not uncoveredCopyright:
@@ -187,5 +197,5 @@ if errorCount == 0:
     print "SUCCESS: No license policy violations detected/left"
     sys.exit(0)
 else:
-    print "FAILED: %d violations against license policy detected" % errorCount
+    print "FAILED: %d violations against license policy detected/left" % errorCount
     sys.exit(2)
