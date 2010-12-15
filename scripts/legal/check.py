@@ -1,12 +1,23 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# license policy root (where to find headers and licenses)
 POLICY_ROOT = ""
 HEADERS_PATH = "headers"
 LICENSES_PATH = "licenses"
+
+# if a license file needs to be shipped, name of the license file
 LICENSE_FILENAME = "LICENSE.txt"
+
+# ignore file paths containing given components
 IGNORE = [ ".git", "LICENSE.txt", "legal", "disclaimer.tex" ]
+
+# directory where to start scanning
 TOPLEVEL = "../.."
+
+# automatically fix license headers / license distribution
+# WARNING: Setting AUTFIX to "True" may destroy your files!
+AUTOFIX = False
 
 import os, sys
 
@@ -72,9 +83,12 @@ licenseByExt = loadLicenseByExt(POLICY_ROOT)
 
 print "Scanning %s..." % TOPLEVEL
 errorCount = 0
+autofixCount = 0
 
 for root, dirs, files in os.walk(TOPLEVEL):
     for name in files:
+        #############################################################################
+        # check if license header is correct
         path = os.path.join(root, name)
         ignore = False
         for part in path.split(os.sep):
@@ -84,27 +98,94 @@ for root, dirs, files in os.walk(TOPLEVEL):
         copyrights = filterCopyrights(path)
         ext = name.split(".")[-1]
         header = []
+        missingHeader = False
         if ext in headerByExt:
             header = headerByExt[ext]
             if not checkHeader(path, header):
-                print "Missing or wrong copyright header in %s" % path
+                print "Error: Missing or wrong copyright header in %s" % path
+                missingHeader = True
                 errorCount = errorCount + 1
+        uncoveredCopyright = False
         for lc in copyrights:
             if lc >= len(header):
                 print "Warning: Uncovered copyright statement in %s:%d" % (path, lc)
+                uncoveredCopyright = True
+        if AUTOFIX and missingHeader:
+            lines = open(path, 'r').readlines()
+            # delete existing header
+            ya = -1
+            yb = -1
+            y = 0
+            for line in lines:
+                isBorder = False
+                borderChars = [ '*', '#', '%', '-', '=' ]
+                for ch in borderChars:
+                    if line.count(ch) > 10:
+                        isBorder = True
+                        break
+                if isBorder:
+                    if ya == -1:
+                        ya = y
+                    elif yb == -1:
+                        yb = y
+                        break
+                y = y + 1
+            if ya != -1 and yb != -1:
+                for y in range(ya, yb + 1):
+                    lines.pop(ya)
+                    if ya < len(lines):
+                        if lines[ya] == "\n":
+                            lines.pop(ya)
+                if uncoveredCopyright <= yb:
+                    uncoveredCopyright = False
+                print "Fix: Deleted existing header from %s" % path
+            # add new header
+            if not uncoveredCopyright:
+                headerText = "".join(header)
+                while len(lines) > 0:
+                    if lines[0] == "\n":
+                        lines.pop(0)
+                    else:
+                        break
+                sourceText = "".join(lines)
+                open(path, 'w').write(headerText + "\n" + sourceText)
+                print "Fix: Added new copyright header to %s" % path
+                autofixCount = autofixCount + 1
+        #############################################################################
+        # check if license file is shipped correctly (if required)
+        wrongLicense = False
+        missingLicense = False
+        licensePath = os.path.join(root, LICENSE_FILENAME)
         for line in header:
             if line.find(LICENSE_FILENAME) != -1:
                 if not LICENSE_FILENAME in os.listdir(root):
-                    print "Missing %s in %s" % (LICENSE_FILENAME, root)
+                    print "Error: Missing %s in %s" % (LICENSE_FILENAME, root)
+                    missingLicense = True
                     errorCount = errorCount + 1
                 else:
-                    licenseUsed = open(os.path.join(root, LICENSE_FILENAME), "r").read()
+                    licenseUsed = open(licensePath, "r").read()
                     if licenseByExt[ext] != licenseUsed:
-                        print "Wrong license file shipped in %s" % root
+                        print "Error: Wrong license file shipped in %s" % root
+                        wrongLicense = True
                         errorCount = errorCount + 1
+        if AUTOFIX:
+            if wrongLicense:
+                os.unlink(licensePath)
+            if wrongLicense or missingLicense:
+                open(licensePath, "w").write(licenseByExt[ext])
+                if wrongLicense:
+                    print "Fix: Replaced license file %s" % licensePath
+                else:
+                    print "Fix: Added license file %s" % licensePath
+                autofixCount = autofixCount + 1
+
+if AUTOFIX:
+    print "NOTE: %d problems automatically fixed" % autofixCount
+    errorCount = errorCount - autofixCount
+
 if errorCount == 0:
-    print "SUCCESS: No license policy violations detected."
+    print "SUCCESS: No license policy violations detected/left"
     sys.exit(0)
 else:
-    print "FAILED: %d violations against license policy detected." % errorCount
+    print "FAILED: %d violations against license policy detected" % errorCount
     sys.exit(2)
