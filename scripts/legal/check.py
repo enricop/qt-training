@@ -17,7 +17,7 @@ TOPLEVEL = "../.."
 
 # automatically fix license headers / license distribution
 # WARNING: Setting AUTFIX to "True" may destroy your files!
-AUTOFIX = True
+AUTOFIX = False
 
 import os, sys
 
