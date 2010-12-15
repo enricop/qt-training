@@ -1,10 +1,11 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+POLICY_ROOT = ""
 HEADERS_PATH = "headers"
 LICENSES_PATH = "licenses"
 LICENSE_FILENAME = "LICENSE.txt"
-IGNORE = [ ".git", "LICENSE.txt", "licenses", "legal" ]
+IGNORE = [ ".git", "LICENSE.txt", "legal", "disclaimer.tex" ]
 TOPLEVEL = "../.."
 
 import os, sys
@@ -16,18 +17,20 @@ def usage():
     print "and license headers."
     sys.exit(1)
 
-def loadHeaderByExt():
+def loadHeaderByExt(policyRoot):
     headerByExt = {}
-    for name in os.listdir(HEADERS_PATH):
+    headersPath = os.path.join(policyRoot, HEADERS_PATH)
+    for name in os.listdir(headersPath):
         ext = name.split(".")[-1]
-        headerByExt[ext] = open(os.path.join(HEADERS_PATH, name)).readlines()
+        headerByExt[ext] = open(os.path.join(headersPath, name)).readlines()
     return headerByExt
 
-def loadLicenseByExt():
+def loadLicenseByExt(policyRoot):
     licenseByExt = {}
-    for name in os.listdir(LICENSES_PATH):
+    licensesPath = os.path.join(policyRoot, LICENSES_PATH)
+    for name in os.listdir(licensesPath):
         ext = name.split(".")[-1]
-        licenseByExt[ext] = open(os.path.join(LICENSES_PATH, name)).read()
+        licenseByExt[ext] = open(os.path.join(licensesPath, name)).read()
     return licenseByExt
 
 def parseArgs(toplevel):
@@ -61,11 +64,14 @@ def checkHeader(path, header):
     return lc == len(header)
 
 TOPLEVEL = parseArgs(TOPLEVEL)
-headerByExt = loadHeaderByExt()
-licenseByExt = loadLicenseByExt()
+POLICY_ROOT = os.path.dirname(sys.argv[0])
+print "Loading license policy from %s" % POLICY_ROOT
+
+headerByExt = loadHeaderByExt(POLICY_ROOT)
+licenseByExt = loadLicenseByExt(POLICY_ROOT)
 
 print "Scanning %s..." % TOPLEVEL
-exitCode = 0
+errorCount = 0
 
 for root, dirs, files in os.walk(TOPLEVEL):
     for name in files:
@@ -82,7 +88,7 @@ for root, dirs, files in os.walk(TOPLEVEL):
             header = headerByExt[ext]
             if not checkHeader(path, header):
                 print "Missing or wrong copyright header in %s" % path
-                exitCode = 2
+                errorCount = errorCount + 1
         for lc in copyrights:
             if lc >= len(header):
                 print "Warning: Uncovered copyright statement in %s:%d" % (path, lc)
@@ -90,10 +96,15 @@ for root, dirs, files in os.walk(TOPLEVEL):
             if line.find(LICENSE_FILENAME) != -1:
                 if not LICENSE_FILENAME in os.listdir(root):
                     print "Missing %s in %s" % (LICENSE_FILENAME, root)
-                    exitCode = 3
+                    errorCount = errorCount + 1
                 else:
                     licenseUsed = open(os.path.join(root, LICENSE_FILENAME), "r").read()
                     if licenseByExt[ext] != licenseUsed:
                         print "Wrong license file shipped in %s" % root
-                        exitCode = 4
-sys.exit(exitCode)
+                        errorCount = errorCount + 1
+if errorCount == 0:
+    print "SUCCESS: No license policy violations detected."
+    sys.exit(0)
+else:
+    print "FAILED: %d violations against license policy detected." % errorCount
+    sys.exit(2)
