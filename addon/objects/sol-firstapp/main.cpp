@@ -28,30 +28,26 @@ int main(int argc, char *argv[])
     itemList->addItem("Item Three");
 
     QVBoxLayout *layout = new QVBoxLayout;
-    {
-        QHBoxLayout *itemAddLayout = new QHBoxLayout;
-        itemAddLayout->addWidget(itemLabel);
-        itemAddLayout->addWidget(itemEdit);
-        itemAddLayout->addWidget(addItem);
-        layout->addLayout(itemAddLayout);
-    }
-    {
-        // Optional part
 
-        QHBoxLayout *hbox = new QHBoxLayout;
-        hbox->addWidget(itemList);
-        {
-            QVBoxLayout *editRemoveLayout = new QVBoxLayout;
-            editRemoveLayout->addWidget(new QPushButton("Edit"));
-            editRemoveLayout->addWidget(new QPushButton("Remove"));
-            editRemoveLayout->addStretch(1);
-            hbox->addLayout(editRemoveLayout);
-        }
-        groupBox->setLayout(hbox);
-        layout->addWidget(groupBox);
-    }
+    QHBoxLayout *itemAddLayout = new QHBoxLayout;
+    itemAddLayout->addWidget(itemLabel);
+    itemAddLayout->addWidget(itemEdit);
+    itemAddLayout->addWidget(addItem);
+    layout->addLayout(itemAddLayout);
+
+    // Optional part
+
+    QHBoxLayout *hbox = new QHBoxLayout;
+    hbox->addWidget(itemList);
+    QVBoxLayout *editRemoveLayout = new QVBoxLayout;
+    editRemoveLayout->addWidget(new QPushButton("Edit"));
+    editRemoveLayout->addWidget(new QPushButton("Remove"));
+    editRemoveLayout->addStretch(1);
+    hbox->addLayout(editRemoveLayout);
+    groupBox->setLayout(hbox);
+    layout->addWidget(groupBox);
+
     window.setLayout(layout);
-
     window.show();
 
     return app.exec();
