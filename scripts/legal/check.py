@@ -58,7 +58,7 @@ def filterCopyrights(path):
     lc = 1
     for line in f:
         lineLower = line.lower()
-        copyrightPatterns = [ "(c)", "copyright" ] # , u"©" ]
+        copyrightPatterns = [ "(c) ", " (c)", "copyright" ] # , u"©" ]
         for pattern in copyrightPatterns:
             if lineLower.find(pattern) != -1:
                 copyrights[lc] = line
