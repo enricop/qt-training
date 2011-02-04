@@ -1,0 +1,75 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Painting and Styling}
+
+%----------------------------------------------------------------------
+\begin{slide}{1522}\frametitle{Custom painting or stylesheets}
+  \begin{itemize}
+  \item Painting
+    \begin{itemize}
+    \item You paint with a painter on a paint device during a paint event
+    \item Qt widgets know how to paint themselves
+    \item Often widgets look like we want
+    \item Painting allows device independent 2D visualization
+    \item Allows to draw pie charts, line charts and many more
+    \end{itemize}
+  \item StyleSheets
+    \begin{itemize}
+    \item Fine grained control over the look and feel
+    \item Easily applied using style sheets in CSS format
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1217}
+\label{painting-and-drawing}
+\frametitle{Module Objectives}
+
+Covers techniques for general 2D graphics and styling applications.
+\begin{itemize}
+\item \textbf{Painting}
+  \begin{itemize}
+  \item Painting infrastructure
+  \item Painting on widget
+  \end{itemize}
+\item \textbf{Color Handling}
+  \begin{itemize}
+  \item Define and use colors
+  \item Pens, Brushes, Palettes
+  \end{itemize}
+\item \textbf{Shapes}
+  \begin{itemize}
+  \item Drawing shapes
+  \end{itemize}
+\item \textbf{Transformation}
+  \begin{itemize}
+  \item 2D transformations of a coordinate system
+  \end{itemize}
+\item \textbf{Style Sheets} 
+  \begin{itemize}
+  \item How to make small customizations
+  \item How to apply a theme to a widget or application
+  \end{itemize}
+% \item For GraphicsView intensive course you may skip Style Sheets
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\input{painting/painting-widgets.tex}
+\input{painting/colors} 
+\input{painting/painting-operations.tex}
+\input{painting/style-sheets.tex}

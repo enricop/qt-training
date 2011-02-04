@@ -1,0 +1,55 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Easing Curves}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1288}\frametitle{Easing Curves}
+
+% declarative-uis/animations/easing-curve.qml
+\inputqml{qml-animations/colorized/easing-curve}     
+
+\demo{qml-animations/ex-animations/easing-curve.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1287}\frametitle{Easing Curves}
+
+Apply an easing curve to an animation:
+
+\flushedImageDoubleWidth{qml-animations/images/qeasingcurve-outexpo.png}
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{NumberAnimation}~\qc{keyword}{on}~\qc{type}{x}~\{}\\
+\qtt{~~~~\qc{type}{from}:~\qc{number}{0};~\qc{type}{to}:~\qc{number}{150};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\qc{type}{easing.type}:~\qc{string}{"OutExpo"}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Sets the \qic{type}{easing.type} property
+\item Relates the elapsed time
+  \begin{itemize}
+  \item to a value interpolated between the \qic{type}{from} and \qic{type}{to}
+        values
+  \item using a function for the easing curve
+  \item in this case, the \qic{string}{"OutExpo"} curve
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------          

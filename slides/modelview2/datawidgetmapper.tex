@@ -1,0 +1,88 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Data Widget Mapper}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1298}
+  \frametitle{Data Widget Mapper- \iCls{QDataWidgetMapper}}
+ \begin{columns}[t]
+    \begin{column}{6cm}
+      \begin{itemize}
+      \item Maps model sections to widgets
+      \item Widgets updated, when current index changes
+      \item Orientation
+        \begin{itemize}
+        \item Horizontal => Data Columns
+        \item Vertical => Data Rows
+        \end{itemize}
+     \end{itemize}
+   \end{column}
+   \begin{column}{4cm}
+     \flushedImage{modelview2/images/datawidgetmapper}            
+   \end{column}
+ \end{columns}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1297}
+  \frametitle{Using \iCls{QDataWidgetMapper}}
+  \begin{itemize}
+  \item Mapping Setup
+ \begin{cpp}
+mapper = new QDataWidgetMapper(this);
+mapper->setOrientation(Qt::Horizontal);
+mapper->setModel(model);
+// mapper->addMapping( widget, model-section)
+mapper->addMapping(nameEdit, 0);
+mapper->addMapping(addressEdit, 1);
+mapper->addMapping(ageSpinBox, 2);
+// populate widgets with 1st row
+mapper->toFirst();
+  \end{cpp}
+\item Track Navigation
+  \begin{cpp}
+connect(nextButton, SIGNAL(clicked()), 
+          mapper, SLOT(toNext()));    
+connect(previousButton, SIGNAL(clicked()), 
+          mapper, SLOT(toPrevious()));    
+  \end{cpp}
+  \end{itemize}
+\qtdemo{examples/itemviews/simplewidgetmapper}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1296}\frametitle{Mapped Property - The \texttt{USER} Property}
+    \begin{cpp}
+class QLineEdit : public QWidget 
+{
+  ...
+  Q_PROPERTY(QString text 
+             READ text WRITE setText NOTIFY textChanged 
+             USER true) // USER property
+  ...
+};      
+    \end{cpp}
+    \begin{itemize}
+    \item \texttt{USER} indicates property is user-editable property
+    \item Only one \texttt{USER} property per class
+    \item Used to transfer data between the model and the widget
+    \end{itemize}
+    \begin{cpp}
+addMapping(lineEdit, 0); // uses "text" user property
+addMapping(lineEdit, 0, "inputMask"); // uses named property      
+    \end{cpp}
+\qtdemo{examples/itemviews/combowidgetmapper}
+\end{slide}
+
+

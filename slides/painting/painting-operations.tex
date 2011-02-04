@@ -1,0 +1,162 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Painting Operations}
+
+%----------------------------------------------------------------------
+\begin{slide}{1521}\frametitle{Drawing Figures}
+\flushedImage{painting/images/figures}
+\begin{itemize}
+\item Painter configuration
+  \begin{itemize}
+  \item pen width: 2
+  \item pen color: red
+  \item font size: 10
+  \item brush color: yello
+  \item brush style: solid
+  \end{itemize}
+
+\item \demo{painting/ex-figures}
+\end{itemize}
+\end{slide}                             
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1520}\frametitle{Drawing Text}
+  \begin{itemize}
+  \item \texttt{QPainter::drawText(rect, flags, text)}
+\flushedImageDoubleWidth{painting/images/drawtext.png}
+  \item[] \begin{cpp}
+QPainter painter(this);
+painter.drawText(rect, Qt::AlignCenter, tr("Qt"));
+painter.drawRect(rect);      
+    \end{cpp}
+ \item \iCls{QFontMetrics}
+      \begin{itemize}
+      \item calculate size of strings
+      \end{itemize}
+    \item[] \begin{cpp}
+QFont font("times", 24);
+QFontMetrics fm(font);
+int pixelsWide = fm.width("Width of this text?");
+int pixelsHeight = fm.height();        
+      \end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1519}\frametitle{Transformation}
+\flushedImage{painting/images/transform}
+  \begin{itemize}
+  \item Manipulating the coordinate system
+    \begin{itemize}
+    \item translate(x,y)
+    \item scale(sx,sy)
+    \item rotate(a)
+    \item shear(sh,sv)
+    \item reset()
+    \end{itemize}
+ \item[] \demo{painting/ex-transform}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1518}\frametitle{Transform and Center}
+  \begin{itemize}
+  \item scale(sx, sy)
+    \begin{itemize}
+    \item scales around QPoint(0,0)
+    \end{itemize}
+  \item Same applies to all transform operations
+  \item Scale around center?
+\flushedImage{painting/images/scale-center}
+  \item [] \begin{cpp}
+painter.drawRect(r);
+painter.translate(r.center());
+painter.scale(sx,sy);
+painter.translate(-r.center());
+// draw center-scaled rect      
+painter.drawRect(r); 
+    \end{cpp}
+ \item[] \demo{painting/ex-transform (scale center)}
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1517}\frametitle{Painter Path - QPainterPath}
+  \begin{itemize}
+  \item Container for painting operations
+  \item Enables reuse of shapes
+\flushedImageDoubleWidth{painting/images/qpainterpath-construction}
+  \item[] \begin{cpp}
+QPainterPath path;
+path.addRect(20, 20, 60, 60);
+path.moveTo(0, 0);
+path.cubicTo(99, 0,  50, 50,  99, 99);
+path.cubicTo(0, 99,  50, 50,  0, 0);      
+painter.drawPath(path);
+    \end{cpp}
+  \item Path information
+    \begin{itemize}
+    \item \hClsFn{QPainterPath}{controlPointRect} - rect containing all points
+    \item \hClsFn{QPainterPath}{contains} - test if given shape is inside path
+    \item \hClsFn{QPainterPath}{intersects} - test given shape intersects path
+    \end{itemize}
+
+  \item[] \qtdemo{examples/painting/painterpaths}
+
+  \end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1516}\frametitle{Other Painter Concepts}
+  \begin{itemize}
+  \item Clipping
+    \begin{itemize}
+    \item Clip drawing operation to shape
+    \end{itemize}
+    \flushedImage{painting/images/qpainter-compositiondemo}
+  \item Composition modes:
+    \begin{itemize}
+    \item Rules for digital image compositing
+    \item Combining pixels from source to destination
+    \item[] \qtdemo{demos/composition}
+    \end{itemize}
+  \item Rubber Bands - \iCls{QRubberBand}
+    \begin{itemize}
+    \item Rectangle or line that indicate selection or boundary
+    \item \doc{qrubberband.html}{QRubberband}
+    \end{itemize}
+  \end{itemize}  
+\end{slide}
+
+\begin{slide}{1515}\frametitle{Lab: Pie Chart Widget}
+    \flushedImage{painting/images/piechart}
+  \begin{itemize}
+  \item Task to implement a pie chart
+  \item Draw pies with painters based on data.
+  \item Data Example: Population of 4 countries
+    \begin{itemize}
+    \item Sweden
+    \item Germany
+    \item Norway
+    \item Italy
+   \end{itemize}
+  \item Guess the population in millions of citizens ;-)
+  \item \textbf{Legend is optional}
+  \item See lab description for details
+  \item[] \lab{painting/lab-piechart}
+  \end{itemize}
+\end{slide}

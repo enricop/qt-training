@@ -1,0 +1,393 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{SQL Database API} \label{sql}
+
+%----------------------------------------------------------------------
+\begin{slide}{0516}\frametitle{Overview}
+\begin{itemize}
+\item We will cover
+ \begin{itemize}
+  \item Connecting to a database.
+  \item Invoking SQL queries using \iCls{QSqlQuery}.
+  \item SQL Models
+  \end{itemize}
+  \item Not covered
+    \begin{itemize}
+    \item Developing database drivers
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0514}\frametitle{SQL Drivers}
+\xConcept{SQL!Supported databases}
+\begin{itemize}
+\item \textbf{Qt's SQL}
+  \begin{itemize}
+  \item Cross platform
+  \item Database independent
+  \end{itemize}
+\item \textbf{Supported drivers are:}
+  \begin{multicols}{2}
+
+     \begin{itemize}
+    \begin{footnotesize}
+      \item MySQL (QMYSQL)
+      \item PostgreSQL (QPSQL)
+      \item SQLite (QSQLITE)
+      \item ODBC (QODBC)
+      \item IBM DB2 (QDB2)
+      \item Borland Interbase (QIBASE)
+      \item Oracle Call Interface (QOCI)
+      \item Sybase Adaptive Server (QTDS)
+        \medskip
+  \end{footnotesize}
+      \end{itemize}
+   \end{multicols}
+\end{itemize}
+\begin{itemize}
+\item Extra drivers can be developed as Qt plug-ins.
+\item Enable SQL module, with \texttt{QT += sql} in qmake file
+\end{itemize}
+ 
+\doc{sql-driver.html}{SQL Database Drivers}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0518}\frametitle{Connecting to a Database}
+\begin{itemize}
+\item Connect to PostgreSQL database
+  \begin{cpp}
+// choose driver by name
+QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
+db.setHostName("acidalia");
+db.setDatabaseName("customdb");
+db.setUserName("mojito");
+db.setPassword("J0a1m8");
+bool ok = db.open();    
+  \end{cpp}
+
+\item Supporting multi databases
+  \begin{cpp}
+QSqlDatabase::addDatabase("QPSQL", "db1");
+// retrieve database by name
+QSqlDatabase db1 = QSqlDatabase::database("db1");
+  \end{cpp}
+\item By default all SQL API uses the default connection 
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0520}\frametitle{Obtaining Error Messages}
+\begin{itemize}
+\item \textbf{\iCls{QSqlError}}
+  \begin{cpp}
+QSqlDatabase db ...
+QSqlError error = db.lastError();    
+qDebug() << "database error: " << error.databaseText();
+qDebug() << "driver error: " << error.driverText();
+qDebug() << "combined message: " << error.text();
+  \end{cpp}
+\item \iCls{QSqlQuery} supports same error reporting
+\item \textit{Note: } Messages are most likely not localized. 
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0522}
+\frametitle{Invoking SQL Queries}
+\xConcept{SQL!Simple queries}
+\begin{itemize}
+\item \iCls{QSqlQuery} - used to run SQL queries
+  \begin{cpp}
+QSqlQuery query;
+if ( query.exec( "SELECT name FROM author" ) ) {
+  while( query.next() ) {
+  // ask for field by index ( 0 = name )
+  QString name = query.value(0).toString();
+  // do something useful with name
+}  else {
+  qDebug() << query.lastError();
+}
+  \end{cpp}
+\item Alternative query with sql statement, specific database
+  \begin{cpp}
+QSqlQuery query("SELECT name FROM author", db1);
+// query is automatically executed; error checking with isActive()
+while( query.next() ) {
+...
+  \end{cpp}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0523}\frametitle{Navigating and Querying Results}
+\begin{itemize}
+\item \textbf{Navigating result}
+  \begin{cpp}
+QSqlQuery query("SELECT name from author");
+// [ Anders, Relative, Chris, Donald ] 
+query.first(); // "Anders"
+query.last(); // "Donald"
+query.prev(); // "Chris"
+query.seek(-1, true); // "Relative" 
+ \end{cpp}
+\item \textbf{Querying result}
+  \begin{cpp}
+query.size(); // number of rows
+query.numRowsAffected(); // e.g. update statement
+  \end{cpp}
+\item \demo{dataio/ex-query}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0525}\frametitle{Inserting Records with Prepared Queries}
+\begin{itemize}
+\item \textbf{Named Bindings}
+  \begin{cpp}
+QSqlQuery query;
+query.prepare("INSERT INTO person (id, forename, surname) "
+              "VALUES (:id, :forename, :surname)");
+// for each data you want to insert
+    query.bindValue(":id", 1001);
+    query.bindValue(":forename", "Bart");
+    query.bindValue(":surname", "Simpson");
+    query.exec();  
+\end{cpp}
+\item \textbf{Positional Bindings}
+  \begin{cpp}
+QSqlQuery query;
+query.prepare("INSERT INTO person (id, forename, surname) "
+              "VALUES (?, ?, ?)");
+// for each data you want to insert
+    query.bindValue(0, 1001);
+    query.bindValue(1, "Bart");
+    query.bindValue(2, "Simpson");
+    query.exec();
+  \end{cpp}
+\end{itemize}
+\end{slide}
+
+\subsection{SQL Models}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0529}\frametitle{QSqlQueryModel}
+\xConcept{SQL!Model/View}
+\xConcept{Model/View!SQL}
+\begin{itemize}
+\item Read-only data model for SQL result set
+\item Derived from \iCls{QAbstractTableModel}
+  \begin{itemize}
+  \item Wraps a \iCls{QSqlQuery}
+  \end{itemize}
+\item By default headers taken from database
+  \begin{itemize}
+  \item \iClsFn{QSqlQueryModel}{setHeaderData} - custom headers
+  \end{itemize}
+\item \textbf{Using \iCls{QSqlQueryModel}}
+  \begin{cpp}
+QSqlQueryModel *model = new QSqlQueryModel;
+model->setQuery("SELECT name, salary FROM employee");
+model->setHeaderData(0, Qt::Horizontal, tr("Name"));
+model->setHeaderData(1, Qt::Horizontal, tr("Salary"));
+QTableView *view = new QTableView;
+view->setModel(model);
+view->show();    
+  \end{cpp}
+\item \demo{dataio/ex-qsql-query-model}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0530}\frametitle{Working on a SQL Table - QSqlTableModel}
+\xConcept{SQL!Tables}
+\begin{itemize}
+\item Wraps a single table in a model
+\item Allows editing of data
+\item Using \iCls{QSqlTableModel}
+  \begin{itemize}
+  \begin{cpp}
+QSqlTableModel *model = new QSqlTableModel;
+model->setTable("employee");
+model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+model->select(); // execute query
+model->removeColumn(0); // don't show the ID
+
+QTableView *view = new QTableView;
+view->setModel(model);
+view->show();    
+  \end{cpp}
+\item Optionally
+  \begin{itemize}
+  \item \texttt{setFilter(...)} - \texttt{WHERE} part of query
+  \item \texttt{setSort(...)} - sort by column
+  \end{itemize}
+ \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0531}\frametitle{Convenience Methods of QSqlTableModel}
+\begin{itemize}
+\item All \iCls{QAbstractItemModel} methods  are available
+\item Additional record based access
+  \begin{itemize}
+  \item \texttt{record( row )}
+  \item \texttt{setRecord( row, record )}
+  \item \texttt{insertRecord(row, record)}
+  \end{itemize}
+\item \iCls{QSqlRecord}
+  \begin{itemize}
+  \item Encapsulates database record (row in table) 
+  \end{itemize}
+\item Updating price in table
+  \begin{cpp}
+for ( int row = 0; row < model->rowCount(); ++row ) {
+  QSqlRecord record = model->record( row );
+  double price = record.value( "price" ).toDouble();
+  price *= 1.1;
+  record.setValue( "price", price );
+  model->setRecord( row, record );
+}
+model->submitAll();
+    \end{cpp}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0533}\frametitle{Commit Strategies}
+\begin{itemize}
+\item \hClsFn{QSqlTableModel}{setEditStrategy}
+  \begin{itemize}
+  \item Strategy when changes are commited to database
+  \end{itemize}
+\medskip
+\item \textbf{OnFieldChange}
+  \begin{itemize}
+  \item Changes applied immediately to database
+  \end{itemize}
+\item \textbf{OnRowChange}
+  \begin{itemize}
+  \item Changes applied when user selects a different row
+  \item Discard with \texttt{revert()}
+  \end{itemize}
+\item \textbf{OnManualSubmit}
+  \begin{itemize}
+  \item Changes only applied on \texttt{submit()}
+  \item Discard with \texttt{revertAll()}
+  \end{itemize}
+\end{itemize}
+\medskip
+\begin{footnotesize}
+\emph{Note:} \texttt{OnFieldChange} has performance hit (frequent update)
+\end{footnotesize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0535}\frametitle{Relations between Table QSqlRelationalTableModel}
+\begin{itemize}
+\item Editable model for database table, with foreign key support
+  \begin{cpp}
+model->setTable("employee");
+// map column 2 to city table column id
+// and show name from city table in view
+model->setRelation(2, QSqlRelation("city", "id", "name"));
+// map column 3 to country table column id 
+// and show name from country table in view
+model->setRelation(3, QSqlRelation("country", "id", "name"));    
+  \end{cpp}
+\medskip
+\item \textbf{\iCls{QSqlRelationalDelegate}}
+  \begin{itemize}
+  \item Provides combobox for foreign key fields
+    \begin{cpp}
+view->setItemDelegate(new QSqlRelationalDelegate(view));
+    \end{cpp}
+  \end{itemize}
+
+\item \demo{dataio/ex-qsql-relational-table-model}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0536}\frametitle{Editable Queries Using QSqlQueryModel}
+\begin{itemize}
+\item \iCls{QSqlQueryModel} is read only by default
+\item \iCls{QSqlTableModel} works only on single table
+\medskip
+\item To enable arbitrary editable query models, override
+  \begin{itemize}
+  \item \iClsFn{QAbstractItemModel}{setData}
+    \begin{itemize}
+    \item to update the data yourself
+    \end{itemize}
+  \item \iClsFn{QAbstractItemModel}{flags}
+    \begin{itemize}
+    \item to specify that the table is editable
+    \end{itemize}  
+  \end{itemize}
+
+\item \demo{dataio/ex-editable-query}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0537}\frametitle{Database Transactions}
+\xConcept{SQL!Transactions}
+\begin{itemize}
+\item \iClsFn{QSqlDatabase}{transaction}
+  \begin{itemize}
+  \item starts a transaction
+  \end{itemize}
+\item \iClsFn{QSqlDatabase}{commit} \\
+  \iClsFn{QSqlDatabase}{rollback}
+  \begin{itemize}
+  \item Ends the transaction
+  \item Returns true on success
+  \end{itemize}
+\medskip
+\item \iClsFnPar{QSqlDriver}{hasFeature}{QSqlDriver::Transactions}
+  \begin{itemize}
+  \item Check if database supports transactions
+  \end{itemize} 
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0538}\frametitle{Lab: Master-Details Table}
+\flushedImage{dataio/images/sql-exercise}\xProject{SQL}
+\begin{itemize}
+\item Author table in upper view
+\item Book table in lower view
+\item Only books from current author
+\item Follow these steps:
+  \begin{enumerate}
+  \item Setup the author table
+  \item Use current item change
+  \item Setup book table with \iCls{QSqlQueryModel}
+  \item Rerun the query
+  \item Provide edit support for both tables
+  \item Optional
+    \begin{itemize}
+    \item Polish views: hide  id columns and row headers
+    \item Support add/delete rows using context menu
+    \end{itemize}
+ \end{enumerate}
+\end{itemize}
+\end{slide}

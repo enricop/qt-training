@@ -1,0 +1,36 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{400};}\\
+\qtt{~~~~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~rectangle1}\\
+\qtt{~~~~~~~~\qc{type}{x}:~\qc{number}{150};~\qc{type}{y}:~\qc{number}{150}}\\
+\qtt{~~~~~~~~\qc{type}{width}:~\qc{number}{100}}\\
+\qtt{~~~~~~~~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"green"}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~ColorAnimation~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rectangle1}\\
+\qtt{~~~~~~~~\qc{type}{\qc{keyword}{property}}:~\qc{string}{"color"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{class}{Qt}.rgba(\qc{number}{0},\qc{number}{0.5},\qc{number}{0},\qc{number}{1})}\\
+\qtt{~~~~~~~~\qc{type}{to}:~\qc{class}{Qt}.rgba(\qc{number}{1},\qc{number}{1},\qc{number}{1},\qc{number}{1})}\\
+\qtt{~~~~~~~~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

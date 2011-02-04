@@ -1,0 +1,236 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection {Delegates}
+
+\begin{slide}{1320}
+  \frametitle{ Item Delegates}
+\flushedImage{modelview/images/modelview-overview}
+  \begin{itemize}
+ \item \iCls{QAbstractItemDelegate} subclasses
+    \begin{itemize}
+    \item Control appearance of items in views
+    \item Provide edit and display mechanisms
+   \end{itemize}
+  \item \iCls{QItemDelegate}, \iCls{QStyledItemDelegate}
+    \begin{itemize}
+    \item Default delegates
+    \item Suitable in most cases
+    \item Model needs to provide appropriate data
+    \end{itemize}
+    \medskip
+  \item When to go for Custom Delegates?
+    \begin{itemize}
+    \item More control over appearance of items
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}{1319}
+  \frametitle{Item Appearance}
+  \flushedImage{modelview2/images/itemappearance}
+  \textit{Data table shown has no custom delegate}
+  \vskip 10em
+  \begin{itemize}
+  \item No need for custom delegate!
+  \item Use \texttt{Qt::ItemRole} to customize appearance
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]{1318}
+  \frametitle{Delegate from \iCls{QAbstractItemDelegate}}
+  \begin{cpp}
+class BarGraphDelegate : public QAbstractItemDelegate {
+public:
+  void paint(QPainter *painter, 
+             const QStyleOptionViewItem &option,
+             const QModelIndex &index) const;
+  QSize sizeHint(const QStyleOptionViewItem &option, 
+                 const QModelIndex &index) const;
+};
+  \end{cpp}
+  
+  \flushedImage{modelview2/images/bargraphdelegate}
+
+\doc{qabstractitemdelegate.html}{QAbstractItemDelegate}
+
+\end{slide}
+
+\begin{slide}[fragile]{1317}
+  \frametitle{Integer Value - Bar Graph Delegate}
+  \begin{cpp}
+void BarGraphDelegate::paint(painter, option, index) const {
+  if(index.data(Qt::EditRole).userType() == QVariant::Int) {
+    int value = index.data(Qt::EditRole).toInt();
+    // prepare rect with a width proportional to value
+    QRect rect(option.rect.adjusted(4,4,-4,-4));
+    rect.setWidth(rect.width()*value/MAX_VALUE);
+    // draw the value bar
+    painter->fillRect(rect, QColor("steelblue").lighter(value));
+    painter->drawText(option.rect, index.data().toString());
+  }
+}
+
+QSize BarGraphDelegate::sizeHint(option, index) const {
+    Q_UNUSED(index)
+    return QSize(MIN_BAR_WIDTH, option.fontMetrics.height());
+}
+  \end{cpp}
+\demo{modelview2/ex-bargraphdelegate}
+\end{slide}
+
+\subsection{Editing item data}
+
+\begin{slide}[fragile]{1316}
+  \frametitle{An Editor Delegate}
+  \flushedImage{modelview2/images/editordelegate}
+ \begin{itemize}
+  \item Provides \iCls{QComboBox}
+    \begin{itemize}
+    \item for editing a series of values
+    \end{itemize}
+
+ \end{itemize}
+ \vskip 2em
+
+ \begin{cpp}
+class CountryDelegate : public QItemDelegate
+{
+public:
+  // returns editor for editing data
+  QWidget *createEditor( parent, option, index ) const;
+  // sets data from model to editor
+  void setEditorData( editor, index ) const;
+  // sets data from editor to model
+  void setModelData( editor, model, index ) const;
+  // updates geometry of editor for index
+  void updateEditorGeometry( editor, option, index ) const;
+};   
+ \end{cpp}
+
+\end{slide}
+
+\begin{slide}[fragile]{1315}
+  \frametitle{Providing an editor}
+  \begin{itemize}
+  \item Create editor by index
+ \begin{cpp}
+QWidget *CountryDelegate::createEditor( ... ) const {
+  QComboBox *editor = new QComboBox(parent);
+  editor->addItems( m_countries );
+  return editor;
+}    
+  \end{cpp}
+\item Set data to editor
+  \begin{cpp}
+void CountryDelegate::setEditorData( ... ) const {
+  QComboBox* combo = static_cast<QComboBox*>( editor );
+  QString country = index.data().toString();
+  int idx = m_countries.indexOf( country );
+  combo->setCurrentIndex( idx );
+}
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]{1314}
+  \frametitle{Submitting data to the model}
+  \begin{itemize}
+  \item When user finished editing
+    \begin{itemize}
+    \item view asks delegate to store data into model
+    \end{itemize}
+
+  \begin{cpp}
+void CountryDelegate::setModelData(editor, model, index) const {
+  QComboBox* combo = static_cast<QComboBox*>( editor );
+  model->setData( index, combo->currentText() );
+}    
+  \end{cpp}
+
+\item If editor has finished editing
+  \begin{cpp}
+// copy edtitors data to model
+emit commitData( editor );
+// close/destroy editor
+emit closeEditor( editor, hint );
+// hint: indicates action performed next to editing
+ \end{cpp}
+\end{itemize}
+
+\end{slide}
+
+\begin{slide}[fragile]{1313}
+  \frametitle{Updating the editor's geometry}
+  \begin{itemize}
+  \item Delegate manages editor's geometry
+  \item View provides geometry information
+    \begin{itemize}
+    \item \iCls{QStyleOptionViewItem}
+    \end{itemize}
+  \end{itemize}
+
+  \begin{cpp}
+void CountryDelegate::updateEditorGeometry( ... ) const {
+  // don't allow to get smaller than editors sizeHint()
+  QSize size = option.rect.size().expandedTo(editor->sizeHint());
+  QRect rect(QPoint(0,0), size); 
+  rect.moveCenter(option.rect.center());
+  editor->setGeometry( rect );
+}    
+  \end{cpp}
+  \demo{modelview2/ex-editordelegate}
+  \begin{itemize}
+  \item Case of multi-index editor
+    \begin{itemize}
+    \item Position editor in relation to indexes
+    \end{itemize}
+
+  \end{itemize}
+\end{slide}
+
+
+\begin{slide}{1312}
+  \frametitle{Setting Delegates on Views}
+  \begin{itemize}
+  \item \texttt{view->setItemDelegate( ... )}
+  \item \texttt{view->setItemDelegateForColumn( ... )}
+  \item \texttt{view->setItemDelegateForRow(... )}
+ \end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]{1311}
+  \frametitle{Type Based Delegates}
+\flushedImage{modelview2/images/coloreditor}
+\begin{itemize}
+\item Our color editor widget
+\begin{cpp}
+class ColorListEditor : public QComboBox {
+ ...
+}; 
+\end{cpp}
+\medskip
+\item Registering editor for type QVariant::Color
+\begin{cpp}
+QItemEditorFactory *factory = new QItemEditorFactory;
+QItemEditorCreatorBase *creator = 
+        new QStandardItemEditorCreator<ColorListEditor>();
+// registers item editor creator given type of data
+factory->registerEditor(QVariant::Color, creator);
+// new and existing delegates will use new factory
+QItemEditorFactory::setDefaultFactory(factory);
+\end{cpp}
+\end{itemize}
+\qtdemo{examples/itemviews/coloreditorfactory}
+\end{slide}
+

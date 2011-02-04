@@ -1,0 +1,533 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------
+
+\subsection{Concepts}
+\begin{slide}{2023}\frametitle{What is QML?}
+\vspace*{0.5em}
+
+% Basic concepts - what is Qt Quick, declarative UI?
+Declarative language for User Interface elements:
+
+\vspace*{0.5em}
+\begin{itemize}
+    \item Describes the user interface
+    \begin{itemize}
+    \item What elements look like
+    \item How elements behave
+    \end{itemize}
+\item UI specified as tree of elements with properties     
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2022}\frametitle{A Tree of Elements}
+
+% Insert tree <-> UI comparison image here.
+
+% Other than the fundamental difference inheritance/parent-child trees that
+% needs to be communicated, is there some fundamental difference between
+% nested elements and elements listed using the children property.
+% (Probably an implementation detail we don't want to address.)
+                               
+\centeredImageDoubleWidth{qml-intro/images/tree-of-elements.pdf}
+
+\vspace*{1em}
+Let's start with an example...
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{2021}\frametitle{Viewing an Example}
+
+% declarative-uis/concepts/rectangle.qml
+\inputqml{qml-intro/colorized/rectangle}
+
+% Launching an example - the QML viewer, some simple markup
+\vspace*{1em}
+\begin{itemize}
+\item Locate the example: \texttt{rectangle.qml}
+\item Launch the QML viewer:\\
+\consolecode{qmlviewer~rectangle.qml}
+
+% qml(viewer) shows the top level element at the correct size initially, but
+% it will be resized with the window.
+%
+% Default values for x and y.
+
+%%% Explain QML viewer                  
+
+\demo{qml-intro/ex-concepts/rectangle.qml}
+
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2020}\frametitle{Example Concepts}
+
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{// Define a light blue square}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{Rectangle~\{}}\\
+\qtt{~~~~\qc{lightgray}{width:~400;~height:~400}}\\
+\qtt{~~~~\qc{lightgray}{color:~"lightblue"}}\\
+\qtt{\qc{lightgray}{\}}}
+\end{qml}
+
+\vspace*{1em}
+\begin{itemize}
+\item To use Qt's features, \qic{keyword}{import} the \qic{class}{Qt} module
+\item Specify a version to get the features you want
+  \begin{itemize}
+  \item only imports the features from that version
+  \item will not use features from later versions, even if available
+  \item will not fall back to features from an earlier version
+  \end{itemize}
+\item Guarantees that the behavior of the code will not change
+  \begin{itemize}
+  \item modules include support for multiple versions
+  \item an upgraded module retains support for older versions of itself
+  \end{itemize}
+\end{itemize}
+
+%%% Imports of other versions
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2019}\frametitle{Example Concepts}
+
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{comment}{// Define a light blue square}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{Rectangle~\{}}\\
+\qtt{~~~~\qc{lightgray}{width:~400;~height:~400}}\\
+\qtt{~~~~\qc{lightgray}{color:~"lightblue"}}\\
+\qtt{\qc{lightgray}{\}}}
+\end{qml}
+
+\vspace*{1em}
+\begin{itemize}
+\item Use \qic{comment}{//} to add single line comments
+\item Put multi-line comments inside \qic{comment}{/*} and \qic{comment}{*/}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2018}\frametitle{Example Concepts}
+
+\begin{qml}
+\qtt{\qc{lightgray}{import~QtQuick~1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{// Define a light blue square}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{lightgray}{width:~400;~height:~400}}\\
+\qtt{~~~~\qc{lightgray}{color:~"lightblue"}}\\
+\qtt{\}}
+\end{qml}
+
+\vspace*{1em}
+\begin{itemize}
+\item Declare the elements you want to use
+\item Each element has a body between \texttt{\{} and \texttt{\}}
+\item A set of default elements are included in the \texttt{\qc{class}{Qt}} module
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2017}\frametitle{Example Concepts}
+
+\begin{qml}
+\qtt{\qc{lightgray}{import~QtQuick~1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{// Define a light blue square}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{Rectangle~\{}}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{400}}\\
+\qtt{~~~~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\qtt{\qc{lightgray}{\}}}
+\end{qml}
+
+\vspace*{1em}
+\begin{itemize}
+\item Elements contain properties
+\item Each property is defined using its name and a value
+\item \texttt{\qc{type}{name}~:~value}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2016}\frametitle{Example Summary}
+
+\flushedImage{qml-intro/images/rectangle.pdf}
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{comment}{// Define a light blue square}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{400}}\\
+\qtt{~~~~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\qtt{\}}
+\end{qml}
+
+\vspace*{1em}
+\begin{itemize}
+\item A \texttt{\textcolor{class}{Rectangle}} element
+  \begin{itemize}
+  \item with a body: \texttt{\{ ... \}}
+  \item containing \qic{type}{width}, \qic{type}{height} and \qic{type}{color}
+  properties
+  \item separated by line breaks or semicolons
+  \end{itemize}
+\item Running the example in the \texttt{qml} viewer
+  \begin{itemize}
+  \item the viewer window will be 400 by 400
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2015}\frametitle{Elements}
+
+\begin{itemize}
+\item Elements are structures in the markup language
+  \begin{itemize}
+  \item represent visible and non-visible parts
+  \end{itemize}
+\item \qic{class}{Item} is the base type of visible elements
+  \begin{itemize}
+  \item not visible itself
+  \item has a position, dimensions
+  \item usually used to group visual elements
+  \item often used as the top-level element
+  \item \qic{class}{Rectangle}, \qic{class}{Text}, \qic{class}{TextInput}, ...
+  \end{itemize}
+\item Non-visible elements:
+  \begin{itemize}
+  \item states, transitions, ...
+  \item models, paths, ...
+  \item gradients, timers, etc.
+  \end{itemize}
+\item Elements contain properties
+  \begin{itemize}
+  \item can also be extended with custom properties
+  \end{itemize}
+\end{itemize}
+
+% A full list of elements and items is available in the documentation.
+% Alternatively, you can look in the Qt Creator sources for the XML
+% file that defines the basic types.
+
+%%% Items based on QGraphicsItems
+%%% qml viewer uses QGraphicsView
+%%% Element hierarchy
+
+\doc{qdeclarativeelements.html}{QML Elements}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2014}\frametitle{Properties}
+
+Elements are described by properties:
+
+\begin{itemize}
+\item Simple name-value definitions
+  \begin{itemize}
+  \item \qic{type}{width}, \qic{type}{height}, \qic{type}{color}, ...
+  \item with default values
+  \item each has a well-defined type
+  \item separated by semicolons or line breaks
+  \end{itemize}
+  \vspace*{0.5em}
+\item Used for
+  \begin{itemize}
+  \item identifying elements (\qic{type}{id} property)
+  \item customizing their appearance
+  \item changing their behavior
+  \end{itemize}
+  \vspace*{0.5em}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2013}\frametitle{Property Examples}
+
+\begin{itemize}
+\item \textbf{Standard properties} can be given values:
+
+\vspace*{0.25em}
+\inputqml{qml-intro/colorized/standard-properties}
+
+\vspace*{0.5em}
+\item \textbf{Grouped properties} keep related properties together:
+
+\vspace*{0.25em}
+\inputqml{qml-intro/colorized/grouped-properties}
+
+\vspace*{0.5em}
+\item \textbf{Identity property} gives the element a name:
+
+\vspace*{0.25em}
+\inputqml{qml-intro/colorized/id-property}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2012}\frametitle{Property Examples}
+
+\begin{itemize}
+\item \textbf{Attached properties} are applied to elements:
+
+\vspace*{0.25em}
+\inputqml{qml-intro/colorized/attached-properties}
+
+\begin{itemize}
+\item \qic{type}{KeyNagivation.tab} is not a standard property of \qic{class}{TextInput}
+\item is a standard property that is attached to elements
+\end{itemize}
+
+\vspace*{0.5em}
+\item \textbf{Custom properties} can be added to any element:
+
+\vspace*{0.25em}
+\inputqml{qml-intro/colorized/custom-property}
+\end{itemize}
+
+\end{slide}
+
+%%% Add examples of properties with some standard elements
+%%% Mention attached properties, but explain them when showing key input
+%%% Highlight custom properties, but explain them 
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2011}\frametitle{Binding Properties}
+
+\flushedImage{qml-intro/images/expressions.png}
+% declarative-uis/concepts/expressions.qml
+\inputqml{qml-intro/colorized/expressions}
+
+\demo{qml-intro/ex-concepts/expressions.qml}
+
+\begin{itemize}
+\item Properties can contain expressions
+  \begin{itemize}
+  \item see above: \qic{type}{width} is twice the \qic{type}{height}
+  \end{itemize}
+\item Not just initial assignments
+\item Expressions are evaluated when needed
+\end{itemize}
+
+\doc{propertybinding.html}{Property Binding}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2010}\frametitle{Identifying Elements}
+
+% id is an especially important property because it provides a name
+% for an element
+% Coding convention - always first property?
+
+The \qic{type}{id} property defines an identity for an element
+
+\begin{itemize}
+\item Lets other elements refer to it
+  \begin{itemize}
+  \item for relative alignment and positioning
+  \item to use its properties
+  \item to change its properties (e.g., for animation)
+  \item for re-use of common elements (e.g., gradients, images)
+  \end{itemize}
+\item Used to \textit{create relationships} between elements
+\end{itemize}
+
+%%% Show Qt Creator id highlighting feature
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2009}\frametitle{Using Identities}
+
+\flushedImageDoubleWidth{qml-intro/images/identity.png}
+% declarative-uis/concepts/identity.qml
+\inputqml{qml-intro/colorized/identity} 
+
+\demo{qml-intro/ex-concepts/identity.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2008}\frametitle{Using Identities}
+
+\flushedImageDoubleWidth{qml-intro/images/identity.png}
+% declarative-uis/concepts/identity.qml
+\begin{qml}
+\qtt{\qc{class}{Text}~\{}\\
+\qtt{~~~~\qc{type}{id}:~textElement}\\
+\qtt{~~~~\qc{lightgray}{x:~50;~y:~25}}\\
+\qtt{~~~~\qc{lightgray}{text:~"Qt~Quick"}}\\
+\qtt{~~~~\qc{lightgray}{font.family:~"Helvetica";~font.pixelSize:~50}}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{lightgray}{x:~50;~y:~75;~height:~5}}\\
+\qtt{~~~~\qc{type}{width}:~textElement.width}\\
+\qtt{~~~~\qc{lightgray}{color:~"green"}}\\
+\qtt{\}}
+\end{qml}      
+
+\vspace*{0.5em}
+\begin{itemize}
+\item \qic{class}{Text} element has the identity, \qtt{textElement}
+\item \qic{type}{width} of \qic{class}{Rectangle} bound to \qic{type}{width} of
+      \qtt{textElement}
+\item Try using \qic{class}{TextInput} instead of \qic{class}{Text}
+\end{itemize}
+
+%%% Can identities be changed/reassigned?
+%%% Restrictions on IDs? Can we use "parent"?
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{2007}\frametitle{Methods}
+
+\begin{itemize}
+\item Most features are accessed via properties
+\item Some actions cannot be exposed as properties
+\item Elements have methods to perform actions:
+  \begin{itemize}
+  \item \qic{class}{TextInput} has a \qic{type}{selectAll()} method
+  \item \qic{class}{Timer} has \qic{type}{start()}, \qic{type}{stop()}
+        and \qic{type}{restart()} methods
+  \item \qic{class}{Particles} has a \qic{type}{burst()} method
+  \end{itemize}
+\item All methods are public in QML
+\item Other methods are used to convert values between types:
+  \begin{itemize}
+  \item \qic{class}{Qt}.\qic{type}{formatDateTime(datetime, format)}
+  \item \qic{class}{Qt}.\qic{type}{md5(data)}
+  \item \qic{class}{Qt}.\qic{type}{tint(baseColor, tintColor)}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2006}\frametitle{Basic Types}
+Property values can have different types:
+\begin{itemize}
+\item Numbers (int and real): \qic{number}{400} and \qic{number}{1.5}
+\item Boolean values: \qic{number}{true} and \qic{number}{false}
+\item Strings: \qic{string}{"Hello Qt"}
+\item Constants: \qic{class}{AlignLeft}
+\vspace*{0.25em}
+\item Lists: \qic{black}{[ ... ]}
+  \begin{itemize}
+  \item lists with one item can be written as just the item itself
+  \end{itemize}
+  \vspace*{0.25em}
+\item Scripts:
+  \begin{itemize}
+  \item included directly in property definitions
+%  \item can be written inside \qic{black}{\{ ... \}} for clarity
+  \end{itemize}
+  \vspace*{0.25em}
+\item Other types:
+  \begin{itemize}
+  \item colors, dates, times, rects, points, sizes, 3D vectors, ...
+  \item usually created using constructors
+  \end{itemize}
+\end{itemize}
+
+%%% None/null/nil type?
+
+\doc{qdeclarativeglobalobject.html\#types}{QML Types}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{2005}\frametitle{Summary}
+
+\begin{itemize}
+\item QML defines user interfaces using elements and properties
+  \begin{itemize}
+  \item elements are the structures in QML source code
+  \item items are visible elements
+  \end{itemize}
+\item Standard elements contain properties and methods
+  \begin{itemize}
+  \item properties can be changed from their default values
+  \item property values can be expressions
+  \item \qic{type}{id} properties give identities to elements
+  \end{itemize}
+\item Properties are bound together
+  \begin{itemize}
+  \item when a property changes, the properties that reference it are updated
+  \end{itemize}
+\item Some standard elements define methods
+\item A range of built-in types is provided
+\end{itemize}
+
+%%% Show property, method syntax
+
+\end{slide}
+
+%%% Scopes - lexical vs. dynamic
+                                   
+
+%----------------------------------------------------------------------
+\begin{slide}{2004}\frametitle{Exercise}
+
+\begin{enumerate}
+\item How do you request features from a certain version of Qt?
+% Import Qt with the relevant version.
+\item What is the difference between \qic{class}{Rectangle} and \qic{type}{width}?
+% Rectangle is an element; width is a property.
+\item How would you create an element with an identity?
+% Create an id property with a suitable name
+\item What syntax do you use to refer to a property of another element?
+% identity.property
+\end{enumerate}
+
+\end{slide}
+

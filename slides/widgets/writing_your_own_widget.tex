@@ -1,0 +1,184 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Guidelines for Custom Widgets}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1328} \frametitle{Guidelines: Creating a Custom Widget}
+  \begin{itemize}
+    \item It's as easy as deriving from QWidget
+    \item[] \begin{cpp}
+class CustomWidget : public QWidget
+{
+public:
+  explicit CustomWidget(QWidget* parent=0);
+}
+\end{cpp}           
+  \item If you need custom Signal Slots
+  \begin{itemize}
+    \item add Q\_OBJECT
+  \end{itemize} 
+  \item Use layouts to arrange widgets inside, or paint the widget yourself.
+\end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}{0860}
+  \frametitle{Guidelines: Base class and Event Handlers}
+  \label{writing_your_own_widget}
+  \begin{itemize}
+  \item \textbf{Do not reinvent the wheel}
+    \begin{itemize}
+    \item \doc{gallery.html}{Widget Gallery}
+    \end{itemize}
+  \item \textbf{Decide on a base class}
+    \begin{itemize}
+    \item Often \iCls{QWidget} or \iCls{QFrame}
+    \end{itemize}
+  \item \textbf{Overload needed event handlers}
+    \begin{itemize}
+    \item Often:
+      \begin{itemize}
+      \item \iClsFn{QWidget}{mousePressEvent}, \\ \iClsFn{QWidget}{mouseReleaseEvent}
+      \end{itemize}
+    \item If widget accepts keyboard input
+      \begin{itemize}
+      \item \iClsFn{QWidget}{keyPressEvent}
+      \end{itemize}
+    \item If widget changes appearance on focus
+      \begin{itemize}
+      \item \iClsFn{QWidget}{focusInEvent}, \\ \iClsFn{QWidget}{focusOutEvent}
+      \end{itemize}
+  \end{itemize}
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}{0861}\frametitle{Guidelines: Drawing a Widget}
+\xConcept{Events}
+\begin{itemize}
+\item \textbf{Decide on composite or draw approach?}
+  \begin{itemize}
+  \item \textit{If composite}: Use layouts to arrange other widgets
+  \item \textit{If draw}: implement paint event
+  \end{itemize}
+
+\item \textbf{Reimplement \iClsFn{QWidget}{paintEvent} for drawing}
+  \begin{itemize}
+  \item To draw widget's visual appearance
+  \item Drawing often depends on internal states
+  \end{itemize}
+\item \textbf{Decide which signals to emit}
+  \begin{itemize}
+  \item Usually from within event handlers
+  \item Especially \hClsFn{QWidget}{mousePressEvent} or \hClsFn{QWidget}{mouseDoubleClickEvent}
+  \end{itemize}
+\item \textbf{Decide carefully on types of signal parameters}
+  \begin{itemize}
+  \item General types increase reusability
+  \item Candidates are \texttt{bool}, \texttt{int} and \texttt{const QString\&}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}{0862}\frametitle{Guidelines: Internal States and Subclassing}
+\xConcept{Interfaces}
+\begin{itemize}
+  \item \textbf{Decide on publishing internal states}
+    \begin{itemize}
+    \item Which internal states should be made publically accessible?
+    \item Implement accessor methods
+    \end{itemize}
+ \item \textbf{Decide which setter methods should be slots}
+   \begin{itemize}
+   \item Candidates are methods with integral or common parameters
+   \end{itemize}
+  \item \textbf{Decide on allowing subclassing}
+    \begin{itemize}
+    \item If yes
+      \begin{itemize}
+      \item Decide which methods to make protected instead of private
+      \item Which methods to make virtual
+     \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0863}\frametitle{Guidelines: Widget Constructor}
+\begin{itemize}
+\item \textbf{Decide on parameters at construction time}
+  \begin{itemize}
+  \item Enrich the constructor as necessary
+  \item Or implement more than one constructor
+  \item If a parameter is needed for widget to work correctly
+    \begin{itemize}
+    \item User should be forced to pass it in the constructor
+    \end{itemize}
+  \end{itemize}
+  \item \textbf{Keep the Qt convention with:}
+\begin{lstlisting}
+    explicit Constructor(..., QWidget *parent = 0)
+\end{lstlisting}
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1327}\frametitle{Lab: File Chooser}
+ \begin{itemize}
+  \item Create a reusable file chooser component
+  \item 2 Modes
+    \begin{itemize}
+    \item Choose File
+    \item Choose Directory
+    \end{itemize}
+  \item \textit{Think about the Custom Widget Guidelines!}
+  \item \textit{Create a reusable API for a
+      \texttt{FileChooser}?}
+ \end{itemize}
+ \centeredImageDoubleWidth{widgets/images/filechooser} \\
+ \lab{widgets/lab-filechooser}
+ \begin{itemize}
+ \item After lab discuss your API
+ \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0864}\frametitle{Lab: Compass Widget}
+  \label{writing_your_own_widget_exercize}
+  \begin{itemize}
+  \item Implement a ``compass widget'' and let user ...
+    \begin{itemize}
+    \item Select a direction
+      \begin{itemize}
+      \item north, west, south, east
+      \item and optionally none
+      \end{itemize}
+    \end{itemize}
+    \item Provide API to ...
+      \begin{itemize}
+      \item change direction programmatically
+      \item get informed when direction changes
+      \end{itemize}
+    \item Optional      
+    \begin{itemize}
+      \item Add direction None
+      \item Select direction with the keyboard
+    \end{itemize}
+  \end{itemize}
+  \flushedImage{widgets/images/compass}   
+  \lab{widgets/lab-compasswidget}
+\end{slide}
+
+% Local Variables: 
+% mode: latex 
+% TeX-master: "course"
+% End: 

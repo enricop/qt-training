@@ -1,0 +1,249 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Common Widgets}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1326}
+  \frametitle{Text Widgets}
+  \flushedImage{widgets/images/textwidgets}
+  \begin{itemize}
+  \item \textbf{\iCls{QLabel}}
+    \begin{itemize}
+    \item[] \begin{cpp}
+label = new QLabel("Text", parent);
+     \end{cpp}
+    \item \texttt{setPixmap( pixmap )} - as content
+    \end{itemize}
+  \item \textbf{\iCls{QLineEdit}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+line = new QLineEdit(parent);        
+line->setText("Edit me");
+line->setEchoMode(QLineEdit::Password);
+connect(line, SIGNAL(textChanged(QString)) ...
+connect(line, SIGNAL(editingFinished()) ...
+      \end{cpp}
+    \item \texttt{setInputMask( mask )} -
+      \doc{qlineedit.html\#inputMask-prop}{Input Mask}
+    \item \texttt{setValidator( validator )} - \doc{qlineedit.html\#setValidator}{Validator}
+   \end{itemize}
+  \item \textbf{\iCls{QTextEdit}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+edit = new QTextEdit(parent);
+edit->setPlainText("Plain Text");        
+edit->append("<h1>Html Text</h1>");
+connect(edit, SIGNAL(textChanged(QString)) ...
+      \end{cpp}
+   \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1325}
+  \frametitle{Button Widgets}
+ \begin{itemize}
+  \item \textbf{\iCls{QAbstractButton}}
+    \begin{itemize}
+    \item Abstract base class of buttons
+   \end{itemize}
+\flushedImage{widgets/images/buttonwidgets}
+  \item \textbf{\iCls{QPushButton}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+button = new QPushButton("Push Me", parent);
+button->setIcon(QIcon("images/icon.png"));
+connect(button, SIGNAL(clicked()) ...
+      \end{cpp}
+    \item \texttt{setCheckable(bool)} - toggle button
+    \end{itemize}
+ \item \textbf{\iCls{QRadioButton}}
+   \begin{itemize}
+   \item[]
+     \begin{cpp}
+radio = new QRadionButton("Option 1", parent);
+     \end{cpp}
+   \end{itemize}
+  \item \textbf{\iCls{QCheckBox}}
+    \begin{itemize}
+     \item[] \begin{cpp}
+check = new QCheckBox("Choice 1", parent);
+     \end{cpp}
+  \end{itemize}
+  \item \textbf{\iCls{QButtonGroup}} - non-visual button manager
+    \begin{itemize}
+   \item[]
+     \begin{cpp}
+group = new QButtonGroup(parent);
+group->addButton(button); // add more buttons
+group->setExclusive(true);
+connect(group, SIGNAL(buttonClicked(QAbstractButton*)) ...
+     \end{cpp}
+   \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1324}
+  \frametitle{Value Widgets}
+ \begin{itemize}
+  \item \textbf{\iCls{QSlider}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+slider = new QSlider(Qt::Horizontal, parent);
+slider->setRange(0, 99);
+slider->setValue(42);
+connect(slider, SIGNAL(valueChanged(int)) ...
+      \end{cpp}
+    \end{itemize}
+\flushedImage{widgets/images/valuewidgets}
+  \item \textbf{\iCls{QProgressBar}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+progress = new QProgressBar(parent);
+progress->setRange(0, 99);
+progress->setValue(42);
+// format: %v for value; %p for percentage
+progress->setFormat("%v (%p%)");
+    \end{cpp}
+   \end{itemize}
+ \item \textbf{\iCls{QSpinBox}}
+   \begin{itemize}
+    \item[]
+      \begin{cpp}
+spin = new QSpinBox(parent);
+spin->setRange(0, 99);
+spin->setValue(42);
+spin->setSuffix(" USD");
+connect(spin, SIGNAL(valueChanged(int)) ...
+      \end{cpp}
+  \end{itemize}
+ \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1323}
+  \frametitle{Organizer Widgets}
+  \begin{itemize}
+  \item \textbf{\iCls{QGroupBox}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+box = new QGroupBox("Your Options", parent);
+// ... set layout and add widgets
+     \end{cpp}
+   \item \texttt{setCheckable( bool )} - checkbox in title
+    \end{itemize}
+
+  \item \textbf{\iCls{QTabWidget}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+tab = new QTabWidget(parent);
+tab->addWidget(widget, icon, "Tab 1");
+connect(tab, SIGNAL(currentChanged(int)) ...
+      \end{cpp}
+\flushedImage{widgets/images/organizerwidgets}
+    \item \texttt{setCurrentWidget( widget )}
+      \begin{itemize}
+      \item Displays page assoziated by widget
+      \end{itemize}
+    \item \texttt{setTabPosition( position )}
+      \begin{itemize}
+      \item Defines where tabs are drawn
+      \end{itemize}
+    \item \texttt{setTabsClosable( bool )}
+      \begin{itemize}
+      \item Adds close buttons
+      \end{itemize}
+
+    \end{itemize}
+
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1322}
+  \frametitle{Item Widgets}
+\flushedImage{widgets/images/itemwidgets}
+  \begin{itemize}
+  \item \textbf{\iCls{QComboBox}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+combo = new QComboBox(parent);        
+combo->addItem("Option 1", data);
+connect(combo, SIGNAL(activated(int)) ...
+QVariant data = combo->itemData(index);
+     \end{cpp}
+   \item \texttt{setCurrentIndex( index )}
+   \end{itemize}
+
+  \item \textbf{\iCls{QListWidget}}
+    \begin{itemize}
+    \item[]
+      \begin{cpp}
+list = new QListWidget(parent);
+list->addItem("Item 1");
+// ownership of items with list
+item = new QListWidgetItem("Item 2", list);
+item->setCheckState(Qt::Checked);        
+connect(list, SIGNAL(itemActivated(QListWidgetItem*)) ...
+      \end{cpp}
+    \item \texttt{QListWidgetItem::setData(Qt::UserRole, data)}
+
+   \end{itemize}
+   \medskip
+ \item \textit{Other Item Widgets}: \iCls{QTableWidget}, \iCls{QTreeWidget}
+ \end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+ \begin{slide}{1321}\frametitle{Other Widgets}
+   \begin{itemize}
+   \item  \textbf{\iCls{QToolBox}}
+     \begin{itemize}
+     \item Column of tabbed widget items
+     \end{itemize}
+   \item \textbf{\iCls{QDateEdit}, \iCls{QTimeEdit}, \iCls{QDateTimeEdit}}
+     \begin{itemize}
+     \item Widget for editing date and times
+     \end{itemize}
+   \item \textbf{\iCls{QCalendarWidget}}
+     \begin{itemize}
+     \item Monthly calendar widget
+     \end{itemize}
+   \item  \textbf{\iCls{QToolButton}}
+     \begin{itemize}
+     \item Quick-access button to commands
+     \end{itemize}
+   \item \textbf{\iCls{QSplitter}}
+     \begin{itemize}
+     \item Implements a splitter widget
+     \end{itemize}
+   \item \textbf{\iCls{QStackedWidget}}
+     \begin{itemize}
+     \item Stack of widgets
+     \item Only one widget visible at a time
+     \end{itemize}
+ \end{itemize}
+ \doc{gallery.html}{Widget Classes}
+\end{slide}

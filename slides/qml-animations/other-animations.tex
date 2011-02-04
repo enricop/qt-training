@@ -1,0 +1,132 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{slide}{1286}\frametitle{Other Animations}
+
+\begin{itemize}
+\item Other animations
+  \begin{itemize}
+  \item \qic{class}{ColorAnimation} for changes to color properties
+  \item \qic{class}{RotationAnimation} for changes to orientation of items
+  \item \qic{class}{Vector3dAnimation} for motion in 3D space
+  \item \qic{class}{AnchorAnimation} animate an anchor change
+  \item \qic{class}{ParentAnimation} animates changes in parent values.
+  \item \qic{class}{SpringAnimation} allows a property to track a value in a spring-like motion\\[3mm]
+  \item \qic{class}{PropertyAction} the PropertyAction element allows
+    immediate property changes during animation
+  \item \qic{class}{ScriptAction} allows scripts to be run during an
+    animation
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1285}\frametitle{Color Animation}
+
+\flushedImage{qml-animations/images/color-animation.png}
+\begin{itemize}
+\item \qic{class}{ColorAnimation} describes color changes to items
+\item Component-wise blending of RGBA values
+\end{itemize}
+
+\begin{qml}
+\qtt{\qc{class}{ColorAnimation}~\{}\\
+\qtt{~~~~\qc{type}{target}:~rectangle1}\\
+\qtt{~~~~\qc{type}{\qc{keyword}{property}}:~\qc{string}{"color"}}\\
+\qtt{~~~~\qc{type}{from}:~\qc{class}{Qt}.rgba(\qc{number}{0},\qc{number}{0.5},\qc{number}{0},\qc{number}{1})}\\
+\qtt{~~~~\qc{type}{to}:~\qc{class}{Qt}.rgba(\qc{number}{1},\qc{number}{1},\qc{number}{1},\qc{number}{1})}\\
+\qtt{~~~~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1284}\frametitle{Rotation Animation}
+
+\begin{itemize}
+\item \qic{class}{RotationAnimation} describes rotation of items
+\item Easier to use than \qic{class}{NumberAnimation} for the same purpose
+\item Applied to the \qic{type}{rotation} property of an element
+\item Value of \qic{type}{direction} property controls rotation:
+  \begin{itemize}
+  \item \qtt{\qc{class}{RotationAnimation}.Clockwise}
+  \item \qtt{\qc{class}{RotationAnimation}.Counterclockwise} 
+  \item \qtt{\qc{class}{RotationAnimation}.Shortest}~\textendash~the direction of least angle between \qic{type}{from} and \qic{type}{to} values
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1283}\frametitle{Rotation Animation}
+
+\flushedImageDoubleWidth{qml-animations/images/rotation-animation.png}
+\begin{qml}
+\qtt{\qc{class}{Image}~\{}\\
+\qtt{~~~~\qc{type}{id}:~ball}\\
+\qtt{~~~~\qc{type}{source}:~\qc{string}{"../images/ball.png"}}\\
+\qtt{~~~~\qc{type}{anchors.centerIn}:~parent}\\
+\qtt{~~~~\qc{type}{smooth}:~\qc{number}{true}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{RotationAnimation}~\qc{keyword}{on}~\qc{type}{rotation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{45};~\qc{type}{to}:~\qc{number}{315}}\\
+\qtt{~~~~~~~~\qc{type}{direction}:~\qc{class}{RotationAnimation}.Shortest}\\
+\qtt{~~~~~~~~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item 1 second animation
+\item Counter-clockwise from 45$^{\circ}$ to 315$^{\circ}$
+  \begin{itemize}
+  \item shortest angle of rotation is via 0$^{\circ}$
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1282}\frametitle{Vector3d Animation}
+
+\begin{center}
+\textbf{Not covered at the moment}
+\end{center}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1281}\frametitle{Lab: Bouncing Ball}
+
+\centeredImage{qml-animations/images/bouncing-ball.png}
+
+Starting from the first partial solution:
+
+\begin{itemize}
+\item Make the ball start from the ground and return to the ground.
+\item Make the ball travel from left to right
+\item Add rotation, so the ball completes just over one rotation
+\item Reorganize the animations using sequential and parallel animations
+\item Make the animation start when the ball is clicked
+\item Add decoration (ground and sky)
+\end{itemize}
+
+\end{slide}

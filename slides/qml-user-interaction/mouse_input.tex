@@ -1,0 +1,248 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Mouse Input}
+%----------------------------------------------------------------------
+
+\begin{slide}{1374}\frametitle{Handling User Input}
+
+Users interact with Qt Quick user interfaces:
+
+\begin{itemize}
+\item Mouse movement, clicks and dragging
+\item Keyboard input
+%\item Touch events
+\end{itemize}
+
+\end{slide}
+                      
+
+\begin{slide}{1373}\frametitle{Mouse Areas}
+
+Mouse areas define parts of the screen where cursor input occurs
+
+\begin{itemize}
+\item Placed and resized like ordinary items
+  \begin{itemize}
+  \item using anchors if necessary
+  \end{itemize}
+\item Two ways to monitor mouse input:
+  \begin{itemize}
+  \item handle signals
+  \item dynamic property bindings
+  \end{itemize}
+\end{itemize}
+
+% signals - need to figure out the order of slides for this
+% properties - containsMouse with hoverEnabled, for example
+
+\doc{qml-mousearea.html}{QML MouseArea Element Reference}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1372}\frametitle{Clickable Mouse Area}
+
+\flushedImage{qml-user-interaction/images/mouse-pressed.png}
+% declarative-uis/user-interaction/mouse-pressed-signals.qml
+\inputqml{qml-user-interaction/colorized/mouse-pressed-signals}
+                                                            
+\demo{qml-user-interaction/ex-mouse-input/mouse-pressed-signals.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1371}\frametitle{Placing the Mouse Area}
+
+\begin{qml}
+\qtt{\qc{class}{Text}~\{}\\
+\qtt{~~\qc{lightgray}{...}}\\
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{\qc{lightgray}{~~~~~~~~onPressed:~parent.color~=~"green"}}\\
+\qtt{\qc{lightgray}{~~~~~~~~onReleased:~parent.color~=~"black"}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Define a \qic{class}{Text} element
+\item Define a \qic{class}{MouseArea} child element
+\item Use an anchor to apply the area to the entire parent
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1370}\frametitle{Mouse Area Signals}
+
+\begin{qml}
+\qtt{\qc{lightgray}{Text~\{}}\\
+\qtt{~~\qc{lightgray}{...}}\\
+\qtt{\qc{lightgray}{~~~~MouseArea~\{}}\\
+\qtt{\qc{lightgray}{~~~~~~~~anchors.fill:~parent}}\\
+\qtt{~~~~~~~~\qc{type}{onPressed}:~parent.color~\qc{operator}{=}~\qc{string}{"green"}}\\
+\qtt{~~~~~~~~\qc{type}{onReleased}:~parent.color~\qc{operator}{=}~\qc{string}{"black"}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Define responses to signals with \qic{type}{onPressed} and \qic{type}{onReleased}
+  \begin{itemize}
+  \item by default, only left clicks are handled
+  \item set the \qic{type}{acceptedButtons} property to change this
+  \end{itemize}
+\item These change the color of the parent \qic{class}{Text} element
+\item Can do something similar with properties...
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1369}\frametitle{Mouse Hover and Properties}
+
+\flushedImage{qml-user-interaction/images/hover-property.png}
+% declarative-uis/user-interaction/hover-property.qml
+\inputqml{qml-user-interaction/colorized/hover-property}
+                                                     
+\demo{qml-user-interaction/ex-mouse-input/hover-property.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1368}\frametitle{Enabling Mouse Hover}
+
+\begin{qml}
+\qtt{\qc{lightgray}{Rectangle~\{}}\\
+\qtt{~~~~\qc{lightgray}{...}}\\
+\qtt{~~~~\qc{lightgray}{color:~mouse\_area.containsMouse~?~"green"~:~"white"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~\qc{lightgray}{id:~mouse\_area}}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{hoverEnabled}:~\qc{number}{true}}\\
+\qtt{~~~~\}}\\
+\qtt{\qc{lightgray}{\}}}
+\end{qml}
+
+\begin{itemize}
+\item Ensure that the mouse area fills the parent's area
+\item Set the \qic{type}{hoverEnabled} property
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1367}\frametitle{Naming the Mouse Area}
+
+\begin{qml}
+\qtt{\qc{lightgray}{Rectangle~\{}}\\
+\qtt{~~~~\qc{lightgray}{...}}\\
+\qtt{~~~~\qc{lightgray}{color:~mouse\_area.containsMouse~?~"green"~:~"white"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~mouse\_area}\\
+\qtt{~~~~~~~~\qc{lightgray}{anchors.fill:~parent}}\\
+\qtt{~~~~~~~~\qc{lightgray}{hoverEnabled:~true}}\\
+\qtt{~~~~\}}\\
+\qtt{\qc{lightgray}{\}}}
+\end{qml}
+
+\begin{itemize}
+\item Give the \qic{class}{MouseArea} an \qic{type}{id} property
+\item Refer to this mouse area as \qtt{mouse\_area}
+  \begin{itemize}
+  \item Enables access to the mouse area's properties
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1366}\frametitle{Using a Mouse Area Property}
+
+\begin{qml}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{lightgray}{...}}\\
+\qtt{~~~~\qc{type}{color}:~mouse\_area.containsMouse~?~\qc{string}{"green"}~:~\qc{string}{"white"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{lightgray}{MouseArea~\{}}\\
+\qtt{~~~~~~~~\qc{lightgray}{id~:~mouse\_area}}\\
+\qtt{~~~~~~~~\qc{lightgray}{anchors.fill:~parent}}\\
+\qtt{~~~~~~~~\qc{lightgray}{hoverEnabled:~true}}\\
+\qtt{~~~~\qc{lightgray}{\}}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item \qic{type}{color} is updated when \qtt{mouse\_area.}\qic{type}{containsMouse} changes
+\item Uses a simple JavaScript test
+\item \qic{string}{"green"} if true
+\item \qic{string}{"white"} if false
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1365}\frametitle{Mouse Area Hints and Tips}
+
+\begin{itemize}
+\item A mouse area only responds to its \qic{type}{acceptedButtons}
+  \begin{itemize}
+  \item the handlers are not called for other buttons, but
+  \item any click involving an allowed button is reported
+  \item the \qic{type}{pressedButtons} property contains \textit{all} buttons
+  \item even non-allowed buttons, if an allowed button is also pressed
+  \end{itemize}
+\item With \qic{type}{hoverEnabled} set to \qic{number}{false}
+  \begin{itemize}
+  \item \qic{type}{containsMouse} can be \qic{number}{true} if the mouse area
+  is clicked
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1364}\frametitle{Signals vs. Property Bindings}
+
+Which to use?
+
+\begin{itemize}
+\item Signals can be easier to use in some cases
+  \begin{itemize}
+  \item when a signal only affects one other item
+  \end{itemize}
+\item Property bindings rely on named elements
+  \begin{itemize}
+  \item many items can react to a change by referring to a property
+  \end{itemize}
+\item Use the most intuitive approach for the use case
+\item Favor simple assignments over complex scripts
+\end{itemize}
+
+% Signal handlers are easier to use when only modifying one other object
+% Bindings are easier to set up when more than one object is affected by
+% a change to an item
+
+\end{slide}
+
+%----------------------------------------------------------------------
+

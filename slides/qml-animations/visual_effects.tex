@@ -1,0 +1,226 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Visual Effects}
+\begin{slide}{1273}\frametitle{Visual Effects}
+
+Effects are applied to items:
+
+\begin{itemize}
+\item Applied using the \qic{type}{effect} property
+\item Four kinds of visual effect are provided:
+  \begin{itemize}
+  \item \qic{class}{Blur} applies a Gaussian blur
+  \item \qic{class}{Colorize} adjusts the item's colors towards a single color
+  \item \qic{class}{DropShadow} adds a shadow behind the item
+  \item \qic{class}{Opacity} makes items solid or see-through
+  \end{itemize}
+\item Effects can be combined
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1272}\frametitle{Visual Effects~\textendash~Blur}
+
+\flushedImage{qml-animations/images/blur-effect.png}
+% declarative-uis/effects/blur-effect.qml
+\inputqml{qml-animations/colorized/blur-effect}
+
+\demo{qml-animations/ex-effects/blur-effect.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1271}\frametitle{Visual Effects~\textendash~Blur}
+
+The standard \qic{class}{Blur} effect
+
+\begin{itemize}
+\item Samples pixels within a circular area
+\item The \qic{type}{blurRadius} controls the radius of the sample area
+  \begin{itemize}
+  \item the amount of blurring
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.5em}
+\centeredImage{qml-animations/images/blur-values.png}
+
+\vspace*{1em}
+Choose speed or accuracy with the \qic{type}{blurHint} property:
+
+\begin{itemize}
+\item Default is \qtt{PerformanceHint} for quick rendering
+\item Alternative is \qtt{QualityHint} when accuracy is more important
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1270}\frametitle{Visual Effects~\textendash~Colorize}
+
+\flushedImage{qml-animations/images/colorize-effect.png}
+% declarative-uis/effects/colorize-effect.qml
+\inputqml{qml-animations/colorized/colorize-effect}    
+
+\demo{qml-animations/ex-effects/colorize-effect.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1269}\frametitle{Visual Effects~\textendash~Colorize}
+
+The standard \qic{class}{Colorize} effect
+
+\begin{itemize}
+\item Adjusts the colors used in an element
+\item Towards the color specified in the \qic{type}{color} property
+\end{itemize}
+
+\vspace*{0.5em}
+\centeredImage{qml-animations/images/colorize-values.png}
+
+\vspace*{1em}
+The \qic{type}{strength} property
+
+\begin{itemize}
+\item Describes the extent of the recoloring
+\item \qic{number}{0.0} is no recoloring
+\item \qic{number}{1.0} (default) is complete recoloring
+\item Choose values between these for different effects
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1268}\frametitle{Visual Effects~\textendash~Drop Shadow}
+
+\flushedImage{qml-animations/images/drop-shadow-effect.png}
+% declarative-uis/effects/drop-shadow-effect.qml
+\inputqml{qml-animations/colorized/drop-shadow-effect}  
+
+\demo{qml-animations/ex-effects/drop-shadow-effect.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1267}\frametitle{Visual Effects~\textendash~Drop Shadow}
+
+The standard \qic{class}{DropShadow} effect
+
+\begin{itemize}
+\item Displays a shadow behind an item
+\item With horizontal and vertical offsets: \qic{type}{xOffset} and \qic{type}{yOffset}
+\item With a color: \qic{type}{color}
+\item \qic{type}{blurRadius} describes the blurring applied to the shadow
+\end{itemize}
+
+\vspace*{0.5em}
+\centeredImage{qml-animations/images/drop-shadow-values.png}
+
+\vspace*{1em}
+Default values:
+
+\begin{itemize}
+\item Default \qic{type}{blurRadius} of 1 (a sharp shadow)
+\item The default \qic{type}{color} is black
+\item Default value of 8 pixels for \qic{type}{xOffset} and \qic{type}{yOffset}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1266}\frametitle{Visual Effects~\textendash~Opacity}
+
+\flushedImage{qml-animations/images/opacity-effect.png}
+% declarative-uis/effects/opacity-effect.qml
+\inputqml{qml-animations/colorized/opacity-effect}  
+
+\demo{qml-animations/ex-effects/opacity-effect.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1265}\frametitle{Visual Effects~\textendash~Opacity}
+
+The standard \qic{class}{Opacity} effect
+
+\begin{itemize}
+\item Uniformly changes the opacity of an item
+\item Specified with an \qic{type}{opacity} property
+\end{itemize}
+
+\vspace*{0.5em}
+\centeredImage{qml-animations/images/opacity-values.png}
+
+\vspace*{1em}
+Default value:
+
+\begin{itemize}
+\item Default \qic{type}{opacity} of 0.7
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1264}\frametitle{Combining Visual Effects}
+
+Effects can be combined by using nested elements
+
+\begin{itemize}
+\item Apply an effect to an item
+\item Place the item inside another
+  \begin{itemize}
+  \item apply an effect to the outer item
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1263}\frametitle{Combining Visual Effects}
+
+\flushedImage{qml-animations/images/combining-effects.png}
+% declarative-uis/animations/combining-effects.qml
+\inputqml{qml-animations/colorized/combining-effects}   
+
+\demo{qml-animations/ex-effects/combining-effect.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1262}\frametitle{Animating Visual Effects}
+
+Animations and visual effects can be combined
+
+\begin{itemize}
+\item Fading and transformations are often used together
+\item Effects parameters can be changed over time
+\end{itemize}
+
+\end{slide}

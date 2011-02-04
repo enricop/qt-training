@@ -1,0 +1,147 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Custom Tree Model}
+
+%----------------------------------------------------------------------
+\begin{slide}{1306}
+  \frametitle{A Custom Tree Model in 5 Steps}
+  \begin{enumerate}
+  \item Read-Only Model
+  \item Editable Model
+  \item Insert-Remove Model
+  \item Lazy Model
+  \item Drag and Drop Model
+  \end{enumerate}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1305}
+  \frametitle{A (Simple) Node Structure}
+  \begin{cpp}
+class Node {
+public:
+  Node(const QString& aText="No Data", Node *aParent=0);
+  ~Node();
+  QVariant data() const;
+public:
+  QString text;
+  Node *parent;
+  QList<Node*> children;
+};
+  \end{cpp}
+  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{node.h})}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1304}
+  \frametitle{Read-Only Model}
+  \begin{cpp}
+class ReadOnlyModel : public QAbstractItemModel {
+public:
+  ...
+  QModelIndex index( row, column, parent ) const;
+  QModelIndex parent child ) const;
+
+  int rowCount( parent ) const;
+  int columnCount( parent ) const;
+  QVariant data( index, role) const;
+
+protected: // important helper methods
+  QModelIndex indexForNode(Node *node) const;
+  Node* nodeForIndex(const QModelIndex &index) const;
+  int rowForNode(Node *node) const;
+};    
+  \end{cpp}
+  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{readonlymodel.h})}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1303}
+  \frametitle{Editable Model}
+  \begin{cpp}
+class EditableModel : public ReadOnlyModel {
+public:
+  ...
+  bool setData( index, value, role );
+  Qt::ItemFlags flags( index ) const;
+};
+  \end{cpp}
+  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{editablemodel.h})}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1302}
+  \frametitle{Insert Remove Model}
+  \begin{cpp}
+class InsertRemoveModel : public EditableModel {
+public:
+    ...
+    void insertNode(Node *parentNode, int pos, Node *node);
+    void removeNode(Node *node);
+    void removeAllNodes();
+}; 
+  \end{cpp}
+  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{insertremovemodel.h})}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1301}
+  \frametitle{Lazy Model}
+  \begin{cpp}
+class LazyModel : public ReadOnlyModel {
+public:
+  ...
+  bool hasChildren( parent ) const;
+  bool canFetchMore( parent ) const;
+  void fetchMore( parent );
+};    
+  \end{cpp}
+  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{lazymodel.h})}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1300}
+  \frametitle{DnD Model}
+  \begin{cpp}
+class DndModel : public InsertRemoveModel {
+public:
+  ...
+  Qt::ItemFlags flags( index ) const;
+  Qt::DropActions supportedDragActions() const;
+  Qt::DropActions supportedDropActions() const;
+  QStringList mimeTypes() const;
+  QMimeData *mimeData( indexes ) const;
+
+  bool dropMimeData(data, dropAction, row, column, parent);
+  bool removeRows(row, count, parent);
+  bool insertRows(row, count, parent);
+};    
+  \end{cpp}
+  \demo{modelview2/ex-treemodel} \footnotesize{(\texttt{dndmodel.h})}
+\end{slide}
+
+%----------------------------------------------------------------------
+% \begin{slide}{1299}
+%   \frametitle{Lab: Object Inspector}
+%   \begin{itemize}
+%   \item Read-Only Object Inspector
+%     \medskip
+%   \item Optional:
+%     \begin{itemize}
+%     \item Editable Object Inspector
+%     \end{itemize}
+%   \end{itemize}
+
+
+% \end{slide}

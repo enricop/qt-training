@@ -1,0 +1,40 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Proxy Models}
+\begin{slide}[fragile]{1585}\frametitle{Sorting/Filtering - \iCls{QSortFilterProxyModel}}
+  \begin{itemize}
+  \item \textbf{Filter with Proxy Model}
+\begin{cpp}
+// filter column 1 by "India"
+proxy->setFilterWildcard("India");
+proxy->setFilterKeyColumn(1); 
+\end{cpp}
+\item \textbf{Sorting with Proxy Model}
+\begin{cpp}
+// sort column 0 ascending
+view->setSortingEnabled(true);
+proxy->sort(0, Qt::AscendingOrder);
+\end{cpp}
+  \end{itemize}
+\medskip
+\begin{itemize}
+\item \textbf{Filter via \iCls{QLineEdit} signal}
+\begin{cpp}
+connect(m_edit, SIGNAL(textChanged(QString)), 
+    proxy, SLOT(setFilterWildcard(QString)));      
+\end{cpp}
+\end{itemize}
+\demo{modelview/ex-sortfiltertableview}
+\end{slide}
+

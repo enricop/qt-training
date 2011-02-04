@@ -1,0 +1,51 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{250};~\qc{type}{height}:~\qc{number}{50};~\qc{type}{color}:~\qc{string}{"\#ccffcc"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~text\_field}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Enter~text..."}}\\
+\qtt{~~~~~~~~\qc{type}{font.pointSize}:~\qc{number}{24}}\\
+\qtt{~~~~~~~~anchors~\{~\qc{type}{left}:~parent.left;~\qc{type}{leftMargin}:~\qc{number}{4}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{type}{verticalCenter}:~parent.verticalCenter~\}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Image}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~clear\_button}\\
+\qtt{~~~~~~~~\qc{type}{source}:~\qc{string}{"../images/clear.svg"}}\\
+\qtt{~~~~~~~~anchors~\{~\qc{type}{right}:~parent.right;~\qc{type}{rightMargin}:~\qc{number}{4}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{type}{verticalCenter}:~text\_field.verticalCenter~\}}\\
+\qtt{~~~~~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~~~~~\qc{type}{onClicked}:~text\_field.text~\qc{operator}{=}~""}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{type}{states}:~[}\\
+\qtt{~~~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~~~\qc{type}{name}:~\qc{string}{"with~text"}}\\
+\qtt{~~~~~~~~\qc{type}{when}:~text\_field.text~\qc{operator}{!=}~""}\\
+\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~clear\_button;~\qc{type}{opacity}:~\qc{number}{1.0}~\}}\\
+\qtt{~~~~~~\},}\\
+\qtt{~~~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~~~\qc{type}{name}:~\qc{string}{"without~text"}}\\
+\qtt{~~~~~~~~\qc{type}{when}:~text\_field.text~\qc{operator}{==}~""}\\
+\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~clear\_button;~\qc{type}{opacity}:~\qc{number}{0.25}~\}}\\
+\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~text\_field;~\qc{type}{focus}:~\qc{number}{true}~\}}\\
+\qtt{~~~~~~\}}\\
+\qtt{~~~~]}\\
+\qtt{\}}\\

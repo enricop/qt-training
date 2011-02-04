@@ -1,0 +1,97 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Resources}
+
+\begin{slide}{1780}\frametitle{Resource System}
+   \begin{itemize}
+    \item Platform-independent mechanism for storing binary files
+      \begin{itemize}
+      \item Not limited to images
+      \end{itemize}
+    \item Resource files stored in application's executable
+    \item Useful if application requires files 
+      \begin{itemize}
+      \item E.g. icons, translation files, sounds
+      \item  Don't risk of losing files, easier deployment
+      \end{itemize}
+      \centeredImage{appcreation/images/resources}
+
+      \item[] \doc{resources.html}{The Qt Resource System}
+    \end{itemize}
+\end{slide}
+\begin{slide}[fragile]{1779}\frametitle{Using Resources}
+  \begin{itemize}
+  \item Resources specified in .qrc  file
+    \begin{itemize}
+    \item [] \begin{lstlisting}[language=xml]
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>images/copy.png</file>
+  <file>images/cut.png</file>
+  ...
+</qresource>
+</RCC>      
+    \end{lstlisting}
+   \item Can be created using QtCreator
+    \end{itemize}
+  \item Resources are accessible with ':' prefix
+    \begin{itemize}
+    \item Example: ":/images/cut.png"
+    \item Simply use resource path instead of file name
+    \item \texttt{QIcon(":/images/cut.png")}
+    \end{itemize}
+  \item To compile resource, edit .pro file
+    \begin{itemize}
+    \item \texttt{RESOURCES += application.qrc}
+    \item qmake produces make rules to generate binary file
+   \end{itemize}
+  \end{itemize}
+\end{slide}
+
+\begin{slide}{1778}\frametitle{Resource Specifics}
+  \begin{itemize}
+  \item Path Prefix
+    \begin{itemize}
+    \item \texttt{<qresource prefix="/myresources">}
+    \item File accessible via \texttt{":/myresources/..."}
+    \end{itemize}
+  \item Aliases
+    \begin{itemize}
+    \item \texttt{<file alias="cut.png">images/scissors.png</file>}
+    \item File accessible via \texttt{":/cut.png"}
+    \end{itemize}
+  \item Static Libraries and Resources
+    \begin{itemize}
+    \item Need to force initialization
+    \item \texttt{Q\_INIT\_RESOURCE(basename);}
+    \end{itemize}
+  \item Loading resources at runtime
+    \begin{itemize}
+    \item Use rcc to create binary and register resource
+    \item \texttt{rcc -binary data.qrc -o data.rcc}
+    \item \texttt{QResource::registerResource("data.rcc")}
+    \end{itemize}
+  \item Traverse resource tree using \texttt{QDir(":/")}
+  \end{itemize}
+\end{slide}
+
+
+\begin{slide}{1777}
+  \frametitle{Lab: Upgrade editor to use resources}
+  \begin{itemize}
+  \item Use your previous editor, to use Qt resource system for icons
+  \item Tip: You can use Qt Creator to create QRC files
+  \end{itemize}
+\end{slide}
+

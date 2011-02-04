@@ -1,0 +1,210 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Color Handling}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0927}\frametitle{Creating Color Values}
+\xConcept{Colors}
+\begin{itemize}
+  \item Using different color models:
+  \begin{itemize}
+    \item \texttt{QColor(255,0,0)} // RGB
+    \item \texttt{QColor::fromHsv(h,s,v)} // HSV
+    \item \texttt{QColor::fromCmyk(c,m,y,k)} // CMYK
+  \end{itemize}
+  \item Defining colors:
+  \item[] \begin{cpp}
+QColor(255,0,0); // red in RGB
+QColor(255,0,0, 63); // red 25% opaque (75% transparent)
+QColor("#FF0000"); // red in web-notation
+QColor("red"); // by svg-name
+Qt::red; // predefined Qt global colors
+    \end{cpp}
+  \item Many powerful helpers for manipulating colors
+  \item[] \begin{cpp}
+QColor("black").lighter(150); // a shade of gray
+    \end{cpp}
+  \item \iCls{QColor} always refers to device color space
+\end{itemize}
+  \doc{qcolor.html\#details}{QColor Details}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1006}\frametitle{Drawing lines and outlines
+    with QPen}
+\begin{itemize}
+  \item A pen (\iCls{QPen}) consists of:
+    \begin{itemize}
+    \item \textbf{a color or brush}
+    \item \textbf{a width}
+    \item \textbf{a style} (e.g. \texttt{NoPen} or \texttt{SolidLine})
+    \item \textbf{a cap style} (i.e. line endings)
+    \item \textbf{a join style} (connection of lines)
+    \end{itemize}
+  \item Activate with \iClsFn{QPainter}{setPen}. 
+  \item[] \begin{cpp}
+QPainter painter(this);
+QPen pen = painter.pen();
+pen.setBrush(Qt::red);
+pen.setWidth(3);
+painter.setPen(pen);          
+// draw a rectangle with 3 pixel width red outline
+painter.drawRect(0,0,100,100);
+  \end{cpp}
+  \end{itemize}
+\end{slide}    
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1011}
+\frametitle{The Outline}
+\begin{block}{Rule}
+The outline equals the size plus half the pen width on each side.
+\end{block}
+
+\begin{itemize}
+\item For a pen of width 1:
+\begin{cpp}
+QPen pen(Qt::red, 1); // width = 1
+float hpw = pen.widthF()/2; // half-pen width
+QRectF rect(x,y,width,height);
+QRectF outline = rect.adjusted(-hpw, -hpw, hpw, hpw);
+\end{cpp}
+\item  \textit{Due to integer rounding on a
+    non-antialiased grid,
+    the outline is shifted by 0.5 pixel towards the bottom right.}
+\item \demo{painting/ex-rectoutline}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1007}\frametitle{Filling shapes with QBrush}
+\begin{itemize}
+  \item \iCls{QBrush} defines fill pattern of shapes
+\flushedImageDoubleWidth{painting/images/brush}
+  \item Brush configuration
+    \begin{itemize}
+    \item \texttt{setColor(color)}
+    \item \texttt{setStyle(Qt::BrushStyle)}
+      \begin{itemize}
+      \item NoBrush, SolidPattern, ...
+      \end{itemize}
+    \item \texttt{QBrush(gradient)}  // QGradient's
+    \item \texttt{setTexture(pixmap)}
+   \end{itemize}
+    \item Brush with solid red fill    
+    \item[] \begin{cpp}
+painter.setPen(Qt::red);
+painter.setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
+painter.drawRect(rect);
+    \end{cpp}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1009}
+\frametitle{Drawing gradient fills}
+\begin{itemize}                    
+  \item Gradients used with \iCls{QBrush}
+  \flushedImage{painting/images/gradients}
+  \item Gradient types
+  \begin{itemize}
+  \item \iCls{QLinearGradient}
+  \item \iCls{QConicalGradient}
+  \item \iCls{QRadialGradient}
+  \end{itemize} 
+  \item Gradient from P1(0,0) to P2(100,100)
+  \item[] \begin{cpp}   
+QLinearGradient gradient(0, 0, 100, 100);
+// position, color: position from 0..1
+gradient.setColorAt(0, Qt::red); 
+gradient.setColorAt(0.5, Qt::green);
+gradient.setColorAt(1, Qt::blue);
+painter.setBrush(gradient);
+// draws rectangle, filled with brush
+painter.drawRect(0, 0, 100, 100 );
+  \end{cpp}                  
+  \item \demo{painting/ex-gradients}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1010}\frametitle{Brush on \iCls{QPen}}
+\begin{itemize}
+\item Possible to set a brush on a pen
+\item Strokes generated will be filled with the brush
+\vfill
+  \centeredImage{painting/images/pen-with-brush}
+  \vfill
+\item \demo{painting/ex-penwithbrush}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0932}\frametitle{Color Themes and \iConcept{Palettes}}
+\begin{itemize}
+  \item To support widgets color theming
+  \begin{itemize}
+    \item \texttt{setColor(blue)} not recommended
+    \item Colors needs to be managed
+  \end{itemize} 
+  \item \iCls{QPalette} manages colors
+  \begin{itemize}
+    \item Consist of color groups
+  \end{itemize}     
+\end{itemize}     
+\vspace{5mm}
+\begin{itemize}
+  \item \texttt{enum QPalette::ColorGroup}
+  \item Resemble widget states 
+  \begin{itemize}
+    \item \iClsEnum{QPalette}{Active} 
+    \begin{itemize}    
+    	\item Used for window with keyboard focus
+    \end{itemize}    
+    \item \iClsEnum{QPalette}{Inactive}
+    \begin{itemize}    
+    	\item Used for other windows
+    \end{itemize}    
+    \item \iClsEnum{QPalette}{Disabled}
+    \begin{itemize}    
+    	\item Used for disabled widgets
+    \end{itemize}    
+  \end{itemize}     
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0934}\frametitle{Color Groups and Roles}
+\begin{itemize}
+  \item Color group consists of color roles
+  \item enum \iClsEnum{QPalette}{ColorRole}
+  \item Defines symbolic color roles used in UI
+\end{itemize}
+\centeredImage{painting/images/palette}
+\begin{itemize}
+  \item[] \begin{cpp}
+QPalette pal = widget->palette();               
+QColor color(Qt::red);
+pal.setColor(QPalette::Active, QPalette::Window, color);
+// for all groups
+pal.setBrush(QPalette::Window, QBrush(Qt::red));
+widget->setPalette(pal);
+  \end{cpp}  
+  \item \iClsFn{QApplication}{setPalette}
+  \begin{itemize}
+    \item Sets application wide default palette
+  \end{itemize} 
+\end{itemize}
+\end{slide}  

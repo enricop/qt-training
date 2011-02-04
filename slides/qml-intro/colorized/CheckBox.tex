@@ -1,0 +1,52 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Item}~\{}\\
+\qtt{~~~~\qc{type}{width}:~text\_item.width~\qc{operator}{+}~check\_image.width}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Image}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~check\_image}\\
+\qtt{~~~~~~~~\qc{type}{anchors.left}:~parent.left}\\
+\qtt{~~~~~~~~\qc{type}{anchors.verticalCenter}:~parent.verticalCenter}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Text}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~text\_item}\\
+\qtt{~~~~~~~~\qc{type}{anchors.left}:~check\_image.right}\\
+\qtt{~~~~~~~~\qc{type}{anchors.leftMargin}:~\qc{number}{4}}\\
+\qtt{~~~~~~~~\qc{type}{anchors.verticalCenter}:~check\_image.verticalCenter}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Option"}}\\
+\qtt{~~~~~~~~\qc{type}{font.pixelSize}:~check\_image.height~\qc{operator}{-}~\qc{number}{4}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{type}{states}:~[}\\
+\qtt{~~~~~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{name}:~\qc{string}{"checked"}}\\
+\qtt{~~~~~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~check\_image;~\qc{type}{source}:~\qc{string}{"checked.svg"}~\}}\\
+\qtt{~~~~~~~~\},}\\
+\qtt{~~~~~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{name}:~\qc{string}{"unchecked"}}\\
+\qtt{~~~~~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~check\_image;~\qc{type}{source}:~\qc{string}{"unchecked.svg"}~\}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~]}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{type}{state}:~\qc{string}{"unchecked"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~check\_image}\\
+\qtt{~~~~~~~~\qc{type}{onClicked}:~parent.state~\qc{operator}{==}~\qc{string}{"checked"}~?~parent.state~\qc{operator}{=}~\qc{string}{"unchecked"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:~parent.state~\qc{operator}{=}~\qc{string}{"checked"}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

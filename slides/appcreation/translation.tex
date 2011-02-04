@@ -1,0 +1,121 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Translation for Developers}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1776} \frametitle{Internationalization (i18n) }
+\begin{itemize}
+\item \textbf{This is by no means a complete guide!}
+\item Internationalization  (i18n)
+  \begin{itemize}
+  \item Designing applications to be adaptable to languages
+  and regions without engineering changes.
+  \end{itemize}
+\item Localization (l10n)
+  \begin{itemize}
+  \item Adapting applications for region by adding components and translations
+  \end{itemize}
+
+\item Qt supports the whole process:
+  \begin{itemize}
+  \item QString supports unicode
+  \item On-screen texts (\iClsFn{QObject}{tr})
+  \item Number and date formats (\iCls{QLocale})
+  \item Icons loading (Resource System)
+  \item Translation tool (Qt Linguist)
+  \item LTR and RTL text, layout and widgets (e.g. arabic)
+  \item Plural handling (1 file vs 2 files)
+  \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \doc{internationalization.html}{Internationalization with Qt}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1775}\frametitle{Text Translation}
+  
+  \begin{itemize}
+  \item \textbf{lupdate} - scan C++ and .ui files for strings. Create/update .ts file
+  \item \textbf{linguist} - edit .ts file for adding translations
+  \item \textbf{lrelease} - read .ts and creates .qm file for release.     
+  \item \textbf{QObject::tr()} - mark translatable strings in C++ code.
+    \begin{itemize}
+    \item combine with \texttt{QString::arg()} for dynamic text
+    \end{itemize}        
+ \begin{cpp}
+ void MyWidget::someFunction(QString name, QDate d) {
+  //: This comment is seen by translation staff
+  label->setText(tr("Name: %1  Date: %2")
+                .arg(name).arg(d.toString()));
+  setWindowTitle(tr("File: %1 Line: %2 [*]").arg(f).arg(l));
+  // ...  
+\end{cpp}
+\item \doc{i18n-source-translation.html}{Writing Source Code for Translation}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1774}\frametitle{Translation Process}
+\centeredImageFullWidth{appcreation/images/translation}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1773}\frametitle{Other Internationalization}
+  \begin{itemize}
+  \item Qt classes are locale aware
+  \item Numbers
+    \begin{itemize}
+    \item[] \begin{cpp}
+QLocale::setDefault(QLocale::German); // de_DE
+QLocale german; bool ok;
+german.toDouble("1234,56", &ok); // ok == true
+QLocale::setDefault(QLocale::C); // en_US
+value = QString("1234.56").toDouble(&ok) // ok == true
+     \end{cpp}
+   \end{itemize}
+  \item \iCls{QDate}, \iCls{QTime} and \iCls{QDateTime}
+    \begin{itemize}
+    \item[] \begin{cpp}
+qDebug() << QDate().toString();  // prints localized date
+      \end{cpp}
+   \item \doc{qdate.html}{QDate}
+
+    \end{itemize}
+ \item Translating Media (Resource System)
+   \begin{itemize}
+   \item See \doc{resources.html}{Qt Resource System}
+   \end{itemize}
+  \item Use \iCls{QKeySequence} for shortcut values
+    \begin{itemize}
+    \item []\begin{cpp}
+action->setShortcut(QKeySequence::New);
+action->setShortcut(QKeySequence(tr("Ctrl+N"));
+      \end{cpp}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1772}
+  \frametitle{Lab: Translate Editor to German}
+  \begin{itemize}
+  \item We use our existing editor
+  \item In the handout you will find a list of translation words
+  \item Germany country code is \texttt{de}
+  \item Tip: You can use Qt Linguist to edit translations
+  \end{itemize}
+\end{slide}

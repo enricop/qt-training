@@ -1,0 +1,186 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Showing Simple Data}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1584}\frametitle{\iCls{QStandardItemModel} -
+    Convenient Model}
+\flushedImage{modelview/images/standarditemmodel}
+  \begin{itemize}
+  \item \iCls{QStandardItemModel}
+    \begin{itemize}
+   \item Classic item-based approach
+    \item Only practical for small sets of data
+ \end{itemize}
+   \begin{cpp}
+model = new QStandardItemModel(parent);
+item = new QStandardItem("A (0,0)");
+model->appendRow(item);
+model->setItem(0, 1, new QStandardItem("B (0,1)"));
+item->appendRow(new QStandardItem("C (0,0)"));
+\end{cpp}
+\item \textit{"C (0,0)" - Not visible. (table view is only 2-dimensional)}
+\item[]
+\item React on click
+  \begin{itemize}
+  \begin{cpp}
+connect(m_view, SIGNAL(clicked(QModelIndex)) ...
+  \end{cpp}
+ \item In slot ...
+  \begin{cpp}
+QStandardItem *item = model->itemFromIndex(index);    
+  \end{cpp}
+ \end{itemize}
+\end{itemize}
+\doc{qstandarditemmodel.html}{QStandardItemModel}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1583}\frametitle{Sharing Models and Selection}
+  \flushedImage{modelview/images/simpleviews}
+  \begin{cpp}
+// create a model
+model = ... // with some items
+
+// and several views
+list = ...; table = ...; tree = ...;
+
+// You can share model with views
+list->setModel(model);      
+table->setModel(model);      
+tree->setModel(model);      
+
+// Even can share selection
+list->setSelectionModel(tree->selectionModel());
+table->setSelectionModel(tree->selectionModel());
+   \end{cpp}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1582}\frametitle{Finishing Touch}
+  \begin{itemize}
+  \item Customizing view headers
+\begin{cpp}
+// set horizontal headers
+model->setHorizontalHeaderItem(0, new QStandardItem("Column 1");
+model->setHorizontalHeaderItem(1, new QStandardItem("Column 2");
+// hide vertical headers on table
+table->verticalHeader().hide();
+\end{cpp}
+\item Customizing Items
+\begin{cpp}
+item->setEditable(false); // disable edit
+item->setCheckable(true); // checkbox on item
+\end{cpp}
+\item Customize selection
+\begin{cpp}
+// allow only to select single rows on table
+table->setSelectionBehavior(QAbstractItemView::SelectRows);
+table->setSelectionMode(QAbstractItemView::SingleSelection);
+\end{cpp}
+\item[] \demo{modelview/ex-showdata}
+\end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1581}\frametitle{Selections - \iCls{QItemSelectionModel}}
+  \begin{itemize}
+   \item Keeps track of selected items in view
+    \item Not a \iCls{QAbstractItemModel}, just \iCls{QObject}
+ \item \texttt{QItemSelectionModel API}
+    \begin{itemize}
+    \item \texttt{currentIndex()}
+    \item \textit{signal} \texttt{currentChanged(current, previous)}
+    \item \texttt{QItemSelection selection()}
+      \begin{itemize}
+      \item List of selection ranges
+      \end{itemize}
+    \item \texttt{select( ... )}
+    \item \textit{signal} \texttt{selectionChanged(selected, deselected)}
+  \end{itemize}
+  \begin{cpp}
+// selecting a range
+selection = new QItemSelection(topLeft, bottomRight);
+view->selectionModel()->select(selection);    
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1580}\frametitle{Meet the City Engine}
+  \flushedImage{modelview/images/citymodelcsv}
+  \begin{itemize}
+  \item Our Demo Model
+    \begin{itemize}
+    \item 62 most populous cities of the world
+    \item Data in CSV file
+   \end{itemize}
+ \item Data Columns
+    \begin{itemize}
+    \item \textit{City | Country | Population | Area | Flag}
+   \end{itemize}
+ \item Implemented as data backend
+   \begin{itemize}
+   \item Internal implementation is hidden
+   \item Code in \texttt{CityEngine} class
+  \end{itemize}
+ \end{itemize}
+\centeredImage{modelview/images/citymodel}
+\end{slide}
+
+\begin{slide}[fragile]{1579}\frametitle{Our Backend CityEngine API}
+ \begin{cpp}
+public CityEngine : public QObject {
+  // returns all city names
+  QStringList cities() const;
+  // returns country by given city name 
+  QString country(const QString &cityName) const;
+  // returns population by given city name
+  int population(const QString &cityName) const;
+  // returns city area by given city name
+  qreal area(const QString &cityName) const;
+  // returns country flag by given country name
+  QIcon flag(const QString &countryName) const;
+  // returns all countries
+  QStringList countries() const;    
+  // returns city names filtered by country
+  QStringList citiesByCountry(const QString& countryName) const;
+};
+ \end{cpp}
+ \begin{itemize}
+ \item \demo{/modelview/ex-standarditemmodel}  
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1578}\frametitle{Lab: Tree Model for CityEngine}
+  \begin{itemize}
+    \item Implement \texttt{createTreeModel()} in \texttt{mainwindow.cpp}
+    \item Display cities grouped by countries
+    \item \textbf{Optional}
+      \begin{itemize}
+     \item Provide a find for country field.
+     \item Found countries shall be selected
+      \end{itemize}
+\centeredImage{modelview/images/sol-treecityengine}
+
+
+ \end{itemize}
+  \lab{modelview/lab-treecityengine}
+\end{slide}
+
+

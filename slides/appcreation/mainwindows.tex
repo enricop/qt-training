@@ -1,0 +1,376 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Main Windows}
+
+\begin{slide}{1769}\frametitle{Typical Application Ingredients}
+\flushedImage{appcreation/images/mainwindow}
+  \begin{itemize}
+  \item Main window with
+    \begin{itemize}
+    \item Menu bar
+    \item Tool bar, Status bar
+    \item Central widget
+    \item Often a dock window
+    \end{itemize}
+  \item Settings (saving state)
+  \item Resources (e.g icons)
+  \item Translation
+  \item Load/Save documents
+  \end{itemize}
+  \begin{center} \textit{Not a complete list} \end{center}  
+    
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1768} \frametitle{Main Window}
+  \begin{itemize}
+  \item \iCls{QMainWindow}: main application window
+  \item Has own layout \\
+    \flushedImage{appcreation/images/mainwindowlayout}
+    \begin{itemize}
+    \item Central Widget
+    \item QMenuBar
+    \item QToolBar
+    \item QDockWidget
+    \item QStatusBar
+   \end{itemize}
+  \end{itemize}
+
+  \vfill
+  \begin{itemize}
+  \item Central Widget
+    \begin{itemize}
+    \item \lstinline{QMainWindow::setCentralWidget( widget )}
+    \item Just any widget object
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1767}
+  \frametitle{Creating Actions - \iCls{QAction}}
+  \begin{itemize}
+  \item \textit{Action is an abstract user interface command}
+    \vspace{3mm}
+  \item Emits signal triggered on execution
+    \begin{itemize}
+    \item Connected slot performs action
+    \end{itemize}
+ \item Added to  menus, toolbar, key shortcuts
+  \item Each performs same way
+    \begin{itemize}
+    \item Regardless of user interface used
+    \end{itemize}
+\item[] \begin{cpp}
+void MainWindow::setupActions() {
+  QAction* action = new QAction(tr("Open ..."), this);
+  action->setIcon(QIcon(":/images/open.png"));
+  action->setShortcut(QKeySequence::Open);
+  action->setStatusTip(tr("Open file"));
+  connect(action, SIGNAL(triggered()), this, SLOT(onOpen()));
+
+  menu->addAction(action);
+  toolbar->addAction(action);
+\end{cpp}
+%\item[]\footnotesize{\emph{Advice: Create actions as children of the window they are used in}}
+  \end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1766}\frametitle{QAction capabilities}
+  \begin{itemize}
+  \item \texttt{setEnabled(bool)}
+    \begin{itemize}
+    \item Enables disables actions
+    \item In menu and toolbars, etc...
+    \end{itemize}
+  \item \texttt{setCheckable(bool)}
+    \begin{itemize}
+    \item Switches checkable state (on/off)
+    \item \texttt{setChecked(bool)} toggles checked state
+    \end{itemize}
+  \item \texttt{setData(QVariant)}
+    \begin{itemize}
+    \item  Stores data with the action
+    \end{itemize}
+  \item \doc{qaction.html}{QAction}
+
+ \end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1765}
+  \frametitle{Create Menu Bar}
+ \begin{itemize}
+  \item \lstinline{QMenuBar}: a horizontal menu bar
+\flushedImageDoubleWidth{appcreation/images/menubar}
+  \item \lstinline{QMenu}: represents a menu
+    \begin{itemize}
+    \item indicates action state
+    \end{itemize}
+
+  \item \lstinline{QAction}: menu items added to \lstinline{QMenu}
+\flushedImage{appcreation/images/menu}
+ \item[] \begin{cpp}
+void MainWindow::setupMenuBar() {
+  QMenuBar* bar = menuBar();
+  QMenu* menu = bar->addMenu(tr("&File"));
+  menu->addAction(action);
+  menu->addSeparator();
+
+  QMenu* subMenu = menu->addMenu(tr("Sub Menu"));
+  ...
+\end{cpp}
+ \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1764}
+  \frametitle{Creating Toolbars - \iCls{QToolBar}}
+\flushedImageDoubleWidth{appcreation/images/toolbar}
+  \begin{itemize}
+  \item Movable panel ...
+    \begin{itemize}
+    \item Contains set of controls
+    \item Can be horizontal or vertical
+    \end{itemize}
+    \vspace{2mm}
+  \item \texttt{QMainWindow::addToolbar( toolbar )}
+   \begin{itemize}
+   \item Adds toolbar to main window
+    \end{itemize}
+  \item \iClsFn{QMainWindow}{addToolBarBreak}
+    \begin{itemize}
+    \item Adds section splitter
+    \end{itemize}
+  \item \texttt{QToolBar::addAction( action )}
+    \begin{itemize}
+    \item Adds action to toolbar
+      \end{itemize}
+    \item \texttt{QToolBar::addWidget(widget)}
+      \begin{itemize}
+      \item Adds widget to toolbar
+      \end{itemize}
+    \item[] \begin{cpp}
+void MainWindow::setupToolBar() {
+  QToolBar* bar = addToolBar(tr("File"));
+  bar->addAction(action);
+  bar->addSeparator();
+  bar->addWidget(new QLineEdit(tr("Find ...")));
+  ...
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1763}\frametitle{QToolButton}
+  \begin{itemize}
+  \item Quick-access button to commands or options
+  \item Used when adding action to QToolBar
+  \item Can be used instead \texttt{QPushButton}
+    \begin{itemize}
+    \item Different visual appearance!
+    \end{itemize}
+ \item Advantage: allows to attach action
+  \item[] \begin{cpp}
+QToolButton* button = new QToolButton(this);
+button->setDefaultAction(action);
+// Can have a menu
+button->setMenu(menu);      
+// Shows menu indicator on  button
+button->setPopupMode(QToolButton::MenuButtonPopup);
+// Control over text + icon placements
+button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    \end{cpp}
+
+  \end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1762}
+  \frametitle{The Status Bar - \iCls{QStatusBar}}
+  \flushedImage{appcreation/images/statusbar}
+
+  \begin{itemize}
+  \item Horizontal bar
+    \begin{itemize}
+    \item[] Suitable for presenting status information
+    \end{itemize}
+
+    \vspace{3mm}
+  \item \texttt{showMessage( message, timeout )}
+    \begin{itemize}
+    \item Displays temporary message for specified milli-seconds
+    \end{itemize}
+  \item \texttt{clearMessage()}
+    \begin{itemize}
+    \item Removes any temporary message
+    \end{itemize}
+  \item \texttt{addWidget()} or \texttt{addPermanentWidget()}
+    \begin{itemize}
+    \item Normal, permanent messages displayed by widget
+    \end{itemize}
+\begin{cpp}
+void MainWindow::createStatusBar() {
+  QStatusBar* bar = statusBar();
+  bar->showMessage(tr("Ready"));
+  bar->addWidget(new QLabel(tr("Label on StatusBar")));
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1761}
+  \frametitle{Creating Dock Windows - \iCls{QDockWidget}}
+  \flushedImage{appcreation/images/docks}
+  \begin{itemize}
+  \item Window docked into main window
+    \vspace{3mm}
+  \item \iClsEnum{Qt}{DockWidgetArea} enum
+    \begin{itemize}
+    \item Left, Right, Top, Bottom dock areas
+    \end{itemize}
+  \item \texttt{QMainWindow::setCorner(corner,area)}
+    \begin{itemize}
+    \item Sets area to occupy specified corner
+    \end{itemize}
+  \item \texttt{QMainWindow::setDockOptions(options)}
+    \begin{itemize}
+    \item Specifies docking behavior (animated, nested, tabbed, ...)
+    \end{itemize}
+
+  \begin{cpp}
+void MainWindow::createDockWidget() {
+  QDockWidget *dock = new QDockWidget(tr("Title"), this);
+  dock->setAllowedAreas(Qt::LeftDockWidgetArea);
+  QListWidget *widget = new QListWidget(dock);
+  dock->setWidget(widget);
+  addDockWidget(Qt::LeftDockWidgetArea, dock);    
+  \end{cpp}
+  \end{itemize}
+  
+\end{slide}
+
+                 
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1760}\frametitle{\iCls{QMenu} and Context Menus}
+  \begin{itemize}
+ \item Launch via event handler
+  \item [] \begin{cpp}
+void MyWidget::contextMenuEvent(event) {
+ m_contextMenu->exec(event->globalPos());    
+    \end{cpp}
+\flushedImage{appcreation/images/menu}
+  \item or signal \texttt{customContextMenuRequested()}
+    \begin{itemize}
+    \item Connect to signal to show context menu
+    \end{itemize}
+\item Or via \iClsFn{QWidget}{actions} list
+    \begin{itemize}
+    \item \texttt{QWidget::addAction(action)}
+    \item \texttt{setContextMenuPolicy(Qt::ActionsContextMenu)}
+    \item Displays \iClsFn{QWidget}{actions} as context menu
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1759}
+  \frametitle{Typical APIs}
+  \begin{columns}[t]
+    \begin{column}{5cm}
+      \begin{itemize}
+      \item QWidget
+        \begin{itemize}
+        \item setWindowModified(...)
+        \item setWindowTitle(...)
+        \item addAction(...)
+        \item contextMenuEvent(...)
+       \end{itemize}
+
+      \item QMainWindow
+        \begin{itemize}
+        \item setCentralWidget(...)
+        \item menuBar()
+        \item statusBar()
+        \item addToolbar(...)
+        \item addToolBarBreak()
+        \item addDockWidget(...)
+        \item setCorner(...)
+        \item setDockOptions(...)
+       \end{itemize}
+
+     \end{itemize}
+    \end{column}
+    
+    \begin{column}[T]{5cm}
+     \begin{itemize}
+      \item QAction
+        \begin{itemize}
+        \item setShortcuts(...)
+        \item setStatusTip(...)
+        \item signal triggered()
+        \end{itemize}
+        
+      \item QMenuBar
+        \begin{itemize}
+        \item addMenu(...)
+        \end{itemize}
+        
+     \item QToolbar
+        \begin{itemize}
+        \item addAction(...)
+        \end{itemize}
+        
+      \item QStatusBar
+        \begin{itemize}
+        \item showMessage(...)
+        \item clearMessage()
+        \item addWidget(...)
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{984}
+  \frametitle{Lab: \iProject{Text Editor}}
+\begin{itemize}
+\item Create a text editor with
+  \begin{itemize}
+  \item \emph{load}, \emph{save}, \emph{quit}
+  \item \emph{about} and \emph{About Qt}
+  \end{itemize}
+\item A \iCls{QPlainTextEdit} serves for editing the text.
+\item Optional:
+  \begin{itemize}
+  \item Show whether the file is dirty
+  \item Ask the user whether to save if file is dirty when application quits
+  \item Make sure also to asks when window is closed via window manager
+  \item Show the cursor position in the status bar
+    \begin{itemize}
+    \item Position is determined by cursors block and column count 
+    \end{itemize}
+  \item Add printing support. \doc{printing.html}{Printing with Qt}
+  \end{itemize}
+\end{itemize}
+\vfill
+% \textit{No handout} % FM: Whatfore??
+\end{slide}

@@ -1,0 +1,205 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Animation Groups}
+
+
+\begin{slide}{1294}\frametitle{Sequential and Parallel Animations}
+
+Animations can be performed sequentially and in parallel
+
+\begin{itemize}
+\item \qic{class}{SequentialAnimation} defines a sequence
+  \begin{itemize}
+  \item with each child animation run in sequence
+  \end{itemize}
+
+\item For example:
+  \begin{itemize}
+  \item a rescaling animation, followed by
+  \item an opacity changing animation
+  \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+\item \qic{class}{ParallelAnimation} defines a parallel group
+  \begin{itemize}
+  \item with all child animations run at the same time
+  \end{itemize}
+
+\item For example:
+  \begin{itemize}
+  \item simultaneous rescaling and opacity changing animations
+  \end{itemize}
+\end{itemize}
+
+Sequential and parallel animations can be nested
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1293}\frametitle{Sequential Animations}
+
+\flushedImage{qml-animations/images/sequential-animation.png}
+% declarative-uis/animations/sequential-animation.qml
+\begin{qml}
+\qtt{\qc{class}{Image}~\{}\\
+\qtt{~~~~\qc{type}{id}:~rocket}\\
+\qtt{~~~~\qc{type}{anchors.centerIn}:~parent}\\
+\qtt{~~~~\qc{type}{source}:~\qc{string}{"../images/rocket.png"}}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{SequentialAnimation~\{}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"scale"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.5};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"opacity"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.0};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\demo{qml-animations/ex-animations/sequential-animation.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1292}\frametitle{Sequential Animations}
+
+\flushedImage{qml-animations/images/sequential-animation.png}
+% declarative-uis/animations/sequential-animation.qml
+\begin{qml}
+\qtt{SequentialAnimation~\{}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"scale"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.5};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"opacity"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.0};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Child elements define a two-stage animation:
+  \begin{itemize}
+  \item first, the rocket is scaled down
+  \item then it fades out
+  \end{itemize}
+\item \qic{class}{SequentialAnimation} does not itself have a \qic{type}{target}
+  \begin{itemize}
+  \item it only groups other animations
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1291}\frametitle{Pausing between Animations}
+
+\begin{itemize}
+\item \qic{class}{PauseAnimation} is used to insert a pause between animations
+\item No \qic{type}{target} property
+\item Only a \qic{type}{duration} property
+\end{itemize}
+
+% declarative-uis/animations/pause-animation.qml
+\begin{qml}
+\qtt{SequentialAnimation~\{}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"scale"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{0.0};~\qc{type}{to}:~\qc{number}{1.0};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~PauseAnimation~\{}\\
+\qtt{~~~~~~~~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"scale"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.0};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1290}\frametitle{Parallel Animations}
+
+\flushedImage{qml-animations/images/parallel-animation.png}
+% declarative-uis/animations/parallel-animation.qml
+\begin{qml}
+\qtt{\qc{class}{Image}~\{}\\
+\qtt{~~~~\qc{type}{id}:~rocket}\\
+\qtt{~~~~\qc{type}{anchors.centerIn}:~parent}\\
+\qtt{~~~~\qc{type}{source}:~\qc{string}{"../images/rocket.png"}}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{ParallelAnimation~\{}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"scale"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.5};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"opacity"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.0};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\demo{qml-animations/ex-animations/parallel-animation.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1289}\frametitle{Parallel Animations}
+
+\flushedImage{qml-animations/images/parallel-animation.png}
+% declarative-uis/animations/parallel-animation.qml
+\begin{qml}
+\qtt{ParallelAnimation~\{}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"scale"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.5};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~rocket;~\qc{type}{properties}:~\qc{string}{"opacity"}}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{number}{1.0};~\qc{type}{to}:~\qc{number}{0.0};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Child elements define a combined animation:
+  \begin{itemize}
+  \item the rocket simultaneously scales down and fades out
+  \end{itemize}
+\item \qic{class}{ParallelAnimation} does not itself have a \qic{type}{target}
+  \begin{itemize}
+  \item it only groups other animations
+  \end{itemize}
+\end{itemize}
+
+\end{slide}

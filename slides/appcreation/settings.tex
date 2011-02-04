@@ -1,0 +1,102 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Settings}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1783}\frametitle{Persistent Settings - \iCls{QSettings}}
+  \begin{itemize}
+ \item Configure \iCls{QSettings}
+  \item[] \begin{cpp}
+QCoreApplication::setOrganizationName("MyCompany");
+QCoreApplication::setOrganizationDomain("mycompany.com");
+QCoreApplication::setApplicationName("My Application");
+  \end{cpp}
+ \item Typical usage
+  \item[] \begin{cpp}
+QSettings settings; 
+settings.setValue("group/value", 68);    
+int value = settings.value("group/value").toInt();
+  \end{cpp}
+  \item Values are stored as \iCls{QVariant}
+  \item Keys form hierarchies using '/'
+   \begin{itemize}
+   \item or use \texttt{beginGroup(prefix)} / \texttt{endGroup()} 
+   \end{itemize}
+ \item value() excepts default value
+   \begin{itemize}
+   \item \lstinline{settings.value("group/value", 68).toInt()}
+ \end{itemize}
+   \item If value not found and default not specified
+     \begin{itemize}
+     \item Invalid \texttt{QVariant()} returned
+     \end{itemize}
+
+    \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1782}\frametitle{Restoring State of an Application}
+  \begin{itemize}
+  \item Store geometry of application
+ \item[] \begin{cpp}
+void MainWindow::writeSettings() {
+  QSettings settings;
+  settings.setValue("MainWindow/size", size());
+  settings.setValue("MainWindow/pos", pos());
+}    
+  \end{cpp}
+  \item Restore geometry of application
+  \item[] \begin{cpp}
+void MainWindow::readSettings() {
+  QSettings settings;
+  settings.beginGroup("MainWindow");
+  resize(settings.value("size", QSize(400, 400)).toSize());
+  move(settings.value("pos", QPoint(200, 200)).toPoint());
+  settings.endGroup();
+}    
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1781}\frametitle{Settings - Behind the Scenes}
+\begin{itemize}
+\item Stored in platform specific format
+  \begin{itemize}
+  \item Unix: INI files
+  \item Windows: System registry
+  \item MacOS: CFPreferences API
+  \item \doc{qsettings.html\#platform-specific-notes}{Platform-Specific Notes}
+  \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \textit{Value lookup will search several locations}
+  \begin{enumerate}
+  \item  User-specific location
+    \begin{enumerate}
+    \item  for application
+    \item for applications by organization
+    \end{enumerate}
+  \item  System-wide location
+    \begin{enumerate}
+    \item  for application
+    \item for applications by organization
+    \end{enumerate}
+  \end{enumerate}
+\item \doc{qsettings.html\#fallback-mechanism}{Fallback Mechanism}
+\item \iCls{QSettings} creation is cheap! Use on stack
+\end{itemize}
+\end{slide}
+

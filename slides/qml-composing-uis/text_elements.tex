@@ -1,0 +1,56 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Text Elements}
+%----------------------------------------------------------------------
+
+\begin{slide}{1695}\frametitle{Text Elements}
+
+\flushedImage{qml-composing-uis/images/text.png}
+% declarative-uis/composing-uis/text.qml
+\inputqml{qml-composing-uis/colorized/text}
+
+\begin{itemize}
+\item Simple text display
+\item Width and height determined by the font metrics and text
+\item Can also use rich text
+  \begin{itemize}
+  \item use HTML tags in the text: \qic{string}{"<html><b>Qt Quick</b></html>"}
+  \end{itemize}
+\end{itemize}  
+\demo{qml-composing-uis/ex-elements/text.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1694}\frametitle{Text Input}
+
+\flushedImage{qml-composing-uis/images/textinput.png}
+% declarative-uis/composing-uis/textinput.qml
+\inputqml{qml-composing-uis/colorized/textinput}
+
+\begin{itemize}
+\item Simple editable text item
+  \begin{itemize}
+  \item no decoration (not a \qic{class}{QLineEdit} widget)
+  \end{itemize}
+\item Gets the focus when clicked
+  \begin{itemize}
+  \item need something to click on
+  \end{itemize}
+\item \qic{type}{text} property changes as the user enters text
+\end{itemize}
+\demo{qml-composing-uis/ex-elements/textinput.qml}
+
+\end{slide}                                                        

@@ -1,0 +1,253 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Keyboard Input}  
+%----------------------------------------------------------------------
+
+\begin{slide}{1384}\frametitle{Keyboard Input}
+
+Basic keyboard input is handled in two different use cases:
+
+\begin{itemize}
+\item Accepting text input
+  \begin{itemize}
+  \item \qic{class}{TextInput} and \qic{class}{TextEdit}
+  \end{itemize}
+\item Navigation between elements
+  \begin{itemize}
+  \item changing the focused element
+  \item directional (arrow keys), tab and backtab
+  \end{itemize}
+\end{itemize}
+
+On page \pageref{raw_keyboard_input} we will see how to handle raw keyboard
+input.
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1383}\frametitle{Assigning Focus}
+
+\flushedImageDoubleWidth{qml-user-interaction/images/textinputs.png}
+\begin{itemize}
+\item UIs with just one \qic{class}{TextInput}
+  \begin{itemize}
+  \item focus assigned automatically
+  \end{itemize}
+\item More than one \qic{class}{TextInput}
+  \begin{itemize}
+  \item need to change focus by clicking
+  \end{itemize}
+\item What happens if a \qic{class}{TextInput} has no text?
+  \begin{itemize}
+  \item no way to click on it
+  \item unless it has a \qic{type}{width} or uses anchors
+  \end{itemize}
+\item Set the \qic{type}{focus} property to assign focus
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1382}\frametitle{Using TextInputs}
+
+\flushedImageDoubleWidth{qml-user-interaction/images/textinputs.png}
+% declarative-uis/user-interaction/textinputs.qml
+\inputqml{qml-user-interaction/colorized/textinputs}
+
+% Tab handling                                   
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1381}\frametitle{Getting the Focus}
+
+% declarative-uis/user-interaction/textinputs.qml
+\begin{qml}
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.left}:~parent.left;~\qc{lightgray}{y:~16}}\\
+\qtt{~~~~~~~~\qc{type}{anchors.right}:~parent.right}\\
+\qtt{~~~~~~~~\qc{lightgray}{text:~"Field~1";~font.pixelSize:~32}}\\
+\qtt{~~~~~~~~\qc{lightgray}{color:~focus~?~"black"~:~"gray"}}\\
+\qtt{~~~~~~~~\qc{type}{focus}:~\qc{number}{true}}\\
+\qtt{~~~~\}}
+\end{qml}
+
+\begin{itemize}
+\item Set the \qic{type}{focus} property
+\item Use anchors to ensure there is something to click on
+\end{itemize}
+
+\demo{qml-user-interaction/ex-key-input/textinputs.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1380}\frametitle{Focus Navigation}
+
+\flushedImageDoubleWidth{qml-user-interaction/images/tab-navigation.png}
+% declarative-uis/user-interaction/tab-navigation.qml
+\begin{qml}
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~name\_field}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~~~~~\qc{type}{focus}:~\qc{number}{true}}\\
+\qtt{~~~~~~~~\qc{type}{KeyNavigation.tab}:~address\_field}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~address\_field}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~~~~~\qc{type}{KeyNavigation.backtab}:~name\_field}\\
+\qtt{~~~~\}}
+\end{qml}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item The \qtt{name\_field} item defines \qic{type}{KeyNavigation.tab}
+  \begin{itemize}
+  \item pressing \textbf{Tab} moves focus to the \qtt{address\_field} item
+  \end{itemize}
+\item The \qtt{address\_field} item defines \qic{type}{KeyNavigation.backtab}
+  \begin{itemize}
+  \item pressing \textbf{Shift+Tab} moves focus to the \qtt{name\_field} item
+  \end{itemize}
+\end{itemize}     
+
+\demo{qml-user-interaction/ex-key-input/tab-navigation.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1379}\frametitle{Key Navigation}
+
+\flushedImage{qml-user-interaction/images/key-navigation-red.png}
+% declarative-uis/user-interaction/key-navigation.qml
+\inputqml{qml-user-interaction/colorized/key-navigation}
+
+\begin{itemize}
+\item Using cursor keys with non-text items
+\item Non-text items can have focus, too
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1378}\frametitle{Key Navigation}
+
+\flushedImage{qml-user-interaction/images/key-navigation-red.png}
+% declarative-uis/user-interaction/key-navigation.qml
+\begin{qml}
+\qtt{\qc{class}{Rectangle}~\{~\qc{type}{id}:~left\_rect}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{x:~25;~y:~25;~width:~150;~height:~150}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{color:~focus~?~"red"~:~"darkred"}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{KeyNavigation.right}:~right\_rect}\\
+\qtt{~~~~~~~~~~~~\qc{type}{focus}:~\qc{number}{true}~\}}\\
+\end{qml}
+\flushedImage{qml-user-interaction/images/key-navigation-green.png}
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{Rectangle}~\{~\qc{type}{id}:~right\_rect}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{x:~225;~y:~25;~width:~150;~height:~150}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{color}:~focus~?~\qc{string}{"\#00ff00"}~:~\qc{string}{"green"}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{KeyNavigation.left}:~left\_rect~\}}
+\end{qml}
+
+\vspace*{1em}
+\begin{itemize}
+\item \qtt{left\_rect} has the focus initially
+\item Define relationships between \qtt{left\_rect} and \qtt{right\_rect}
+  \begin{itemize}
+  \item using \qic{type}{id} and \qic{type}{KeyNavigation}
+  \end{itemize}
+\end{itemize}       
+
+\demo{qml-user-interaction/ex-key-input/key-navigation.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1377}\frametitle{Summary}
+
+Mouse and cursor input handling:
+
+\begin{itemize}
+\item \qic{class}{MouseArea} receives clicks and other events
+\item Use anchors to fill objects and make them clickable
+\item Respond to user input:
+  \begin{itemize}
+  \item give the area a name and refer to its properties, or
+  \item use handlers in the area and change other named items
+  \end{itemize}
+\end{itemize}
+
+Key handling:
+
+\begin{itemize}
+\item \qic{class}{TextInput} and \qic{class}{TextEdit} provide text entry features
+\item Set the \qic{type}{focus} property to start receiving key input
+\item Use anchors to make items clickable
+  \begin{itemize}
+  \item lets the user set the focus
+  \end{itemize}
+\item \qic{class}{KeyNavigation} defines relationships between items
+  \begin{itemize}
+  \item enables focus to be moved
+  \item using cursor keys, tab and backtab
+  \item works with non-text-input items
+  \end{itemize}
+\end{itemize}
+
+\end{slide}       
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1376}\frametitle{Exercise~\textendash~User~Input}
+
+\begin{itemize}
+\item Which element is used to receive mouse clicks?
+% MouseArea.
+\item Name two ways \qic{class}{TextInput} can obtain the input focus?
+% User clicks and by setting its focus property.
+\item How do you define keyboard navigation between items?
+% Define KeyNavigation.<key> for each key used for navigation, referring to the
+% items they give the focus to.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1375}\frametitle{Lab~\textendash~Menu~Screen}
+
+\centeredImage{qml-user-interaction/images/menu-screen.png}
+
+\begin{itemize}
+\item Using the partial solution as a starting point, create a user interface
+similar to the one shown above with these features:
+  \begin{itemize}
+  \item items that change color when they have the focus
+  \item clicking an item gives it the focus
+  \item the current focus can be moved using the cursor keys
+  \end{itemize}
+\end{itemize}       
+
+\lab{qml-user-interaction/lab-menu-screen}
+
+\end{slide}                                 

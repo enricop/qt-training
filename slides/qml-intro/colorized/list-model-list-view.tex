@@ -1,0 +1,38 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{150};~\qc{type}{height}:~\qc{number}{200};~\qc{type}{color}:~\qc{string}{"white"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{ListModel}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~name\_model}\\
+\qtt{~~~~~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Alice"}~\}}\\
+\qtt{~~~~~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Bob"}~\}}\\
+\qtt{~~~~~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Jane"}~\}}\\
+\qtt{~~~~~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Victor"}~\}}\\
+\qtt{~~~~~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Wendy"}~\}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Component}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~name\_delegate}\\
+\qtt{~~~~~~~~\qc{class}{Text}~\{~\qc{type}{text}:~name;~\qc{type}{font.pixelSize}:~\qc{number}{32}~\}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{ListView}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{model}:~name\_model}\\
+\qtt{~~~~~~~~\qc{type}{delegate}:~name\_delegate}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

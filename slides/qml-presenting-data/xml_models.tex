@@ -1,0 +1,141 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{XML Models}
+
+\begin{slide}{1450}\frametitle{XML List Models}
+
+\begin{itemize}
+\item Many data sources provide data in XML formats
+\item \qic{class}{XmlListModel} is used to supply XML data to views
+  \begin{itemize}
+  \item using a mechanism that maps data to properties
+  \item using XPath queries
+  \end{itemize}
+\item Views and delegates do not need to know about XML
+  \begin{itemize}
+  \item use a \qic{class}{ListView} or \qic{class}{Repeater} to access data
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1449}\frametitle{Defining an XML List Model}
+
+% declarative-uis/models-views/xml-list-model.tex
+\begin{qml}
+\qtt{\qc{class}{XmlListModel}~\{}\\
+\qtt{~~~~\qc{type}{id}:~xmlModel}\\
+\qtt{~~~~\qc{type}{source}:~\qc{string}{"files/items.xml"}}\\
+\qtt{~~~~\qc{type}{query}:~\qc{string}{"//item"}}\\
+\vspace*{0.5em}
+\qtt{~~~~XmlRole~\{~\qc{type}{name}:~\qc{string}{"title"};~\qc{type}{query}:~\qc{string}{"string()"}~\}}\\
+\qtt{~~~~XmlRole~\{~\qc{type}{name}:~\qc{string}{"link"};~\qc{type}{query}:~\qc{string}{"@link/string()"}~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Set the \qic{type}{id} property so the model can be referenced
+\item Specify the \qic{type}{source} of the XML
+\item The \qic{type}{query} identifies pieces of data in the model
+\item Each piece of data is queried by \qic{class}{XmlRole} elements
+\end{itemize}
+
+\demo{qml-presenting-data/ex-models-views/xml-list-model.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1448}\frametitle{XML Roles}
+
+\centeredImageDoubleWidth{qml-presenting-data/images/xml-list-model-xml-role.pdf}
+
+\vspace*{1.0em}
+\begin{itemize}
+\item \qic{class}{XmlRole} associates names with data obtained
+      using XPath queries
+\item Made available to delegates as properties
+  \begin{itemize}
+  \item \qic{type}{title} and \qic{type}{link} in the above example
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1447}\frametitle{Using an XML List Model}
+
+% declarative-uis/models-views/xml-list-model.tex
+\begin{qml}
+\qtt{TitleDelegate~\{}\\
+\qtt{~~~~\qc{type}{id}:~xmlDelegate}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~\qc{type}{anchors.margins}:~\qc{number}{4}}\\
+\qtt{~~~~\qc{type}{model}:~xmlModel}\\
+\qtt{~~~~\qc{type}{delegate}:~xmlDelegate}\\
+\qtt{\}}\\
+\end{qml}
+
+\begin{itemize}
+\item Specify the \qic{type}{model} and \qic{type}{delegate} as usual
+\item Ensure that the view is positioned and given a size
+\item \qtt{TitleDelegate} element is defined in \qtt{\small TitleDelegate.qml}
+  \begin{itemize}
+  \item Must be defined using a \qic{class}{Component} element
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.5em}
+\demo{qml-presenting-data/ex-models-views/TitleDelegate.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1446}\frametitle{Defining a Delegate}
+
+% declarative-uis/models-views/TitleDelegate.tex
+\begin{qml}
+\qtt{\qc{class}{Component}~\{}\\
+\qtt{~~~\qc{class}{Item}~\{}\\
+\qtt{~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{height}:~\qc{number}{64}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~~\qc{type}{width}:~Math.max(childrenRect.width~\qc{operator}{+}~\qc{number}{16},~parent.width)}\\
+\qtt{~~~~~~~~~\qc{type}{height}:~\qc{number}{60};~\qc{type}{clip}:~\qc{number}{true}}\\
+\qtt{~~~~~~~~~\qc{type}{color}:~\qc{string}{"\#505060"};~\qc{type}{border.color}:~\qc{string}{"\#8080b0"};~\qc{type}{radius}:~\qc{number}{8}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~~\qc{class}{Column}~\{~\qc{class}{Text}~\{~\qc{type}{x}:~\qc{number}{6};~\qc{type}{color}:~\qc{string}{"white"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pixelSize}:~\qc{number}{32};~\qc{type}{text}:~title~\}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{x}:~\qc{number}{6};~\qc{type}{color}:~\qc{string}{"white"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pixelSize}:~\qc{number}{16};~\qc{type}{text}:~link~\}~\}}\\
+\qtt{~~~~~~\}}\\
+\qtt{~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+%%% parents of delegates (scoping)
+
+\begin{itemize}
+\item \qic{type}{parent} refers to the view where it is used
+\item \qtt{title} and \qtt{link} are properties exported by the model
+\end{itemize}
+
+\end{slide}

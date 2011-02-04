@@ -1,0 +1,213 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Arranging Items}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1489}\frametitle{Arranging Items}
+
+Positioners and repeaters make it easier to work with many items
+
+\begin{itemize}
+\item Positioners arrange items in standard layouts
+  \begin{itemize}
+  \item in a column: \qic{class}{Column}
+  \item in a row: \qic{class}{Row}
+  \item in a grid: \qic{class}{Grid}
+  \item like words on a page: \qic{class}{Flow}
+  \end{itemize}
+\item Repeaters create items from a template
+  \begin{itemize}
+  \item for use with positioners
+  \item using data from a model
+  \end{itemize}
+\item Combining these make it easy to lay out lots of items
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1488}\frametitle{Positioning Items}
+
+\flushedImage{qml-presenting-data/images/grid-rectangles.png}
+% declarative-uis/arranging-items/grid-rectangles.qml
+\inputqml{qml-presenting-data/colorized/grid-rectangles}
+
+
+\begin{itemize}
+\item Items inside a positioner are automatically arranged
+  \begin{itemize}
+  \item in a 2 by 2 \qic{class}{Grid}
+  \item with horizontal/vertical spacing of 20 pixels
+  \end{itemize}
+\item \qic{type}{x}, \qic{type}{y} is the position of the first item
+\item Like layouts in Qt
+\end{itemize}    
+
+\demo{qml-presenting-data/ex-arranging-items/grid-rectangles.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1487}\frametitle{Repeating Items}
+
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{400};~\qc{type}{color}:~\qc{string}{"black"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Grid}~\{}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~~~~~\qc{class}{Repeater}~\{~...~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item The \qic{class}{Repeater} creates items
+\item The \qic{class}{Grid} arranges them within its parent item
+\item The outer \qic{class}{Rectangle} item provides
+  \begin{itemize}
+  \item the space for generated items
+  \item a local coordinate system
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1486}\frametitle{Repeating Items}
+
+\flushedImage{qml-presenting-data/images/repeater-grid.png}
+% declarative-uis/arranging-items/repeater-grid.qml
+\inputqml{qml-presenting-data/colorized/repeater-grid}
+
+\begin{itemize}
+\item \qic{class}{Repeater} takes data from a model
+  \begin{itemize}
+  \item just a number in this case
+  \end{itemize}
+\item Creates items based on the template item
+  \begin{itemize}
+  \item a light green rectangle
+  \end{itemize}
+\end{itemize} 
+
+\demo{qml-presenting-data/ex-arranging-items/repeater-grid.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1485}\frametitle{Indexing Items}
+
+\flushedImage{qml-presenting-data/images/repeater-grid-index.png}
+% declarative-uis/arranging-items/repeater-grid-index.qml
+\begin{qml}
+\qtt{\qc{lightgray}{import~QtQuick~1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{Rectangle~\{}}\\
+\qtt{~~~~\qc{lightgray}{width:~400;~height:~400;~color:~"black"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{lightgray}{Grid~\{}}\\
+\qtt{~~~~~~~~\qc{lightgray}{x:~5;~y:~5}}\\
+\qtt{~~~~~~~~\qc{lightgray}{rows:~5;~columns:~5;~spacing:~10}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{class}{Repeater}~\qc{lightgray}{\{~model:~24}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\qc{lightgray}{Rectangle~\{~width:~70;~height:~70}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{color:~"lightgreen"}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{text}:~index}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pointSize}:~\qc{number}{30}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{anchors.centerIn}:~parent~\}~\}}\\
+\qtt{~~~~~~~~\}~...}
+\end{qml}
+
+\begin{itemize}
+\item \qic{class}{Repeater} provides an \qtt{index} for each item it creates
+\end{itemize}             
+
+\demo{qml-presenting-data/ex-arranging-items/repeater-grid-index.qml} 
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1484}\frametitle{Positioner Hints and Tips}
+
+\begin{itemize}
+\item Anchors in the \qic{class}{Row}, \qic{class}{Column} or \qic{class}{Grid}
+  \begin{itemize}
+  \item apply to all the items they contain
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+                            
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1483}\frametitle{Lab~\textendash~Chess Board}
+
+\flushedImage{qml-presenting-data/images/chess-board.png}
+
+\begin{itemize}
+\item Start by creating a chess board using\\
+      a \qic{class}{Grid} and a \qic{class}{Repeater}
+  \begin{itemize}
+  \item use the \qic{type}{index} to create a checker pattern
+  \end{itemize}
+\item Use the \qtt{\small knight.png} image to create a\\
+      piece that can be placed on any square
+  \begin{itemize}
+  \item bind its \qic{type}{x} and \qic{type}{y} properties to custom\\
+        \qic{type}{cx} and \qic{type}{cy} properties
+  \end{itemize}
+\item Make each square clickable
+  \begin{itemize}
+  \item move the piece when a suitable square is clicked
+  \end{itemize}
+\item Make the model an \qtt{Array} that records which squares have been
+      visited
+\item Make the board and piece separate components
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1482}\frametitle{Lab~\textendash~Calendar}
+
+\flushedImage{qml-presenting-data/images/calendar.png}
+
+\begin{itemize}
+\item Start by creating a grid of squares using\\
+      a \qic{class}{Grid} and a \qic{class}{Repeater}
+  \begin{itemize}
+  \item put the grid inside an \qic{class}{Item}
+  \item use the \qic{type}{index} to give each square a number
+  \end{itemize}
+\item Place a title above the grid
+\item Ensure that the current date is highlighted
+\item Use the \qtt{\small left.png} and \qtt{\small right.png} images to
+      create buttons on each side of the title
+\item Make the buttons navigate to the next and previous months
+\item Add a header showing the days of the week
+\end{itemize}
+
+\end{slide}

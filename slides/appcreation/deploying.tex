@@ -1,0 +1,78 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Deploying Qt Applications}
+
+\begin{slide}{1771}
+  \frametitle{Ways of Deploying}
+  \begin{itemize}
+  \item Static Linking
+    \begin{itemize}
+    \item Results in stand-alone executable
+    \item $+$ Only few files to deploy
+    \item $-$ Executables are large
+    \item $-$ No flexibility
+    \item $-$ You cannot deploy plugins
+    \end{itemize}
+  \item Shared Libraries
+    \begin{itemize}
+    \item $+$ Can deploy plugins
+    \item $+$ Qt libs shared between applications
+    \item $+$ Smaller, more flexible executables
+    \item $-$ More files to deploy
+    \end{itemize}
+  \item Qt is by default compiled as shared library
+  \item If Qt is pre-installed on system
+    \begin{itemize}
+    \item Use shared libraries approach
+    \end{itemize}
+  \item \doc{deployment.html}{Deploying Qt Applications}
+ \end{itemize}
+\end{slide}
+
+\begin{slide}{1770}
+  \frametitle{Deployment}
+  \begin{itemize}
+  \item Shared Library Version
+    \begin{itemize}
+    \item If Qt is not a system library
+      \begin{itemize}
+      \item Need to redistribute Qt libs with application
+      \end{itemize}
+    \item Minimal deployment
+      \begin{itemize}
+      \item Libraries used by application
+      \item Plugins used by Qt
+      \end{itemize}
+    \item Ensure Qt libraries use correct path to find Qt plugins
+      \begin{itemize}
+      \item[] \doc{qt-conf.html}{Using qt.conf}
+      \end{itemize}
+   \end{itemize}
+  \item Static Linkage Version
+    \begin{itemize}
+    \item Build Qt statically
+      \begin{itemize}
+      \item \texttt{\$QTDIR/configure -static <your other options>}
+      \item Specify required options (e.g. sql drivers)
+      \end{itemize}
+    \item Link application against Qt
+    \item Check that application runs stand-alone
+      \begin{itemize}
+      \item Copy application to machine without Qt and run it
+      \end{itemize}
+    \end{itemize}
+  \item \doc{deployment.html\#platform-specific-notes}{Platform-Specific Notes}
+  \end{itemize}
+
+\end{slide}

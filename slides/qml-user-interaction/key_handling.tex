@@ -1,0 +1,103 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{slide}{1363}\frametitle{Raw Keyboard Input}\label{raw_keyboard_input}
+
+\begin{itemize}
+\item Raw key input can be handled by items
+  \begin{itemize}
+  \item with predefined handlers for commonly used keys
+  \item full key event information is also available
+  \end{itemize}
+\item The same focus mechanism is used as for ordinary text input
+  \begin{itemize}
+  \item enabled by setting the \qic{type}{focus} property
+  \end{itemize}
+\item Key handling is not an inherited property of items
+  \begin{itemize}
+  \item enabled using the \qic{type}{Keys} attached property
+  \end{itemize}
+\item Key events can be forwarded to other objects
+  \begin{itemize}
+  \item enabled using the \qic{type}{Keys.forwardTo} attached property
+  \item accepts a list of objects
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1362}\frametitle{Raw Keyboard Input}
+
+\flushedImage{qml-user-interaction/images/key-press.png}
+\inputqml{qml-user-interaction/colorized/key-press}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1361}\frametitle{Raw Keyboard Input}
+
+\begin{itemize}
+\item Can use predefined handlers for arrow keys:
+\end{itemize}
+
+\begin{qml}
+\qtt{~~~~\qc{type}{Keys.onLeftPressed}:}\\
+\qtt{~~~~~~~~rocket.rotation~\qc{operator}{=}~(rocket.rotation~\qc{operator}{-}~\qc{number}{10})~\qc{operator}{\%}~\qc{number}{360}}\\
+\qtt{~~~~\qc{type}{Keys.onRightPressed}:}\\
+\qtt{~~~~~~~~rocket.rotation~\qc{operator}{=}~(rocket.rotation~\qc{operator}{+}~\qc{number}{10})~\qc{operator}{\%}~\qc{number}{360}}
+\end{qml}
+
+\begin{itemize}
+\item Or inspect events from all key presses:
+\end{itemize}
+
+\begin{qml}
+\qtt{~~~~\qc{type}{Keys.onPressed}:~\{}\\
+\qtt{~~~~~~~~\qc{keyword}{if}~(event.key~\qc{operator}{==}~\qc{class}{Qt}.Key\_Left)}\\
+\qtt{~~~~~~~~~~~~rocket.rotation~\qc{operator}{=}~(rocket.rotation~\qc{operator}{-}~\qc{number}{10})~\qc{operator}{\%}~\qc{number}{360};}\\
+\qtt{~~~~~~~~\qc{keyword}{else}~\qc{keyword}{if}~(event.key~\qc{operator}{==}~\qc{class}{Qt}.Key\_Right)}\\
+\qtt{~~~~~~~~~~~~rocket.rotation~\qc{operator}{=}~(rocket.rotation~\qc{operator}{+}~\qc{number}{10})~\qc{operator}{\%}~\qc{number}{360};}\\
+\qtt{~~~~\}}
+\end{qml}
+
+% Keys element (attached property)
+% Key forwarding, priorities
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1360}\frametitle{Focus Scopes}
+
+\begin{itemize}
+\item Focus scopes are used to manage focus for items
+\item \qic{class}{FocusScope} delegates focus to one of its children
+\item When the focus scope loses focus
+  \begin{itemize}
+  \item remembers which one has the focus
+  \end{itemize}
+\item When the focus scope gains focus again
+  \begin{itemize}
+  \item restores focus to the previously active item
+  \end{itemize}
+\end{itemize}
+
+% A focus scope delegates focus to one of its children. It remembers which of
+% them has the focus so that, when focus is transferred away to another
+% item outside the focus scope and returned later, the scope can restore the
+% focus to the correct item.
+
+\end{slide}

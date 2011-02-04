@@ -1,0 +1,189 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Animations}
+\begin{slide}{1280}\frametitle{Animations}
+
+Animations can be applied to any visible element
+
+\begin{itemize}
+\item Animations update properties to cause a visual change
+\item All animations are property animations
+\item Specialized animation types:
+  \begin{itemize}
+  \item \qic{class}{NumberAnimation} for changes to numeric properties
+  \item \qic{class}{ColorAnimation} for changes to color properties
+  \item \qic{class}{RotationAnimation} for changes to orientation of items
+  \item \qic{class}{Vector3dAnimation} for motion in 3D space
+  \end{itemize}
+\item Easing curves are used to create variable speed animations
+\item Animations are used to create visual effects
+\end{itemize}
+
+\doc{qdeclarativeanimation.html}{QML Animation}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1279}\frametitle{Number Animations}
+
+\flushedImage{qml-animations/images/number-animation.png}
+% declarative-uis/animations/number-animation.qml
+\inputqml{qml-animations/colorized/number-animation}
+                                   
+\demo{qml-animations/ex-animations/number-animation.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1278}\frametitle{Number Animations}
+
+Number animations change the values of numeric properties
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{NumberAnimation}~\qc{keyword}{on}~\qc{type}{x}~\{}\\
+\qtt{~~~~\qc{type}{from}:~\qc{number}{0};~\qc{type}{to}:~\qc{number}{150}}\\
+\qtt{~~~~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Applied directly to properties with the \qic{keyword}{on} keyword
+\item The \qic{type}{x} property is changed by the \qic{class}{NumberAnimation}
+  \begin{itemize}
+  \item starts at \qic{number}{0}
+  \item ends at \qic{number}{150}
+  \item takes \qic{number}{1000} milliseconds
+  \end{itemize}
+\item Can also be defined separately
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1277}\frametitle{Property Animations}
+
+\flushedImage{qml-animations/images/property-animation.png}
+% declarative-uis/animations/property-animation.qml
+\inputqml{qml-animations/colorized/property-animation}  
+
+\demo{qml-animations/ex-animations/property-animation.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1276}\frametitle{Property Animations}
+
+Property animations change named properties of a target
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{PropertyAnimation}~\{}\\
+\qtt{~~~~\qc{type}{target}:~rectangle1}\\
+\qtt{~~~~\qc{type}{properties}:~\qc{string}{"width,height"}}\\
+\qtt{~~~~\qc{type}{from}:~\qc{number}{0};~\qc{type}{to}:~\qc{number}{100};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Defined separately to the target element
+\item Applied to properties of the \qic{type}{target}
+  \begin{itemize}
+  \item \qic{type}{properties} is a comma-separated string list of names
+  \end{itemize}
+\item Often used as part of a \qic{class}{Transition}
+\item Not run by default
+  \begin{itemize}
+  \item set the \qic{type}{running} property to \qic{number}{true}
+  \end{itemize}
+\end{itemize}
+
+% Animations defined in this way are not run by default because we may
+% want to wait until something happens before running them. There may be
+% more than one animation defined for an element, and we cannot run them
+% all at once.
+
+% In this case, we want to run the animation automatically, so we must set
+% the running property to true.
+
+% Using a property name without quoting it in a string will cause the
+% animation to silently fail.
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1275}\frametitle{Number Animations Revisited}
+
+\flushedImage{qml-animations/images/number-animation2.png}
+% declarative-uis/animations/number-animation2.qml
+\inputqml{qml-animations/colorized/number-animation2}  
+
+\demo{qml-animations/ex-animations/number-animation2.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1274}\frametitle{Number Animations Revisited}
+
+Number animations are just specialized property animations
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~\qc{type}{target}:~rect}\\
+\qtt{~~~~\qc{type}{properties}:~\qc{string}{"x"}}\\
+\qtt{~~~~\qc{type}{from}:~\qc{number}{0};~\qc{type}{to}:~\qc{number}{150};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Animation can be defined separately
+\item Applied to properties of the \qic{type}{target}
+  \begin{itemize}
+  \item \qic{type}{properties} contains a comma-separated list of property names
+  \end{itemize}
+\item Not run by default
+  \begin{itemize}
+  \item set the \qic{type}{running} property to \qic{number}{true}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{4032}\frametitle{The Behavior Element}
+  \begin{itemize}
+  \item \qc{class}{Behavior} allows you to set up an animation whenever a
+    property changes.
+  \end{itemize}
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{Behavior on x}~\{}\\
+\qtt{~~~~\qc{class}{SpringAnimation}~\{}\\
+\qtt{~~~~~~~~\qc{type}{spring}:~\qc{number}{1}}\\
+\qtt{~~~~~~~~\qc{type}{damping}:~\qc{number}{0.2}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}\\
+
+\demo{qml-animations/ex-animations/spring-animation.qml}
+\end{slide}                                     

@@ -1,0 +1,117 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Painting on Widgets}
+
+\begin{slide}{1514}\frametitle{Low-level painting with QPainter}
+  \begin{itemize}
+  \item Paints on paint devices (\iCls{QPaintDevice})
+  \item \iCls{QPaintDevice} implemented by
+    \begin{itemize}
+    \item On-Screen: \iCls{QWidget}
+    \item Off-Screen: \iCls{QImage}, \iCls{QPixmap}
+    \item And others ...
+    \end{itemize}
+  \item Provides drawing functions
+    \begin{itemize}
+    \item Lines, shapes, text or pixmaps
+    \end{itemize}
+  \item Controls
+    \begin{itemize}
+    \item Rendering quality
+    \item Clipping
+    \item Composition modes
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1513}\frametitle{Painting on Widgets}
+  \begin{itemize}
+  \item Override \texttt{paintEvent(QPaintEvent*)}
+  \item[]
+    \begin{cpp}
+void CustomWidget::paintEvent(QPaintEvent *) {
+   QPainter painter(this);
+   painter.drawRect(0,0,100,200); // x,y,w,h
+}
+    \end{cpp}
+ \item Schedule painting
+    \begin{itemize}
+    \item \texttt{update()}: schedules paint event
+    \item \texttt{repaint()}: repaints directly
+    \end{itemize}
+  \item Qt handles double-buffering
+  \item To enable filling background:
+    \begin{itemize}
+    \item \texttt{QWidget::setAutoFillBackground(true)}
+    \end{itemize}
+ \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1512}\frametitle{Coordinate System - Surface to render} 
+  \begin{itemize}
+  \item Controlled by QPainter
+  \item Origin: Top-Left
+ \item Rendering
+    \begin{itemize}
+    \item Logical - mathematical
+    \item Aliased - right and below
+    \item Anti-aliased - smoothing
+   \end{itemize}
+\end{itemize}
+ \begin{center}
+   \begin{tabular}{c c c}
+     \image{painting/images/coordinatesystem-line} &
+     \image{painting/images/coordinatesystem-line-raster} &
+     \image{painting/images/coordinatesystem-line-antialias}
+   \end{tabular}
+   \begin{itemize}
+   \item Rendering quality switch
+     \begin{itemize}
+     \item \iClsFn{QPainter}{setRenderHint}
+     \end{itemize}
+   \end{itemize}
+
+ \end{center}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1012}\frametitle{Geometry Helper Classes}
+\begin{itemize}
+\item \texttt{QSize(w,h)}
+  \begin{itemize}
+  \item scale, transpose
+  \end{itemize}
+\item \texttt{QPoint(x,y)}
+\item \texttt{QLine(point1, point2)}
+  \begin{itemize}
+  \item translate, dx, dy
+  \end{itemize}
+\flushedImage{painting/images/qrect-coordinates.png}
+\item \texttt{QRect(point, size)}
+  \begin{itemize}
+  \item adjust, move
+  \item translate, scale, center
+  \end{itemize}
+\item[] \begin{cpp}
+QSize size(100,100);
+QPoint point(0,0);
+QRect rect(point, size);
+rect.adjust(10,10,-10,-10);
+QPoint center = rect.center();    
+  \end{cpp}
+
+\end{itemize}
+\end{slide}                             

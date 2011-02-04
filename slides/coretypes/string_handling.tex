@@ -1,0 +1,206 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{String Handling}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{0205}\frametitle{Text Processing with \iCls{QString}}
+  \xConcept{Strings}
+  \label{text_processing}
+  Strings can be created in a number of ways:
+  \begin{itemize}
+  \item Conversion constructor and assignment operators:
+ \begin{cpp}
+QString str("abc");
+str = "def";
+  \end{cpp}
+ \item From a number using a static function:
+ \begin{cpp}
+QString n = QString::number(1234);
+  \end{cpp}
+ \item From a char pointer using the static functions:
+ \begin{cpp}
+QString text = QString::fromLatin1("Hello Qt");
+QString text = QString::fromUtf8(inputText);
+QString text = QString::fromLocal8Bit(cmdLineInput);
+  \end{cpp}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0206}\frametitle{Text Processing with QString}
+  \begin{itemize}
+  \item Created from other strings
+    \begin{itemize}
+    \item Using \texttt{operator+} and \texttt{operator+=}    
+    \end{itemize}
+ \begin{cpp}    
+QString str = str1 + str2;
+fileName += ".txt";
+  \end{cpp}
+ \item \hClsFn{QString}{simplified} // removes duplicate whitespace
+ \item\hClsFn{QString}{left}, \hClsFn{QString}{mid},
+   \hClsFn{QString}{right} // part of a string
+  \item \hClsFn{QString}{leftJustified},
+    \hClsFn{QString}{rightJustified} // padded version
+ \begin{cpp}
+QString s = "apple";
+QString t = s.leftJustified(8, '.'); // t == "apple..."
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0207}\frametitle{Text Processing with QString}
+  Data can be extracted from strings.
+  \vspace*{1em}
+  
+  \begin{itemize}
+  \item Numbers:
+ \begin{cpp}
+int value = QString::toInt();
+float value = QString::toFloat();
+  \end{cpp}
+ \item Strings:
+ \begin{cpp}
+QString text = ...;
+QByteArray bytes = text.toLatin1();
+QByteArray bytes = text.toUtf8();
+QByteArray bytes = text.toLocal8Bit();
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+% Slide note: There are many more functions available for conversions to types.
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1255}\frametitle{Text Processing with QString}
+  Obtaining raw character data from a \iCls{QByteArray}:
+  
+  \begin{lstlisting}
+    char *str = bytes.data();
+    const char *str = bytes.constData();
+  \end{lstlisting}
+  
+  Care must be taken:
+  \begin{itemize}
+  \item Character data is only valid for the lifetime of the byte array.
+  \item Either copy the character data or keep a copy of the byte array.
+  \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{0208}\frametitle{Text Processing with \iCls{QString}}
+    Strings can be tested with:
+    \begin{itemize}
+      \item \hClsFn{QString}{length} 
+      \begin{itemize}    
+        \item returns the length of the string.
+      \end{itemize}
+      \item \hClsFn{QString}{endsWith} and \hClsFn{QString}{startsWith} 
+      \begin{itemize}    
+        \item test whether string starts or ends with an other string
+      \end{itemize}    
+      \item \hClsFn{QString}{contains} 
+      \begin{itemize}
+        \item returns whether the string matches a given expression
+        \item \hClsFn{QString}{count} tells you how many times.
+      \end{itemize}
+      \item \hClsFn{QString}{indexOf} and \hClsFn{QString}{lastIndexOf} 
+      \begin{itemize}    
+        \item search for next matching expressions, and return its index
+      \end{itemize}    
+    \end{itemize}
+    Expression can be characters, strings, or regular expressions
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0209}\frametitle{Text Processing with \iCls{QStringList}}
+\xConcept{List of strings}
+\begin{itemize}
+\item \iClsFn{QString}{split} and \iClsFn{QStringList}{join}
+\begin{itemize}
+  \item \texttt{split} one string or \texttt{join} many strings using a substring
+\end{itemize} 
+\item \iClsFn{QStringList}{replaceInStrings} 
+  \begin{itemize}
+    \item search/replace on all strings in a list
+  \end{itemize} 
+  \item \iClsFn{QStringList}{filter} 
+    \begin{itemize}
+      \item return list of items matching given pattern or substring
+    \end{itemize} 
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0210}\frametitle{\iConcept{URLs}}
+\begin{itemize}
+\item \iCls{QUrl} handles URLs
+\begin{cpp}
+QUrl url("http://qt.nokia.com");
+url.scheme()  // http
+url.host();   // qt.nokia.com
+\end{cpp}
+
+\item Convenience methods 
+\begin{itemize}
+  \item Constructing from components (user, password, protocol, etc.)
+  \item Splitting URL into components
+\end{itemize}
+\item \iCls{QUrlInfo} provides info about the content the URL points to
+  \begin{itemize}
+  	\item similar to what \iCls{QFileInfo} does for local files.
+  \end{itemize}  
+  \item \iCls{QDesktopServices}
+  \begin{itemize}  
+  	\item can \emph{open} URL, and configure how URLs are opened. 
+  	\begin{cpp}
+QDesktopServices::openUrl(QUrl("http://qt.nokia.com"));
+  	\end{cpp}
+  \end{itemize}  
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0211}\frametitle{Working with \iConcept{Regular Expressions}}\label{qregexp}
+\begin{itemize}
+  \item \iCls{QRegExp} supports
+  \begin{itemize}
+    \item Regular expression matching
+    \item Wildcard matching
+  \end{itemize}
+  \item Most regular expression features are supported.
+  \item \iCls{QRegExp} objects can also be used for searching
+    strings.
+  \item \iCls{QRegExp} offers text capturing regular expressions, where
+    a subexpression can be extracted using \iCls{QString} \hClsFnPar{QRegExp}{cap}{int} and
+    \iCls{QStringList} \hClsFn{QRegExp}{capturedTexts}.
+ \begin{cpp}
+QRegExp rx("^\\d\\d?$");    // match integers 0 to 99
+rx.indexIn("123");          // returns -1 (no match)
+rx.indexIn("-6");           // returns -1 (no match)
+rx.indexIn("6");            // returns 0 (matched as position 0)
+    \end{cpp}                      
+  \end{itemize}                 
+  \doc{qregexp.html}{QRegExp}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+% Local Variables: 
+% mode: latex 
+% TeX-master: "course"
+% End: 

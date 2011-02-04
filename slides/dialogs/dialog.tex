@@ -1,0 +1,378 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Dialogs}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1717}\frametitle{Dialog Windows - \iCls{QDialog}}
+  \begin{itemize}
+  \item Base class of dialog window widgets
+  \item General Dialogs can have 2 modes
+  \item Modal dialog
+  \begin{itemize}
+  \item Remains in foreground, until closed
+ \item Blocks input to remaining application
+ \item Example: Configuration dialog
+   \end{itemize}
+  \item Modeless dialog
+  \begin{itemize}
+  \item Operates independently in application
+   \item Example: Find/Search dialog
+   \end{itemize}
+  \end{itemize}
+\vfill
+ \begin{itemize}
+  \item Modal dialog example
+ \item[] 
+    \begin{cpp}
+MyDialog dialog(this);
+dialog.setMyInput(text);
+if(dialog.exec() == Dialog::Accepted) {
+  // exec blocks until user closes dialog
+}
+    \end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1716}
+  \frametitle{Modeless Dialog}
+  \begin{itemize}
+ \item Use \texttt{show()}
+    \begin{itemize}
+    \item Displays dialog
+    \item Returns control to caller
+    \end{itemize}
+  \item[]
+    \begin{cpp}
+void EditorWindow::find() {
+  if (!m_findDialog) {
+    m_findDialog = new FindDialog(this);
+    connect(m_findDialog, SIGNAL(findNext()), 
+      this, SLOT(onFindNext()));
+  }
+  m_findDialog->show(); // returns immediately
+  m_findDialog->raise(); // on top of other windows
+  m_findDialog->activateWindow(); // keyboard focus
+}      
+    \end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1714}
+  \frametitle{Custom Dialogs}
+  \begin{itemize}
+  \item Inherit from \iCls{QDialog}
+  \item Create and layout widgets
+  \item Use \iCls{QDialogButtonBox} for dialog buttons
+    \begin{itemize}
+    \item Connect buttons to \texttt{accept()}/\texttt{reject()}
+    \end{itemize}
+  \item Override \texttt{accept()}/\texttt{reject()}
+  \item[]
+  \begin{cpp}
+MyDialog::MyDialog(QWidget *parent) : QDialog(parent) {
+  m_label = new QLabel(tr("Input Text"), this);
+  m_edit = new QLineEdit(this);
+  m_box = new QDialogButtonBox( QDialogButtonBox::Ok|
+                                QDialogButtonBox::Cancel, this);
+  connect(m_box, SIGNAL(accepted()), this, SLOT(accept()));
+  connect(m_box, SIGNAL(rejected()), this, SLOT(reject()));
+  ... // layout widgets
+}
+void MyDialog::accept() { // customize close behaviour
+  if(isDataValid()) { QDialog::accept() }
+}
+  \end{cpp}
+ \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1713}
+  \frametitle{Other Dialog Topics}
+ \begin{itemize}
+  \item Deletion of dialogs
+    \begin{itemize}
+    \item No need to keep dialogs around forever
+    \item Call \texttt{QObject::deleteLater()}
+    \item Or \texttt{setAttribute(Qt::WA\_DeleteOnClose)}
+    \item Or override \texttt{closeEvent()}
+   \end{itemize}
+ \end{itemize}
+ \flushedImage{dialogs/images/extension-1}
+ \begin{itemize}
+ \item Dialogs with extensions:
+    \begin{itemize}
+    \item \texttt{QWidget::show()/hide()} used on extension
+    \end{itemize}
+   \begin{cpp}
+m_more = new QPushButton(tr("&More"));
+m_more->setCheckable(true);
+    \end{cpp}
+    \flushedImage{dialogs/images/extension-2}
+   \begin{cpp}
+m_extension = new QWidget(this);
+// add your widgets to extension
+m_extension->hide();
+connect(m_more, SIGNAL(toggled(bool)), 
+  m_extension, SLOT(setVisible(bool)));
+      \end{cpp}
+    \item \qtdemo{examples/dialogs/extension}
+  \end{itemize}
+\end{slide}
+
+
+\subsection{Common Dialogs}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1712}
+  \frametitle{Asking for Files - \iCls{QFileDialog}}
+  \begin{itemize}
+  \item Allow users to select files or directories
+  \item Asking for a file name
+  \item[]
+    \begin{cpp}
+QString fileName = 
+  QFileDialog::getOpenFileName(this, tr("Open File"));      
+if(!fileName.isNull()) {
+  // do something useful
+}
+    \end{cpp}
+  \item \iClsFn{QFileDialog}{getOpenFileNames}
+    \begin{itemize}
+    \item Returns one or more selected existing files
+    \end{itemize}
+  \item \iClsFn{QFileDialog}{getSaveFileName}
+    \begin{itemize}
+    \item Returns a file name. File does not have to exist.
+    \end{itemize}
+  \item \iClsFn{QFileDialog}{getExistingDirectory}
+    \begin{itemize}
+    \item Returns an existing directory.
+    \end{itemize}
+  \item \texttt{setFilter("Image Files (*.png *.jpg *.bmp)")}
+    \begin{itemize}
+    \item Displays files matching the patterns
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1711}
+  \frametitle{Showing Messages - \iCls{QMessageBox}}
+\begin{itemize}
+\item Provides a modal dialog for ...
+  \begin{itemize}
+  \item informing the user
+  \item asking a question and receiving an answer
+  \end{itemize}
+
+  \item Typical usage, questioning a user
+  \item[]
+    \begin{cpp}
+QMessageBox::StandardButton ret = 
+   QMessageBox::question(parent, title, text);
+if(ret == QMessageBox::Ok) {
+  // do something useful
+}
+    \end{cpp}
+  \item Very flexible in appearance
+    \begin{itemize}
+    \item \doc{qmessagebox.html}{QMessageBox Class Reference}
+    \end{itemize}
+
+  \item Other convenience methods
+    \begin{itemize}
+    \item \texttt{QMessageBox::information(...)}
+    \item \texttt{QMessageBox::warning(...)}
+    \item \texttt{QMessageBox::critical(...)}
+    \item \texttt{QMessageBox::about(...)}
+   \end{itemize}
+ \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0179}
+\frametitle{Feedback on progress - \iCls{QProgressDialog}}
+\begin{itemize}
+  \item Provides feedback on the progress of a slow operation
+   \begin{cpp}
+QProgressDialog dialog("Copy", "Abort", 0, count, this);
+dialog.setWindowModality(Qt::WindowModal);
+for (int i = 0; i < count; i++) {
+  dialog.setValue(i);
+  if (dialog.wasCanceled()) { break; }
+  //... copy one file
+}
+dialog.setValue(count); // ensure set to maximum      
+    \end{cpp}
+  \item Initialize with \hClsFnPar{QProgressDialog}{setValue}{0}
+    \begin{itemize}
+    \item Otherwise estimation of duration will not work
+    \end{itemize}
+  \item When operation progresses, check for cancel
+    \begin{itemize}
+    \item \iClsFn{QProgressDialog}{wasCanceled}
+    \item Or connect to \iClsFn{QProgressDialog}{canceled}
+    \end{itemize}
+  \item To stay reactive call \iClsFn{QApplication}{processEvents}
+  \item For modeless operation: \doc{qprogressdialog.html}{QProgressDialog}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0180}\frametitle{Providing error messages - \iCls{QErrorMessage}}\label{qerrormessage}
+  \begin{itemize}
+  \item Similar to QMessageBox with checkbox
+  \item Asks if message shall be displayed again
+  \flushedImage{dialogs/images/qerrormessage}
+ \item[]
+    \begin{cpp}
+m_error = new QErrorMessage(this);
+m_error->showMessage(message, type);
+    \end{cpp}
+\item Messages will be queued
+  \item \iClsFn{QErrorMessage}{qtHandler}
+    \begin{itemize}
+   \item installs an error handler for debugging
+    \item Shows \iCls{qDebug}(), \iCls{qWarning}() and
+    \iCls{qFatal}() messages in QErrorMessage box
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1710}
+  \frametitle{Other Common Dialogs}
+  \begin{itemize}
+  \item Asking for Input - \iCls{QInputDialog}
+    \begin{itemize}
+    \item \texttt{QInputDialog::getText(...)}
+    \item \texttt{QInputDialog::getInt(...)}
+    \item \texttt{QInputDialog::getDouble(...)}
+    \item \texttt{QInputDialog::getItem(...)}
+    \end{itemize}
+  \item Selecting Color - \iCls{QColorDialog}
+    \begin{itemize}
+    \item \texttt{QColorDialog::getColor(...)}
+    \end{itemize}
+  \item Selecting Font - \texttt{QFontDialog}
+    \begin{itemize}
+    \item \texttt{QFontDialog::getFont(...)}
+    \end{itemize}
+    \vfill
+  \flushedImage{dialogs/images/standarddialogs-example}
+  \item \qtdemo{examples/dialogs/standarddialogs}
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0181}\frametitle{Guiding the user - \iCls{QWizard}}
+\flushedImage{dialogs/images/qwizard}
+\begin{itemize}
+\item Input dialog
+  \begin{itemize}
+  \item Consisting of sequence of pages
+  \end{itemize}
+\item Purpose: Guide user through process
+  \begin{itemize}
+  \item Page by page
+  \end{itemize}
+\item Supports
+  \begin{itemize}
+  \item Linear and non-linear wizards
+  \item Registering and using fields
+  \item Access to pages by ID
+  \item Page initialization and cleanup
+  \item Title, sub-title
+  \item Logo, banner, watermark, background
+  \item \doc{qwizard.html}{QWizard}
+  \end{itemize}
+
+\item Each page is a \iCls{QWizardPage}
+\item \iClsFn{QWizard}{addPage}
+  \begin{itemize}
+  \item Adds page to wizard
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]{1709}
+  \frametitle{Simple Wizard Example}
+  \begin{itemize}
+  \item[]
+    \begin{cpp}
+QWizardPage *createIntroPage() {
+  QWizardPage *page = new QWizardPage;
+  page->setTitle("Introduction");
+  // create widgets and layout them
+  return page;
+}
+QWizardPage *createRegistrationPage() { ... }
+
+int main(int argc, char *argv[]) {
+  QApplication app(argc, argv); 
+  QWizard wizard;
+  wizard.setWindowTitle("License Wizard");
+  wizard.addPage(createIntroPage());
+  wizard.addPage(createRegistrationPage()); 
+  wizard.show();
+  return app.exec();
+}      
+    \end{cpp}
+
+  \item \qtdemo{examples/dialogs/licensewizard}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0191}
+\frametitle{Questions And Answers}\label{dialogQuestions}
+\begin{questionize}
+\item When would you use a modal dialog, and when would you use a
+  non-modal dialog?
+\item When should you call exec() and when should you call show()?
+\item Can you bring up a modal dialog, when a modal dialog is already
+  active?
+\item When do you need to keep widgets as instance variables?
+\item What is the problem with this code:
+\begin{lstlisting}
+QDialog *dialog = new QDialog(parent);
+QCheckBox *box = new QCheckBox(dialog);
+\end{lstlisting}
+\end{questionize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1708}
+  \frametitle{Lab: Custom Dialog}
+  \flushedImage{dialogs/images/dialog-lab}
+ \begin{itemize}
+  \item We create a simple value dialog
+    \begin{itemize}
+    \item Shows int value
+    \item As slider
+    \item As spin box
+    \item value must be < 50 to be accepted
+   \end{itemize}
+\item A main window will show result
+   \begin{itemize}
+   \item Has a slider, connected to dialog
+   \item Two buttons to launch dialog in modal and modeless mode
+   \end{itemize}
+ \item \lab{dialogs/lab-dialog}
+  \end{itemize}
+\end{slide}

@@ -1,0 +1,320 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Components}
+
+\begin{slide}{1627}\frametitle{Custom Items and Components}
+
+Two ways to create reusable user interface components:
+
+\begin{itemize}
+\item Custom items
+  \begin{itemize}
+  \item defined in separate files
+  \item one main element per file
+  \item used in the same way as standard items
+  \item can have an associated version number
+  \end{itemize}
+\item Components
+  \begin{itemize}
+  \item used with models and view
+  \item used with generated content
+  \item defined using the \qic{class}{Component} item
+  \item used as templates for items
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1626}\frametitle{Defining a Custom Item}
+
+\flushedImage{qml-structures/images/lineedit-focused.png}
+% declarative-uis/modules-components/items/LineEdit.qml
+\inputqml{qml-structures/colorized/LineEdit}
+
+\begin{itemize}
+\item Simple line edit
+  \begin{itemize}
+  \item based on undecorated \qic{type}{TextInput}
+  \item stored in file \texttt{LineEdit.qml}
+  \end{itemize}
+\end{itemize}
+
+%\demo{qml-modules-components/ex-modules-components/lineedit/LineEdit.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1625}\frametitle{Using a Custom Item}
+
+% declarative-uis/modules-components/lineedit/use-lineedit.qml
+\inputqml{qml-structures/colorized/use-lineedit}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item \qtt{LineEdit.qml} is in the same directory
+  \begin{itemize}
+  \item item within the file automatically available as \qtt{LineEdit}
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/lineedit/use-lineedit.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1624}\frametitle{Adding Custom Properties}
+
+\begin{itemize}
+\item \qtt{LineEdit} does not expose a \qic{type}{text} property
+\item The text is held by an internal \qic{class}{TextInput} item
+\item Need a way to expose this text
+\item Create a custom property
+\end{itemize}
+
+\vspace*{0.5em}
+Syntax: \textbf{\qtt{property~<type>~<name>[:~<value>]}}
+
+\vspace*{0.75em}
+Examples:
+
+\vspace*{0.25em}
+\begin{qml}
+\qtt{\qc{keyword}{property}~\qc{type}{string}~product:~\qc{string}{"Qt~Quick"}}\\
+\qtt{\qc{keyword}{property}~\qc{type}{int}~count:~\qc{number}{123}}\\
+\qtt{\qc{keyword}{property}~\qc{type}{real}~slope:~\qc{number}{123.456}}\\
+\qtt{\qc{keyword}{property}~\qc{type}{bool}~condition:~\qc{number}{true}}\\
+\qtt{\qc{keyword}{property}~\qc{type}{url}~address:~\qc{string}{"http://qt.nokia.com/"}}
+\end{qml}
+
+\vspace*{0.75em}
+\doc{qml-extending-types.html}{Extending types from QML}
+% property <type> <name>[: <value>]
+% [default] property alias <name>: <item>.<name>
+% <type> := string|variant|int|real|double|bool|url|color
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1623}\frametitle{Custom Property Example}
+
+% declarative-uis/modules-components/custom-property/NewLineEdit.qml
+\begin{qml}
+\qtt{\qc{comment}{// NewLineEdit.qml}}\\
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~...}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~text\_input}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Enter~text..."}}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{keyword}{property}~string~\qc{type}{text}:~text\_input.text}\\
+\qtt{\}}\\
+\end{qml}
+
+\begin{itemize}
+\item Custom \qic{type}{text} property \textit{binds to} \qtt{text\_input.\qc{type}{text}}
+\item Setting the custom property
+  \begin{itemize}
+  \item changes the binding
+  \item no longer refers to \qtt{text\_input.\qc{type}{text}}
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/custom-property/NewLineEdit.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1622}\frametitle{Property Aliases}
+
+% declarative-uis/modules-components/alias-property/AliasLineEdit.qml
+\begin{qml}
+\qtt{\qc{comment}{// AliasLineEdit.qml}}\\
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~...}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~text\_input}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Enter~text..."}}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{keyword}{property}~\qc{keyword}{alias}~\qc{type}{text}:~text\_input.text}\\
+\qtt{\}}\\
+\end{qml}
+
+\begin{itemize}
+\item Custom \qic{type}{text} property \textit{aliases} \qtt{text\_input.\qc{type}{text}}
+\item Setting the custom property
+  \begin{itemize}
+  \item changes the \qic{class}{TextInput}'s \qic{type}{text}
+  \end{itemize}
+\item Custom property acts like a proxy
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/alias-property/AliasLineEdit.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1621}\frametitle{Adding Custom Signals}
+
+\begin{itemize}
+\item Standard items define signals and handlers
+  \begin{itemize}
+  \item e.g., \qic{class}{MouseArea} items can use \qic{type}{onClicked}
+  \end{itemize}
+\item Custom items can define their own signals
+\end{itemize}
+
+\vspace*{0.5em}
+Signal syntax: \textbf{\qtt{signal~<name>[(<type>~<value>, ...)]}}\\
+Handler syntax: \textbf{\qtt{on<Name>:} <expression>}
+
+\vspace*{1.0em}
+Examples of signals and handlers:
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{keyword}{signal}~clicked}
+\end{qml}
+\begin{itemize}
+\item handled by \qic{type}{onClicked}
+\end{itemize}
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{keyword}{signal}~checked(\qc{number}{bool}~checkValue)}
+\end{qml}
+\begin{itemize}
+\item handled by \qic{type}{onChecked}
+\item argument passed as \qtt{checkValue}
+\end{itemize}
+
+\vspace*{0.5em}
+\demo{qml-modules-components/ex-modules-components/items/NewCheckBox.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1620}\frametitle{Defining a Custom Signal}
+
+% declarative-uis/modules-components/items/NewCheckBox.qml
+\begin{qml}
+\qtt{\qc{comment}{// NewCheckBox.qml}}\\
+\qtt{\qc{class}{Item}~\{}\\
+\qtt{~~~~...}\\
+\qtt{~~~~\qc{lightgray}{MouseArea~\{}}\\
+\qtt{~~~~~~~~\qc{lightgray}{...}}\\
+\qtt{~~~~~~~~\qc{lightgray}{onClicked:~if~(parent.state~==~"checked")~\{}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{parent.state~=~"unchecked";}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{parent.checked(false);}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\qc{lightgray}{\}~else~\{}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{parent.state~=~"checked";}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{parent.checked(true);}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\qc{lightgray}{\}}}\\
+\qtt{~~~~\qc{lightgray}{\}}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{keyword}{signal}~checked(bool~checkValue)}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item \qtt{NewCheckBox} item has a \qtt{checked} signal
+\item Communicates a boolean value called \qtt{checkValue}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1619}\frametitle{Emitting a Custom Signal}
+
+% declarative-uis/modules-components/items/NewCheckBox.qml
+\begin{qml}
+\qtt{\qc{comment}{// NewCheckBox.qml}}\\
+\qtt{\qc{class}{Item}~\{}\\
+\qtt{~~~~...}\\
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~~~~~\qc{type}{onClicked}:~\qc{keyword}{if}~(parent.state~\qc{operator}{==}~\qc{string}{"checked"})~\{}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.state~\qc{operator}{=}~\qc{string}{"unchecked"};}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.checked(\qc{number}{false});}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\}~\qc{keyword}{else}~\{}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.state~\qc{operator}{=}~\qc{string}{"checked"};}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.checked(\qc{number}{true});}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{lightgray}{signal~checked(bool~checkValue)}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item \qic{class}{MouseArea}'s \qic{type}{onClicked} handler emits the signal
+\item Calls the signal to emit it
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1618}\frametitle{Receiving a Custom Signal}
+
+\flushedImage{qml-structures/images/custom-signal-true.png}
+% declarative-uis/modules-components/items/use-custom-signal.qml
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\qtt{\qc{keyword}{import}~\qc{string}{"items"}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{lightgray}{width:~250;~height:~100;~color:~"lightblue"}}\\
+\vspace*{0.5em}
+\qtt{~~~~NewCheckBox~\{}\\
+\qtt{~~~~~~~~\qc{lightgray}{anchors.horizontalCenter:~parent.horizontalCenter}}\\
+\qtt{~~~~~~~~\qc{lightgray}{anchors.verticalCenter:~parent.verticalCenter}}\\
+\qtt{~~~~~~~~\qc{type}{onChecked}:~checkValue~?~parent.color~\qc{operator}{=}~\qc{string}{"red"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~:~parent.color~\qc{operator}{=}~\qc{string}{"lightblue"}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+
+\begin{itemize}
+\item \qtt{checked} signal is handled where the item is used
+  \begin{itemize}
+  \item by the \qic{type}{onChecked} handler
+  \item \qic{type}{on*} handlers are automatically created for signals
+  \item value supplied using name defined in the signal (\qtt{checkValue})
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/use-custom-signal.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+

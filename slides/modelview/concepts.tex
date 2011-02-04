@@ -1,0 +1,363 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Model/View Concept}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1602}\frametitle{Why Model/View?}
+  \begin{itemize}
+  \item \textbf{Isolated domain-logic}
+    \begin{itemize}
+    \item From input and presentation
+    \end{itemize}
+  \item \textbf{Makes Components Independent}
+    \begin{itemize}
+    \item For Development
+    \item For Testing
+    \item For Maintenance
+    \end{itemize}
+  \item \textbf{Foster Component Reuse}
+    \begin{itemize}
+    \item Reuse of Presentation Logic
+    \item Reuse of Domain Model
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1016}\frametitle{Model/View-Components}\label{model_view_concepts}
+\xConcept{Model/View!Concept}
+% \oooFlushedImage{model-view-overview}
+\flushedImageDoubleWidth{modelview/images/modelview-overview}
+\structure{Model View Components}
+\begin{itemize}
+\item \textbf{View}
+  \begin{itemize}
+  \item Displays data structure
+  \end{itemize}
+\item \textbf{Delegate}
+  \begin{itemize}
+  \item Renders single data
+  \item Supports editing data
+  \end{itemize}
+\item \textbf{Model}
+  \begin{itemize}
+  \item Unified adapter to data
+  \end{itemize}
+\end{itemize}
+\medskip
+\structure{Model View Infrastructure}
+ \begin{itemize}
+ \item \textbf{\textit{Item}}
+   \begin{itemize}
+  \item Imaginary unit of data in model
+  \end{itemize}
+
+\item \textbf{Index}
+  \begin{itemize}
+  \item Used to locate item in model
+  \end{itemize}
+
+\end{itemize}
+\vfill
+\begin{itemize}
+\item Lets see how simple it can be
+  \begin{itemize}
+  \item \demo{modelview/ex-simple}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1601}\frametitle{Model Structures}
+ \begin{itemize}
+ \item \textbf{List} - One-Dimensional
+    \begin{itemize}
+    \item Rows
+   \end{itemize}
+  \item \textbf{Table} - Two-Dimensional
+    \begin{itemize}
+    \item Rows
+    \item Columns
+    \end{itemize}
+  \item \textbf{Tree} - Three-Dimensional
+    \begin{itemize}
+    \item Rows
+    \item Columns
+    \item Parent/Child
+    \end{itemize}
+  \end{itemize}
+\medskip
+\centeredImage{modelview/images/modelview-models}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1600}\frametitle{Display the Structure - View Classes}
+\flushedImageDoubleWidth{modelview/images/view-inheritance}
+\begin{itemize}
+ \item \textbf{QAbstractItemView}
+   \begin{itemize}
+   \item Abstract base class for all views
+   \end{itemize}
+\item \textbf{QListView}
+  \begin{itemize}
+  \item List or icon view
+  \end{itemize}
+\item \textbf{QTreeView}
+  \begin{itemize}
+  \item Items of data in hierarchical list
+  \end{itemize}
+\item \textbf{QTableView}
+  \begin{itemize}
+  \item Item based row/column view
+  \end{itemize}
+  \centeredImage{modelview/images/standard-views}
+\item \textbf{Other Views}
+  \begin{itemize}
+  \item \iCls{QHeaderView} - Header for item views
+  \item \iCls{QColumnView} - A cascading list
+  \end{itemize}
+\item[] \doc{model-view-view.html}{View Classes}
+
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1599}\frametitle{Adapts the Data - Model Classes}
+  \begin{itemize}
+\flushedImageDoubleWidth{modelview/images/modelclasses}
+  \item \textbf{\iCls{QAbstractItemModel}}
+    \begin{itemize}
+    \item Abstract interface of models
+   \end{itemize}
+  \item \textbf{Abstract Item Models}
+    \begin{itemize}
+    \item Implement to use
+ \end{itemize}
+  \item \textbf{Ready-Made Models}
+    \begin{itemize}
+    \item Convenient to use
+  \end{itemize}
+ \item \textbf{Proxy Models}
+   \begin{itemize}
+   \item Reorder/filter/sort your items
+  \end{itemize}
+   \item[] \doc{model-view-model.html}{Model Classes}
+ \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1598}
+  \frametitle{Data - Model - View Relationships}
+  \begin{itemize}
+ \item \textbf{Item Widgets}
+\flushedImage{modelview/images/datamodelview1}
+    \begin{itemize}
+    \item All combined
+    \item Model is your data
+   \end{itemize}
+ \end{itemize}
+ \begin{itemize}
+ \item \textbf{Standard Item Model}
+\flushedImage{modelview/images/datamodelview2}
+    \begin{itemize}
+    \item Data+Model combined
+    \item View is separated
+    \item Model is your data
+    \end{itemize}
+ \end{itemize}
+ \begin{itemize}
+ \item \textbf{Custom Item Models}
+\flushedImage{modelview/images/datamodelview3}
+    \begin{itemize}
+    \item Model is adapter to data
+    \item View is separated
+    \end{itemize}
+ \end{itemize}
+\end{slide}
+
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1597}\frametitle{Adressing Data - \iCls{QModelIndex}}
+  \begin{itemize}
+  \item Refers to item in model
+  \item Contains all information to specify location
+  \item Located in given row and column
+    \begin{itemize}
+    \item May have a parent index
+    \end{itemize}
+    \medskip
+  \item \textbf{QModelIndex API}
+    \begin{itemize}
+    \item \texttt{row()} - row index refers to
+    \item \texttt{column()} - column index refers to
+    \item \texttt{parent()} - parent of index
+      \begin{itemize}
+      \item or \texttt{QModelIndex()} if no parent
+      \end{itemize}
+    \item \texttt{isValid()}
+      \begin{itemize}
+      \item Valid index belongs to a model
+      \item Valid index has non-negative row and column numbers
+      \end{itemize}
+    \item \texttt{model()} - the model index refers to
+    \item \texttt{data( role )} - data for given role
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1596}\frametitle{\iCls{QModelIndex} in Table/Tree
+  Structures}
+\flushedImage{modelview/images/modelview-tablemodel}
+  \begin{itemize}
+  \item \textbf{Rows and columns}
+    \begin{itemize}
+    \item Item location in table model
+    \item Item has no parent (parent.isValid() == false)
+   \end{itemize}
+   \begin{cpp}
+indexA = model->index(0, 0, QModelIndex());
+indexB = model->index(1, 1, QModelIndex());
+indexC = model->index(2, 1, QModelIndex());      
+    \end{cpp}
+\flushedImage{modelview/images/modelview-treemodel}
+\medskip
+\item \textbf{Parents, rows, and columns}
+  \begin{itemize}
+  \item Item location in tree model
+  \end{itemize}
+
+    \begin{cpp}
+indexA = model->index(0, 0, QModelIndex());
+indexC = model->index(2, 1, QModelIndex());
+// asking for index with given row, column and parent
+indexB = model->index(1, 0, indexA);      
+    \end{cpp}
+  \end{itemize}
+\doc{model-view-model.html\#model-indexes}{Model Indexes}
+  
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1595}\frametitle{Item and Item Roles}
+\flushedImage{modelview/images/modelview-roles}
+  \begin{itemize}
+  \item \textbf{Item performs various roles}
+    \begin{itemize}
+    \item for other components (delegate, view, ...)
+    \end{itemize}
+  \item \textbf{Supplies different data}
+    \begin{itemize}
+    \item for different situations
+    \end{itemize}
+  \item \textbf{Example:}
+    \begin{itemize}
+    \item \iClsEnum{Qt}{DisplayRole} used displayed string in view
+    \end{itemize}
+  \item \textbf{Asking for data}
+    \begin{cpp}
+QVariant value = model->data(index, role);      
+// Asking for display text
+QString text = model->data(index, Qt::DisplayRole).toString()        
+    \end{cpp}
+  \item \textbf{Standard roles}
+    \begin{itemize}
+    \item Defined by \iClsEnum{Qt}{ItemDataRole}
+    \item \doc{qt.html\#ItemDataRole-enum}{enum Qt::ItemDataRole}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1594}\frametitle{Recap of Model/View Concept}
+\begin{columns}
+  \begin{column}{50mm}
+    \begin{itemize}
+    \item \textbf{Model Structures}
+      \begin{itemize}
+      \item List, Table and Tree
+      \end{itemize}
+    \item \textbf{Components}
+      \begin{itemize}
+      \item Model - Adapter to Data
+      \item View - Displays Structure
+      \item Delegate - Paints Item
+      \item Index - Location in Model
+      \end{itemize}
+    \item \textbf{Views}
+      \begin{itemize}
+      \item \iCls{QListView}
+      \item \iCls{QTableView}
+      \item \iCls{QTreeView}
+      \end{itemize}
+    \end{itemize}
+  \end{column}
+  \begin{column}{55mm}
+    \begin{itemize}
+    \item \textbf{Models}
+      \begin{itemize}
+      \item \iCls{QAbstractItemModel}
+      \item Other Abstract Models
+      \item Ready-Made Models
+      \item Proxy Models
+      \end{itemize}
+    \item \textbf{Index}
+      \begin{itemize}
+      \item \texttt{row(),column(),parent()}
+      \item \texttt{data( role )}
+      \item \texttt{model()}
+      \end{itemize}
+    \item \textbf{Item Role}
+      \begin{itemize}
+      \item \iClsEnum{Qt}{DisplayRole}
+      \item Standard Roles in \iClsEnum{Qt}{ItemDataRoles}
+      \end{itemize}
+   \end{itemize}
+  \end{column}
+\end{columns}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1019}\frametitle{Things you may want to customize}
+\textbf{Models} - \iCls{QAbstractItemModel}
+\begin{itemize}
+\item If model is your data
+  \begin{itemize}
+  \item \iCls{QStandardItemModel} or Item Widgets
+  \end{itemize}
+\item Otherwise
+  \begin{itemize}
+  \item Adapt own data by subclassing a model
+  \end{itemize}
+\end{itemize}
+\textbf{Delegate} - \iCls{QAbstractItemDelegate}
+\begin{itemize}
+\item Standard Delegate sufficient
+\item Custom Delgate
+  \begin{itemize}
+  \item To control display/edit of data
+  \end{itemize}
+\end{itemize}
+\textbf{Views} - \iCls{QAbstractItemView}
+\begin{itemize}
+\item Almost always be used as-is
+\item Exceptional to add new view
+\end{itemize}
+\end{slide}

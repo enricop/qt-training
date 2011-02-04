@@ -1,0 +1,46 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{100};~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\vspace*{0.5em}
+\qtt{~~~~AliasLineEdit~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~lineEdit}\\
+\qtt{~~~~~~~~\qc{type}{anchors.horizontalCenter}:~parent.horizontalCenter}\\
+\qtt{~~~~~~~~\qc{type}{anchors.top}:~parent.top}\\
+\qtt{~~~~~~~~\qc{type}{anchors.topMargin}:~\qc{number}{16}}\\
+\qtt{~~~~~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{50}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Text}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.top}:~lineEdit.bottom}\\
+\qtt{~~~~~~~~\qc{type}{anchors.topMargin}:~\qc{number}{12}}\\
+\qtt{~~~~~~~~\qc{type}{anchors.left}:~parent.left}\\
+\qtt{~~~~~~~~\qc{type}{anchors.leftMargin}:~\qc{number}{16}}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"<b>Summary:</b>~"}~\qc{operator}{+}~lineEdit.text}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Image}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~clearButton}\\
+\qtt{~~~~~~~~\qc{type}{source}:~\qc{string}{"../../images/clear.svg"}}\\
+\qtt{~~~~~~~~anchors~\{~\qc{type}{right}:~parent.right;~\qc{type}{rightMargin}:~\qc{number}{4}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{type}{verticalCenter}:~lineEdit.verticalCenter~\}}\\
+\qtt{~~~~~~~~\qc{type}{opacity}:~lineEdit.text~\qc{operator}{==}~""~?~\qc{number}{0.25}~:~\qc{number}{1.0}}\\
+\qtt{~~~~~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~~~~~\qc{type}{onClicked}:~lineEdit.text~\qc{operator}{=}~""}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

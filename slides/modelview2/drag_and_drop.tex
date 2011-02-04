@@ -1,0 +1,101 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Drag and Drop}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1309}
+  \frametitle{Drag and Drop for Views}
+  \begin{itemize}
+  \item Enable the View
+ \begin{cpp}
+// enable item dragging
+view->setDragEnabled(true);
+// allow to drop internal or external items
+view->setAcceptDrops(true);
+// show where dragged item will be dropped
+view->setDropIndicatorShown(true);
+ \end{cpp}
+\medskip
+\item Model has to provide support for drag and drop operations
+  \begin{cpp}
+Qt::DropActions MyModel::supportedDropActions() const
+{
+  return Qt::CopyAction | Qt::MoveAction;
+}    
+  \end{cpp}
+\item Model needs to support actions
+  \begin{itemize}
+  \item For example \texttt{Qt::MoveAction}
+    \begin{itemize}
+    \item implement \texttt{MyModel::removeRows( ... )}
+    \end{itemize}
+  \end{itemize}
+
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1308}
+  \frametitle{Drag and Drop with \iCls{QStandardItemModel}}
+  \begin{itemize}
+  \item Setup of Model
+    \begin{itemize}
+    \item Model is ready by default
+    \item \texttt{model->mimeTypes()}
+      \begin{itemize}
+      \item "application/x-qabstractitemmodeldatalist"
+      \item "application/x-qstandarditemmodeldatalist"
+      \end{itemize}
+    \item \texttt{model->supportedDragActions()}
+      \begin{itemize}
+      \item \texttt{QDropEvent::Copy | QDropEvent::Move}
+      \end{itemize}
+    \item \texttt{model->supportedDropActions()}
+      \begin{itemize}
+      \item \texttt{QDropEvent::Copy | QDropEvent::Move}
+      \end{itemize}
+    \end{itemize}
+  \item Setup of Item
+    \begin{cpp}
+item = new QStandardItem("Drag and Droppable Item");
+// drag by default copies item
+item->setDragEnabled(true);
+// drop mean adding dragged item as child
+item->setDropEnabled(true);
+    \end{cpp}
+ \end{itemize}
+\demo{modelview2/ex-dndlist}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1307}
+  \frametitle{Drag and Drop on \iCls{QAbstractItemModel}}
+  \begin{cpp}
+class MyModel : public QAbstractItemModel {
+public:
+  // actions supported by the data in this model
+  Qt::DropActions supportedDropActions() const;
+  // for supported index return Qt::ItemIs(Drag|Drop)Enabled
+  Qt::ItemFlags flags(const QModelIndex &index) const;
+  // returns list of MIME types that are supported
+  QStringList QAbstractItemModel::mimeTypes() const;
+  // returns object with serialized data in mime formats
+  QMimeData *mimeData(const QModelIndexList &indexes) const;
+  // true if data and action can be handled, otherwise false
+  bool dropMimeData(const QMimeData *data, Qt::DropAction action, 
+         int row, int column, const QModelIndex &parent);
+};    
+  \end{cpp}
+\demo{modelview2/ex-drag-and-drop}
+\end{slide}

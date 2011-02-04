@@ -1,0 +1,1057 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Item Widgets}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0865}\frametitle{Item Views}
+Qt provides a set of widgets for lists, trees and tables:
+
+\vspace*{1em}
+\centeredImage{Model_View_Programming/images/standard-views}
+
+\vspace*{1em}
+These are available in two forms:
+
+\begin{itemize}
+\item Item-based widgets.
+\item Views that display the contents of models.
+\end{itemize}
+
+We will look at the widgets first.
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0867}\frametitle{Introducing the Widgets}
+  \label{introduction_to_model_view_widgets}
+\xConcept{Model/View!Convenience Widgets}
+
+The item view widgets:
+
+\begin{itemize}
+\item Provide a simple to use API.
+\item Are practical for small-to-medium data sets.
+\item Act as containers for items.
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{List:} \iCls{QListWidget}
+\item \textbf{Table:} \iCls{QTableWidget}
+\item \textbf{Tree:} \iCls{QTreeWidget}
+\end{itemize}
+
+These are all derived from corresponding view classes.
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0868}\frametitle{QListWidget}
+\xConcept{Model/View!QListWidget}
+\xConcept{Model/View!QListView modes}
+
+\begin{itemize}
+ \item Displays a list of items.
+   \begin{itemize}
+   \item \iCls{QListWidgetItem} is item in \iCls{QListWidget}
+   \item \iClsFn{QListWidget}{addItem} adds item.
+   \end{itemize}
+ \item  \texttt{setViewMode()}: \textit{Select the display mode using}
+   \begin{itemize}
+   \item \texttt{ListMode}: a single column of text plus optional icons
+   \item \texttt{IconMode}: a grid of movable icons
+   \end{itemize}
+   \end{itemize}
+\vfill
+\hfill\image{Model_View_Programming/images/listwidget-listmode}\hfill\image{Model_View_Programming/images/listwidget-iconmode}\hfill\strut
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46868}\frametitle{QListWidgetItem}
+
+  \begin{itemize}
+  \item \textbf{Example:} Adding items to a list widget:
+  \end{itemize}
+  \begin{lstlisting}
+    QListWidget *widget = new QListWidget;
+    // adding using item class
+    QListWidgetItem *item = new QListWidgetItem("Item-0");
+    widget->addItem(item);
+    
+    for (int i = 1; i < 10; ++i) {
+      // convienence method
+      widget->addItem(QString("Item %1").arg(i));
+    }
+    // retrieve item from widget
+    widget->item(0)->text(); // returns "Item-0"
+  \end{lstlisting}
+  \begin{itemize}
+  \item \textit{The widget takes ownership of the items}
+ \end{itemize}
+\demo{modelview/ex-QListWidget}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0869}\frametitle{QTableWidget}
+\xConcept{Model/View!QTableWidget}
+
+Displays a table of items.
+
+\begin{itemize}
+\item \texttt{new QTableWidget(rows, columns, parent)}
+  \begin{itemize}
+  \item Usually constructed with predefined dimensions.
+  \end{itemize}
+\item class \iCls{QTableWidgetItem} represents table item
+\item \texttt{setItem(row, column, item)} to set cell data.
+\item Memory-efficient
+  \begin{itemize}
+  \item \textit{ Only cells with contents need memory.}
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.5em}
+\centeredImage{Model_View_Programming/images/tablewidget}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46870}\frametitle{QTableWidgetItem}
+
+\flushedImage{Model_View_Programming/images/naughts-and-crosses}
+\textbf{Example:} Setting items in a table widget:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+ QTableWidget *w = new QTableWidget(3, 3);
+\end{lstlisting}
+
+\vspace*{0.5em}
+Creating items and setting them for a given row and column:
+
+\begin{cpp}
+QTableWidgetItem *item1 = new QTableWidgetItem("X");
+QTableWidgetItem *item2 = new QTableWidgetItem("O");
+QTableWidgetItem *item3 = new QTableWidgetItem("X");
+w->setItem(1, 1, item1);
+w->setItem(1, 2, item2);
+w->setItem(2, 0, item3);
+\end{cpp}
+
+\vspace*{0.5em}
+\textit{The widget takes ownership of the items.}
+
+\vfill
+\demo{modelview/ex-QTableWidget}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0870}\frametitle{QTreeWidget}
+\xConcept{Model/View!QTreeWidget}
+
+Displays a tree of items with branches.
+
+\begin{itemize}
+\item Tree items are instances of \iCls{QTreeWidgetItem}.
+\item One item per row, supports multiple columns.
+\begin{itemize}
+\item \hClsFn{QTreeWidget}{setColumnCount}
+\end{itemize}
+\item Branches can be expanded and collapsed.
+\item Allows sorting by the data in one column.
+\begin{itemize}
+\item \hClsFn{QTreeWidget}{setSortingEnabled}
+\end{itemize}
+\item Columns can be rearranged.
+\end{itemize}
+
+\vspace*{0.5em}
+\centeredImage{Model_View_Programming/images/qtreewidget}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46871}\frametitle{QTreeWidgetItem}
+\xConcept{Model/View!QTreeWidget}
+
+\textbf{Example:} Adding items to a tree widget.
+
+\vspace*{0.5em}
+Creating items as children of the tree widget:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+ QTreeWidget *w = new QTreeWidget;
+ QTreeWidgetItem *top = new QTreeWidgetItem(w);
+ top->setText(0, "Top A");
+ top->setText(1, "Top B");
+\end{lstlisting}
+
+\begin{itemize}
+\item The item is constructed with \iCls{QTreeWidget} as the parent.
+\item Each item has two columns of text.
+\end{itemize}
+
+\vspace*{0.5em}
+The widget takes ownership of the items.
+\vfill
+\demo{modelview/ex-QTreeWidget}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46872}\frametitle{QTreeWidgetItem}
+
+\vspace*{0.5em}
+Adding top-level items later with \hClsFn{QTreeWidget}{addTopLevelItem}:
+
+\vspace*{0.5em}
+\begin{cpp}
+QTreeWidgetItem *top2 = new QTreeWidgetItem();
+top2->setText(0, "Second Top A");
+top2->setText(1, "Second Top B");
+w->addTopLevelItem(top2);
+\end{cpp}
+
+\vspace*{1em}
+\begin{itemize}
+\item The item is constructed without a parent.
+\item It is added explicitly to the tree widget.
+\end{itemize}
+
+\vfill
+\demo{modelview/ex-QTreeWidget}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46873}\frametitle{QTreeWidgetItem}
+\xConcept{Model/View!QTreeWidget}
+
+\textbf{Example:} Creating items as children of a tree widget item:
+
+\vspace*{0.5em}
+\begin{cpp}
+QTreeWidgetItem *player1 = new QTreeWidgetItem(teamItem);
+player1->setText(0, "James");
+player1->setText(1, "Goalkeeper");
+player1->setText(2, "0");
+\end{cpp}
+
+\vspace*{0.5em}
+Adding child items later with \hClsFn{QTreeWidgetItem}{addChild}:
+
+\vspace*{0.5em}
+\begin{cpp}
+QTreeWidgetItem *player7 = new QTreeWidgetItem();
+layer7->setText(0, "Bernie");
+player7->setText(1, "Striker");
+player7->setText(2, "4");
+teamItem->addChild(player7);
+\end{cpp}
+
+\vspace*{1em}
+
+\demo{modelview/ex-tree-child-items}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1165}\frametitle{Items}
+\xConcept{Model/View!Item classes}
+
+\begin{itemize}
+\item Widget Items have similar APIs.
+\item Common setter functions:
+  \begin{itemize}
+  \item Text: \hClsFn{QTreeWidgetItem}{setText}
+  \item Icon: \hClsFn{QTreeWidgetItem}{setIcon}
+  \item Tool tip: \hClsFn{QTreeWidgetItem}{setToolTip}
+  \end{itemize}
+\item Hiding, configuring of Items:
+  \begin{itemize}
+  \item \hClsFn{QTreeWidgetItem}{setHidden}
+  \item \hClsFn{QTreeWidgetItem}{setFlags}
+  \end{itemize}
+  
+\item \iCls{QListWidgetItem}, \iCls{QTreeWidgetItem}
+  \begin{itemize}
+  \item Functions take column number as first argument
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46994}\frametitle{Item Flags}
+\xConcept{Model/View!Item classes}
+
+\begin{itemize}
+\item Flags describe how user can interact with items.
+\item Items can be a combination of these flags:
+  \begin{itemize}
+  \item Enabled: \iNsEnum{Qt}{ItemIsEnabled} 
+  \item Editable: \iNsEnum{Qt}{ItemIsEditable} 
+  \item Selectable: \iNsEnum{Qt}{ItemIsSelectable} 
+  \item Checkable: \iNsEnum{Qt}{ItemIsUserCheckable} 
+    \begin{itemize}
+    \item \iNsEnum{Qt}{ItemIsTristate} 
+    \end{itemize}
+  \item Dragged and dropped:
+    \begin{itemize}
+    \item \iNsEnum{Qt}{ItemIsDragEnabled} 
+    \item \iNsEnum{Qt}{ItemIsDropEnabled} 
+    \end{itemize}
+  \end{itemize}
+\item Items can also be completely disabled:
+  \begin{itemize}
+  \item \iNsEnum{Qt}{NoItemFlags} 
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0873}\frametitle{Headers}
+
+\iCls{QTreeWidget} and \iCls{QTableWidget} have headers.
+
+\vspace*{1em}
+\iCls{QTreeWidget} has a horizontal header:
+\begin{itemize}
+\item Accessed using \hClsFn{QTreeWidget}{headerItem}.
+\item Only a single column is visible to begin with.
+\item Change the number of columns with \hClsFn{QTreeWidget}{setColumnCount} or
+\iClsFn{QTreeWidget}{setHeaderLabels}.
+\end{itemize}
+
+\vspace*{0.5em}
+\iCls{QTableWidget} has horizontal and vertical headers:
+\begin{itemize}
+\item Accessed using \hClsFn{QTreeWidget}{horizontalHeaderItem}
+and \hClsFn{QTreeWidget}{verticalHeaderItem}.
+\item The number of headers match the dimensions of the table.
+\end{itemize}
+\end{slide}
+
+% Notes:
+% \item Set a custom header with \iClsFn{QTreeWidget}{setHeaderItem} for the whole
+% header.
+% \item Set custom headers with \iClsFn{QTableWidget}{setHorizontalHeaderItem}
+% and \iClsFn{QTableWidget}{setHorizontalHeaderItem} for each header section.
+
+%----------------------------------------------------------------------
+\begin{slide}{0874}\frametitle{Selection and Keyboard Focus}
+\xConcept{Model/View!Focus}
+\xConcept{Model/View!Selection}
+\begin{itemize}
+\item Keyboard focus is shown using a line around the item.
+\item Selection is shown by inverting the item colors.
+\item Only one item can have keyboard focus while several items can be
+  selected (depending on the selection mode)
+\item Five different selection modes exist: \hClsEnum{QAbstractItemView}{NoSelection},
+  \hClsEnum{QAbstractItemView}{Single}, \hClsEnum{QAbstractItemView}{Multi},
+  \hClsEnum{QAbstractItemView}{Extended}, and \hClsEnum{QAbstractItemView}{ContiguousSelection}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0875}\frametitle{Selection and Keyboard Focus}
+\begin{itemize}
+\item \hClsEnum{QAbstractItemView}{Multi},
+  \hClsEnum{QAbstractItemView}{Extended}, and \hClsEnum{QAbstractItemView}{ContiguousSelection} allow the user to select 
+  several items. In \hClsEnum[\textbf]{QAbstractItemView}{Extended} mode, selecting one item deselects
+  other selected items unless Ctrl or Shift is held. This is not
+  the case for
+  \hClsEnum[\textbf]{QAbstractItemView}{Multi}-mode. \hClsEnum[\textbf]{QAbstractItemView}{ContiguousSelection} is similar to extended, you can however, only select a contiguous range.
+\item Keyboard focus is retrieved and set using
+  \iClsFn{QTreeWidget}{currentItem} and \iClsFn{QTreeWidget}{setCurrentItem}
+  respectively.
+\item Selection is retrieved and set using
+  \iClsFn{QTreeWidget}{selectedItems} and
+  \iClsFnPar{QTreeWidgetItem}{setSelected}{bool} respectively.
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+% \begin{slide}{969}\frametitle{Models and Views}
+
+% \begin{itemize}
+% \item \iCls{QListView}, \iCls{QTreeView}, \iCls{QTableView}
+% \end{itemize}
+
+% \end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0876}\frametitle{Sorting}
+\xConcept{Model/View!Sorting}
+\begin{itemize}
+\item The user can sort the items by clicking in the header.
+\item This can be enabled by calling
+  \iClsFnPar{QTreeWidget}{setSortingEnabled}{true}.
+\item The tree view shows an arrow in the header to indicate sorting
+  direction. This can be disabled by calling
+  \iClsFnPar{QHeaderView}{setShowSortIndicator}{false}.
+\item You can sort the items programmatically using
+  \iClsFnPar{QListView}{sortItems}{int column, Qt::SortOrder}.
+\item You can change the sorting algorithm by overriding
+  \iClsFn{QTreeWidgetItem}{operator<}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0877}\frametitle{Events}
+\xConcept{Model/View!Events}
+\begin{itemize}
+\item \iCls{QTreeWidgetItem} does \emph{not} inherit from
+  \iCls{QWidget} or \iCls{QObject}, and therefore does not get any
+  events nor emit any signals.
+\item Events can be handled by \iCls{QTreeWidget}, and can be mapped to the
+  item in question using \iClsFnPar{QTreeWidget}{itemAt}{QPoint}
+\item \iCls{QTreeWidget} does part of this job for you by emitting a large
+  number of signals notifying you about changes to the items:
+  \hClsFn{QTreeWidget}{itemClicked}, \hClsFn{QTreeWidget}{itemEntered}, \hClsFn{QTreeWidget}{itemExpanded},
+  \ldots
+\item When constructing a \iCls{QTreeWidgetItem}, you can specify a type,
+  which is basically a number. This type can later be retrieved using the
+  method \hClsFn{QTreeWidgetItem}{type}. This can be used for RTTI.
+\end{itemize}
+\end{slide}
+
+\subsection{Model/View  Concept}
+%----------------------------------------------------------------------
+\begin{slide}{1017}\frametitle{Concept}\label{model_view_concepts}
+\xConcept{Model/View!Concept}
+\oooFlushedImage{model-view-overview}
+\begin{itemize}
+\item \textbf{Model} Provides an interface\\
+  to the real data.
+\item \textbf{View} Displays the data.
+\item \textbf{Delegate} Renders the items of data,\\
+  and supports editing of data.
+\end{itemize}
+\hspace{30mm}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0879}\frametitle{Concept}
+\begin{itemize}
+\item Views can almost always be used as-is
+\item Exception to add a new view
+\item Often you will subclass a model class
+\item Occasionally create own delegate
+  \begin{itemize}
+  \item  Provides control over data display and edit
+  \end{itemize}
+\end{itemize}
+\demo{modelview/ex-simple} \demo{modelview/ex-QColumnView}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0880}\frametitle{Model Classes}
+\xConcept{Model/View!Model classes}
+\vfill
+\oooCenteredImage{model-view-qabstractitemmodel}
+\vfill
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0881}\frametitle{Model Indexes}\label{modelIndexes}
+\xConcept{Model/View!Model indexes}
+\begin{itemize}
+\item Each piece of information that can be obtained via a model is
+  represented by a \emph{model index}.
+\item Two kinds of model index exists:
+  \begin{itemize}
+  \item Temporary indexes that should not be kept around
+    (\iCls{QModelIndex})
+  \item Persistent model indexes, which are updated by the model, when it
+    internally reorganizes (\iCls{QPersistentModelIndex})\\
+    \underline{Warning:} they might be expensive for Qt to maintain.
+  \end{itemize}
+  \item An index consists of three parameters:\\
+    \emph{row}, \emph{column}, and \emph{parent index}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0882}\frametitle{Model Indexes}
+\begin{block}{Imagine}
+A world \textbf{without} model indexes
+\end{block}
+
+\begin{itemize}
+\item \textbf{View:} Dear model, how many items are under the first item?
+  \begin{itemize}
+  \item \textbf{Model:} 12
+  \end{itemize}
+\item \textbf{View:} Great, thanks pal. Say, how many children does
+  the first row of your first row have?
+  \begin{itemize}
+  \item \textbf{Model:} 2
+  \end{itemize}
+\item \textbf{View:} Awesome. Erhh how many children does the first row of the
+  first row of the first row have?
+  \begin{itemize}
+  \item \textit{(much later)}
+  \end{itemize}
+  \item \textbf{View} \textit{(Very tired now)}\textbf{:} One last thing: What is
+the text in the third column of the 15th row inside the second row inside
+the 8th row inside the \ldots?
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0883}
+\frametitle{Table Models}
+\xConcept{Model/View!Table models}
+\flushedImage{Model_View_Programming/images/modelview-tablemodel}
+\begin{itemize}
+\item In the simplest form a model can\\
+  be represented as a table.
+\item In that case, the parent index\\
+  is not used.
+\item Example:
+\begin{alltt}
+\iCls{QModelIndex} index = 
+model->index(2,1, QModelIndex())
+\end{alltt}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0884}
+\frametitle{Tree Models}
+\xConcept{Model/View!Tree models}
+\flushedImage{Model_View_Programming/images/modelview-treemodel}
+\begin{alltt}
+\iCls{QModelIndex} indexA = 
+  model->index(0, 0, QModelIndex());
+
+QModelIndex indexB = 
+  model->index(1, 0, indexA);
+
+QModelIndex indexC = 
+  model->index(2, 1, QModelIndex());
+\end{alltt}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0885}\frametitle{Item Roles}\label{itemRoles}
+\xConcept{Model/View!Item roles}
+\flushedImage{Model_View_Programming/images/modelview-roles}
+\begin{itemize}
+\item Each item in the model\\
+  can contain different data\\
+  (aka. performing\\
+  different kind of\\
+  \emph{roles}).
+\item You get the data for\\
+  a given role using\\
+  \iClsFn{QAbstractItemModel}{data},\\
+  providing an index,\\
+  and a \texttt{DisplayRole} enum.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0886}\frametitle{Item Roles}
+\begin{itemize}
+\item The existing views and delegates understand a lot of roles:
+  \begin{itemize}
+  \item \textbf{General purpose:} DisplayRole, DecorationRole,
+    EditRole, ToolTipRole, StatusTipRole, WhatsThisRole
+  \item \textbf{Appearance and meta data:} FontRole, TextAlignmentRole,
+    BackgroundColorMode, TextColorRole, CheckStateRole, SizeHintRole
+  \item \textbf{Accessibility:} AccessibleTextRole, AccessibleDescriptionRole
+  \end{itemize}
+\item You can also provide your own roles, though Qt's Views and Delegates
+  might not make use of them.
+\end{itemize}
+\end{slide}
+
+\subsection{Custom Models}
+%----------------------------------------------------------------------
+\begin{slide}{0887}\frametitle{Implementing a Model}\label{model_view_creating_your_own_model}
+\xConcept{Model/View!Creating your own models}
+\begin{itemize}
+\item When implementing a model, we have a variety of classes to
+  choose from, each with their advantages:
+  \begin{itemize}
+  \item \iCls[\textbf]{QAbstractListModel} One dimensional list.
+  \item \iCls[\textbf]{QAbstractTableModel} Two-dimensional tables.
+  \item \iCls[\textbf]{QAbstractItemModel} Generic model class.
+  \item \iCls[\textbf]{QStringListModel} Simple one-dimensional model that works on a string
+  \item \iCls[\textbf]{QStandardItemModel} A simple model that stores the data.
+    string list.
+  \end{itemize}
+\item Notice that you need to subclass each of the above classes except
+  \iCls{QStandardItemModel} and \iCls{QStringListModel}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0888}\frametitle{Implemeting a ListModel}
+\begin{itemize}
+\item Using \iCls{QAbstractListModel}:
+  \begin{itemize}
+  \item Inherit from the class
+  \item Implement \texttt{int} \hClsFn{QAbstractItemModel}{rowCount} and
+     \iCls{QVariant} \hClsFn{QAbstractItemModel}{data}
+  \item Optionally reimplement \iCls{QVariant} \hClsFn{QAbstractItemModel}{headerData} to make the
+    model work better with \iCls{QTableView} and \iCls{QTreeView}.
+  \item If the model is editable, reimplement  \iClsEnum{Qt}{ItemFlags} \hClsFn{QAbstractItemModel}{flags},
+    and \hClsFn{QAbstractItemModel}{setData}.
+  \item Optionally, to allow row insertion and removal, implement
+    \hClsFn{QAbstractItemModel}{insertRows} and \hClsFn{QAbstractItemModel}{removeRows}
+  \end{itemize}
+\end{itemize}
+\demo{modelview/ex-stringlistmodel-4}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0889}\frametitle{Implemeting a TableModel}
+\begin{itemize}
+\item Using \iCls{QAbstractTableModel}:
+  \begin{itemize}
+  \item Everything from \iCls{QAbstractListModel} applies here, too.
+  \item In addition, you must implement \texttt{int} \hClsFn{QAbstractItemModel}{columnCount}
+  \item Optionally also implement \hClsFn{QAbstractItemModel}{insertColumns} and
+    \hClsFn{QAbstractItemModel}{removeColumns}.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0890}\frametitle{Handle Changes}
+\begin{itemize}
+\item Inform the view of changes in the model:
+  \begin{itemize}
+  \item \iCls{QAbstractItemModel} provides signals to inform the views when its contents change :
+    \hClsFn{QAbstractItemModel}{dataChanged}, \hClsFn{QAbstractItemModel}{headerDataChanged} 
+  \item There are also signals to inform the views about structural changes :
+    \hClsFn{QAbstractItemModel}{rowsInserted}, \hClsFn{QAbstractItemModel}{rowsRemoved},
+    \hClsFn{QAbstractItemModel}{columnsInserted}, \hClsFn{QAbstractItemModel}{columnsRemoved}
+    \hClsFn{QAbstractItemModel}{layoutChanged}, \hClsFn{QAbstractItemModel}{modelReset}
+    (and their "AboutToBe" counterparts)
+  \item Don't forget to emit the right signal when you change data in the model,
+    to make sure the views will be properly updated. For example, you should emit
+    \hClsFn{QAbstractItemModel}{dataChanged} from \hClsFn{QAbstractItemModel}{setData}.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0891}\frametitle{Lab: \iProject{Object Browser - step 1}}
+\flushedImage{Model_View_Programming/images/object-browser-step1}
+\begin{itemize}
+\item In the following exercises we\\
+  will implement an object browser\\
+  that allows us to see the \\
+  parent/child hierarchy of a dialog.
+\item In the first step you must\\
+  implement a table model. 
+\item Your model will take as argument a widget which should be displayed.
+\item Slow teams can get a kickstart by using the implementation in the
+  file \emph{extra-help}.
+\end{itemize}
+\lab{modelview/lab-object-browser-step1}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0892}\frametitle{Implementing Your Own Model}\label{model_indexes_start}
+\begin{itemize}
+\item Using \iCls{QAbstractItemModel}:
+  \begin{itemize}
+  \item Everything from \iCls{QAbstractTableModel} applies here, too.
+  \item Implement \iCls{QModelIndex} \hClsFnPar{QAbstractItemModel}{index}{row, column, parent}, where
+    \emph{parent} is itself a model index.
+  \item Implement \iCls{QModelIndex} \hClsFnPar{QAbstractItemModel}{parent}{QModelIndex}.
+  \end{itemize}
+\item Indexes can be created using the protected method 
+  \iClsFn{QAbstractItemModel}{createIndex}, which is overloaded to
+  take either an integer index, or a void pointer (usually internal data
+  pointer to your data structure).
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0893}\frametitle{Implementing Your Own Model
+   }\label{model_indexes_end}
+\xConcept{Model/View!Model indexes}
+\begin{itemize}
+\item With the void pointer, you can associate a model index with your internal
+  data structures.
+\item Example: making a model around a linked list: you need the pointer to each
+  item inside the index representing it.
+\item You can ask an index for its id or pointer using
+  \iClsFn{QModelIndex}{internalId} and \iClsFn{QModelIndex}{internalPointer}
+\end{itemize}
+\qtdemo{examples/itemviews/simpletreemodel}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0894}
+  \frametitle{Summary of Methods Needed}
+  \begin{itemize}
+  \item Methods to implement \textit{(simplified)}
+  \end{itemize}
+  \begin{cpp}
+class CustomModel : public QAbstractItemModel
+{
+public:
+  int columnCount( QModelIndex parent );
+  int rowCount( QModelIndex parent );
+
+  QVariant data( QModelIndex index, int role );
+
+  QModelIndex index( int row, int column, QModelIndex parent );
+
+  QModelIndex parent( QModelIndex index );
+};
+\end{cpp}
+\end{slide}
+  
+%----------------------------------------------------------------------
+\begin{slide}{0895}\frametitle{Lab: \iProject{Object Browser - step 2}}
+\flushedImage{Model_View_Programming/images/object-browser-step2}
+\begin{itemize}
+\item Implement an object browser \\ that uses
+  a tree view.
+\item First step is to verify \\ this code
+  against your solution.
+\item To help you a lot of test cases\\
+ are available in main.cpp.
+\end{itemize}
+
+\textit{Hints on next slide...}
+
+\lab{modelview/lab-object-browser-step2}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0896}\frametitle{Lab: Object Browser - step 2}
+\label{model_view_exercise_step2}
+\begin{itemize}
+\item Follow these steps carefully.
+  \begin{enumerate}
+  \item On a piece of paper formulate what goes into the internal
+    pointer. You will likely not succeed this exercise if you skip this
+    step.
+  \item Implement the method \texttt{qobjectFromModelIndex()}.
+    \begin{itemize}
+    \item This maps from a model index to the associated widget.
+    \end{itemize}
+  \item Update \texttt{rowCount()} and
+    \texttt{data()}
+    \begin{itemize}
+    \item using the \texttt{qobjectFromModelIndex()} method.
+    \end{itemize}
+  \item Implement the \texttt{index()} method.
+  \item Compile and hope for the best
+    \begin{itemize}
+    \item if it doesn't work, try to check the
+      test cases in main.cpp
+    \end{itemize}
+  \end{enumerate}
+\item Optional:
+  \begin{itemize}
+  \item Throw out the implementation for \texttt{parent()}
+    and implement it yourself.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0897}\frametitle{QStandardItemModel and QStringListModel}
+\begin{itemize}
+\item There are two model classes that do not need subclassing:
+  \iCls{QStandardItemModel} and \iCls{QStringListModel}.
+\item Generally you do not gain much from model/view programming if you
+  give the model all your data upfront, so please consider these two
+  classes as stubs which help you migrate to model/view.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0898}\frametitle{Proxy Models - Motivation}\label{proxymodels}
+\xConcept{Model/View!Proxy models}
+  \begin{itemize}
+  \item Imagine you had two different views on the same data. One view
+    should show the \emph{highlights} (i.e.\ was somehow filtered). The other
+    view should show all the data.
+  \item How would you implement that using model/view?
+    \begin{itemize}
+    \item Clutter the view with information about filtering?
+    \item Modify the model? If so, how would the model know when to return what?
+    \end{itemize}
+  \item Solution: Use a stack of models. Intermediate models are called Proxy
+    Models. 
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0899}\frametitle{Proxy Models - Introduction}
+  \begin{itemize}
+  \item Proxy Models take a source model and transform it, usually by manipulating
+    the model indexes.
+  \item Common use cases:
+    \begin{itemize}
+    \item Customizable sorting by column.
+    \item Filtering of rows matching a regular expression or wildcard.
+    \item Reordering of cells by manipulating the indexes.
+    \item Extracting part of a model (Imagine that the model shows different
+      data in different branches of a tree, and you only want to operate on
+      one of the branches).
+    \end{itemize}
+  \end{itemize}
+\demo{modelview/ex-DecorationProxy} \demo{modelview/ex-ModelFlip}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0900}\frametitle{Proxy Model Classes}
+  \begin{itemize}
+  \item \iCls[\textbf]{QAbstractProxyModel}: Abstract Proxy Model class that can be used to
+    implement any index, row or column based model transformation. Has to be
+    reimplemented, as it contains pure virtual methods.
+  \item \iCls[\textbf]{QSortFilterProxyModel}: Generic implementation of a Proxy Model that
+    allows sorting and filtering of the model data. 
+  \item Proxy models may never give out indexes of their source models. In
+    other words \hClsFn{QAbstractItemModel}{index} and \hClsFn{QAbstractItemModel}{parent} must always call \hClsFn{QAbstractItemModel}{createIndex}.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0901}\frametitle{Proxy Models}
+\begin{itemize}
+\item Proxy models sometimes need to know everything about the underlying
+  model in order to be able to implement its API. Just think about a filtering model
+  that needs to implement \hClsFn{QAbstractItemModel}{rowCount}.
+\item It is therefore very wise to cache information---the views do ask a
+  lot of questions!
+\item Be careful to update your cache when the underlying model
+  changes. Signals will tell you when that is, including
+  \hClsSig{QAbstractItemModel}{dataChanged},
+  \hClsSig{QAbstractItemModel}{endInsertRows},
+  \hClsSig{QAbstractItemModel}{endRemoveColumns}, etc
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0902}\frametitle{QSortFilterProxyModel}
+  \begin{itemize}
+  \item Can be used to display filtered, sorted model data.
+  \item Model rows can be filtered using regular expressions or wildcards. 
+  \item Model rows can be sorted by different colummns. 
+  \item Sorting order can be customized by reimplementing the \texttt{bool lessThan()}
+    function. 
+  \item needs to be reimplemented to overload \hClsFn{QSortFilterProxyModel}{lessThan},
+    \hClsFn{QSortFilterProxyModel}{filterAcceptsColumn}, \hClsFn{QSortFilterProxyModel}{filterAcceptsRow}
+  \end{itemize}
+\demo{modelview/ex-QSortFilterProxyModel}
+\end{slide}
+
+
+\subsection{Item Views}
+%----------------------------------------------------------------------
+\begin{slide}{0903}\frametitle{Views}\label{model_view_views}
+\xConcept{Model/View!Views}
+\vfill
+\oooCenteredImage{model-view-qabstractitemview}
+\vfill
+\end{slide}
+
+%-------------------------------------------------------------------
+\begin{slide}{0904}\frametitle{Views}
+\begin{itemize}
+\item Using \iClsFn{QAbstractItemView}{setEditTriggers}, you specify when
+  editing starts, the possible options are:
+  \begin{itemize}
+    \item \textbf{NoEditTriggers} No editing possible.
+    \item \textbf{CurrentChanged} Start whenever current item changes.
+    \item \textbf{DoubleClicked} Start when an item is double clicked.
+    \item \textbf{SelectedClicked} Start when clicking on an already selected item.
+    \item \textbf{EditKeyPressed} Start when an edit key has been pressed over an item.
+    \item \textbf{AnyKeyPressed} Start when any key is pressed over an item.
+    \item \textbf{AllEditTriggers} Start for all above actions.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0905}\frametitle{QDataWidgetMapper}
+\begin{itemize}
+\item Sometimes the three predefined views are not exactly the kind of view
+  you need. In those cases you have two possibilities:
+  \begin{itemize}
+  \item Subclass \iCls{QAbstractItemView}
+  \item Implement a view with a number of regular \iCls{QWidgets} and \iCls{QDataWidgetMapper}
+  \end{itemize}
+\end{itemize}
+\demo{modelview/ex-QDataWidgetMapper}\\[1cm]
+\hfill\image{Model_View_Programming/images/qdatawidgetmapper-2}\hfill\image{images/qdatawidgetmapper-1}\hfill\strut
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0906}\frametitle{Delegates}\label{model_view_delegates}
+\xConcept{Model/View!Delegates}
+\begin{itemize}
+\item Rendering and editing of items in the views are handled by subclasses
+  of \iCls{QAbstractItemDelegate}.
+\item As we have seen so far, a suitable delegate is already in place,
+  which renders the items, and allows editing using an appropriate widget
+  for the data type in question (\iCls{QItemEditorFactory} decides what
+  is \emph{appropriate}).
+\item Many editing properties are specified directly on the items in the
+  model using \iClsFn{QAbstractItemModel}{setData} with appropriate
+  roles%
+, as specified on \pageHyperlink{itemRoles}.%
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0907}\frametitle{Delegates}
+\begin{itemize}
+\item New input methods can be implemented by subclassing
+  \iCls{QAbstractItemDelegate} or \iCls{QItemDelegate}
+\item Subclassing from \iCls{QAbstractItemDelegate} requires that you
+  also implement rendering methods.
+\item To create a custom editor, the methods to reimplement are \hClsFn{QAbstractItemDelegate}{createEditor},
+  \hClsFn{QAbstractItemDelegate}{setEditorData}, \hClsFn{QAbstractItemDelegate}{setModelData}, and optionally
+  \hClsFn{QAbstractItemDelegate}{updateEditorGeometry}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0908}\frametitle{Delegates}
+\begin{itemize}
+\item To improve usability it is possible to let the delegate emit the
+  signal \hClsFn{QAbstractItemDelegate}{closeEditor} with a hint on where focus should go.
+\item This signal should be emitted when the editor is done editing, an
+  event filter might be useful to figure out when that is.
+\end{itemize}
+\demo{modelview/ex-delegate}\xExample{Model/View!Delegate}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0909}\frametitle{Selection}\label{model_view_selection}
+\xConcept{Model/View!Selection}
+\begin{itemize}
+\item Selection is handled by an instance of the class
+  \iCls{QItemSelectionModel}.
+\item The selection model can be retrieved using
+  \iClsFn{QAbstractItemView}{selectionModel}, and set using
+  \iClsFn{QAbstractItemView}{setSelectionModel}.
+\item A selection model can be shared between several views.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0910}\frametitle{Selection}
+\begin{itemize}
+\item The current selection can be retrieved using\\
+  \iClsFn[QModelIndexList]{QItemSelectionModel}{selectedIndexes}.
+\item You build selections using the class \iCls{QItemSelection}, and
+  apply them using \iClsFn{QItemSelectionModel}{select}.
+\item The select method takes as a second parameter
+  \texttt{SelectionFlags}, which describes how the selection is to be
+  applied.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0911}\frametitle{Selection}
+\begin{itemize}
+\item \iClsEnum{QItemSelectionModel}{SelectionFlag}:
+\begin{itemize}
+\item \textbf{Select} All specified indexes will be selected.
+\item \textbf{Deselect} All specified indexes will be deselected.
+\item \textbf{Toggle} All specified indexes will be selected or deselected, depending on their current state.\\
+
+\item \textbf{Rows} All indexes will be expanded to span rows.
+\item \textbf{Columns} All indexes will be expanded to span columns.\\
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0912}
+\frametitle{Selection}
+\begin{itemize}
+\item \iClsEnum{QItemSelectionModel}{SelectionFlag}:
+\begin{itemize}
+\item \textbf{Clear} The complete selection will be cleared.
+\item \textbf{Current} The current selection will be updated.\\
+
+\item \textbf{SelectCurrent} Select \verb!|! Current 
+\item \textbf{ToggleCurrent} Toggle \verb!|! Current
+\item \textbf{ClearAndSelect} Clear \verb!|! Select
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0913}\frametitle{Selection}
+\begin{itemize}
+\item The selection model emits the following signals:
+  \begin{itemize}
+  \item currentChanged ( const QModelIndex \& current,\\
+    \strut\hspace{28.5mm}const QModelIndex \& previous )
+  \item selectionChanged ( const QItemSelection \& selected,\\
+    \strut\hspace{30.5mm}const QItemSelection \& deselected )
+  \item currentColumnChanged ( const QModelIndex \& current,\\
+    \strut\hspace{40.5mm}const QModelIndex \& previous )
+  \item currentRowChanged ( const QModelIndex \& current,\\
+    \strut\hspace{35mm}const QModelIndex \& previous )
+  \end{itemize}
+\end{itemize}
+\demo{modelview/ex-selection}\xExample{Model/View!Selection}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0914}\frametitle{Drag and Drop}\label{model_view_dragndrop}
+\xConcept{Model/View!Drag and drop}
+\begin{itemize}
+\item The model/view classes support drag and drop to a certain extent, so
+  you do not have to implement it from scratch.
+\item To enable dragging:
+  \begin{itemize}
+  \item Call \iClsFnPar{QAbstractItemView}{setDragEnabled}{true} on each of
+    the views.
+  \item Reimplement \iClsFn{QAbstactItemModel}{mimeTypes} to return a
+    list of mime types you support
+  \item Reimplement \iClsFn{QAbstractItemModel}{mimeData} to encode data
+    in your supported formats.
+  \end{itemize}
+\item You only need to implement \texttt{mimeTypes()} and
+  \texttt{mimeData()} if you want to be able to drop outside of
+  \iCls{QAbstractItemViews}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0915}\frametitle{Drag and Drop}
+\begin{itemize}
+\item To enable dropping of data:
+  \begin{itemize}
+  \item Implement \iClsFn{QAbstractItemModel}{dropMimeData} to handle
+    drops of the types specified with
+    \iClsFn{QAbstactItemModel}{mimeTypes}.
+  \item Optionally, implement \hClsFn{QAbstractItemModel}{supportedDropActions} to specify
+    which drop operations you support. (Default is copy)
+  \end{itemize}
+\item For drag and drop only inside the views, you do not need to implement
+  \texttt{dropMimeData()}.
+\end{itemize}
+\end{slide}

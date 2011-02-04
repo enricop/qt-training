@@ -1,0 +1,126 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Views Revisited}
+%----------------------------------------------------------------------
+
+\begin{slide}{1465}\frametitle{Customizing Views}
+
+\begin{itemize}
+\item All views are based on the \qic{class}{Flickable} item
+\item Key navigation of the highlighted item does not wrap around
+  \begin{itemize}
+  \item set \qic{type}{keyNavigationWraps} to \qtt{true} to change this behavior
+  \end{itemize}
+\item The highlight can be constrained
+  \begin{itemize}
+  \item set the \qic{type}{highlightRangeMode} property
+  \item \qtt{\qc{class}{ListView}.ApplyRange}\\
+        tries to keep the highlight in a given area
+  \item \qtt{\qc{class}{ListView}.StrictlyEnforceRange}\\
+        keeps the highlight stationary, moves the items around it
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1464}\frametitle{Customizing Views}
+
+\flushedImage{qml-presenting-data/images/list-view-highlight-range-apply.png}
+% declarative-uis/models-views/list-view-highlight-range-apply.qml
+\begin{qml}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~...}\\
+\qtt{~~~~\qc{type}{preferredHighlightBegin}:~\qc{number}{42}}\\
+\qtt{~~~~\qc{type}{preferredHighlightEnd}:~\qc{number}{150}}\\
+\qtt{~~~~\qc{type}{highlightRangeMode}:~\qc{class}{ListView}.ApplyRange}\\
+\qtt{~~~~...}\\
+\qtt{\}}
+\end{qml}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-view-highlight-range-apply-end.png}
+\begin{itemize}
+\item View tries to keep the highlight within range
+\item Highlight may leave the range to cover\\
+      end items
+\item \qic{type}{preferredHighlightBegin} and\\
+      \qic{type}{preferredHighlightEnd} should
+  \begin{itemize}
+  \item hold coordinates within the view
+  \item differ by the height/width of an item or more
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-presenting-data/ex-models-views/list-view-highlight-range-apply.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1463}\frametitle{Customizing Views}
+
+\flushedImage{qml-presenting-data/images/list-view-highlight-range-strict.png}
+% declarative-uis/models-views/list-view-highlight-range-strict.qml
+\begin{qml}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~...}\\
+\qtt{~~~~\qc{type}{preferredHighlightBegin}:~\qc{number}{42}}\\
+\qtt{~~~~\qc{type}{preferredHighlightEnd}:~\qc{number}{150}}\\
+\qtt{~~~~\qc{type}{highlightRangeMode}:~\qc{class}{ListView}.StrictlyEnforceRange}\\
+\qtt{~~~~...}\\
+\qtt{\}}
+\end{qml}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-view-highlight-range-strict-end.png}
+\begin{itemize}
+\item View always keeps the highlight within range
+\item View may scroll past its end to keep the\\
+      highlight in range
+\item \qic{type}{preferredHighlightBegin} and\\
+      \qic{type}{preferredHighlightEnd} should
+  \begin{itemize}
+  \item hold coordinates within the view
+  \item differ by the height/width of an item or more
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-presenting-data/ex-models-views/list-view-highlight-range-strict.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1462}\frametitle{Optimizing Views}
+
+\begin{itemize}
+\item Views create delegates to display data
+  \begin{itemize}
+  \item delegates are only created when they are needed
+  \item delegates are destroyed when no longer visible
+  \item this can impact performance
+  \end{itemize}
+\item Delegates can be cached to improvement performance
+  \begin{itemize}
+  \item \qic{type}{cacheBuffer} is the maximum number of delegates to keep
+  \item trades memory usage for performance
+  \item useful if it is expensive to create delegates; for example
+    \begin{itemize}
+    \item when obtaining data over a network
+    \item when delegates require complex rendering
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}

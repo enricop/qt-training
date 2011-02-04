@@ -1,0 +1,262 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------
+
+\subsection{Transitions}
+\begin{slide}{1505}\frametitle{Transitions}
+
+\begin{itemize}
+\item Define how items change when switching states
+\item Applied to two or more states
+\item Usually describe how items are animated
+\end{itemize}
+
+\vspace*{0.5em}
+\centeredImage{qml-states-transitions/images/states-stop-go-transitions.pdf}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Let's add transitions to a previous example...
+\end{itemize}
+
+\demo{qml-states-transitions/ex-transitions/transitions.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1504}\frametitle{Transitions Example}
+
+\begin{qml}
+\qtt{~~\qc{type}{transitions}:~[}\\
+\qtt{~~~~\qc{class}{Transition}~\{}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{string}{"stop"};~\qc{type}{to}:~\qc{string}{"go"}}\\
+\qtt{~~~~~~~~\qc{lightgray}{PropertyAnimation~\{}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{target:~stop\_light}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{properties:~"color";~duration:~1000}}\\
+\qtt{~~~~~~~~\qc{lightgray}{\}}}\\
+\qtt{~~~~\},}\\
+\qtt{~~~~\qc{class}{Transition}~\{}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{string}{"go"};~\qc{type}{to}:~\qc{string}{"stop"}}\\
+\qtt{~~~~~~~~\qc{lightgray}{PropertyAnimation~\{}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{target:~go\_light}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{properties:~"color";~duration:~1000}}\\
+\qtt{~~~~~~~~\qc{lightgray}{\}}}\\
+\qtt{~~~~\}~]}
+\end{qml}
+
+\begin{itemize}
+\item The \qic{type}{transitions} property defines a list of transitions
+\item Transitions between \qic{string}{"stop"} and \qic{string}{"go"} states
+\end{itemize}     
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1503}\frametitle{Wildcard Transitions}
+
+\flushedImage{qml-states-transitions/images/states-stop-go-wildcard-transitions.pdf}
+\begin{qml}
+\qtt{~~\qc{type}{transitions}:~[}\\
+\qtt{~~~~\qc{class}{Transition}~\{}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{string}{"*"};~\qc{type}{to}:~\qc{string}{"*"}}\\
+\qtt{~~~~~~~~\qc{lightgray}{PropertyAnimation}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{target:~stop\_light}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{properties:~"color";~duration:~1000}}\\
+\qtt{~~~~~~~~\qc{lightgray}{\}}}\\
+\qtt{~~~~~~~~\qc{lightgray}{PropertyAnimation~\{}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{target:~go\_light}}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{properties:~"color";~duration:~1000}}\\
+\qtt{~~~~~~~~\qc{lightgray}{\}}}\\
+\qtt{~~~~\}~]}\\
+\end{qml}
+
+\begin{itemize}
+\item Use \qic{string}{"*"} to represent any state
+\item Now the same transition is used whenever the state changes
+\item Both lights fade at the same time
+\end{itemize}
+                      
+\demo{qml-states-transitions/ex-transitions/transitions-multi.qml}
+
+% Possible questions about using "*" for only one state.
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1502}\frametitle{Reversible Transitions}
+
+\begin{itemize}
+\item Useful when two transitions operate on the same properties
+\end{itemize}
+
+\flushedImage{qml-states-transitions/images/state-conditions-with-text.png}
+\begin{qml}
+\qtt{~~~~\qc{type}{transitions}:~[}\\
+\qtt{~~~~~~~~\qc{class}{Transition}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{from}:~\qc{string}{"with~text"};~\qc{type}{to}:~\qc{string}{"without~text"}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{reversible}:~\qc{number}{true}}\\
+\qtt{~~~~~~~~~~~~\qc{class}{PropertyAnimation}~\{}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{type}{target}:~clear\_button}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{type}{properties}:~\qc{string}{"opacity"};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~~~~~~~~~\}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~]}
+\end{qml}
+
+\begin{itemize}
+\item Transition applies from \qic{string}{"with text"} to \qic{string}{"without text"}
+  \begin{itemize}
+  \item and back again from \qic{string}{"without text"} to \qic{string}{"with text"}
+  \end{itemize}
+\item No need to define two separate transitions
+\end{itemize}
+
+\demo{qml-states-transitions/ex-transitions/transitions-reversible.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1501}\frametitle{Using States and Transitions}
+
+\begin{itemize}
+\item Avoid defining complex statecharts
+  \begin{itemize}
+  \item not just one statechart to manage the entire UI
+  \item usually defined individually for each component
+  \item link together components with internal states
+  \end{itemize}
+\item Setting state with script code
+  \begin{itemize}
+  \item easy to do, but might be difficult to manage
+  \item cannot use reversible transitions
+  \end{itemize}
+\item Setting state with state conditions
+  \begin{itemize}
+  \item more declarative style
+  \item can be difficult to specify conditions
+  \end{itemize}
+\item Using animations in transitions
+  \begin{itemize}
+  \item do not specify \qic{type}{from} and \qic{type}{to} properties
+  \item use \qic{class}{PropertyChanges} elements in state definitions
+  \end{itemize}
+\end{itemize}
+
+% Scope - where are states defined? Depends on encapsulation
+% (inside the Item they are defined for vs. inside an Item that manages its children).
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1500}\frametitle{Summary~\textendash~States}
+
+\qic{class}{State} items manage properties of other items:
+
+\begin{itemize}
+\item Items define states using the \qic{type}{states} property
+  \begin{itemize}
+  \item must define a unique \qic{type}{name} for each state
+  \end{itemize}
+\item Useful to assign \qic{type}{id} properties to items
+  \begin{itemize}
+  \item use \qic{class}{PropertyChanges} to modify items
+  \end{itemize}
+\item The \qic{type}{state} property contains the current state
+  \begin{itemize}
+  \item set this using JavaScript code, or
+  \item define a \qic{type}{when} condition for each state
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1499}\frametitle{Summary~\textendash~Transitions}
+
+\qic{class}{Transition} items describe how items change between states:
+
+\begin{itemize}
+\item Items define transitions using the \qic{type}{transitions} property
+\item Transitions refer to the states they are between
+  \begin{itemize}
+  \item using the \qic{type}{from} and \qic{type}{to} properties
+  \item using a wildcard value, \qic{string}{"*"}, to mean any state
+  \end{itemize}
+\item Transitions can be reversible
+  \begin{itemize}
+  \item used when the \qic{type}{from} and \qic{type}{to} properties are reversed
+  \end{itemize}
+\end{itemize}
+
+\end{slide}             
+
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1498}\frametitle{Exercise~\textendash~States~and~Transitions}
+
+\begin{itemize}
+\item How do you define a set of states for an item?
+% Define the states property, using a list of State elements.
+\item What defines the current state?
+% The state property.
+\item Do you need to define a name for all states?
+% Yes, states need names to distinguish them.
+\item Do state names need to be globally unique?
+% No, just unique for the item they are defined for.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1497}\frametitle{Lab~\textendash~Light~Switch}
+
+\vspace*{-1em}
+\begin{center}
+\imageDoubleWidth{qml-states-transitions/images/switch-off.png}
+\hspace*{0.5em}
+\imageDoubleWidth{qml-states-transitions/images/switch-on.png}
+\end{center}
+
+\vspace*{-0.5em}
+\begin{itemize}
+\item Using the partial solutions as hints, create a user interface similar
+to the one shown above.
+\end{itemize}
+
+\begin{center}
+\imageDoubleWidth{qml-states-transitions/images/switch-hint1.png}
+\hspace*{0.5em}
+\imageDoubleWidth{qml-states-transitions/images/switch-hint2.png}
+\hspace*{0.5em}
+\imageDoubleWidth{qml-states-transitions/images/switch-hint3.png}
+\end{center}
+
+\vspace*{-0.5em}
+\begin{itemize}
+\item Adapt the reversible transition code from earlier and add it to the
+example. 
+
+\lab{qml-states-transitions/lab-switch}
+\end{itemize}
+
+\end{slide}
+
+                                                                   

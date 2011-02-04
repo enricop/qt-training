@@ -1,0 +1,252 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Anchor Layout}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1680}\frametitle{Anchors}
+
+\begin{itemize}
+\item Used to position and align items
+\item Line up the edges or central lines of items
+\item Anchors refer to
+\begin{itemize}
+\item other items (\qic{type}{centerIn}, \qic{type}{fill})
+\item anchors of other items (\qic{type}{left}, \qic{type}{top})
+\end{itemize}
+\end{itemize}
+
+\centeredImageDoubleWidth{qml-composing-uis/images/edges-qml.pdf}
+
+\doc{anchor-layout.html}{Anchor-based Layout}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1679}\frametitle{Anchors}
+
+\flushedImage{qml-composing-uis/images/anchors.pdf}
+% declarative-uis/composing-uis/anchors.qml
+\inputqml{qml-composing-uis/colorized/anchors}
+
+\begin{itemize}
+\item \qic{type}{anchors.centerIn} centers the \qic{class}{Text}
+element in the \qic{class}{Rectangle}
+  \begin{itemize}
+  \item refers to an item not an anchor
+  \end{itemize}
+\end{itemize}                              
+\demo{qml-composing-uis/ex-anchor-layout/anchors.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1678}\frametitle{Anchors}
+
+\flushedImage{qml-composing-uis/images/anchors.pdf}
+% declarative-uis/composing-uis/anchors2.qml
+\inputqml{qml-composing-uis/colorized/anchors2}
+
+\begin{itemize}
+\item Each element can refer to its parent element
+  \begin{itemize}
+  \item using the \texttt{parent} ID
+  \end{itemize}
+\item Can refer to ancestors and named children of ancestors
+\end{itemize}                               
+
+\demo{qml-composing-uis/ex-anchor-layout/anchors2.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1677}\frametitle{Anchors}
+
+\flushedImage{qml-composing-uis/images/anchor-to-anchor.png}
+% declarative-uis/composing-uis/anchor-to-anchor.qml
+\inputqml{qml-composing-uis/colorized/anchor-to-anchor}
+
+\begin{itemize}
+\item Connecting anchors together
+\item Anchors of other items are referred to directly
+  \begin{itemize}
+  \item use \qtt{parent.right}
+  \item not \qtt{parent.anchors.right}
+  \end{itemize}
+\end{itemize}
+\demo{qml-composing-uis/ex-anchor-layout/anchor-to-anchor.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1668}\frametitle{Margins}
+
+\begin{itemize}
+\item Used with anchors to add space
+\item Specify distances
+  \begin{itemize}
+  \item in pixels
+  \item between elements connected with anchors
+  \end{itemize}
+\end{itemize}
+
+\centeredImageDoubleWidth{qml-composing-uis/images/margins-qml.pdf}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1667}\frametitle{Margins}
+
+\flushedImage{qml-composing-uis/images/alignment.png}
+% declarative-uis/composing-uis/alignment.qml
+\inputqml{qml-composing-uis/colorized/alignment}
+
+\begin{itemize}
+\item Use margins to add space between items
+\end{itemize}
+\demo{qml-composing-uis/ex-anchor-layout/alignment.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1666}\frametitle{Hints and Tips~\textendash~Anchors}
+
+\begin{itemize}
+\item Anchors can only be used with parent and sibling items
+\item Anchors work on constraints
+  \begin{itemize}
+  \item some items need to have well-defined positions and sizes
+  \item items without default sizes should be anchored to fixed or well-defined items
+  \end{itemize}
+\item Anchors creates dependencies on geometries of other items
+  \begin{itemize}
+  \item creates an order in which geometries are calculated
+  \item avoid creating circular dependencies
+    \begin{itemize}
+    \item e.g., parent $\rightarrow$ child $\rightarrow$ parent
+    \end{itemize}
+  \end{itemize}
+\item Margins are only used if the corresponding anchors are used
+  \begin{itemize}
+  \item e.g., \qic{type}{leftMargin} needs \qic{type}{left} to be defined
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1665}\frametitle{Strategies for Use~\textendash~Anchors}
+
+Identify item with different roles in the user interface:
+
+\begin{itemize}
+\item Fixed items
+  \begin{itemize}
+  \item make sure these have \qic{type}{id} properties defined
+  \item unless these items can easily be referenced as parent items
+  \end{itemize}
+\item Items that dominate the user interface
+  \begin{itemize}
+  \item make sure these have \qic{type}{id} properties defined
+  \end{itemize}
+\item Items that react to size changes of the dominant items
+  \begin{itemize}
+  \item give these anchors that refer to the dominant or fixed items
+  \end{itemize}
+\end{itemize}
+
+\end{slide}      
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1664}\frametitle{Exercise~\textendash~Items}
+
+% Something about nesting items and relative positions
+
+\flushedImage{qml-composing-uis/images/nested-elements.png}
+The image on the right shows two items and two child items inside
+a 400 $\times$ 400 rectangle.\\
+
+\begin{enumerate}
+\item Recreate the scene using \qic{class}{Rectangle} items.
+\item Can items overlap?\\
+{\small Experiment by moving the light blue or green\\
+rectangles.}
+\item Can child items be displayed outside their parents?\\
+{\small Experiment by giving one of the child items negative coordinates.}
+\end{enumerate}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{7980}\frametitle{Exercise~\textendash~Colors and Gradients}
+
+\begin{enumerate}
+\item How else can you write these colors?
+  \begin{itemize}
+  \item \qic{string}{"blue"} % "#0000ff", Qt.rgba(0,0,1,1)
+  \item \qic{string}{"\#ff0000"} % "red", Qt.rgba(1,0,0,1)
+  \item \qtt{\qc{class}{Qt}.rgba(\qc{number}{0},\qc{number}{0.5},\qc{number}{0},\qc{number}{1})}
+  \end{itemize}
+\item How would you create these items using the \qic{type}{gradient} property?\\
+\centeredImageDoubleWidth{qml-composing-uis/images/colors-and-gradients.png}
+\item Describe another way to create these gradients?
+% Using pre-defined images, optionally with rotation.
+\end{enumerate}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1663}\frametitle{Exercise~\textendash~Images and Text}
+
+\begin{enumerate}
+\item When creating an \qic{class}{Image}, how do you specify the location of
+the image file?
+% Using the source property, containing a URL or path relative to the location
+% of the .qml file.
+\item By default, images are rotated about a point inside the image. Where is
+this point?
+% The center of the image.
+\item How do you change the text in a \qic{class}{Text} element?
+% Yes, but only programmatically.
+\end{enumerate}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1676}\frametitle{Lab~\textendash~Images,~Text~and~Anchors}
+
+\centeredImageDoubleWidth{qml-composing-uis/images/text-images-anchors.png}
+
+\begin{itemize}
+\item Using the partial solutions as hints, create a user interface similar
+to the one shown above.
+\item Use the background image supplied in the common \qtt{images} directory
+for the background gradient.
+\end{itemize}
+
+\begin{center}
+\image{qml-composing-uis/images/text-images-anchors-hint1.png}
+\hspace*{0.5em}
+\image{qml-composing-uis/images/text-images-anchors-hint2.png}
+\hspace*{0.5em}
+\image{qml-composing-uis/images/text-images-anchors-hint3.png}
+\end{center}
+
+\lab{qml-composing-uis/lab-text-images-anchors}
+\end{slide}
+

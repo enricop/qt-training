@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{260}}\\
+\qtt{~~~~\qc{type}{color}:~\qc{string}{"\#404040"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{XmlListModel}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~xmlModel}\\
+\qtt{~~~~~~~~\qc{type}{source}:~\qc{string}{"files/items.xml"}}\\
+\qtt{~~~~~~~~\qc{type}{query}:~\qc{string}{"//item"}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~XmlRole~\{~\qc{type}{name}:~\qc{string}{"title"};~\qc{type}{query}:~\qc{string}{"string()"}~\}}\\
+\qtt{~~~~~~~~XmlRole~\{~\qc{type}{name}:~\qc{string}{"link"};~\qc{type}{query}:~\qc{string}{"@link/string()"}~\}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~TitleDelegate~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~xmlDelegate}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{ListView}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{anchors.margins}:~\qc{number}{4}}\\
+\qtt{~~~~~~~~\qc{type}{model}:~xmlModel}\\
+\qtt{~~~~~~~~\qc{type}{delegate}:~xmlDelegate}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

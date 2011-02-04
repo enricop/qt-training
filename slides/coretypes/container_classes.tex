@@ -1,0 +1,403 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Container Classes}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0282}\frametitle{Container Classes}
+  General purpose template-based container classes
+  \begin{itemize}
+  \item \lstinline!QList<QString>! - \textit{Sequence Container}
+    \begin{itemize}
+    \item Other: QLinkedList, QStack , QQueue ...
+    \end{itemize}
+  \item \lstinline!QMap<int, QString>! - \textit{Associative Container}
+    \begin{itemize}
+    \item Other: QHash, QSet, QMultiMap, QMultiHash
+    \end{itemize}
+  \end{itemize}
+  \medskip  Qt's Container Classes compared to STL
+  \begin{itemize}
+  \item Lighter, safer, and easier to use than STL containers
+  \item If you prefer STL, feel free to continue using it.
+  \item Methods exist that convert between Qt and STL
+    \begin{itemize}
+    \item e.g. you need to pass \texttt{std::list} to a Qt method
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1997}\frametitle{Using Containers}
+  \begin{itemize}
+  \item Using \iCls{QList}
+    \begin{cpp}
+QList<QString> list;
+list << "one" << "two" << "three";
+QString item1 = list[1]; // "two"
+for(int i=0; i<list.count(); i++) { 
+  const QString &item2 = list.at(i);
+}
+int index = list.indexOf("two"); // returns 1
+    \end{cpp}
+  \item Using \iCls{QMap}
+    \begin{cpp}
+QMap<QString, int> map;
+map["Norway"] = 5; map["Italy"] = 48;
+int value = map["France"]; // inserts key if not exists
+if(map.contains("Norway")) {
+  int value2 = map.value("Norway"); // recommended lookup
+}
+  \end{cpp}
+
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0286}\frametitle{Algorithm Complexity}
+  \begin{block}{Concern}
+    How fast is a function when number of items grow  
+  \end{block}
+  \begin{itemize}
+  \item Sequential Container
+  \item[] \begin{tabular}{l|c|c|c|c|}
+        & \textbf{Lookup} & \textbf{Insert} & \textbf{Append} & \textbf{Prepend}\\\hline
+        \textbf{QList} & O(1) & O(n) & O(1) & O(1)\\\hline
+        \textbf{QVector} & O(1) & O(n) & O(1) & O(n)\\\hline
+        \textbf{QLinkedList} & O(n) & O(1) & O(1) & O(1)\\\hline
+      \end{tabular}
+      \medskip
+  \item Associative Container
+      \medskip
+  \item[] \begin{tabular}{l|l|l|}
+        & \textbf{Lookup} & \textbf{Insert} \\\hline
+        \textbf{QMap} & O(log(n)) &  O(log(n)) \\
+        \textbf{QHash} & O(1) & O(1) \\\hline
+      \end{tabular}
+  \end{itemize}
+  \medskip
+  \textit{all complexities are amortized}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0287}\frametitle{Storing Classes in Qt Container}
+\begin{itemize}
+  \item Class must be an \emph{assignable data type}
+  \item Class is \emph{assignable}, if:
+  \item[] \begin{cpp}
+class Contact {
+public:
+  Contact() {} // default constructor
+  Contact(const Contact &other); // copy constructor
+  // assignment operator
+  Contact &operator=(const Contact &other);
+};
+\end{cpp}
+\item \emph{If copy constructor or assignment operator is not provided} 
+\begin{itemize}
+	\item C++ will provide one (uses member copying)
+\end{itemize}
+\item \emph{If no constructors provided}
+\begin{itemize}
+  \item Empty default constructor provided by C++
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0288}\frametitle{Requirements on Container Keys}
+\begin{itemize}
+  \item Type \texttt{K} as key for \iCls{QMap}:
+    \begin{itemize}
+    \item \texttt{bool K::operator$<$( const K\& )} or\\
+      \texttt{bool operator$<$( const K\&, const K\& )}
+        \item[] \begin{cpp}
+bool Contact::operator<(const Contact& c);
+bool operator<(const Contact& c1, const Contact& c2);
+      \end{cpp}    
+
+      \item \doc{qmap.html}{QMap}
+    \end{itemize} 
+  \item Type \texttt{K} as key for \iCls{QHash} or \iCls{QSet}:
+  \begin{itemize}
+  \item \texttt{bool K::operator==( const K\& )} or\\
+    \texttt{bool operator==( const K\&, const K\& )}
+  \item \texttt{uint qHash( const K\& )}
+  \item \doc{qmap.html}{QHash}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0289}\frametitle{\iConcept{Iterators}}
+\begin{itemize}
+  \item Allow reading a container's content sequentially
+ \item \textbf{Java-style iterators}: simple and easy to use
+  \begin{itemize}
+    \item \texttt{QListIterator$<$...$>$} for read
+    \item \texttt{QMutableListIterator$<$...$>$} for read-write
+ \end{itemize}
+  \item \textbf{STL-style iterators} slightly more efficient
+  \begin{itemize}
+    \item \texttt{QList::const\_iterator} for read
+    \item \iClsFn{QList}{iterator} for read-write
+ \end{itemize}
+    \item Same works for QSet, QMap, QHash, ...
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0291}\frametitle{\iConcept{Iterators} {Java style}}\label{java-style-iterators}
+\xExample{Iterators!Java style}
+\flushedImage{coretypes/images/javaiterators1}
+\begin{itemize}
+  \item Iterator points between items
+  \item Example \xConcept{Iterators}{QList} iterator
+  \begin{cpp}
+QList<QString> list;
+list << "A" << "B" << "C" << "D";
+QListIterator<QString> it(list);
+  \end{cpp}
+  \item Forward iteration
+  \begin{cpp}
+while(it.hasNext()) {
+  qDebug() << it.next();    // A B C D
+}  
+  \end{cpp}
+  \item Backward iteration
+  \begin{cpp}
+it.toBack(); // position after the last item
+while(it.hasPrevious()) {
+  qDebug() << it.previous(); // D C B A
+}  
+  \end{cpp}  
+  \item[] \doc{qlistiterator.html\#details}{QListIterator}
+\end{itemize}  
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0293}\frametitle{Modifying During Iteration}
+\xConcept{Iterators!Modifying}
+\begin{itemize}
+  \item Use \emph{mutable} versions of the iterators
+  \begin{itemize}
+	  \item e.g. \iCls{QMutableListIterator}.
+    \item[] \begin{cpp}
+QList<int> list; 
+list << 1 << 2 << 3 << 4;
+QMutableListIterator<int> i(list);
+while (i.hasNext()) {
+  if (i.next() % 2 != 0)
+    i.remove();
+}
+// list now 2, 4  
+    \end{cpp}
+  \end{itemize}
+  \item \hClsFn{QMutableListIterator}{remove} and \hClsFn{QMutableListIterator}{setValue}
+  \begin{itemize}
+    \item  Operate on items just jumped over using next()/previous()
+  \end{itemize}
+  \item \hClsFn{QMutableListIterator}{insert} 
+  \begin{itemize}
+    \item Inserts item at current position in sequence \\ 
+    \begin{itemize}    
+    	\item \emph{Remember iterator points between item}
+    \end{itemize}    
+    \item \hClsFn{QMutableListIterator}{previous} reveals just inserted item
+  \end{itemize}
+\end{itemize}    
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0294}\frametitle{Iterating Over QMap and QHash}
+\xConcept{Iterators!QMap}
+\begin{itemize}
+\item \hClsFn{QMapIterator}{next} and \hClsFn{QMapIterator}{previous} 
+  \begin{itemize}  
+  	\item Return Item class  with \texttt{key()} and \texttt{value()}
+  \end{itemize}  
+\item Alternatively use \hClsFn{QMapIterator}{key} and \hClsFn{QMapIterator}{value} from iterator
+\end{itemize} 
+\xExample{Iterators!QMap}                                                               
+\begin{cpp}
+QMap<QString, QString> map;
+map["Paris"] = "France";
+map["Guatemala City"] = "Guatemala";
+map["Mexico City"] = "Mexico";
+map["Moscow"] = "Russia";
+
+QMutableMapIterator<QString, QString> i(map);
+while (i.hasNext()) {
+  if (i.next().key().endsWith("City"))
+    i.remove();
+}          
+// map now "Paris", "Moscow"
+\end{cpp}
+\demo{core-types/ex-container}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0297}\frametitle{\iConcept{STL-style} Iterators}
+\xExample{Iterators!STL style}
+\flushedImage{coretypes/images/stliterators1}
+\begin{itemize}
+  \item Iterator points at item
+  \item Example \xConcept{Iterators}{QList} iterator
+\begin{cpp}
+QList<QString> list;
+list << "A" << "B" << "C" << "D";
+QList<QString>::iterator i;
+\end{cpp}
+\item Forward mutable iteration
+\begin{cpp}
+for (i = list.begin(); i != list.end(); ++i) {
+    *i = (*i).toLower();
+}
+\end{cpp}
+\item Backward mutable iteration
+\begin{cpp}
+i = list.end();
+while (i != list.begin()) {
+    --i;
+    *i = (*i).toLower();
+}
+\end{cpp}  
+\item \lstinline{QList<QString>::const_iterator} for read-only
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0298}\frametitle{The \texttt{foreach} Keyword}
+\xConcept{foreach keyword}                                                                     
+\xExample{Iterators!foreach}
+\begin{itemize}
+  \item It is a macro, feels like a keyword
+  \item[] \fbox{\texttt{foreach} ( \textit{variable}, \textit{container} ) \textit{statement} }  
+  \item[] \begin{cpp}
+foreach (const QString& str, list) {
+  if (str.isEmpty())
+    break;
+  qDebug() << str;
+}    
+  \end{cpp}
+  \item \iCls{break} and \iCls{continue} as normal
+  \item Modifying the container while iterating
+  \begin{itemize}
+  	\item results in container being copied
+  	\item iteration continues in unmodified version
+  \end{itemize}
+  \item Not possible to modify item
+  \begin{itemize}
+  	\item iterator variable is a const reference.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0300}\frametitle{\iConcept{Algorithms}}
+\begin{itemize}
+  \item STL-style iterators are compatible with the STL algorithms
+  \begin{itemize}
+    \item Defined in the STL $<$algorithm$>$ header
+  \end{itemize}
+  \item Qt has own algorithms
+  \begin{itemize}
+    \item Defined in $<$QtAlgorithms$>$ header
+  \end{itemize}
+  \item \emph{If STL is available on all your supported platforms you can
+      choose to use the STL algorithms}
+  \begin{itemize}
+    \item The collection is much larger than the one in Qt.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0301}\frametitle{Algorithms}
+\begin{itemize}
+\item \iCls[\textbf]{qSort}(begin, end) sort items in range
+\item \iCls[\textbf]{qFind}(begin, end, value) find value
+\item \iCls[\textbf]{qEqual}(begin1, end1, begin2) checks two ranges
+\item \iCls[\textbf]{qCopy}(begin1, end1, begin2) from one range to another
+\item \iCls[\textbf]{qCount}(begin, end, value, n) occurrences of value in range
+\item and more ...
+\end{itemize}
+Counting 1's in list          
+\begin{cpp}
+QList<int> list;
+list << 1 << 2 << 3 << 1;
+int count = 0;
+qCount(list, 1, count); // count the 1's
+qDebug() << count;      // 2  (means 2 times 1)
+\end{cpp}
+\begin{itemize}
+  \item For parallel (ie. multi-threaded) algorithms
+  \begin{itemize}  
+  	\item \doc{threads.html\#qtconcurrent-intro}{\iCls{QtConcurrent}}
+  \end{itemize}
+\end{itemize}    
+  \doc{qtalgorithms.html\#details}{QtAlgorithms}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0303}\frametitle{Algorithms Examples}
+\xExample{Algorithms!qCopy}
+\begin{itemize}
+  \item Copy list to vector example
+  \item[] \begin{cpp}
+QList<QString> list;
+list << "one" << "two" << "three";
+QVector<QString> vector(3);
+qCopy(list.begin(), list.end(), vector.begin());
+// vector: [ "one", "two", "three" ]
+  \end{cpp}      
+  \item Case insensitive sort example
+  \item[] \begin{cpp}
+bool lessThan(const QString& s1, const QString& s2) {
+    return s1.toLower() < s2.toLower();
+}
+// ...
+QList<QString> list;
+list << "AlPha" << "beTA" << "gamma" << "DELTA";
+qSort(list.begin(), list.end(), lessThan);
+// list: [ "AlPha", "beTA", "DELTA", "gamma" ]
+\end{cpp}
+  
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0305}\frametitle{\iConcept{Implicitly Sharing and Containers}}
+\xConcept{Reference counting} 
+\begin{block}{Implicit Sharing}
+If an object is copied, then its data is copied \textit{only when} the data of one of
+the objects is changed
+\end{block}
+\begin{itemize}
+  \item Shared class has a pointer to shared data block
+  \begin{itemize}
+    \item Shared data block = reference counter and actual data
+ \end{itemize}  
+  \item Assignment is a shallow copy
+  \item Changing results into deep copy (detach)
+\begin{cpp}
+QList<int> l1, l2; l1 << 1 << 2;
+l2 = l1; // shallow-copy: l2 shares date with l1
+l2 << 3; // deep-copy: change triggers detach from l1
+\end{cpp}  
+\end{itemize}
+\textit{Important to remember when inserting items into a container, or when returning a container.}
+\end{slide}

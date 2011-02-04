@@ -1,0 +1,43 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{200};~\qc{type}{color}:~\qc{string}{"black"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{VisualItemModel}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~labels}\\
+\qtt{~~~~~~~~\qc{class}{Rectangle}~\{~\qc{type}{color}:~\qc{string}{"\#cc7777"};~\qc{type}{radius}:~\qc{number}{10.0}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{50}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pointSize}:~\qc{number}{32};~\qc{type}{text}:~\qc{string}{"Books"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{horizontalAlignment}:~\qc{class}{Qt}.AlignHCenter~\}~\}}\\
+\qtt{~~~~~~~~\qc{class}{Rectangle}~\{~\qc{type}{color}:~\qc{string}{"\#cccc55"};~\qc{type}{radius}:~\qc{number}{10.0}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{50}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pointSize}:~\qc{number}{32};~\qc{type}{text}:~\qc{string}{"Music"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{horizontalAlignment}:~\qc{class}{Qt}.AlignHCenter~\}~\}}\\
+\qtt{~~~~~~~~\qc{class}{Rectangle}~\{~\qc{type}{color}:~\qc{string}{"\#99cccc"};~\qc{type}{radius}:~\qc{number}{10.0}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{50}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pointSize}:~\qc{number}{32};~\qc{type}{text}:~\qc{string}{"Movies"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{horizontalAlignment}:~\qc{class}{Qt}.AlignHCenter~\}~\}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Column}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.horizontalCenter}:~parent.horizontalCenter}\\
+\qtt{~~~~~~~~\qc{type}{anchors.verticalCenter}:~parent.verticalCenter}\\
+\qtt{~~~~~~~~\qc{class}{Repeater}~\{~\qc{type}{model}:~labels~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

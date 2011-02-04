@@ -1,0 +1,214 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ----------------------------------------------------------------------
+
+\subsection{Coordinate Systems and Transformations}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1629}\frametitle{Coordinate Systems}
+
+\begin{itemize}
+\item Each View and Item has its own local coordinate system
+\item "Viewport" and "Scene" coordinates refer to the same thing:  \iCls{QGraphicsView}'s coordinate system.
+\centeredImageFullWidth{graphicsview/images/qgv-coordinate-systems}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1757}
+\frametitle{Coordinates}
+\begin{itemize}
+\item Coordinates are local to an item
+    \begin{itemize}
+    \item Logical coordinates, not pixels
+    \item Floating point, not integer
+    \item Without transformations, 1 logical coordinate = 1 pixel.
+    \end{itemize}   
+\item Items inherit position and transform from parent
+\item zValue is relative to parent
+\item Item transformation does not affect its local coordinate system
+\item Items are painted recursively
+    \begin{itemize}
+    \item From parent to children
+    \item in increasing zValue order
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{1756}
+\frametitle{QTransform}
+\begin{itemize}
+\item Coordinate systems can be transformed using \texttt{QTransform}
+\item \texttt{QTransform} is a $3x3$ matrix describing a linear transformation from (x,y) to (xt, yt)
+\end{itemize}
+\begin{columns}[t]
+\begin{column}{50mm}
+
+\begin{tabular}{c|c|c}
+m11 & m12 & m13 \\ \hline
+m21 & m22 & m23 \\ \hline
+m31 & m32 & m33 \\
+\end{tabular}
+
+\end{column}
+\begin{column}{50mm}
+
+\begin{lstlisting}[language=Python]
+xt = m11*x + m21*y + m31 
+yt = m22*y + m12*x + m32 
+if projected: 
+    wt = m13*x + m23*y + m33  
+    xt /= wt 
+    yt /= wt 
+\end{lstlisting}
+\end{column}
+\end{columns}
+\begin{itemize}
+\item $m_{13}$ and $m_{23}$
+    \begin{itemize}
+    \item Control perspective transformations
+    \end{itemize}
+\item \wiki{Affine_transformation}{Affine Transformations}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1755}
+\frametitle{Common Transformations}
+\begin{itemize}
+
+\item Commonly-used convenience functions:
+    \begin{itemize}
+    \item \texttt{scale()}
+    \item \texttt{rotate()}
+    \item \texttt{shear()}
+    \item \texttt{translate()}
+    \end{itemize}
+\item Saves you the trouble of defining transformation matrices 
+\item \texttt{rotate()} takes optional 2nd argument: axis of rotation.
+    \begin{itemize}
+    \item Z axis is "simple 2D rotation"
+    \item Non-Z axis rotations are "perspective" projections. 
+    \end{itemize}
+\centeredImage{graphicsview/images/xyzaxis}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1754}\frametitle{View transformations}
+\begin{itemize}
+\item[] \begin{cpp}
+
+    t = QTransform();        // identity matrix
+    t.rotate(45, Qt::ZAxis); // simple rotate
+    t.scale(1.5, 1.5)        // scale by 150%
+    view->setTransform(t);   // apply transform to entire view
+\end{cpp}
+
+\item \hClsFn{QGraphicsView}{setTransformationAnchor}
+    \begin{itemize}
+    \item An \textbf{anchor} is a point that remains fixed before/after the transform.
+    \item \texttt{AnchorViewCenter}: (Default) The \textit{center point} remains the same 
+    \item \texttt{AnchorUnderMouse}: The \textit{point under the mouse} remains the same
+    \item \texttt{NoAnchor}: Scrollbars remain unchanged.
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1632}\frametitle{Item Transformations}
+\begin{itemize}
+\item \iCls{QGraphicsItem} supports same transform operations:
+    \begin{itemize}
+    \item \texttt{setTransform()}, \texttt{transform()}
+    \item \texttt{rotate()}, \texttt{scale()}, \texttt{shear()}, \texttt{translate()} 
+    \end{itemize}
+\end{itemize}    
+
+\begin{block}{An item's effective transformation:}
+The product of its own and all its ancestors' transformations
+\end{block}
+
+{\small TIP: When managing the transformation of items, store the desired rotation, scaling etc. in member variables and build a \iCls{QTransform} from the identity transformation when they change. Don't try to deduce values from the current transformation and/or try to use it as the base for further changes.}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{Zooming}
+\begin{itemize}
+\item Zooming is done with \texttt{view->scale()}
+\begin{cpp}
+void MyView::zoom(double factor)
+{
+    double width =
+        matrix().mapRect(QRectF(0, 0, 1, 1)).width();
+    width *= factor;
+    if ((width < 0.05) || (width > 10)) return;
+
+    scale(factor, factor);
+}
+\end{cpp}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1631}\frametitle{Mapping between Coordinate Systems}
+%TODO - show code snippet here
+\begin{itemize}
+\item Mapping methods are overloaded for \iCls{QPolygonF}, \iCls{QPainterPath} etc
+\begin{itemize}
+\item \hClsFnPar{QGraphicsItem}{mapFromScene}{const QPointF\&}:
+    \begin{itemize}
+    \item Maps a point from viewport coordinates to item coordinates. Inverse:  \hClsFnPar{QGraphicsItem}{mapToScene}{const QPointF\&}
+    \end{itemize}
+
+\item \hClsFnPar{QGraphicsItem}{mapFromItem}{const QGraphicsItem*, const QPointF\&}
+    \begin{itemize}
+    \item Maps a point from another item's coordinate system to this item's. Inverse:  \hClsFnPar{QGraphicsItem}{mapToItem}{const QGraphicsItem*, const QPointF\&}.
+    \end{itemize}
+\item Special case: \hClsFnPar{QGraphicsItem}{mapFromParent}{const QPointF\&}.
+\end{itemize}
+
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1630}\frametitle{Ignoring Transformations}
+\begin{itemize}
+\item Sometimes we don't want particular items to be transformed before display.
+\item View transformation can be disabled for individual items.
+\item Used for text labels in a graph that should not change size when the graph is zoomed.
+\end{itemize}
+\small{
+\texttt{item->setFlag( QGraphicsItem::ItemIgnoresTransformations);}
+}
+
+
+\end{slide}
+
+\begin{slide}{1750}
+\frametitle{Transforms Demo}
+\imageFullWidth{graphicsview/images/transformination-screenshot}
+
+\demo{graphicsview/ex-transformination}
+
+\end{slide}
+

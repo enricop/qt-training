@@ -1,0 +1,338 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Data Models}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1461}\frametitle{Models and Views}
+
+% Models and Views
+
+Models and views provide a way to handle data sets
+
+\begin{itemize}
+\item Models hold data or items
+\item Views display data or items
+  \begin{itemize}
+  \item using delegates
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1460}\frametitle{Models}
+
+Pure models provide access to data:
+
+\begin{itemize}
+\item \qic{class}{ListModel}
+\item \qic{class}{XmlListModel}
+\end{itemize}
+
+Visual models provide information about how to display data:
+
+\begin{itemize}
+\item Visual item model: \qic{class}{VisualItemModel}
+  \begin{itemize}
+  \item contains child items that are supplied to views
+  \end{itemize}
+\item Visual data model: \qic{class}{VisualDataModel}
+  \begin{itemize}
+  \item contains an interface to an underlying model
+  \item supplies a delegate for rendering
+  \end{itemize}
+\end{itemize}
+
+\doc{qdeclarativemodels.html}{Data Models}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1459}\frametitle{List Models}
+
+\begin{itemize}
+\item List models contain simple sequences of elements
+\item Each \qic{class}{ListElement} contains
+  \begin{itemize}
+  \item one or more pieces of data
+  \item defined using properties
+  \item \textit{no information} about how to display itself
+  \end{itemize}
+\item \qic{class}{ListElement} does not have pre-defined properties
+  \begin{itemize}
+  \item all properties are custom properties
+  \end{itemize}
+\end{itemize}
+
+\vspace*{1em}
+\begin{qml}
+\qtt{\qc{class}{ListModel}~\{}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~...~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~...~\}}\\
+\qtt{~~~~...}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1458}\frametitle{Defining a List Model}
+
+\flushedImage{qml-presenting-data/images/list-model-repeater.png}
+% declarative-uis/models-views/visual-item-model.qml
+\begin{qml}
+\qtt{\qc{class}{ListModel}~\{}\\
+\qtt{~~~~\qc{type}{id}:~name\_model}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Alice"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Bob"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Jane"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Victor"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Wendy"}~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Define a \qic{class}{ListModel}
+  \begin{itemize}
+  \item with an \qic{type}{id} so it can be referenced
+  \end{itemize}
+\item Define \qic{class}{ListElement} child objects
+  \begin{itemize}
+  \item each with a \qic{type}{name} property
+  \item the property will be referenced by a delegate
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-presenting-data/ex-models-views/list-model-list-view.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1457}\frametitle{Defining a Delegate}
+
+\flushedImage{qml-presenting-data/images/list-model-repeater.png}
+% declarative-uis/models-views/visual-item-model.qml
+\begin{qml}
+\qtt{\qc{class}{Component}~\{}\\
+\qtt{~~~~\qc{type}{id}:~name\_delegate}\\
+\qtt{~~~~\qc{class}{Text}~\{}\\
+\qtt{~~~~~~~~\qc{type}{text}:~name}\\
+\qtt{~~~~~~~~\qc{type}{font.pixelSize}:~\qc{number}{32}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Define a \qic{class}{Component} to use as a delegate
+  \begin{itemize}
+  \item with an \qic{type}{id} so it can be referenced
+  \item describes how the data will be displayed
+  \end{itemize}
+\item Properties of list elements can be referenced
+  \begin{itemize}
+  \item use a \qic{class}{Text} item for each list element
+  \item use the value of the \qic{type}{name} property from each element
+  \end{itemize}
+\item In the item inside a \qic{class}{Component}
+  \begin{itemize}
+  \item the \qic{type}{parent} property refers to the view
+  \item a \qic{type}{ListView} attached property can also be used to access the view
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1456}\frametitle{Using a List Model}
+
+\flushedImage{qml-presenting-data/images/list-model-repeater.png}
+% declarative-uis/models-views/visual-item-model.qml
+\begin{qml}
+\qtt{\qc{class}{Column}~\{}\\
+\qtt{~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~\qc{class}{Repeater}~\{}\\
+\qtt{~~~~~~~~\qc{type}{model}:~name\_model}\\
+\qtt{~~~~~~~~\qc{type}{delegate}:~name\_delegate}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item A \qic{class}{Repeater} fetches elements from \qtt{name\_model}
+  \begin{itemize}
+  \item using the delegate to display elements as \qic{class}{Text} items
+  \end{itemize}
+\item A \qic{class}{Column} arranges them vertically
+  \begin{itemize}
+  \item using anchors to make room for the items
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1455}\frametitle{Working with Items}
+
+\begin{itemize}
+\item \qc{class}{ListModel} is a dynamic list of items
+\item Items can be appended, inserted, removed and moved
+  \begin{itemize}
+  \item \textbf{append} item data using JavaScript dictionaries:\\
+  \vspace*{0.25em}
+  \begin{qml}
+  \qtt{bookmarkModel.append(\{\qc{string}{"title"}:~lineEdit.text\})}
+  \end{qml}
+  \vspace*{0.5em}
+
+  \item \textbf{remove} items by index obtained from a \qic{class}{ListView}:\\
+  \vspace*{0.25em}
+  \begin{qml}
+  \qtt{bookmarkModel.remove(listView.currentIndex)}
+  \end{qml}
+  \vspace*{0.5em}
+
+  \item \textbf{move} a number of items between two indices:\\
+  \vspace*{0.25em}
+  \begin{qml}
+  \qtt{bookmarkModel.move(listView.currentIndex,}\\
+  \qtt{~~~~~~~~~~~~~~~~~~~listView.currentIndex~\qc{operator}{+}~\qc{number}{1},~number)}
+  \end{qml}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1454}\frametitle{List Model Hints}
+
+\begin{itemize}
+\item \textbf{Note:} Model properties cannot shadow delegate properties:
+\end{itemize}
+\begin{qml}
+\qtt{~~\qc{class}{ListModel}~\{}\\
+\qtt{~~~~~~ListElement~\{~\qc{type}{text}:~\qc{string}{"Alice"}~\}}\\
+\qtt{~~\}}\\
+\vspace*{0.5em}
+\qtt{~~\qc{class}{Component}~\{}\\
+\qtt{~~~~~~\qc{class}{Text}~\{}\\
+\qtt{~~~~~~~~~~\qc{type}{text}:~text~\qc{comment}{// will not work}}\\
+\qtt{~~~~~~\}}\\
+\qtt{~~\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1453}\frametitle{Defining a Visual Item Model}
+
+\flushedImage{qml-presenting-data/images/visual-item-model-repeater.png}
+% declarative-uis/models-views/visual-item-model.qml
+\begin{qml}
+\qtt{\qc{class}{VisualItemModel}~\{}\\
+\qtt{~~~~\qc{type}{id}:~labels}\\
+\qtt{~~~~\qc{lightgray}{Rectangle~\{~color:~"\#cc7777";~radius:~10.0}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{lightgray}{width:~300;~height:~50}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{lightgray}{Text~\{~anchors.fill:~parent}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{font.pointSize:~32;~text:~"Books"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{horizontalAlignment:~Qt.AlignHCenter~\}~\}}}\\
+\qtt{~~~~\qc{lightgray}{Rectangle~\{~color:~"\#cccc55";~radius:~10.0}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{lightgray}{width:~300;~height:~50}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{lightgray}{Text~\{~anchors.fill:~parent}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{font.pointSize:~32;~text:~"Music"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{lightgray}{horizontalAlignment:~Qt.AlignHCenter~\}~\}}}\\
+\qtt{~~~~\qc{lightgray}{...}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Define a \qic{class}{VisualItemModel} item
+  \begin{itemize}
+  \item with an \qic{type}{id} so it can be referenced
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1452}\frametitle{Defining a Visual Item Model}
+
+\flushedImage{qml-presenting-data/images/visual-item-model-repeater.png}
+% declarative-uis/models-views/visual-item-model.qml
+\begin{qml}
+\qtt{\qc{lightgray}{VisualItemModel~\{}}\\
+\qtt{~~~~\qc{lightgray}{id:~labels}}\\
+\qtt{~~~~\qc{class}{Rectangle}~\{~\qc{type}{color}:~\qc{string}{"\#cc7777"};~\qc{type}{radius}:~\qc{number}{10.0}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{50}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pointSize}:~\qc{number}{32};~\qc{type}{text}:~\qc{string}{"Books"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{horizontalAlignment}:~\qc{class}{Qt}.AlignHCenter~\}~\}}\\
+\qtt{~~~~\qc{class}{Rectangle}~\{~\qc{type}{color}:~\qc{string}{"\#cccc55"};~\qc{type}{radius}:~\qc{number}{10.0}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{50}}\\
+\qtt{~~~~~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{font.pointSize}:~\qc{number}{32};~\qc{type}{text}:~\qc{string}{"Music"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\qc{type}{horizontalAlignment}:~\qc{class}{Qt}.AlignHCenter~\}~\}}\\
+\qtt{~~~~...}\\
+\qtt{\qc{lightgray}{\}}}
+\end{qml}
+
+\begin{itemize}
+\item Define child items
+  \begin{itemize}
+  \item these will be shown when required
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1451}\frametitle{Using a Visual Item Model}
+
+\flushedImage{qml-presenting-data/images/visual-item-model-repeater.png}
+% declarative-uis/models-views/visual-item-model.qml
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{200};~\qc{type}{color}:~\qc{string}{"black"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{VisualItemModel}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~labels}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Column}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.horizontalCenter}:~parent.horizontalCenter}\\
+\qtt{~~~~~~~~\qc{type}{anchors.verticalCenter}:~parent.verticalCenter}\\
+\qtt{~~~~~~~~\qc{class}{Repeater}~\{~\qc{type}{model}:~labels~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+
+\begin{itemize}
+\item A \qic{class}{Repeater} fetches items from the \qtt{labels} model
+\item A \qic{class}{Column} arranges them vertically
+\end{itemize}
+
+\end{slide}

@@ -1,0 +1,238 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Style Sheets}\label{style_sheets}
+
+%----------------------------------------------------------------------
+\begin{slide}{0450}\frametitle{Qt Style Sheets}
+\begin{itemize}
+\item Mechanism to customize appearance of widgets
+  \begin{itemize}
+  \item Additional to subclassing \texttt{QStyle}
+  \end{itemize}
+\item Inspired by HTML CSS
+\item Textual specifications of styles
+\flushedImage{painting/images/style-sheets-simple}
+\item Applying Style Sheets
+  \begin{itemize}
+  \item \texttt{QApplication::setStyleSheet(sheet)}
+    \begin{itemize}
+    \item On whole application
+    \end{itemize}
+  \item \texttt{QWidget::setStyleSheet(sheet)}
+    \begin{itemize}
+    \item On a specific widget (incl. child widgets)
+    \end{itemize}
+ \end{itemize}
+\item[] \demo{painting/ex-simpleqss}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0452}\frametitle{CSS Rules}
+\begin{block}{CSS Rule}
+selector \{ property : value; property : value \}    
+  \end{block}
+\begin{itemize}
+\item Selector: specifies the  widgets
+\item Property/value pairs: specify properties to change.
+\item[] \begin{cpp}
+QPushButton {color:red; background-color:white}    
+  \end{cpp}
+\item Examples of stylable elements
+  \begin{itemize}
+  \item Colors, fonts, pen style, alignment.
+  \item Background images.
+  \item Position and size of sub controls.
+  \item Border and padding of the widget itself.
+  \end{itemize}
+\item Reference of stylable elements
+\item[] \doc{stylesheet-reference.html}{Qt Style Sheets Reference}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0454}\frametitle{The Box Model}
+\flushedImage{painting/images/stylesheet-boxmodel}
+\begin{itemize}
+\item Every widget treated as box
+\item Four concentric rectangles
+  \begin{itemize}
+  \item Margin, Border, Padding, Content
+  \end{itemize}
+\item Customizing QPushButton
+  \item[] \begin{cpp}
+QPushButton {
+  border-width: 2px;
+  border-radius: 10px;
+  padding: 6px;
+  // ...
+ }    
+  \end{cpp}
+\flushedImage{painting/images/stylesheet-redbutton}
+\item By default, \texttt{margin}, \texttt{border-width}, and \texttt{padding} are 0
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0455}\frametitle{Selector Types}
+\begin{itemize}
+\item \texttt{*\{ \}} // Universal selector
+  \begin{itemize}
+  \item All widgets
+  \end{itemize}
+\item \texttt{QPushButton \{ \}} // Type Selector
+  \begin{itemize}
+  \item All instances of class
+  \end{itemize}
+\item\texttt{.QPushButton \{ \}} // Class Selector
+  \begin{itemize}
+  \item All instances of class, but not subclasses
+  \end{itemize}
+\item \texttt{QPushButton\#objectName} // ID Selector
+  \begin{itemize}
+  \item All Instances of class with objectName
+  \end{itemize}
+\item\texttt{QDialog QPushButton \{ \} } // Descendant Selector
+  \begin{itemize}
+  \item All instances of QPushButton which are child of QDialog
+  \end{itemize}
+\item\texttt{QDialog > QPushButton \{ \}} // Direct Child Selector
+  \begin{itemize}
+  \item All instances of QPushButton which are direct child of QDialog
+  \end{itemize}
+\item QPushButton[enabled="true"] // Property Selector
+  \begin{itemize}
+  \item All instances of class which match property
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0457}\frametitle{Selector Details}
+\begin{itemize}
+\item Property Selector
+  \begin{itemize}
+  \item If property changes it is required to re-set style sheet
+  \end{itemize}
+\item Combining Selectors
+  \begin{itemize}
+  \item \texttt{QLineEdit, QComboBox, QPushButton \{ color:\ red \}}
+  \end{itemize}
+\item Pseudo-States
+  \begin{itemize}
+  \item Restrict selector based on widget's state
+  \item Example: \texttt{QPushButton:hover \{color:red\}}
+  \end{itemize}
+\item \demo{painting/ex-qssselector}
+\item Selecting Subcontrols
+  \begin{itemize}
+  \item Access subcontrols of complex widgets
+    \begin{itemize}
+    \item as QComboBox, QSpinBox, ...
+    \end{itemize}
+  \item \texttt{QComboBox::drop-down \{ image: url(dropdown.png) \}}
+ \end{itemize}
+  \item Subcontrols positioned relative to other elements
+    \begin{itemize}
+  \item Change using \texttt{subcontrol-origin} and \texttt{subcontrol-position}
+  \end{itemize}
+
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0460}\frametitle{Conflict Resolution - Cascading}\label{style_sheet_conflict_resolution}
+  \begin{itemize}
+  \item Effective style sheet obtained by merging
+    \begin{enumerate}
+    \item Widgets's ancestor (parent, grandparent, etc.)
+    \item Application stylesheet
+    \end{enumerate}
+  \item On conflict: widget own style sheet preferred
+  \item[]
+    \begin{cpp}
+qApp->setStyleSheet("QPushButton { color: white }");
+button->setStyleSheet("* { color: blue }");
+    \end{cpp}
+  \item Style on button forces button to have blue text
+    \begin{itemize}
+    \item In spite of more specific application rule
+    \end{itemize}
+\item[] \demo{painting/ex-qsscascading}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0461}\frametitle{Conflict Resolution - Selector Specifity}
+\begin{itemize}
+\item Conflict: When rules on same level specify same property
+  \begin{itemize}
+  \item Specificity of selectors apply
+\item[]
+  \begin{cpp}
+QPushButton:hover { color: white }
+QPushButton { color: red }    
+  \end{cpp}
+\item Selectors with pseudo-states are more specific
+  \end{itemize}
+\item Calculating selector's specificity
+ \begin{itemize}
+  \item \textbf{a} Count number of ID attributes in selector
+  \item \textbf{b} Count number of property specifications
+  \item \textbf{c} Count number of class names
+  \item Concatenate numbers \textbf{a}-\textbf{b}-\textbf{c}. Highest score wins.
+  \item If rules scores equal, use last declared rule
+  \end{itemize}
+\item[]
+  \begin{cpp}
+QPushButton {}     /* a=0 b=0 c=1 -> specificity =   1 */    
+QPushButton#ok {}  /* a=1 b=0 c=1 -> specificity =   101 */    
+  \end{cpp}
+
+\item[] \demo{painting/ex-qssconflict}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0462}\frametitle{Qt Designer Integration}
+\flushedImage{painting/images/designer-stylesheet-options}
+\begin{itemize}
+\item Excellent tool to preview style sheets
+\item Right-click on any widget
+  \begin{itemize}
+  \item Select \textit{Change styleSheet..}
+  \end{itemize}
+\item Includes syntax highlighter and validator
+\item[] \demo{Editing Style Sheets in Designer}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0463}\frametitle{Project Task}
+\flushedImage{painting/images/stylesheet-project}
+\begin{itemize}
+\item Tasks
+  \begin{itemize}
+  \item Investigate style sheet
+  \item Modify style sheet
+  \item Remove style sheet \\ and implement your own
+ \end{itemize}
+\item Example does not save changes. \\ Use designer for this.
+\item Edit style sheet using \\ \texttt{File -> Edit StyleSheet}
+\item[] \lab{\$QTDIR/examples/widgets/stylesheet}
+\end{itemize}
+\end{slide}

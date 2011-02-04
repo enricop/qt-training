@@ -1,0 +1,32 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{112};~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.left}:~parent.left;~\qc{type}{y}:~\qc{number}{16}}\\
+\qtt{~~~~~~~~\qc{type}{anchors.right}:~parent.right}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Field~1"};~\qc{type}{font.pixelSize}:~\qc{number}{32}}\\
+\qtt{~~~~~~~~\qc{type}{color}:~focus~?~\qc{string}{"black"}~:~\qc{string}{"gray"}}\\
+\qtt{~~~~~~~~\qc{type}{focus}:~\qc{number}{true}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{class}{TextInput}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.left}:~parent.left;~\qc{type}{y}:~\qc{number}{64}}\\
+\qtt{~~~~~~~~\qc{type}{anchors.right}:~parent.right}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Field~2"};~\qc{type}{font.pixelSize}:~\qc{number}{32}}\\
+\qtt{~~~~~~~~\qc{type}{color}:~focus~?~\qc{string}{"black"}~:~\qc{string}{"gray"}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

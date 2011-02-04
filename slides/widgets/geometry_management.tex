@@ -1,0 +1,366 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Layout Management}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0565}
+\xConcept{Geometry Management!Doing it yourself}
+\frametitle{Doing it Yourself}
+\label{geometry_management}
+\begin{itemize}
+  \item Place and resize widgets
+    \begin{itemize}
+      \item \hClsFn{QWidget}{move}
+      \item \hClsFn{QWidget}{resize}
+      \item \hClsFn{QWidget}{setGeometry}
+    \end{itemize}
+    
+  \item Example: \xExample{Simple Layout}
+  \item[] \begin{lstlisting}
+QWidget *parent = new QWidget(...);
+parent->resize(400,400);
+
+QCheckBox *cb = new QCheckBox(parent);
+cb->move(10, 10);
+  \end{lstlisting}
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}{0566}\frametitle{Making Qt do the Work}
+\begin{definition}{Layout: }
+  Specifying the relations of elements to each other
+  instead of the absolute positions and sizes.
+\end{definition}    
+\begin{itemize}
+ \item Advantages: 
+    \begin{itemize}
+    \item Works with different languages.
+    \item Works with different dialog sizes.
+    \item Works with different font sizes.
+    \item Better to maintain.
+   \end{itemize}
+  \item Disadvantage
+    \begin{itemize}
+    \item Need to think about your layout first.
+    \end{itemize}
+  \end{itemize}
+  \vfill
+  \textit{Thinking about layout is not really a disadvantage!}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}{0567}\frametitle{Managed Widgets and Sizes}
+\xConcept{Geometry Management!Specifying sizes}
+\begin{itemize}
+\item  On managed widgets never call 
+  \begin{itemize}
+  \item \hClsFn{QWidget}{setGeometry}, \hClsFn{QWidget}{resize}, or
+    \hClsFn{QWidget}{move}
+  \end{itemize}
+\item Preferred
+  \begin{itemize}
+  \item Override 
+  \begin{itemize}
+	  \item \hClsFn{QWidget}{sizeHint}
+	  \item \hClsFn{QWidget}{minimumSizeHint}
+  \end{itemize}
+  \item Or call 
+  \begin{itemize}
+	  \item \hClsFn{QWidget}{setFixedSize}
+	  \item \hClsFn{QWidget}{setMinimumSize}
+	  \item \hClsFn{QWidget}{setMaximumSize}
+  \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0568}\frametitle{Layout Management Classes}
+\begin{itemize} 
+\item \iCls[\textbf]{QHBoxLayout} 
+  \begin{itemize}
+  \item Lines up widgets horizontally 
+  \end{itemize}
+\item \iCls[\textbf]{QVBoxLayout}
+  \begin{itemize}
+  \item Lines up widgets vertically
+  \end{itemize}
+\item \iCls[\textbf]{QGridLayout} 
+  \begin{itemize}
+  \item Arranges the widgets in a grid
+  \end{itemize}
+\item \iCls[\textbf]{QFormLayout} 
+  \begin{itemize}
+  \item Lines up a (label, widget) pairs in two columns.
+  \end{itemize}
+\item \iCls[\textbf]{QStackedLayout} 
+  \begin{itemize}
+  \item Arranges widgets in a stack
+    \begin{itemize}
+	    \item only topmost is visible
+  \end{itemize}
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46568}
+  \frametitle{QHBoxLayout and QVBoxLayout}
+  \begin{itemize}
+  \item Lines up widgets horizontally or vertically
+  \item Divides space into boxes
+  \item Each managed widgets fills in one box
+  \end{itemize}
+  \centeredImage{widgets/images/hboxlayout}
+  \flushedImage{widgets/images/vboxlayout}
+  \begin{itemize}
+  \item[] \begin{cpp}
+QWidget* window = new QWidget;
+QPushButton* one = new QPushButton("One");
+...
+QHBoxLayout* layout = new QHBoxLayout;
+layout->addWidget(one);
+...
+window->setLayout(layout);
+  \end{cpp}               
+  \end{itemize}
+  \qtexample{layouts/basiclayouts} ( \textit{See create[H,V]BoxLayout()} )
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0569}\frametitle{Widgets in a grid - \iCls{QGridLayout}}
+\begin{itemize}           
+%  \item Lays out widgets in a grid
+  \item[] \begin{cpp}
+QWidget* window = new QWidget;
+QPushButton* one = new QPushButton("One");
+\end{cpp}
+\flushedImage{widgets/images/gridlayout}
+\begin{cpp} 
+QGridLayout* layout = new QGridLayout;
+layout->addWidget(one, 0, 0); // row:0, col:0
+layout->addWidget(two, 0, 1); // row:0, col:1
+// row:1, col:0, rowSpan:1, colSpan:2
+layout->addWidget(three, 1, 0, 1, 2); 
+\end{cpp}
+\begin{cpp} 
+window->setLayout(layout)
+\end{cpp}                  
+  \item Additional
+  \begin{itemize}
+    \item \texttt{setColumnMinimumWidth()} \emph{(minimum width of column)}
+    \item \texttt{setRowMinimumHeight()} \emph{(minimum height of row)}
+  \end{itemize}
+  \item \textit{No need to specify rows and columns before
+  adding children.}
+  \item[] \demo{widgets/ex-layouts} ( \textit{See createGridLayout()} )
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0570}\frametitle{QFormLayout}
+\begin{itemize}
+\item A two-column layout
+  \begin{itemize}
+  \item Column 1 a label (as annotation)
+  \item Column 2 a widget (as field)
+  \end{itemize}
+\item Respects style guide of individual platforms.
+\item[] \begin{cpp}
+QWidget* window = new QWidget();
+QPushButton* one = new QPushButton("One");
+...
+QFormLayout* layout = new QFormLayout();
+layout->addRow("One", one); 
+...
+window->setLayout(layout)
+\end{cpp}                  
+  \item[] \demo{widgets/ex-layouts} ( \textit{See createFormLayout()} )
+  \item Form layout with cleanlooks and mac style
+  \item[] \begin{tabular}{ c c }
+\image{widgets/images/formlayout-win} & \image{widgets/images/formlayout-mac}
+\end{tabular}
+\end{itemize}     
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0571}\frametitle{Lab: \iProject{Contact Form}}
+\label{config_dialog-part1}
+                                        
+\begin{columns}[t]
+  \begin{column}{7cm} 
+    \begin{itemize}     
+      \item Specified by graphic designer
+      \begin{itemize}
+        \item Your task: implement it
+        \item Focus on correct layout
+        \item Details disabled by default
+        \item 'Show Details' enables details
+     \end{itemize}
+   \end{itemize}
+     \vfill
+     Optional: 
+     \begin{itemize}
+       \item Click on Picture 
+       \begin{itemize}
+       \item Lets user choose image
+       \item See lab description
+       \end{itemize}             
+       \item Validate Zip-Code as integers
+    \end{itemize}
+    \lab{widgets/lab-contactform}
+  \end{column}
+  \begin{column}{4cm}
+    \flushedImage{widgets/ooo/contactform}
+  \end{column}
+\end{columns}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0572}\frametitle{Some Layout Terms}
+\xConcept{Geometry Management!Stretching}
+\xConcept{Geometry Management!Margin}
+\xConcept{Geometry Management!Spacing}
+\begin{itemize}
+\item \textbf{Stretch}
+  \begin{itemize}
+  \item \emph{Relative resize factor  }
+  \item \texttt{QBoxLayout::addWidget(widget, stretch)}
+  \item \texttt{QBoxLayout::addStretch(stretch)}
+  \item \iClsFnPar{QGridLayout}{setRowStretch}{row, stretch}
+  \item \iClsFnPar{QGridLayout}{setColumnStretch}{col, stretch}
+  \item[\strut] \flushedImage{widgets/images/stretch}
+  \end{itemize}
+\item \textbf{Contents Margins}
+  \begin{itemize}
+  \item \emph{Space reserved \textit{around} the managed widgets.}
+  \item \texttt{QLayout::setContentsMargins(l,t,r,b)}
+  \end{itemize}
+  \item[] \flushedImage{widgets/images/margins-spacing}
+\item \textbf{Spacing}
+  \begin{itemize}
+  \item \emph{Space reserved \textit{between} widgets}
+  \item \iClsFnPar{QBoxLayout}{addSpacing}{size}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0573}\frametitle{More Layout Terms}
+\xConcept{Geometry Management!Strut}
+\xClsFn{QWidget}{setMinimumWidth}
+\xClsFn{QWidget}{setMinimumHeight}
+\xClsFn{QWidget}{setMinimumSize}
+\xClsFn{QWidget}{setMaximumWidth}
+\xClsFn{QWidget}{setMaximumHeight}
+\xClsFn{QWidget}{setMaximumSize}
+\xClsFn{QWidget}{setFixedWidth}
+\xClsFn{QWidget}{setFixedHeight}
+\xClsFn{QWidget}{setFixedSize}
+\begin{itemize}
+  \item \textbf{Strut}
+    \begin{itemize}           
+      \item \emph{Limits perpendicular box dimension }
+      \item e.g. height for QHBoxLayout
+      \item \emph{Only for box layouts}
+    \end{itemize}
+  \item \textbf{Min, max and fixed sizes}
+    \begin{itemize}
+      \flushedImage{widgets/images/min-max-preferred}
+    \item \texttt{QWidget::setMinimumSize( QSize )}
+    \item \texttt{QWidget::setMaximumSize( QSize )}
+    \item \texttt{QWidget::setFixedSize( QSize )}
+    \item \emph{Individual width and height contraints also available}
+    \end{itemize}   
+  \item \iConcept[\textbf]{Nested Layouts} 
+    \begin{itemize}
+    \item[] \flushedImage{widgets/images/nested-layout}
+    \item \emph{Allows flexible layouts}
+    \item \texttt{QLayout::addLayout(...)}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0578}
+\frametitle{Widgets Size Policies}
+\xConcept{Geometry Management!Size policy}
+\begin{itemize}
+  \item \iCls{QSizePolicy} describes interest of widget in resizing 
+  \item[]\begin{lstlisting}
+QSizePolicy policy = widget->sizePolicy();
+policy.setHorizontalPolicy(QSizePolicy::Fixed);
+widget->setSizePolicy(policy);
+  \end{lstlisting}
+  \item One policy per direction (horizontal and vertical)
+  \item Button-like widgets set size policy to the following:
+  \begin{itemize}
+    \item may stretch horizontally
+    \item are fixed vertically
+    \item Similar to \iCls{QLineEdit}, \iCls{QProgressBar}, ... 
+  \end{itemize}                                                     
+  \item Widgets which provide scroll bars (e.g. QTextEdit)
+  \begin{itemize}
+    \item Can use additional space
+    \item Work with less than sizeHint() 
+  \end{itemize}
+  \item \texttt{sizeHint()}: recommended size for widget
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0579}\frametitle{Available Size Policies}
+          
+
+\begin{tabular}{ p{20mm} | p{25mm} | p{50mm}}
+  \textbf{Policy} & \textbf{\texttt{sizeHint()}} & \textbf{Widget} \\ \hline
+  \structure{\textbf{Fixed}} & authoritative &  can not grow or shrink \\ \hline
+  \structure{\textbf{Minimum}} & minimal, sufficient & can expand, no advantage of being larger  \\ \hline 
+  \structure{\textbf{Maximum}} & is maximum & can shrink \\ \hline
+  \structure{\textbf{Preferred}} & is best & can shrink, no advantage of being larger \\ \hline 
+  \structure{\textbf{Minimum Expanding}} & is minimum & can use extra space \\ \hline
+  \structure{\textbf{Expanding}} & sensible size & can grow and shrink
+\end{tabular}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0581}\frametitle{Lab: \iProject{Layout of buttons}}
+  \label{stretching}  
+  \begin{itemize}
+  \item Develop the following layouts
+  \item Adjust the layouts as shown below.
+  \item Optionally:
+    \begin{itemize}
+    \item Make buttons resize vertically when making the window higher.
+    \end{itemize}
+  \end{itemize}
+  \centeredImage{widgets/images/layoutbuttons} 
+  \lab{widgets/lab-layoutbuttons}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0583}\frametitle{Questions And Answers}\label{layoutQuestions}
+  \begin{questionize}
+  \item How do you change the minimum size of a widget?
+  \item Name the available layout managers.
+  \item How do you specify stretch?
+  \item When are you allowed to call \texttt{resize} and \texttt{move} on a
+    widget?
+  \end{questionize}
+\end{slide}

@@ -1,0 +1,61 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~\qc{type}{width}:~\qc{number}{150};~\qc{type}{height}:~\qc{number}{250}}\\
+\vspace*{0.5em}
+\qtt{~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~\qc{type}{id}:~stop\_light}\\
+\qtt{~~~~~~\qc{type}{x}:~\qc{number}{25};~\qc{type}{y}:~\qc{number}{15};~\qc{type}{width}:~\qc{number}{100};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~\}}\\
+\qtt{~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~\qc{type}{id}:~go\_light}\\
+\qtt{~~~~~~\qc{type}{x}:~\qc{number}{25};~\qc{type}{y}:~\qc{number}{135};~\qc{type}{width}:~\qc{number}{100};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~\}}\\
+\vspace*{0.5em}
+\qtt{~~\qc{type}{states}:~[}\\
+\qtt{~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~\qc{type}{name}:~\qc{string}{"stop"}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~stop\_light;~\qc{type}{color}:~\qc{string}{"red"}~\}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~go\_light;~\qc{type}{color}:~\qc{string}{"black"}~\}}\\
+\qtt{~~~~\},}\\
+\qtt{~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~\qc{type}{name}:~\qc{string}{"go"}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~stop\_light;~\qc{type}{color}:~\qc{string}{"black"}~\}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~go\_light;~\qc{type}{color}:~\qc{string}{"green"}~\}}\\
+\qtt{~~~~\}}\\
+\qtt{~~]}\\
+\vspace*{0.5em}
+\qtt{~~\qc{type}{state}:~\qc{string}{"stop"}}\\
+\vspace*{0.5em}
+\qtt{~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~\qc{type}{onClicked}:~parent.state~\qc{operator}{==}~\qc{string}{"stop"}~?}\\
+\qtt{~~~~~~~~~~~~~~~~~parent.state~\qc{operator}{=}~\qc{string}{"go"}~:~parent.state~\qc{operator}{=}~\qc{string}{"stop"}}\\
+\qtt{~~\}}\\
+\vspace*{0.5em}
+\qtt{~~\qc{type}{transitions}:~[}\\
+\qtt{~~~~\qc{class}{Transition}~\{}\\
+\qtt{~~~~~~~~\qc{type}{from}:~\qc{string}{"*"};~\qc{type}{to}:~\qc{string}{"*"}}\\
+\qtt{~~~~~~~~\qc{class}{PropertyAnimation}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{target}:~stop\_light}\\
+\qtt{~~~~~~~~~~~~\qc{type}{properties}:~\qc{string}{"color"};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~~~~~\qc{class}{PropertyAnimation}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{target}:~go\_light}\\
+\qtt{~~~~~~~~~~~~\qc{type}{properties}:~\qc{string}{"color"};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}~]}\\
+\qtt{\}}\\

@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Declarative Environment}
+
+\begin{slide}{2075}\frametitle{Overview}
+
+Qt Quick is a combination of technologies:
+
+\begin{itemize}
+\item A set of components, some graphical
+\item A declarative language: QML
+  \begin{itemize}
+  \item based on JavaScript
+  \item running on a virtual machine
+  \end{itemize}
+\item A C++ API for managing and interacting with components
+  \begin{itemize}
+  \item the \textbf{QtDeclarative} module
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1526}\frametitle{Setting up a Declarative View}
+
+\begin{lstlisting}
+#include <QApplication>
+#include <QDeclarativeView>
+#include <QUrl>
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QDeclarativeView view;
+    view.setSource(QUrl("qrc:files/animation.qml"));
+    view.show();
+    return app.exec();
+}
+\end{lstlisting}
+
+\demo{qml-cpp-integration/ex-simpleviewer}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1525}\frametitle{Setting up QtDeclarative}
+
+\begin{qmake}
+QT       += declarative
+RESOURCES = simpleviewer.qrc
+SOURCES   = main.cpp
+\end{qmake}
+
+\end{slide}

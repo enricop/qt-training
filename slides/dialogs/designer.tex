@@ -1,0 +1,340 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Qt Designer}
+\newcommand{\uicProgram}{\iConcept{uic}\xspace}
+
+\label{qt_designer}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0431}\frametitle{Qt Designer}
+\flushedImage{dialogs/images/designer}
+  \begin{itemize}
+\item Design UI forms visually
+  \end{itemize}
+  \vfill
+ \begin{itemize}
+ \item Visual Editor for
+   \begin{itemize}
+  \item Signal/slot connections
+  \item Actions
+  \item Tab handling
+  \item Buddy widgets
+  \item Widget properties
+  \item Integration of custom widgets
+  \item Resource files
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1707}\frametitle{Designer Views}
+  \centeredImageDoubleWidth{dialogs/images/designer-views}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1706}\frametitle{Designer's Editing Modes}
+  \begin{itemize}
+  \item \inlinedImage{dialogs/images/designer-widget-tool} Widget Editing 
+    \begin{itemize}
+    \item Change appearance of form
+    \item Add layouts
+    \item Edit properties of widgets
+    \end{itemize}
+  \item \inlinedImage{dialogs/images/designer-connection-tool} Signal and Slots Editing 
+    \begin{itemize}
+    \item Connect widgets together with signals \& slots
+    \end{itemize}
+ \item \inlinedImage{dialogs/images/designer-buddy-tool} Buddy Editing
+   \begin{itemize}
+   \item Assign buddy widgets to label
+   \item \textit{Buddy widgets help keyboard focus handling correctly}
+   \end{itemize}
+  \item \inlinedImage{dialogs/images/designer-tab-order-tool} Tab Order Editing
+    \begin{itemize}
+    \item Set order for widgets to receive the keyboard focus
+    \end{itemize}
+
+ \end{itemize}  
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1705}
+  \frametitle{Designer UI Form Files}
+\flushedImage{dialogs/images/ui-xml}
+\begin{itemize}
+\item Form stored in .ui file
+  \begin{itemize}
+  \item format is XML 
+  \end{itemize}
+\end{itemize}
+\begin{itemize}
+\item \texttt{uic} tool generates code
+  \begin{itemize}
+  \item From \texttt{myform.ui}
+    \begin{itemize}
+    \item to \texttt{ui\_myform.h}
+    \end{itemize}
+  \end{itemize}
+ \item[] \begin{cpp}
+// ui_mainwindow.h
+class Ui_MainWindow {
+public:
+  QLineEdit *fileName;
+  ... // simplified code
+  void setupUi(QWidget *) { /* setup widgets */ }
+};        
+  \end{cpp}
+\item Form \texttt{ui} file in project (\texttt{.pro})
+  \begin{itemize}
+  \item \texttt{FORMS += mainwindow.ui}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1704}
+\frametitle{From .ui to C++}
+\centeredImageFullWidth{dialogs/images/designer-steps} 
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1703}
+\frametitle{Qt Creator - Form Wizards}
+\begin{itemize}
+\item \textbf{Add New...} "Designer Form"
+  \begin{itemize}
+  \item or "Designer Form Class" (for C++ integration)
+  \end{itemize}
+\end{itemize}
+\medskip
+\centeredImage{dialogs/images/designer-new-form.png}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1702}
+\frametitle{Naming Widgets}
+\begin{enumerate}
+\item Place widgets on form
+\item Edit \texttt{objectName} property
+\end{enumerate}
+\medskip
+\centeredImage{dialogs/images/designer-object-inspector.png}
+\begin{itemize}
+\item \textit{\texttt{objectName} defines member name in generated code}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1701}
+\frametitle{Form layout in Designer}
+\begin{itemize}
+\item \iCls{QFormLayout}: Suitable for most input forms
+\end{itemize}
+\medskip
+\centeredImage{dialogs/images/designer-form-layout}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1700}
+\frametitle{Top-Level Layout}
+\begin{enumerate}
+\item First layout child widgets
+\item Finally select empty space and set top-level layout
+\end{enumerate}
+\medskip
+\centeredImage{dialogs/images/designer-toplevel-layout}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1699}
+\frametitle{Preview Widget in Preview Mode}
+\begin{itemize}
+\item Check that widget is nicely resizable
+\end{itemize}
+\medskip
+\centeredImage{dialogs/images/designer-preview-form}    
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1698}\frametitle{Code Integration - Header File}
+   \begin{cpp}
+// orderform.h
+class Ui_OrderForm;
+
+class OrderForm : public QDialog {
+private:
+   Ui_OrderForm *ui;    // pointer to UI object
+};
+\end{cpp}
+  \begin{itemize}
+  \item "Your Widget" derives from appropriate base class
+  \item \textbf{\texttt{*ui}} member encapsulate UI class
+    \begin{itemize}
+    \item Makes header independent of designer generated code 
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1697}\frametitle{Code Integration - Implementation File}
+  \begin{itemize}
+   \begin{cpp}
+// orderform.cpp
+#include "ui_orderform.h"
+
+OrderForm::OrderForm(QWidget *parent)
+: QDialog(parent), ui(new Ui_OrderForm) {
+  ui->setupUi(this);
+}
+
+OrderForm::~OrderForm() {
+  delete ui; ui=0;
+}      
+\end{cpp}
+\item \textit{Default behavior in Qt Creator}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0441}\frametitle{Signals and Slots in Designer}
+  \begin{itemize}
+  \item Widgets are available as public members
+    \begin{itemize}
+    \item \texttt{ui->fileName->setText("image.png")}
+      \begin{itemize}
+      \item \textit{Name based on widgets object name}
+      \end{itemize}
+    \end{itemize}
+  \item You can set up signals \& slots traditionally...
+    \begin{itemize}
+    \item \texttt{connect(ui->okButton, SIGNAL(clicked()), ...}
+    \end{itemize}
+  \end{itemize}
+  \begin{itemize}
+  \item Auto-connection facility for custom slots
+    \begin{itemize}
+    \item Automatically connect signals to slots in your code
+      \begin{itemize}
+      \item Based on object name and signal 
+      \end{itemize}
+    \item \texttt{void on\_\emph{objectName}\_\emph{signal}(\emph{parameters});}
+      \begin{itemize}
+      \item Example: \textit{\texttt{on\_okButton\_clicked()}} slot
+      \end{itemize}
+    \item \doc{designer-using-a-ui-file.html\#automatic-connections}{Automatic Connections}
+    \end{itemize}
+  \end{itemize}
+  \begin{itemize}
+  \item Qt Creator: right-click on widget and "Go To Slot"
+    \begin{itemize}
+    \item Generates a slot using auto-connected name
+    \end{itemize}
+  \end{itemize}
+
+\end{slide}
+
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0442}\frametitle{Using Custom Widgets in Designer}\label{designer_plugins}
+\xConcept{Qt Designer!Handling your own classes}
+\xConcept{Qt Designer!Plug-ins}
+Choices for Custom Widgets
+\begin{enumerate}
+\flushedImage{dialogs/images/customWidget}
+\item \emph{Promote to Custom Widget}
+  \begin{itemize}
+  \item Choose the widget closest
+  \item From context menu choose \\ \emph{Promote to Custom Widget}
+  \item Code generated will now refer to given class name
+  \end{itemize}
+\item \emph{Implement a Designer plug-in}
+  \begin{itemize}
+  \item \qtdemo{examples/designer/customwidgetplugin}
+  \item \doc{designer-creating-custom-widgets.html}{Creating Custom Widgets for Qt Designer}
+  \end{itemize}
+\end{enumerate}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0445}\frametitle{Dynamically loading \texttt{.ui} files}
+\begin{itemize}
+\item Forms can be processed at runtime
+  \begin{itemize}
+  \item Produces dynamically generated user interfaces
+  \end{itemize}
+\item Disadvantages
+  \begin{itemize}
+  \item Slower, harder to maintain
+  \item Risk: \texttt{.ui} file not available at runtime
+  \end{itemize}
+\item[] \doc{designer-using-a-ui-file.html\#run-time-form-processing}{Run Time Form Processing}
+\item Loading \texttt{.ui} file
+ \begin{cpp}
+QUiLoader loader;
+QFile file("forms/textfinder.ui");
+file.open(QFile::ReadOnly);
+QWidget *formWidget = loader.load(&file, this);
+\end{cpp}
+\item Locate objects in form
+\begin{cpp}
+ui_okButton = qFindChild<QPushButton*>(this, "okButton");
+\end{cpp}
+\item[] \qtdemo{examples/designer/calculatorbuilder}
+\item \emph{Handle with care!}
+
+\end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1236}
+\frametitle{Lab: Designer Order Form}
+\begin{itemize}
+\item Create an order form dialog
+  \begin{itemize}
+  \item With fields for price, quantity and total.
+  \item Total field updates itself to reflect quantity and price entered
+  \end{itemize}
+\end{itemize} 
+
+\centeredImageDoubleWidth{dialogs/images/designer-orderform-screenshot}
+
+\lab{dialogs/lab-orderform}
+
+
+\end{slide}
+
+%%% See ticket #320. Please add once you have a valid handout.
+%%% %----------------------------------------------------------------------
+%%% \begin{slide}{0448}\frametitle{Lab (Optional): Options Dialog}
+%%%   \label{qt_designer_exercise}
+%%%  \begin{itemize}
+%%%   \item Create options dialog for a simple text editor
+%%%   \item Use designer for dialog and editor UI
+%%%  \item Try out different approaches
+%%%     \begin{itemize}
+%%%     \item Direct, Single and Multiple Inheritance
+%%%     \end{itemize}
+%%%  \flushedImage{dialogs/images/lab-optionsdialog}
+%%%  \item Use Auto-Connection Signal\&Slots
+%%%   \item Optional
+%%%     \begin{itemize}
+%%%     \item Implement real functionality
+%%%     \item Save dialog settings
+%%%     \end{itemize}
+%%%   \item[] \lab{dialogs/lab-optionsdialog}
+%%%  \end{itemize}
+%%% \end{slide}

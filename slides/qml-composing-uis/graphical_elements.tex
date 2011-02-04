@@ -1,0 +1,230 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------   
+
+\subsection{Graphical Elements}
+
+\begin{slide}{1693}\frametitle{Colors}
+
+The colors of elements can be specified in many ways:
+
+\begin{itemize}
+\item As a named color in a string (using SVG names):
+  \begin{itemize}
+  \item \qic{string}{"red"}, \qic{string}{"green"}, \qic{string}{"blue"}, ...
+  \end{itemize}
+  \vspace*{0.5em}
+\item With color components in a string:
+  \begin{itemize}
+  \item red, green and blue: \qtt{\#<rr><gg><bb>}
+  \item \qic{string}{"\#ff0000"}, \qic{string}{"\#008000"}, \qic{string}{"\#0000ff"}, ...
+%  \item alpha precedes the other components:
+%  \item \qic{string}{"\#7f008000"} (alpha value of 127)
+  \end{itemize}
+  \vspace*{0.5em}
+\item Using a built-in function (red, green, blue, alpha):
+  \begin{itemize}
+  \item \qtt{\qc{class}{Qt}.rgba(\qc{number}{0},\qc{number}{0.5},\qc{number}{0},\qc{number}{1})}
+  \end{itemize}
+  \vspace*{0.5em}
+\item With an opacity:
+  \begin{itemize}
+  \item using the \qic{type}{opacity} property
+  \item values from \qic{number}{0.0} (transparent) to \qic{number}{1.0} (opaque)
+  \end{itemize}
+\end{itemize}
+
+\doc{qml-color.html}{QML Basic Type: color}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1692}\frametitle{Colors}
+
+\flushedImage{qml-composing-uis/images/colors.png}
+% declarative-uis/composing-uis/colors.qml
+\inputqml{qml-composing-uis/colorized/colors}
+
+\begin{itemize}
+\item Three different ways to specify colors
+\end{itemize}
+\demo{qml-composing-uis/ex-elements/colors.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1691}\frametitle{Images}
+
+\begin{itemize}
+\item Represented by the \qic{class}{Image} element
+\item Refer to image files with the \qic{type}{source} property
+  \begin{itemize}
+  \item using absolute URLs
+  \item or relative to the QML file
+  \end{itemize}
+\item Can be transformed
+  \begin{itemize}
+  \item scaled, rotated
+  \item about an axis or central point
+  \end{itemize}
+\end{itemize}
+
+%%% BorderImage
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1690}\frametitle{Images}
+
+\flushedImage{qml-composing-uis/images/images.png}
+% declarative-uis/composing-uis/images.qml
+\inputqml{qml-composing-uis/colorized/images}
+
+\flushedImageDoubleWidth{qml-composing-uis/images/image-location.pdf}
+\begin{itemize}
+\item \qic{type}{source} contains a relative path
+  \begin{itemize}
+  \item \qic{string}{"../"} refers to the parent directory
+  \end{itemize}
+\item \qic{type}{width} and \qic{type}{height} are obtained from\\
+the image file
+\end{itemize}
+\demo{qml-composing-uis/ex-elements/images.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1689}\frametitle{Image Scaling}
+
+\flushedImage{qml-composing-uis/images/image-scaling.png}
+% declarative-uis/composing-uis/image-scaling.qml
+\begin{qml}
+\qtt{\qc{lightgray}{import~QtQuick~1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{lightgray}{Rectangle~\{}}\\
+\qtt{~~~~\qc{lightgray}{width:~400;~height:~400}}\\
+\qtt{~~~~\qc{lightgray}{color:~"black"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{lightgray}{Image~\{}}\\
+\qtt{~~~~~~~~\qc{lightgray}{x:~150;~y:~150}}\\
+\qtt{~~~~~~~~\qc{lightgray}{source:~"../images/rocket.png"}}\\
+\qtt{~~~~~~~~\qc{type}{scale}:~\qc{number}{2.0}}\\
+\qtt{~~~~\qc{lightgray}{\}}}\\
+\qtt{\qc{lightgray}{\}}}
+\end{qml}
+
+\begin{itemize}
+\item Set the \qic{type}{scale} property
+\item By default, the center of the item remains in the same place
+\end{itemize}                                    
+\demo{qml-composing-uis/ex-elements/image-scaling.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1688}\frametitle{Image Rotation}
+
+\flushedImage{qml-composing-uis/images/image-rotation.png}
+% declarative-uis/composing-uis/image-rotation.qml
+\inputqml{qml-composing-uis/colorized/image-rotation}
+
+\begin{itemize}
+\item Set the \qic{type}{rotate} property
+\item By default, the center of the item remains in the same place
+\end{itemize}                                     
+\demo{qml-composing-uis/ex-elements/image-rotation.qml}
+\end{slide}                                       
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1687}\frametitle{Image Rotation}
+
+\flushedImage{qml-composing-uis/images/image-rotation-top.png}
+% declarative-uis/composing-uis/image-rotation-top.qml
+\inputqml{qml-composing-uis/colorized/image-rotation-top}
+
+\begin{itemize}
+\item Set the \qic{type}{transformOrigin} property
+\item Now the image rotates about the top of the item
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1686}\frametitle{Gradients}
+
+Define a gradient using the \qic{type}{gradient} property:
+
+\begin{itemize}
+\item With a \qic{class}{Gradient} element as the value
+\item Containing two or more \qic{class}{GradientStop} elements, each with
+  \begin{itemize}
+  \item a position: a number between 0 (start point) and 1 (end point)
+  \item a color
+  \end{itemize}
+\item The start and end points
+  \begin{itemize}
+    \item are on the top and bottom edges of the item
+    \item cannot be repositioned
+  \end{itemize}
+\item Issues with gradients:
+  \begin{itemize}
+  \item rendering is CPU intensive
+  \item gradients may not be animated as you expect
+  \item use images of gradients instead
+  \end{itemize}
+\item Gradients override \qic{type}{color} definitions
+\end{itemize}
+
+\doc{qml-gradient.html}{QML Gradient Element Reference}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1684}\frametitle{Gradients}
+
+\flushedImage{qml-composing-uis/images/gradients.png}
+% declarative-uis/composing-uis/gradients.qml
+\inputqml{qml-composing-uis/colorized/gradients}
+
+\begin{itemize}
+\item A gradient with two gradient stops
+\item Note the definition of an element as a property value
+\item It is often faster to use images instead
+\end{itemize}                                
+
+\demo{qml-composing-uis/ex-elements/gradients.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1683}\frametitle{Gradient Images}
+
+\flushedImage{qml-composing-uis/images/image-gradients.png}
+% declarative-uis/composing-uis/image-gradients.qml
+\inputqml{qml-composing-uis/colorized/image-gradients}
+
+\begin{itemize}
+\item Use two-predefined images of gradients
+\item Artists can create the desired gradients
+\end{itemize}
+\demo{qml-composing-uis/ex-elements/image-gradients.qml}
+
+\end{slide}

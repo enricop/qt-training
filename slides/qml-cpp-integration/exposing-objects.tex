@@ -1,0 +1,1322 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------
+\subsection{Custom Items and Properties}
+
+%----------------------------------------------------------------------
+\begin{slide}{1576}\frametitle{Overview}
+
+Interaction between C++ and QML occurs via objects exposed to the
+QML environment as new types.
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Non-visual types are \iCls{QObject} subclasses
+\item Visual types (items) are \iCls{QDeclarativeItem} subclasses
+  \begin{itemize}
+  \item \iCls{QDeclarativeItem} is the C++ equivalent of \qic{class}{Item}
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.5em}
+To define a new type:
+
+\begin{itemize}
+\item In C++: Subclass either \iCls{QObject} or \iCls{QDeclarativeItem}
+\item In C++: Register the type with the QML environment
+\item In QML: Import the module containing the new item
+\item In QML: Use the item like any other standard item
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1575}\frametitle{A Custom Item}
+
+\flushedImage{qml-cpp-integration/images/ellipse1.png}
+In the \textit{ellipse1.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-simple-item/files/ellipse1.qml
+\inputqml{qml-cpp-integration/colorized/ellipse1}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item A custom ellipse item
+  \begin{itemize}
+  \item instantiated using the \qtt{Ellipse} element
+  \item from the custom \qtt{Shapes} module
+  \end{itemize}
+\item Draws an ellipse with the specified geometry
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1574}\frametitle{Declaring the Item}
+
+In the \textit{ellipseitem.h} file:
+
+\medskip
+\begin{lstlisting}
+#include <QDeclarativeItem>
+
+class EllipseItem : public QDeclarativeItem
+{
+    Q_OBJECT
+public:
+    EllipseItem(QDeclarativeItem *parent = 0);
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0);
+};
+\end{lstlisting}
+
+\begin{itemize}
+\item \qtt{EllipseItem} is a \iCls{QDeclarativeItem} subclass
+\item As with Qt widgets, each item can have a parent
+\item Each custom item needs to paint itself
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1573}\frametitle{Implementing an Item}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+#include <QtGui>
+#include "ellipseitem.h"
+
+EllipseItem::EllipseItem(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent)
+{
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
+}
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item As usual, call the base class's constructor
+\item It is necessary to clear the \hClsEnum{QGraphicsItem}{ItemHasNoContents}
+      flag
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1572}\frametitle{Implementing an Item (Continued)}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+...
+void EllipseItem::paint(QPainter *painter,
+    const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->drawEllipse(option->rect);
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item A simple \hClsFn{QDeclarativeItem}{paint} function implementation
+\item Ignore style information and use the default pen
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1571}\frametitle{Registering the Item}
+
+\begin{lstlisting}
+#include <QApplication>
+#include <QDeclarativeView>
+#include "ellipseitem.h"
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    qmlRegisterType<EllipseItem>("Shapes", 1, 0, "Ellipse");
+
+    QDeclarativeView view;
+    view.setSource(QUrl("qrc:files/ellipse1.qml"));
+    view.show();
+    return app.exec();
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item Custom item registered as a module and element
+\item Automatically available to the \qtt{ellipse1.qml} file
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1570}\frametitle{Reviewing the Registration}
+
+\medskip
+\begin{lstlisting}
+qmlRegisterType<EllipseItem>("Shapes", 1, 0, "Ellipse");
+\end{lstlisting}
+
+\medskip
+\medskip
+
+\begin{itemize}
+\item  This registers the \qtt{EllipseItem} C++ class
+\medskip
+\item Available from the \qtt{Shapes} QML module
+  \begin{itemize}
+  \item version 1.0 (first number is major; second is minor)
+  \end{itemize}
+\item Available as the \qtt{Ellipse} element
+  \begin{itemize}
+  \item the \qtt{Ellipse} element is an visual item
+  \item a subtype of \qic{class}{Item}
+  \end{itemize}
+\end{itemize}
+\demo{qml-cpp-integration/ex-simple-item}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1569}\frametitle{Adding Properties}
+
+\flushedImage{qml-cpp-integration/images/ellipse2.png}
+In the \textit{ellipse2.qml} file:
+
+\medskip
+% qml-cpp-integration/ex-simple-item/files/ellipse2.qml
+\inputqml{qml-cpp-integration/colorized/ellipse2}
+
+\medskip
+\begin{itemize}
+\item A new \qic{type}{color} property
+\item[] \demo{qml-cpp-integration/ex-properties}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1568}\frametitle{Declaring a Property}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+class EllipseItem : public QDeclarativeItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor
+               NOTIFY colorChanged)
+    ...
+\end{lstlisting}
+
+\begin{itemize}
+\item Use a \iCls{Q\_PROPERTY} macro to define a new property
+  \begin{itemize}
+  \item named \qic{type}{color} with \iCls{QColor} type
+  \item with getter and setter, \hClsFn{EllipseItem}{color} and \hClsFn{EllipseItem}{setColor}
+  \item emits the \hClsSig{EllipseItem}{colorChanged} signal when the value changes
+  \end{itemize}
+  \vspace*{0.5em}
+\item The signal is just a notification
+  \begin{itemize}
+  \item it contains no value
+  \item we must emit it to make property bindings work
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1567}\frametitle{Declaring Getter and Setter}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+public:
+    ...
+    const QColor &color() const;
+    void setColor(const QColor &newColor);
+
+signals:
+    void colorChanged();
+
+private:
+    QColor m_color;
+};
+\end{lstlisting}
+
+\begin{itemize}
+\item Declare the getter and setter
+\item Declare the private variable containing the color
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1566}\frametitle{Implementing Getter and Setter}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+const QColor &EllipseItem::color() const {
+    return m_color;
+}
+
+void EllipseItem::setColor(const QColor &newColor) {
+  // always check if new value differs from current
+  if (m_color != newColor) {
+    m_color = newColor; // set the new value
+    update(); // update painting
+    emit colorChanged(); // notify about changes
+  }
+}
+\end{lstlisting}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1565}\frametitle{Updated Paint}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+void EllipseItem::paint(QPainter *painter,
+    const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    painter->save(); // save painter state
+    painter->setPen(Qt::NoPen); // we use no pen
+    // setup brush as described by property 'color'
+    painter->setBrush(m_color); 
+    painter->drawEllipse(option->rect);
+    painter->restore(); // restore painter state
+}
+\end{lstlisting}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1564}\frametitle{Summary of Items and Properties}
+
+\begin{itemize}
+\item Register new QML types using \iCls{qmlRegisterType}
+  \begin{itemize}
+  \item new types are subclasses of \iCls{QDeclarativeItem}
+  \end{itemize}
+\vspace*{0.5em}
+\item Add QML properties
+  \begin{itemize}
+  \item define C++ properties with \qtt{NOTIFY} signals
+  \item notifications are used to maintain the bindings between items
+  \end{itemize}
+\end{itemize}
+
+\end{slide}       
+
+%----------------------------------------------------------------------
+\subsection{Signals \& Slots and Methods}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1563}\frametitle{Adding Signals}
+
+\flushedImage{qml-cpp-integration/images/ellipse3a.png}
+In the \textit{ellipse3.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-simple-item/files/ellipse3.qml
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\qtt{\qc{keyword}{import}~Shapes~\qc{number}{3.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Item}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{200}}\\
+\vspace*{0.5em}
+\qtt{~~~~Ellipse~\{}\\
+\qtt{~~~~~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
+\qtt{~~~~~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~...}
+\end{qml}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item A new \qic{type}{onReady} signal handler
+  \begin{itemize}
+  \item changes the \qic{type}{text} property of the \qtt{label} item
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1562}\frametitle{Declaring a Signal}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+...
+signals:
+    void colorChanged();
+    void ready();
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item Add a \hClsSig{EllipseItem}{ready} signal
+  \begin{itemize}
+  \item this will have a corresponding \qic{type}{onReady} handler in QML
+  \item we will emit this 2 seconds after the item is created
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1561}\frametitle{Emitting the Signal}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+EllipseItem::EllipseItem(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent)
+{
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
+    QTimer::singleShot(2000, this, SIGNAL(ready()));
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item Change the constructor
+  \begin{itemize}
+  \item start a 2 second single-shot timer
+  \item this emits the \hClsSig{EllipseItem}{ready} signal when it times out
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1560}\frametitle{Handling the Signal}
+
+\flushedImage{qml-cpp-integration/images/ellipse3b.png}
+In the \textit{ellipse3.qml} file:
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{~~~~Ellipse~\{}\\
+\qtt{~~~~~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
+\qtt{~~~~~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Text}~\{}\\
+\qtt{~~~~~~~~...}\\
+\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Not~ready"}}\\
+\qtt{~~~~\}}
+\end{qml}
+
+\begin{itemize}
+\item In C++:
+  \begin{itemize}
+  \item the \iClsSig{EllipseItem}{ready} signal is emitted
+  \end{itemize}
+\item In QML:
+  \begin{itemize}
+  \item the \qic{class}{Ellipse} item's \qic{type}{onReady} handler is called
+  \item sets the text of the \qic{class}{Text} item
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1559}\frametitle{Adding Methods to Items}
+
+Two ways to add methods that can be called from QML:
+
+\vspace*{0.5em}
+\begin{enumerate}
+\item Create C++ slots
+  \begin{itemize}
+  \item automatically exposed to QML
+  \item useful for methods that do not return values
+  \end{itemize}
+\item Mark regular C++ functions as invokable
+  \begin{itemize}
+  \item allows values to be returned
+  \end{itemize}
+\end{enumerate}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1558}\frametitle{Adding Slots}
+
+\flushedImage{qml-cpp-integration/images/ellipse4.png}
+In the \textit{ellipse4.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-slots/files/ellipse4.qml
+\begin{qml}
+\qtt{Ellipse~\{}\\
+\qtt{~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
+\qtt{~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{onClicked}:~parent.setColor(\qc{string}{"darkgreen"});}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item \qtt{Ellipse} now has a \qtt{setColor()} method
+  \begin{itemize}
+  \item accepts a color
+  \item also accepts strings containing colors
+  \end{itemize}
+ \item Normally, could just use properties to change colors...
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1557}\frametitle{Declaring a Slot}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+...
+    const QColor &color() const;
+
+signals:
+    void colorChanged();
+    void ready();
+
+public slots:
+    void setColor(const QColor &newColor);
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item Moved the \hClsFn{EllipseItem}{setColor} setter function
+  \begin{itemize}
+  \item now in the \iCls{public slots} section of the class
+  \end{itemize}
+\vspace*{0.25em}
+\item Accepts \iCls{QColor} values
+  \begin{itemize}
+  \item the string passed from QML is converted to a color
+  \item for custom types, make sure that type conversion is supported
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1556}\frametitle{Adding Methods}
+
+\flushedImage{qml-cpp-integration/images/ellipse5.png}
+In the \textit{ellipse5.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-methods/files/ellipse5.qml
+\begin{qml}
+\qtt{Ellipse~\{}\\
+\qtt{~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
+\qtt{~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{onClicked}:~parent.color~\qc{operator}{=}~parent.randomColor()}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item \qtt{Ellipse} now has a \qtt{randomColor()} method
+  \begin{itemize}
+  \item obtain a random color using this method
+  \item set the color using the \qic{type}{color} property
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1555}\frametitle{Declaring a Method}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+...
+public:
+    EllipseItem(QDeclarativeItem *parent = 0);
+    void paint(QPainter *painter,
+      const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+
+    const QColor &color() const;
+    void setColor(const QColor &newColor);
+
+    Q_INVOKABLE QColor randomColor() const;
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item Define the \hClsFn{EllipseItem}{randomColor} function
+  \begin{itemize}
+  \item add the \iCls{Q\_INVOKABLE} macro before the declaration
+  \item returns a \iCls{QColor} value
+  \item \textit{cannot} return a const reference
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1554}\frametitle{Implementing a Method}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+QColor EllipseItem::randomColor() const
+{
+    return QColor(qrand() & 0xff, qrand() & 0xff, qrand() & 0xff);
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item Define the new \hClsFn{EllipseItem}{randomColor} function
+  \begin{itemize}
+  \item the pseudo-random number generator has already been seeded
+  \item simply return a color
+  \item do not use the \iCls{Q\_INVOKABLE} macro in the source file
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1553}\frametitle{Summary of Signals, Slots and Methods}
+
+\begin{itemize}
+\item Define signals
+  \begin{itemize}
+  \item connect to Qt signals with the \qic{type}{onSignal} syntax
+  \end{itemize}
+\item Define QML-callable methods
+  \begin{itemize}
+  \item reuse slots as QML-callable methods
+  \item methods that return values are marked using \iMacro{Q\_INVOKABLE}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+                             
+
+%----------------------------------------------------------------------
+\subsection{Using Custom Types}
+
+%----------------------------------------------------------------------
+\begin{slide}{1552}\frametitle{Defining Custom Property Types}
+
+\begin{itemize}
+\item Items can be used as property types
+  \begin{itemize}
+  \item allows rich description of properties
+  \item subclass \iCls{QDeclarativeItem} (as before)
+  \item requires registration of types (as before)
+  \end{itemize}
+
+\vspace*{0.5em}
+\item A simpler way to define custom property types:
+  \begin{itemize}
+  \item use simple enums and flags
+  \item easy to declare and use
+  \end{itemize}
+
+\vspace*{0.5em}
+\item Collections of custom types:
+  \begin{itemize}
+  \item define a new custom item
+  \item use with a \iCls{QDeclarativeListProperty} template type
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1551}\frametitle{Enums as Property Types}
+
+\flushedImage{qml-cpp-integration/images/ellipse6.png}
+% qml-cpp-integration/ex-methods/files/ellipse6.qml
+\inputqml{qml-cpp-integration/colorized/ellipse6}
+
+\begin{itemize}
+\item A new \qic{type}{style} property with a custom value type
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1550}\frametitle{Declaring Enums as Property Types}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+class EllipseItem : public QDeclarativeItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor
+               NOTIFY colorChanged)
+    Q_PROPERTY(Style style READ style WRITE setStyle
+               NOTIFY styleChanged)
+    Q_ENUMS(Style)
+
+public:
+    enum Style { Outline, Filled };
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item Declare the \qic{type}{style} property using the \iCls{Q\_PROPERTY}
+      macro
+\item Declare the \hClsEnum{EllipseItem}{Style} enum using the \iCls{Q\_ENUMS}
+      macro
+\item Define the \hClsEnum{EllipseItem}{Style} enum
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1549}\frametitle{Using Enums in Getters and Setters}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+...
+    const Style &style() const;
+    void setStyle(const Style &newStyle);
+
+signals:
+    void colorChanged();
+    void styleChanged();
+
+private:
+    QColor m_color;
+    Style m_style;
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item Define the usual getter, setter, signal and private member for the
+      \qic{type}{style} property
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1548}\frametitle{Using Enums in Getters and Setters}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+const EllipseItem::Style &EllipseItem::style() const
+{
+    return m_style;
+}
+
+void EllipseItem::setStyle(const Style &newStyle)
+{
+    if (m_style != newStyle) {
+        m_style = newStyle;
+        update();
+        emit styleChanged();
+    }
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item Similar getter and setter as used for the \qic{type}{color} property
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1547}\frametitle{Custom Items as Property Types}
+
+\flushedImage{qml-cpp-integration/images/ellipse7.png}
+% qml-cpp-integration/ex-methods/files/ellipse7.qml
+\inputqml{qml-cpp-integration/colorized/ellipse7}
+
+\begin{itemize}
+\item A new \qic{type}{style} property with a custom item type
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1546}\frametitle{Declaring the Style Item}
+
+In the \textit{style.h} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+class Style : public QDeclarativeItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor
+               NOTIFY colorChanged)
+    Q_PROPERTY(bool filled READ filled WRITE setFilled
+               NOTIFY filledChanged)
+
+public:
+    Style(QDeclarativeItem *parent = 0);
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item \qtt{Style} is a \iCls{QDeclarativeItem} subclass
+\item Defined like the \qtt{EllipseItem} class
+  \begin{itemize}
+  \item implemented in the same way
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1545}\frametitle{Declaring the Style Property}
+
+In the \textit{ellipseitem.h} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+class EllipseItem : public QDeclarativeItem
+{
+    Q_OBJECT
+    Q_PROPERTY(Style *style READ style WRITE setStyle
+               NOTIFY styleChanged)
+public:
+...
+    Style *style() const;
+    void setStyle(Style *newStyle);
+
+signals:
+    void styleChanged();
+...
+\end{lstlisting}
+
+\begin{itemize}
+\item Declare the \qic{type}{style} property
+  \begin{itemize}
+  \item with the \qtt{Style} pointer as its type
+  \item declare the associated getter, setter and signal
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1544}\frametitle{Using the Style Property}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.25em}
+\begin{lstlisting}
+void EllipseItem::paint(QPainter *painter,
+    const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->save();
+    if (!m_style->filled()) {
+        painter->setPen(m_style->color());
+        painter->setBrush(Qt::NoBrush);
+    } else {
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(m_style->color());
+    }
+    painter->drawEllipse(option->rect);
+    painter->restore();
+}
+\end{lstlisting}
+
+\begin{itemize}
+\item Use the internal \qtt{Style} object to decide what to paint
+  \begin{itemize}
+  \item using the getters to read its \qic{type}{color} and \qic{type}{filled}
+        properties
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1543}\frametitle{Registering the Style Property}
+
+In the \textit{ellipseitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    qmlRegisterType<EllipseItem>("Shapes", 7, 0, "Ellipse");
+    qmlRegisterType<Style>("Shapes", 7, 0, "Style");
+...
+\end{lstlisting}
+
+\vspace*{1.0em}
+\begin{itemize}
+\item Register the \qtt{Style} class
+  \begin{itemize}
+  \item in the same way as the \qtt{EllipseItem} class
+  \item in the same module: \qtt{Shapes} 7.0
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1542}\frametitle{Collections of Custom Types}
+
+\flushedImage{qml-cpp-integration/images/chart1.png}
+% qml-cpp-integration/ex-methods/files/chart1.qml
+\inputqml{qml-cpp-integration/colorized/chart1}
+
+\begin{itemize}
+\item A \qtt{Chart} item
+  \begin{itemize}
+  \item with a \qic{type}{bars} list property
+  \item accepting custom \qtt{Bar} items
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1541}\frametitle{Declaring the List Property}
+
+In the \textit{chartitem.h} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+class BarItem;
+
+class ChartItem : public QDeclarativeItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QDeclarativeListProperty<BarItem> bars READ bars
+               NOTIFY barsChanged)
+public:
+    ChartItem(QDeclarativeItem *parent = 0);
+    void paint(QPainter *painter,
+      const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+...
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Define the \qic{type}{bars} property
+  \begin{itemize}
+  \item in theory, read-only but with a notification signal
+  \item in reality, writable as well as readable
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1540}\frametitle{Declaring the List Property}
+
+In the \textit{chartitem.h} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+...
+    QDeclarativeListProperty<BarItem> bars();
+
+signals:
+    void barsChanged();
+
+private:
+    static void append_bar(QDeclarativeListProperty<BarItem> *list,
+                           BarItem *bar);
+    QList<BarItem*> m_bars;
+};
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Define the getter function and notification signal
+\item Define an append function for the list property
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1539}\frametitle{Defining the Getter Function}
+
+In the \textit{chartitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{lstlisting}
+QDeclarativeListProperty<BarItem> ChartItem::bars()
+{
+    return QDeclarativeListProperty<BarItem>(this, 0,
+        &ChartItem::append_bar);
+}
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Defines and returns a list of \qtt{BarItem} objects
+  \begin{itemize}
+  \item with an append function
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1538}\frametitle{Defining the Append Function}
+
+\begin{lstlisting}
+void ChartItem::append_bar(QDeclarativeListProperty<BarItem> *list,
+                           BarItem *bar)
+{
+    ChartItem *chart = qobject_cast<ChartItem *>(list->object);
+    if (chart) {
+        bar->setParentItem(chart);
+        chart->m_bars.append(bar);
+        chart->barsChanged();
+    }
+}
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Static function, accepts
+  \begin{itemize}
+  \item the list to operate on
+  \item each \qtt{BarItem} to append
+  \end{itemize}
+\vspace*{0.5em}
+\item When a \qtt{BarItem} is appended
+  \begin{itemize}
+  \item emits the \hClsSig{ChartItem}{barsChanged} signal
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1537}\frametitle{Summary of Custom Property Types}
+
+\begin{itemize}
+\item Define items as property types:
+  \begin{itemize}
+  \item declare and implement a new \iCls{QDeclarativeItem} subclass
+  \item declare properties to use a pointer to the new type
+  \item register the item with \iCls{qmlRegisterType}
+  \end{itemize}
+\vspace*{1em}
+\item Use enums as simple custom property types:
+  \begin{itemize}
+  \item use \iCls{Q\_ENUMS} to declare a new enum type
+  \item declare properties as usual
+  \end{itemize}
+\vspace*{1em}
+\item Define collections of custom types:
+  \begin{itemize}
+  \item using a custom item that has been declared and registered
+  \item declare properties with \iCls{QDeclarativeListProperty}
+  \item implement a getter and an append function for each property
+  \item read-only properties, but read-write containers
+  \item read-only containers define append functions that simply return
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1536}\frametitle{Creating Extension Plugins}
+
+\begin{itemize}
+\item Declarative extensions can be deployed as plugins 
+  \begin{itemize}
+  \item using source and header files for a working custom type
+  \item developed separately then deployed with an application
+  \item write QML-only components then rewrite in C++
+  \item use placeholders for C++ components until they are ready
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by the \qtt{qmlviewer} tool
+  \begin{itemize}
+  \item with an appropriate \qtt{qmldir} file
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by C++ applications
+  \begin{itemize}
+  \item some work is required to load and initialize them
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1535}\frametitle{Defining an Extension Plugin}
+
+\begin{lstlisting}
+#include <QDeclarativeExtensionPlugin>
+
+class EllipsePlugin : public QDeclarativeExtensionPlugin
+{
+    Q_OBJECT
+
+public:
+    void registerTypes(const char *uri);
+};
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Create a \iCls{QDeclarativeExtensionPlugin} subclass
+  \begin{itemize}
+  \item only one function to reimplement
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1534}\frametitle{Implementing an Extension Plugin}
+
+\begin{lstlisting}
+#include <qdeclarative.h>
+#include "ellipseplugin.h"
+#include "ellipseitem.h"
+
+void EllipsePlugin::registerTypes(const char *uri)
+{
+    qmlRegisterType<EllipseItem>(uri, 9, 0, "Ellipse");
+}
+
+Q_EXPORT_PLUGIN2(ellipseplugin, EllipsePlugin);
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Register the custom type using the \qtt{uri} supplied
+  \begin{itemize}
+  \item the same custom type we started with
+  \end{itemize}
+\item Export the plugin using
+  \begin{itemize}
+  \item the name of the plugin library (\qtt{ellipseplugin})
+  \item the name of the plugin class (\qtt{EllipsePlugin})
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1533}\frametitle{Building an Extension Plugin}
+
+\begin{qmake}
+TEMPLATE  = lib
+CONFIG   += qt plugin
+QT       += declarative
+
+HEADERS  += ellipseitem.h \
+            ellipseplugin.h
+
+SOURCES  += ellipseitem.cpp \
+            ellipseplugin.cpp
+
+DESTDIR   = ../plugins
+\end{qmake}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Ensure that the project is built as a Qt plugin
+\item Declarative module is added to the Qt configuration
+\item Plugin is written to a \qtt{plugins} directory
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1532}\frametitle{Using an Extension Plugin}
+
+To use the plugin with the \qtt{qmlviewer} tool:
+
+\flushedImageDoubleWidth{qml-cpp-integration/images/plugin-location.pdf}
+\begin{itemize}
+\item Write a \qtt{qmldir} file
+  \begin{itemize}
+  \item include a line to describe the plugin
+  \item stored in the \qtt{standalone} directory
+  \end{itemize}
+\vspace*{0.5em}
+\item Write a QML file to show the item
+  \begin{itemize}
+  \item \qtt{ellipse9s.qml}
+  \end{itemize}
+\end{itemize}
+
+\vspace*{1em}
+The \qtt{qmldir} file contains a declaration:
+
+\begin{alltt}
+plugin ellipseplugin ../plugins
+\end{alltt}
+
+\begin{itemize}
+\item \textbf{\qtt{plugin}} followed by
+  \begin{itemize}
+  \item the plugin name: \textbf{\qtt{ellipseplugin}}
+  \item the plugin path relative to the \qtt{qmldir} file: \textbf{\qtt{../plugins}}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1531}\frametitle{Using an Extension Plugin}
+
+In the \qtt{ellipse9s.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-extension-plugin/standalone/ellipse9s.qml
+\inputqml{qml-cpp-integration/colorized/ellipse9s}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Use the custom item directly
+\item No need to import any custom modules
+  \begin{itemize}
+  \item \qtt{qmldir} and \qtt{ellipse9s.qml} are in the same project
+        directory
+  \item \qtt{Ellipse} is automatically imported into the global namespace
+  \end{itemize}
+\end{itemize}
+
+% uri mentioned but not explained
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1530}\frametitle{Loading an Extension Plugin}
+
+To load the plugin in a C++ application:
+
+\begin{itemize}
+\item Locate the plugin
+  \begin{itemize}
+  \item (perhaps scan the files in the \qtt{plugins} directory)
+  \end{itemize}
+\item Load the plugin with \iCls{QPluginLoader}
+\begin{lstlisting}
+QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+\end{lstlisting}
+\vspace*{0.5em}
+\item Cast the plugin object to a \iCls{QDeclarativeExtensionPlugin}
+\begin{lstlisting}
+QDeclarativeExtensionPlugin *plugin =
+  qobject_cast<QDeclarativeExtensionPlugin *>(loader.instance());
+\end{lstlisting}
+\vspace*{0.5em}
+\item Register the extension with a URI
+\begin{lstlisting}
+if (plugin)
+  plugin->registerTypes("Shapes");
+\end{lstlisting}
+  \begin{itemize}
+  \item in this example, \qtt{Shapes} is used as a URI
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1529}\frametitle{Using an Extension Plugin}
+
+In the \qtt{ellipse9s.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-extension-plugin/standalone/ellipse9.qml
+\inputqml{qml-cpp-integration/colorized/ellipse9}
+
+\begin{itemize}
+\item The \qtt{Ellipse} item is part of the \qtt{Shapes} module
+\item A different URI makes a different import necessary; e.g.,
+\begin{lstlisting}
+plugin->registerTypes("com.nokia.qt.examples.Shapes");
+\end{lstlisting}
+\item corresponds to\\
+\begin{qml}
+\qtt{\qc{keyword}{import}~com.nokia.qt.examples.Shapes~\qc{number}{9.0}}\\
+\end{qml}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1528}\frametitle{Summary of Extension Plugins}
+
+\begin{itemize}
+\item Extensions can be compiled as plugins
+  \begin{itemize}
+  \item define and implement a \iCls{QDeclarativeExtensionPlugin} subclass
+  \item define the version of the plugin in the extension
+  \item build a Qt plugin project with the \qtt{declarative} option enabled
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by the \qtt{qmlviewer} tool
+  \begin{itemize}
+  \item write a \qtt{qmldir} file
+  \item declare the plugin's name and location relative to the file
+  \item no need to import the plugin in QML
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by C++ applications
+  \begin{itemize}
+  \item use \iCls{QPluginLoader} to load the plugin
+  \item register the custom types with a specific URI
+  \item import the same URI and plugin version number in QML
+  \end{itemize}
+\end{itemize}
+
+\end{slide}

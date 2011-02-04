@@ -1,0 +1,305 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Basic XML APIs}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0009}
+\frametitle{\iConcept{XML} APIs in Qt} \label{xml}
+\begin{itemize}
+\item \textbf{SAX (version 2)}
+  \begin{itemize}
+  \item Serial stream parser API
+  \item User defines callbacks
+  \item Callbacks called when XML events occurs
+  \item Suited when data is processed in one-pass
+  \end{itemize}
+\item\textbf{ DOM (level 1 and 2)}
+  \begin{itemize}
+  \item Tree node view on data
+  \item Suited when data is accessed repeatedly or out of sequence 
+  \end{itemize}
+\item \textbf{XML Stream Reader/Writer}
+  \begin{itemize}
+  \item Serial stream parser API
+  \item User pulls token on own convenience
+  \item Easy to build recursive descent parsers
+  \item Extremly fast and memory conservative
+  \item Preferred XML reader/writer if not DOM is required
+  \end{itemize}
+\item For  SAX and DOM APIs, add \verb!QT += xml!
+\item XML Stream APIs reside in QtCore module
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1724}\frametitle{Using \iConcept{SAX}}
+  \begin{itemize}
+  \item Simple usage of SAX with a custom xml handler
+  \item Preparing the reader
+ \begin{cpp}
+// Own implementation of QXmlDefaultHandler
+CustomXmlHandler handler;
+// Standard xml parser
+QXmlSimpleReader reader;
+// register handler with the reader
+reader.setContentHandler(&handler);
+reader.setErrorHandler(&handler);
+\end{cpp}
+\item Feeding xml file to reader
+\begin{cpp}
+QFile xmlFile ...;
+QXmlInputSource source(&xmlFile);
+// parse reports xml tokens via callbacks to your handler
+reader.parse(source);
+  \end{cpp}
+  \end{itemize}
+
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}{0011}\frametitle{SAX Handlers}
+\begin{itemize}
+  \item Several abstract handler classes that define SAX events:
+    \begin{itemize}
+    \item \textbf{\iCls{QXmlContentHandler}}
+      \begin{itemize}
+      \item for content-related events
+      \end{itemize}
+    \item \textbf{\iCls{QXmlErrorHandler}}
+      \begin{itemize}
+      \item for errors, fatal errors, and warnings
+      \end{itemize}
+
+    \item \textbf{\iCls{QXmlEntityResolver}}
+      \begin{itemize}
+      \item for external entities that need resolution
+      \end{itemize}
+    \item \textbf{\iCls{QXmlDTDHandler}}
+      \begin{itemize}
+      \item for DTD-related events
+      \end{itemize}
+    \item \textbf{\iCls{QXmlDeclHandler}}
+      \begin{itemize}
+      \item for rarely used DTD-related events
+      \end{itemize}
+    \item  \textbf{\iCls{QXmlLexicalHandler}}
+      \begin{itemize}
+      \item for events related to the lexical structure. (start/end of DTD, comments,...)
+      \end{itemize}
+    \end{itemize}
+  \item \textbf{\iCls{QXmlDefaultHandler}} - easiest to subclass 
+    \begin{itemize}
+    \item provides empty implementation for all callbacks
+    \end{itemize}
+
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1723}\frametitle{Using QXmlDefaultHandler}
+  \begin{itemize}
+  \item Register it for each role it has
+  \item Out custom handler
+    \begin{cpp}
+class CustomXmlHandler : public QXmlDefaultHandler { ... }
+    \end{cpp}
+  \item Registration for xml event roles
+    \begin{cpp}
+CustomXmlHandler handler;
+QXmlSimpleReader reader;
+// register handler for the roles
+reader.setContentHandler( &handler );
+reader.setErrorHandler( &handler );
+    \end{cpp}
+  \item See \qtdemo{examples/xml/saxbookmarks}
+  \item or \doc{xml-saxbookmarks.html}{Sax Bookmarks}
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0017}
+\label{qdom}
+        \frametitle{\iConcept{DOM} - The \iConcept{Document Object Model}}\label{qdom}
+\begin{itemize}
+  \item Accessing XML in tree form
+  \item Entire XML document is kept memory
+  \item Everything is a \emph{node} (in Qt: \iCls{QDomNode}).
+  \item DOM is specified by the W3C
+  \item DOM is awkward in places, but has the advantage of being standardized.
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1722}\frametitle{Working with DOM}
+\begin{itemize}
+\item Print tag names of all elements
+   \begin{cpp}
+QFile xmlFile ...;
+QDomDocument doc();      
+doc.setContent(&file);
+// retrieve root element
+QDomElement root = doc.documentElement();
+QDomNode node = root.firstChild();
+while(!node.isNull()) { // always test a node
+  QDomElement element = node.toElement();
+  if(!element.isNull()) { // test if node is an element
+    qDebug() << element.tagName();
+  }
+  node = node.nextSibling();
+}
+    \end{cpp}
+  \item Iterate over elements
+    \begin{itemize}
+    \item \hClsFn{QDomNode}{firstChildElement}, \hClsFn{QDomNode}{nextSiblingElement}
+    \end{itemize}
+  \item \demo{dataio/ex-qdom}
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1721}\frametitle{Writing XML with DOM}
+\begin{itemize}
+\item Create HTML page with one anchor
+  \begin{cpp}
+QDomDocument doc;
+QDomElement html = doc.createElement("html");
+doc.appendChild(html);
+QDomElement body = doc.createElement("body");
+html.appendChild(body);
+QDomElement anchor = doc.createElement("a");
+anchor.setAttribute("href", "http://qt.nokia.com/training/");
+QDomText text = doc.createTextNode("Qt Training");
+anchor.appendChild(text);
+body.appendChild(anchor);
+qDebug() << doc.toString(); // print DOM tree
+  \end{cpp}
+\item Writing the DOM
+  \begin{cpp}
+QTextStream stream(&file); // stream for writeable file
+doc.save(stream, 4); // write to file with indent = 4    
+  \end{cpp}
+ \item \demo{dataio/ex-qdom-write}
+  \end{itemize}
+\end{slide}
+
+\subsection{XML Streaming API}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1720}\frametitle{Pull Parser - QXmlStreamReader} \label{QXmlStreamReader}
+\begin{itemize}
+\item Provides fast parser for reading via a simple streaming API
+\item Faster and more convenient replacement for SAX parser
+  \begin{cpp}
+QXmlStreamReader xml;
+...
+while ( !xml.atEnd() ) {
+  xml.readNext(); // pulls next token
+  ... // do processing
+}
+if ( xml.hasError() ) {
+  ... // do error handling
+}    
+  \end{cpp}
+\item Determine type of Token
+  \begin{itemize}
+  \item \hClsFn{QXmlStreamReader}{isStartDocument}
+  \item \hClsFn{QXmlStreamReader}{isStartElement}
+  \item \hClsFn{QXmlStreamReader}{isEndElement}
+  \item \hClsFn{QXmlStreamReader}{isCharacters}
+ \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1719}\frametitle{QXmlStreamReader - Errors}
+\begin{itemize}
+\item \textbf{If an error occurs}
+  \begin{itemize}
+  \item \texttt{readNext()} returns \texttt{EndDocument}
+  \item and \texttt{atEnd()} returns \texttt{true}
+  \end{itemize}
+\item \textbf{\texttt{hasError()} - test if error exists}
+  \begin{itemize}
+  \item \texttt{error()} - Returns type of error
+  \item \texttt{errorString()} - Returns error message
+  \end{itemize}
+\item \textbf{\texttt{raiseError( msg )} - Raises a custom error}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0015}\frametitle{QXmlStreamReader - Providing XML}
+\begin{itemize}
+\item \textbf{Provide XML content via}
+  \begin{itemize}
+  \item \texttt{addData(...)} as \iCls{QString} or \iCls{QByteArray}
+  \item \texttt{setDevice(...)} as IO device (e.g. file, socket, ...)
+  \end{itemize}
+\item \textbf{If data ends prematurely}
+  \begin{itemize}
+  \item \texttt{readNext} returns \texttt{PrematureEndOfDocumentError}
+  \item and \texttt{atEnd()} return \texttt{false}
+  \item Possible to resume once data is available
+  \end{itemize}
+\end{itemize}
+\qtdemo{examples/xml/streambookmarks}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0016}\frametitle{Writing XML with \iCls{QXmlStreamWriter}}
+\begin{itemize}
+\item Allows to write XML using high level functions
+\item \textbf{Methods for writing}
+  \begin{itemize}
+  \item \hClsFn{QXmlStreamWriter}{writeStartDocument}
+  \item \hClsFn{QXmlStreamWriter}{writeStartElement}
+  \item \hClsFn{QXmlStreamWriter}{writeEndElement}
+  \item \hClsFn{QXmlStreamWriter}{writeAttribute}
+  \item \hClsFn{QXmlStreamWriter}{writeCharacters}.
+  \end{itemize}
+\item \textbf{\texttt{setDevice(QIODevice *)}} - device to write to
+\item  \textbf{\texttt{setAutoFormatting(true)}}
+  \begin{itemize}
+  \item Generates human readable XML
+  \end{itemize}
+\item \demo{dataio/ex-xmlstreamwriter} 
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{1718}\frametitle{Lab: Reading and writing XML keys}
+  \begin{itemize}
+  \item KeyEngine class allows storing key-value pairs
+  \item Your task to write XML read/write backends
+  \item XML Format shall be:
+    \begin{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<keys version="1.0">
+  <item key="Key-0">Value-0</item>
+  <item key="Key-1">Value-1</item>
+  ...
+  <item key="Key-9">Value-9</item>
+</keys>      
+    \end{xml}
+  \item \lab{dataio/lab-xmlkeys}
+  \item \textbf{Optional}
+    \begin{itemize}
+  \item No optional tasks
+    \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+
+
+
+

@@ -1,0 +1,179 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{States}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1510}\frametitle{States}
+
+States manage named items
+
+\begin{itemize}
+\item Represented by the \qic{class}{State} element
+\item Each item can define a set of states
+  \begin{itemize}
+  \item with the \qic{type}{states} property
+  \item current state is set with the \qic{type}{state} property
+  \end{itemize}
+\item Properties are set when a state is entered
+\item Can also
+  \begin{itemize}
+  \item modify anchors
+  \item change the parents of items
+  \item run scripts
+  \end{itemize}
+\end{itemize}
+
+\doc{qdeclarativestates.html}{QML States}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1509}\frametitle{States Example}
+
+\flushedImage{qml-states-transitions/images/states-stop-light.png}
+% declarative-uis/states-transitions/states.qml
+\begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~\qc{type}{width}:~\qc{number}{150};~\qc{type}{height}:~\qc{number}{250}}\\
+\vspace*{0.5em}
+\qtt{~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~\qc{type}{id}:~stop\_light}\\
+\qtt{~~~~~~\qc{type}{x}:~\qc{number}{25};~\qc{type}{y}:~\qc{number}{15};~\qc{type}{width}:~\qc{number}{100};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~\}}\\
+\qtt{~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~\qc{type}{id}:~go\_light}\\
+\qtt{~~~~~~\qc{type}{x}:~\qc{number}{25};~\qc{type}{y}:~\qc{number}{135};~\qc{type}{width}:~\qc{number}{100};~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~\}}\\
+\qtt{~~...}\\
+\end{qml}
+
+\begin{itemize}
+\item Prepare each item with an \qic{type}{id}
+\item Set up properties not modified by states
+\end{itemize}      
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1508}\frametitle{Defining States}
+
+% declarative-uis/states-transitions/states.qml
+\begin{qml}
+\qtt{~~\qc{type}{states}:~[}\\
+\qtt{~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~\qc{type}{name}:~\qc{string}{"stop"}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~stop\_light;~\qc{type}{color}:~\qc{string}{"red"}~\}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~go\_light;~\qc{type}{color}:~\qc{string}{"black"}~\}}\\
+\qtt{~~~~\},}\\
+\qtt{~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~\qc{type}{name}:~\qc{string}{"go"}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~stop\_light;~\qc{type}{color}:~\qc{string}{"black"}~\}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~go\_light;~\qc{type}{color}:~\qc{string}{"green"}~\}}\\
+\qtt{~~~~\}}\\
+\qtt{~~]}
+\end{qml}
+
+\begin{itemize}
+\item Define states with names: \qic{string}{"stop"} and \qic{string}{"go"}
+\item Set up properties for each state with \qic{class}{PropertyChanges}
+  \begin{itemize}
+  \item defining differences from the default values
+  \end{itemize}
+\end{itemize}
+                                
+\demo{qml-states-transitions/ex-states/states.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1507}\frametitle{Setting the State}
+
+\flushedImage{qml-states-transitions/images/states-stop-go-lights.pdf}
+
+Define an initial state:
+
+\begin{qml}
+\qtt{~~\qc{type}{state}:~\qc{string}{"stop"}}
+\end{qml}
+
+\vspace*{1em}
+Use a \qic{class}{MouseArea} to switch between\\
+states:
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~\qc{type}{onClicked}:~parent.state~\qc{operator}{==}~\qc{string}{"stop"}~?}\\
+\qtt{~~~~~~~~~~~~~~~~~parent.state~\qc{operator}{=}~\qc{string}{"go"}~:~parent.state~\qc{operator}{=}~\qc{string}{"stop"}}\\
+\qtt{~~\}}
+\end{qml}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Reacts to a click on the user interface
+  \begin{itemize}
+  \item toggles the parent's \qic{type}{state} property
+  \item between \qic{string}{"stop"} and \qic{string}{"go"} states
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1506}\frametitle{Changing Properties}
+
+States change properties with the \qic{class}{PropertyChanges} element:
+
+\begin{qml}
+\qtt{~~~~\qc{class}{State}~\{}\\
+\qtt{~~~~~~\qc{type}{name}:~\qc{string}{"go"}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~stop\_light;~\qc{type}{color}:~\qc{string}{"black"}~\}}\\
+\qtt{~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~go\_light;~\qc{type}{color}:~\qc{string}{"green"}~\}}\\
+\qtt{~~~~\}}\\
+\end{qml}
+
+\begin{itemize}
+\item Acts on a target element named using the \qic{type}{target} property
+  \begin{itemize}
+  \item the \qic{type}{target} refers to an \qic{type}{id}
+  \end{itemize}
+\item Applies the other property definitions to the target element
+  \begin{itemize}
+  \item one \qic{class}{PropertyChanges} element can redefine multiple properties
+  \end{itemize}
+\item Property definitions are evaluated when the state is entered
+\item \qic{class}{PropertyChanges} describes new property values for an item
+  \begin{itemize}
+  \item new values are assigned to items when the state is entered
+  \item \textit{properties left unspecified are assigned their default values}
+  \end{itemize}
+\end{itemize}
+
+% Use of signals (MouseArea) to change the state property of an Item.
+% Or states can be set using JavaScript.
+% Use of states property, defining State objects which reference elements
+% by their id properties.
+
+% When are the property changes evaluated?
+% Can you update the target property of a target element?
+
+\end{slide}

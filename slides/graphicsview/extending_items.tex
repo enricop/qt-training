@@ -1,0 +1,254 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ----------------------------------------------------------------------
+\subsection{Creating Custom Items}
+% ----------------------------------------------------------------------
+\begin{slide}{1749}
+\frametitle{Extending QGraphicsItem}
+\iCls{QGraphicsItem} pure virtual methods (required overrides):
+\begin{itemize}
+\item \texttt{void }\hClsFn{QGraphicsItem}{paint}
+    \begin{itemize}
+    \item Paints contents of item in local coordinates
+    \end{itemize}
+\item \iCls{QRectF} \hClsFn{QGraphicsItem}{boundingRect}
+    \begin{itemize}
+    \item Returns outer bounds of item as a rectangle 
+    \item Called by \iCls{QGraphicsView} to determine what regions need to be redrawn
+    \end{itemize}
+      
+\item \iCls{QPainterPath} \hClsFn{QGraphicsItem}{shape} - shape of item
+\begin{itemize}   
+    \item Used by \hClsFn{QGraphicsItem}{contains} and \hClsFn{QGraphicsItem}{collidesWithPath} for collision detection
+    \item Defaults to \hClsFn{QGraphicsItem}{boundingRect} if not implemented
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+\begin{slide}{1748}
+\frametitle{Boundaries}
+\centeredImageFullWidth{graphicsview/images/boundaries}
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+\begin{slide}{1747}
+\frametitle{Painting Items}
+\begin{itemize}
+\item Item is in complete control of drawing itself
+\item Use standard \iCls{QPainter} drawing methods
+    \begin{itemize}
+    \item \iCls{QPen}, \iCls{QBrush}, pixmaps, gradients, text, etc. 
+    \end{itemize}
+\item No background to draw
+
+\item Dynamic boundary and arbitrary shape
+    \begin{itemize}
+    \item Polygon, curved, non-contiguous, etc. 
+    \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+
+\begin{slide}[fragile]{1746}
+\frametitle{Custom Item example}
+\begin{cpp}
+
+class PendulumItem : public QGraphicsItem {
+public:
+    QRectF boundingRect() const;
+    void paint(QPainter* painter,
+               const QStyleOptionGraphicsItem* option,
+               QWidget* widget);
+};
+
+\end{cpp}
+\begin{columns}[t]
+\begin{column}{10mm}
+\centeredImage{graphicsview/images/pendulum}
+\end{column}
+\begin{column}{10mm}
+\centeredImage{graphicsview/images/pendulum-schema} 
+\end{column}
+\end{columns}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1745}
+\frametitle{paint() and boundingRect()}
+\begin{itemize}
+\item \texttt{boundingRect()} must take the pen width into consideration
+\end{itemize}
+\begin{cpp}
+QRectF PendulumItem::boundingRect() const {
+    return QRectF(-20.0 - PENWIDTH/2.0, -PENWIDTH/2.0,
+                  40.0 + PENWIDTH, 140.0 + PENWIDTH );
+}
+
+void PendulumItem::paint( QPainter* painter,
+    const QStyleOptionGraphicsItem*, QWidget*) {
+    painter->setPen( QPen( Qt::black, PENWIDTH ) );
+    painter->drawLine(0,0,0,100);
+    QRadialGradient g( 0, 120, 20, -10, 110 );
+    g.setColorAt( 0.0, Qt::white );
+    g.setColorAt( 0.5, Qt::yellow );
+    g.setColorAt( 1.0, Qt::black );
+    painter->setBrush(g);
+    painter->drawEllipse(-20, 100, 40, 40);
+}
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1421}
+\frametitle{Choosing a \texttt{boundingRect()}}
+\begin{itemize}
+\item \texttt{boundingRect()} 
+    \begin{itemize}
+    \item Influences drawing code
+    \item Influences "origin" of item transforms
+    \end{itemize}
+\item i.e. for Pendulum that swings:
+    \begin{itemize}
+    \item Good origin is non-weighted end of line
+    \item Can rotate around (0,0) without translation 
+    \end{itemize}
+\end{itemize}
+\centeredImage{graphicsview/images/boundingRect-implications}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1743}
+\frametitle{QGraphicsItemGroup}
+\begin{itemize}
+\item Easier approach to making a Pendulum:
+    \begin{itemize}
+    \item Extend \iCls{QGraphicsItemGroup}
+    \item Use other concrete items as elements, add as children
+    \item No need to override \texttt{paint()} or \texttt{shape()}
+    \end{itemize} 
+\end{itemize}
+\begin{cpp}
+PendulumItem::PendulumItem(QGraphicsItem* parent)
+  : QGraphicsItemGroup(parent) { 
+  m_line = new QGraphicsLineItem( 0,0,0,100, this);
+  m_line->setPen( QPen( Qt::black, 3 ) );
+  m_circle = new QGraphicsEllipseItem( -20, 100, 40, 40, this );
+  m_circle->setPen( QPen(Qt::black, 3 ));
+  QRadialGradient g( 0, 120, 20, -10, 110 );
+  g.setColorAt( 0.0, Qt::white );
+  g.setColorAt( 0.5, Qt::yellow );
+  g.setColorAt( 1.0, Qt::black );
+  m_circle->setBrush(g);  
+}
+\end{cpp}
+\demo{graphicsview/ex-pendulum}
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+\begin{slide}{1741}
+\frametitle{Event Handling}
+\begin{itemize}
+\item \texttt{QGraphicsItem::sceneEvent(QEvent*)}
+    \begin{itemize}
+    \item Receives all events for an item
+    \item Similar to \iClsFn{QWidget}{event}
+    \end{itemize} 
+\item Specific typed event handlers:
+    \begin{itemize}
+    \item \texttt{keyPressEvent(QKeyEvent*)}
+    \item \texttt{mouseMoveEvent(QGraphicsSceneMouseEvent*)}
+    \item \hClsFnPar{QGraphicsItem}{wheelEvent}{QGraphicsSceneWheelEvent*}
+    \item \texttt{mousePressEvent(QGraphicsSceneMouseEvent*)}
+    \item \texttt{contextMenuEvent(QGraphicsSceneContextMenuEvent*)}
+    \item \texttt{dragEnterEvent(QGraphicsSceneDragDropEvent*)}
+    \item \texttt{focusInEvent(QFocusEvent*)}
+    \item \texttt{hoverEnterEvent(QGraphicsSceneHoverEvent*)}
+    \end{itemize}
+
+\begin{block}{When overriding mouse event handlers:}
+   Make sure to call base-class versions, too. Without this, the item select, focus, move behavior will not work as expected.
+\end{block}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1740}
+\frametitle{Event Handler examples}
+\begin{cpp}
+void MyView::wheelEvent(QWheelEvent *event) {
+    double factor =
+        1.0 + (0.2 * qAbs(event->delta()) / 120.0);
+    if (event->delta() > 0) zoom(factor);
+    else                    zoom(1.0/factor);
+}
+void MyView::keyPressEvent(QKeyEvent *event) {
+    switch (event->key()) {
+      case Qt::Key_Plus:
+          zoom(1.2);
+          break;
+      case Qt::Key_Minus:
+          zoom(1.0/1.2);
+          break;
+      default:
+          QGraphicsView::keyPressEvent(event);
+    }
+}
+\end{cpp}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1739}
+\frametitle{Collision Detection}
+\begin{itemize}
+\item Determines when items' shapes intersect
+\item Two methods for collision detection:
+    \begin{itemize}
+    \item \texttt{collidesWithItem(QGraphicsItem* other)}
+    \item \texttt{collidingItems(Qt::ItemSelectionMode)}
+    \end{itemize}
+\item \texttt{shape()}
+    \begin{itemize}
+    \item Returns \iCls{QPainterPath} used for collision detection
+    \item Must be overridden properly
+    \end{itemize}
+\item \texttt{items()}
+    \begin{itemize}
+    \item Overloaded forms take \iCls{QRectF}, \iCls{QPolygonF}, \iCls{QPainterPath}
+    \item Return items found in rect/polygon/shape
+    \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1738}
+\frametitle{Lab: Corner drag button}
+\begin{itemize}
+\item Define a \texttt{QGraphicsItem} which can display an image, and has at least 1 child item, that is a "corner drag" button, permitting the user to click and drag the button, to resize or rotate the image. 
+\item Start with the handout provided in \texttt{graphicsview/lab-cornerdrag}
+\flushedImage{graphicsview/images/cornerdrag}
+\item Further details are in the \texttt{readme.txt} in the same directory.
+\end{itemize}
+\end{slide}
+
+

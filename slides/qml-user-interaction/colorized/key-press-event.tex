@@ -1,0 +1,33 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{400};~\qc{type}{height}:~\qc{number}{400};~\qc{type}{color}:~\qc{string}{"black"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Image}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~rocket}\\
+\qtt{~~~~~~~~\qc{type}{x}:~\qc{number}{150};~\qc{type}{y}:~\qc{number}{150}}\\
+\qtt{~~~~~~~~\qc{type}{source}:~\qc{string}{"../images/rocket.svg"}}\\
+\qtt{~~~~~~~~\qc{type}{transformOrigin}:~\qc{class}{Item}.Center}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{type}{Keys.onPressed}:~\{}\\
+\qtt{~~~~~~~~\qc{keyword}{if}~(event.key~\qc{operator}{==}~\qc{class}{Qt}.Key\_Left)}\\
+\qtt{~~~~~~~~~~~~rocket.rotation~\qc{operator}{=}~(rocket.rotation~\qc{operator}{-}~\qc{number}{10})~\qc{operator}{\%}~\qc{number}{360};}\\
+\qtt{~~~~~~~~\qc{keyword}{else}~\qc{keyword}{if}~(event.key~\qc{operator}{==}~\qc{class}{Qt}.Key\_Right)}\\
+\qtt{~~~~~~~~~~~~rocket.rotation~\qc{operator}{=}~(rocket.rotation~\qc{operator}{+}~\qc{number}{10})~\qc{operator}{\%}~\qc{number}{360};}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{focus}:~\qc{number}{true}}\\
+\qtt{\}}\\

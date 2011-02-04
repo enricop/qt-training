@@ -1,0 +1,167 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Custom Models}
+
+%----------------------------------------------------------------------                                                                                                         
+\begin{slide}{1593}\frametitle{Implementing a Model}
+\begin{itemize}
+\item Variety of classes to choose from
+  \begin{itemize}
+  \item \iCls[\textbf]{QAbstractListModel}
+    \begin{itemize}
+    \item One dimensional list
+    \end{itemize}
+  \item \iCls[\textbf]{QAbstractTableModel}
+    \begin{itemize}
+    \item Two-dimensional tables
+    \end{itemize}
+  \item \iCls[\textbf]{QAbstractItemModel}
+    \begin{itemize}
+    \item Generic model class
+    \end{itemize}
+  \item \iCls[\textbf]{QStringListModel}
+    \begin{itemize}
+    \item One-dimensional model
+    \item Works on string list
+    \end{itemize}
+  \item \iCls[\textbf]{QStandardItemModel}
+    \begin{itemize}
+    \item Model that stores the data
+    \end{itemize}
+ \end{itemize}
+\item[]
+\item \textbf{Notice:} Need to subclass \textit{abstract} models
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1592}\frametitle{Step 1: Read Only List Model}
+  \begin{cpp}
+class MyModel: public QAbstractListModel {
+public:
+  // return row count for given parent
+  int rowCount( const QModelIndex &parent) const;
+  // return data, based on current index and requested role
+  QVariant data( const QModelIndex &index, 
+                 int role = Qt::DisplayRole) const;
+};    
+  \end{cpp}
+\demo{modelview/ex-stringlistmodel}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1591}\frametitle{Step 2: Suppling Header Information}
+ \begin{cpp}
+QVariant MyModel::headerData(int section, 
+                             Qt::Orientation orientation, 
+                             int role) const
+{
+  // return column or row header based on orientation
+}
+   \end{cpp}
+\demo{modelview/ex-stringlistmodel-2}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1590}\frametitle{Step 3: Enabling Editing}
+  \begin{cpp}
+// should contain Qt::ItemIsEditable
+Qt::ItemFlags MyModel::flags(const QModelIndex &index) const 
+{
+ return QAbstractListModel::flags() | Qt::ItemIsEditable;
+}
+
+// set role data for item at index to value
+bool MyModel::setData( const QModelIndex & index, 
+                const QVariant & value, 
+                int role = Qt::EditRole)
+{
+  ... = value; // set data to your backend
+  emit dataChanged(topLeft, bottomRight); // if successful
+}
+\end{cpp}
+\demo{modelview/ex-stringlistmodel-3}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1589}\frametitle{Step 4: Row Manipulation}
+    \begin{cpp}
+// insert count rows into model before row
+bool MyModel::insertRows(int row, int count, parent) {      
+   beginInsertRows(parent, first, last);
+   // insert data into your backend
+   endInsertRows();
+}
+
+// removes count rows from parent starting with row
+bool MyModel::removeRows(int row, int count, parent) {
+   beginRemoveRows(parent, first, last);
+   // remove data from your backend
+   endRemoveRows();
+}      
+    \end{cpp}
+\demo{modelview/ex-stringlistmodel-4}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1588}\frametitle{A Table Model}
+  \begin{itemize}
+  \item 2-dimensional model (rows x columns)
+  \item \texttt{int columnCount(parent)}
+   \begin{itemize}
+   \item Enabling columns
+   \end{itemize}
+    \begin{cpp}
+int MyModel::columnCount ( parent ) const {
+  // return number of columns for parent
+}
+
+QVariant MyModel::data( index, role ) const {
+ // adapt to react on requested column from index
+}
+    \end{cpp}
+  \end{itemize}
+\demo{modelview/ex-tablemodel}  
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1587}\frametitle{Lab: City Table Model}
+  \begin{itemize}
+  \item Please implement a City Table Model
+  \item Given:
+    \begin{itemize}
+    \item The data  in \texttt{CityEngine}
+    \item A main test function
+    \end{itemize}
+  \item Your Task:
+    \begin{itemize}
+    \item Adapt the data to a table model
+    \end{itemize}
+  \item \textbf{Optional}
+    \begin{itemize}
+    \item Make the model editable
+    \item Enable adding/removing cities
+   \end{itemize}
+ \end{itemize}
+\lab{modelview/lab-citymodel}
+ 
+\end{slide}
+
+
+

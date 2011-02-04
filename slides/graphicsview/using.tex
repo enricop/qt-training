@@ -1,0 +1,306 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Using GraphicsView Classes}
+% ----------------------------------------------------------------------
+\begin{slide}{7982}
+\frametitle{GraphicsView Framework}
+\begin{itemize}
+\item Provides:
+    \begin{itemize}
+    \item a surface for managing interactive 2D graphical items
+    \item A view widget for visualizing the items
+    \end{itemize}
+\item Uses MVC paradigm
+\item Resolution Independent
+\item Animation Support
+\item Fast item discovery, hit tests, collision detection
+    \begin{itemize}
+    \item Using Binary Space Paritioning (BSP) tree indexes
+    \end{itemize}
+\item Can manage large numbers of items (tens of thousands)
+\item Supports zooming, printing and rendering
+
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+\begin{slide}[fragile]
+\frametitle{Hello World}
+
+\begin{cpp}
+#include <QtGui>
+int main(int argc, char **argv) {
+  QApplication app(argc, argv);
+  QGraphicsView view;
+  QGraphicsScene *scene = new QGraphicsScene(&view);
+  view.setScene(scene);
+  QGraphicsRectItem *rect = 
+      new QGraphicsRectItem(-10, -10, 120, 50);
+  scene->addItem(rect);
+  QGraphicsTextItem *text = scene->addText("Hello World!");
+  view.show();
+  return app.exec();
+}
+\end{cpp}
+\centeredImageDoubleWidth{graphicsview/images/helloworld} \\
+\demo{graphicsview/ex-helloworld}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+\begin{slide}{1735}
+\frametitle{UML relationship}
+\begin{itemize}
+
+\item \iCls{QGraphicsScene} is:
+    \begin{itemize}
+    \item a "model" for \iCls{QGraphicsView}
+    \item a "container" for \iCls{QGraphicsItem}s
+    \end{itemize}
+
+\end{itemize}
+\centeredImageFullWidth{graphicsview/images/graphicsview-uml}
+
+\doc{qgraphicsview.html}{QGraphicsView}
+
+\end{slide}
+% ----------------------------------------------------------------------
+
+
+\begin{slide}{1734}
+\frametitle{QGraphicsScene}
+\begin{itemize}
+\item Container for Graphic Items
+    \begin{itemize}
+    \item Items can exist in only one scene at a time
+    \end{itemize}
+\item Propagates events to items
+    \begin{itemize}
+    \item Manages Collision Detection
+    \item Supports fast item indexing
+    \item Manages item selection and focus
+    \end{itemize}
+\item Renders scene onto view
+    \begin{itemize}
+    \item z-order determines which items show up in front of others
+    \end{itemize}
+\end{itemize}
+\end{slide}
+% ----------------------------------------------------------------------
+
+\begin{slide}[fragile]{1733}
+\frametitle{QGraphicsScene important methods}
+
+\begin{itemize}
+\item \texttt{addItem()}
+    \begin{itemize}
+    \item Add an item to the scene
+        \begin{itemize}
+        \item (remove from previous scene if necessary)
+        \end{itemize}
+    \item Also \texttt{addEllipse()}, \texttt{addPolygon()}, \texttt{addText()}, etc 
+    \end{itemize}
+\begin{cpp}
+
+    QGraphicsEllipseItem *ellipse = 
+        scene->addEllipse(-10, -10, 120, 50);
+    QGraphicsTextItem *text = 
+        scene->addText("Hello World!");
+\end{cpp}    
+\item \texttt{items()}
+    \begin{itemize}
+    \item returns items intersecting a particular point or region
+    \end{itemize}
+
+\item \texttt{selectedItems()}
+    \begin{itemize}
+    \item returns list of selected items
+    \end{itemize}
+\item \texttt{sceneRect()}
+    \begin{itemize}
+    \item bounding rectangle for the entire scene
+    \end{itemize}
+\end{itemize}
+
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+
+\begin{slide}{1732}
+\frametitle{QGraphicsView}
+\begin{itemize}
+\item Scrollable widget viewport onto the scene
+    \begin{itemize}
+    \item Zooming, rotation, and other transformations
+    \item Translates input events (from the View) into \iCls{QGraphicsSceneEvent}s
+    \item Maps coordinates between scene and viewport
+    \item Provides "level of detail" information to items
+    \item Supports OpenGL
+    \end{itemize}
+\end{itemize}
+\xCls{QGraphicsView}
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}{1731}
+\frametitle{QGraphicsView important methods}
+
+\begin{itemize}
+\item \texttt{setScene()}
+    \begin{itemize}
+    \item sets the QGraphicsScene to use
+    \end{itemize}
+\item \texttt{setRenderHints()}
+    \begin{itemize}
+    \item antialiasing, smooth pixmap transformations, etc
+    \end{itemize}
+\item \texttt{centerOn()}
+    \begin{itemize}
+    \item takes a QPoint or a QGraphicsItem as argument
+    \item ensures point/item is centered in View
+    \end{itemize}
+\item \texttt{mapFromScene()}, \texttt{mapToScene()}
+    \begin{itemize}
+    \item map to/from scene coordinates
+    \end{itemize}
+\item \texttt{scale()}, \texttt{rotate()}, \texttt{translate()}, \texttt{matrix()}
+    \begin{itemize}
+    \item transformations
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+%TODO show example using mapfromscene/maptoscene
+
+% ----------------------------------------------------------------------
+\begin{slide}{1730}
+\frametitle{QGraphicsItem}
+\begin{itemize}
+
+\item Abstract base class: basic canvas element
+    \begin{itemize}
+    \item Supports parent/child hierarchy
+    \end{itemize}
+    
+\item Easy to extend or customize concrete items:
+    \begin{itemize}
+    \item \iCls{QGraphicsRectItem}, \iCls{QGraphicsPolygonItem}, \iCls{QGraphicsPixmapItem}, \iCls{QGraphicsTextItem}, etc.
+    \item SVG Drawings, other widgets
+    \end{itemize}
+
+\item Items can be transformed:
+    \begin{itemize}
+    \item move, scale, rotate
+    \item using local coordinate systems
+    \end{itemize}
+    
+\item Supports Drag and Drop similar to QWidget
+\end{itemize}
+\xCls{QGraphicsItem}
+\end{slide}
+
+% ----------------------------------------------------------------------
+
+\begin{slide}{1729}
+\frametitle{Concrete QGraphicsItem Types}
+\centeredImageDoubleWidth{graphicsview/images/concrete_items}
+\demo{graphicsview/ex-concreteitems}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1728}
+\frametitle{QGraphicsItem important methods}
+\begin{itemize}
+
+\item \texttt{pos()}
+    \begin{itemize}
+    \item get the item's position in scene
+    \end{itemize}
+\item \texttt{moveBy()}
+    \begin{itemize}
+    \item moves an item relative to its own position. 
+    \end{itemize}
+\item \texttt{zValue()}
+    \begin{itemize}
+    \item get a Z order for item in scene
+    \end{itemize}
+           
+\item \texttt{show()}, \texttt{hide()} - set visibility
+\item \texttt{setEnabled(bool)} - disabled items can not take focus or receive events
+\item \texttt{setFocus(Qt::FocusReason)} - sets input focus.
+\item \texttt{setSelected(bool)}
+    \begin{itemize}
+    \item select/deselect an item
+    \item typically called from \iClsFn{QGraphicsScene}{setSelectionArea}
+    \end{itemize}
+\end{itemize}
+\end{slide} 
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1727}
+\frametitle{Select, Focus, Move}
+\begin{itemize}
+\item \iClsFn{QGraphicsItem}{setFlags}
+    \begin{itemize}
+    \item Determines which operations are supported on an item
+      
+    \end{itemize}
+\item \iCls{QGraphicsItemFlags}
+    \begin{itemize}
+    \item \iClsEnum{QGraphicsItem}{ItemIsMovable}
+    \item \iClsEnum{QGraphicsItem}{ItemIsSelectable}
+    \item \iClsEnum{QGraphicsItem}{ItemIsFocusable}
+    \end{itemize}   
+\begin{cpp}
+item->setFlags(
+  QGraphicsItem::ItemIsMovable|QGraphicsItem::ItemIsSelectable);
+\end{cpp}
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1726}
+\frametitle{Groups of Items}
+\begin{itemize}
+
+\item Any \iCls{QGraphicsItem} can have children 
+\item \iCls{QGraphicsItemGroup} is an invisible item for grouping child items
+\item To group child items in a box with an outline (for example), use a \iCls{QGraphicsRectItem} 
+\item Try dragging boxes in demo: 
+
+\end{itemize}
+\centeredImage{graphicsview/images/concrete-items-dragged}
+\\
+\medskip
+\demo{graphicsview/ex-concreteitems} 
+\end{slide}
+
+\begin{slide}{1725}
+\frametitle{Parents and Children}
+\begin{itemize}
+\item Parent propagates values to child items:
+    \begin{itemize}
+    \item \texttt{setEnabled()}
+    \item \texttt{setFlags()}
+    \item \texttt{setPos()}
+    \item \texttt{setOpacity()}
+    \item etc...
+    \end{itemize}
+\item Enables composition of items.
+\end{itemize}
+\end{slide}
+

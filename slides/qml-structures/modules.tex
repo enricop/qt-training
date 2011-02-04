@@ -1,0 +1,225 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Modules}
+\begin{slide}{1617}\frametitle{Modules}
+
+Modules hold collections of elements:
+
+\begin{itemize}
+\item Contain definitions of new elements
+\item Allow and promote re-use of elements and higher level components
+\item Versioned
+  \begin{itemize}
+  \item allows specific versions of modules to be chosen
+  \item guarantees certain features/behavior
+  \end{itemize}
+\item Import a directory name to import all modules within it
+\end{itemize}
+
+%%% Module != "module"
+%%% qmldir files in directories or in C++ library
+%%% qmldir contains a mapping between .qml files and versions
+%%% Version guarantees behavior
+%%% Version number is effectively maximum version guarantee
+%%% Use "as" to import two versions of a module in order to access
+%%% import "myfile.qml"
+%%% compiled components
+%%% import "myfile.js" as Script
+
+\doc{qdeclarativemodules.html}{QML Modules}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+%%% Two cases: built-in, versioned modules and custom items
+%%% Imports only introduce objects into the namespace of the module
+%%% that imports them. Cannot import Qt indirectly using a custom item.
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1616}\frametitle{Custom Item Revisited}
+
+% declarative-uis/modules-components/lineedit/use-lineedit.qml
+\inputqml{qml-structures/colorized/use-lineedit}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Recall this example from earlier
+\item \qtt{LineEdit.qml} is in the same directory
+  \begin{itemize}
+  \item item within the file automatically available as \qtt{LineEdit}
+  \end{itemize}
+\item We would like to make different versions of this item
+  \begin{itemize}
+  \item to do this, we need to learn about collections of items
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/lineedit/use-lineedit.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1615}\frametitle{Collections of Items}
+
+% declarative-uis/modules-components/use-collection-of-items.qml
+\inputqml{qml-structures/colorized/use-collection-of-items}
+
+\begin{itemize}
+\item Importing \qic{string}{"items"}
+  \begin{itemize}
+  \item imports all files in \texttt{items} directory
+  \item including file \texttt{items/CheckBox.qml}
+  \item the item within is available as \qtt{CheckBox}
+  \end{itemize}
+\item Useful for splitting up an application
+\item Provides the mechanism for versioning of modules
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/use-collection-of-items.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1614}\frametitle{Versioning Modules}
+
+\flushedImageDoubleWidth{qml-structures/images/module-structure.pdf}
+
+\begin{itemize}
+\item Create a directory called \qtt{LineEdit}\\
+      containing
+  \begin{itemize}
+  \item \qtt{1.0.qml}~\textendash~implementation of the custom item
+  \item \qtt{qmldir}~\textendash~version information for the module
+  \end{itemize}
+
+\item The \qtt{qmldir} file contains a single line:
+
+\begin{alltt}
+LineEdit 1.0 LineEdit-1.0.qml
+\end{alltt}
+
+\item Describes the name of the item exported by the module
+\item Relates a version number to the file containing the implementation
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1613}\frametitle{Using a Versioned Module}
+
+% declarative-uis/modules-components/versioned/use-lineedit-version.qml
+\inputqml{qml-structures/colorized/use-lineedit-version}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Now explicitly import the \qic{class}{LineEdit}
+  \begin{itemize}
+  \item using a relative path
+  \item and a version number
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/versioned/use-lineedit-version.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1612}\frametitle{Running the Example}
+
+\begin{itemize}
+\item Locate the \qtt{declarative-uis/modules-components} directory
+\item Launch the example:\\
+\consolecode{\footnotesize qmlviewer -I versioned versioned/use-lineedit-version.qml}
+\end{itemize}
+
+\begin{itemize}
+\item Normally, the module would be installed on the system
+  \begin{itemize}
+  \item within the Qt installation's \qtt{imports} directory
+  \item so the \qtt{-I} option would not be needed for \qtt{qmlviewer}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1611}\frametitle{Supporting Multiple Versions}
+
+\begin{itemize}
+\item Imagine that we release version 1.1 of \qtt{LineEdit}
+\item The example imports version 1.0
+  \begin{itemize}
+  \item only the features from that version are required
+  \item we need to ensure backward compatibility
+  \end{itemize}
+\item \qtt{LineEdit} needs to include support for multiple versions
+\item Version handling is done in the \qtt{qmldir} file
+
+\begin{alltt}
+LineEdit 1.1 LineEdit-1.1.qml\\
+LineEdit 1.0 LineEdit-1.0.qml
+\end{alltt}
+
+\item Each implementation file is declared
+  \begin{itemize}
+  \item with its version
+  \item in decreasing version order (newer versions first)
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1610}\frametitle{Importing into a Namespace}
+
+% declarative-uis/modules-components/use-namespace-module.qml
+\inputqml{qml-structures/colorized/use-namespace-module}
+
+\begin{itemize}
+\item \qic{keyword}{import} ... \qic{keyword}{as} ...
+  \begin{itemize}
+  \item all items in the \qtt{Qt} module are imported
+  \item accessed via the \qtt{MyQt} namespace
+  \end{itemize}
+\item Allows multiple versions of modules to be imported
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/use-namespace-module.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1609}\frametitle{Importing into a Namespace}
+
+% declarative-uis/modules-components/use-namespace.qml
+\inputqml{qml-structures/colorized/use-namespace}
+
+\begin{itemize}
+\item Importing a collection of items from a path
+\item Avoids potential naming clashes with items from other collections
+      and modules
+\end{itemize}
+
+\demo{qml-modules-components/ex-modules-components/use-namespace.qml}
+
+\end{slide}
+

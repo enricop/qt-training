@@ -1,0 +1,477 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Using Views}
+%----------------------------------------------------------------------
+
+\begin{slide}{1481}\frametitle{Views}
+
+\begin{itemize}
+\item \qic{class}{ListView} shows a classic list of items
+  \begin{itemize}
+  \item with horizontal or vertical placing of items
+  \end{itemize}
+\item \qic{class}{GridView} displays items in a grid
+  \begin{itemize}
+  \item like an file manager's icon view
+  \end{itemize}
+%\item \qic{class}{PathView} displays items on a path
+%  \begin{itemize}
+%  \item the items move instead of the selection
+%  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1480}\frametitle{List Views}
+
+Take the model and delegate from before:
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{ListModel}~\{}\\
+\qtt{~~~~\qc{type}{id}:~nameModel}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Alice"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Bob"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Jane"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Victor"}~\}}\\
+\qtt{~~~~ListElement~\{~\qc{type}{name}:~\qc{string}{"Wendy"}~\}}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Component}~\{}\\
+\qtt{~~~~\qc{type}{id}:~nameDelegate}\\
+\qtt{~~~~\qc{class}{Text}~\{}\\
+\qtt{~~~~~~~~\qc{type}{text}:~name;}\\
+\qtt{~~~~~~~~\qc{type}{font.pixelSize}:~\qc{number}{32}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1479}\frametitle{List Views}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-model-list-view.png}
+% declarative-uis/models-views/list-model-list-view.qml
+\begin{qml}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~\qc{type}{model}:~nameModel}\\
+\qtt{~~~~\qc{type}{delegate}:~nameDelegate}\\
+\qtt{~~~~\qc{type}{clip}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Like Qt views
+  \begin{itemize}
+  \item you must set a model
+  \end{itemize}
+\item Unlike Qt views
+  \begin{itemize}
+  \item there is no default delegate
+  \item you must create and set a delegate or nothing will be displayed
+  \end{itemize}
+\item Unclipped views paint outside their areas
+  \begin{itemize}
+  \item set the \qic{type}{clip} property to enable clipping
+  \end{itemize}
+\item Views are positioned like other items
+  \begin{itemize}
+  \item the above view fills its parent
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-presenting-data/ex-models-views/list-model-list-view.qml}
+
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1478}\frametitle{Decoration and Navigation}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-view-decoration.pdf}
+
+By default, \qic{class}{ListView} is
+\begin{itemize}
+\item undecorated
+\item a flickable surface
+  \begin{itemize}
+  \item (can be dragged and flicked)
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.75em}
+\begin{itemize}
+\item To add decoration:
+  \begin{itemize}
+  \item with a \qic{type}{header} and \qic{type}{footer}
+  \item with a \qic{type}{highlight} item to show the current item
+  \end{itemize}
+
+\vspace*{0.75em}
+\item To configure for navigation:
+  \begin{itemize}
+  \item set \qic{type}{focus} to allow keyboard navigation
+  \item \qic{type}{highlight} also helps the user with navigation
+  \item unset \qic{type}{interactive} to disable dragging and flicking
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.5em}
+\demo{qml-presenting-data/ex-models-views/list-view-decoration.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1477}\frametitle{Decoration and Navigation}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-view-decoration.pdf}
+% declarative-uis/models-views/list-view-decoration.qml
+\begin{qml}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~\qc{type}{model}:~nameModel}\\
+\qtt{~~~\qc{type}{delegate}:~nameDelegate}\\
+\qtt{~~~\qc{type}{focus}:~\qc{number}{true}}\\
+\qtt{~~~\qc{type}{clip}:~\qc{number}{true}}\\
+\qtt{~~~\qc{type}{header}:~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{height}:~\qc{number}{10}}\\
+\qtt{~~~~~~\qc{type}{color}:~\qc{string}{"pink"}}\\
+\qtt{~~~\}}\\
+\qtt{~~~\qc{type}{footer}:~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{height}:~\qc{number}{10}}\\
+\qtt{~~~~~~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\qtt{~~~\}}\\
+\qtt{~~~\qc{type}{highlight}:~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{color}:~\qc{string}{"lightgray"}}\\
+\qtt{~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1476}\frametitle{Decoration and Navigation}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-view-current-item.png}
+Each \qic{class}{ListView} exposes its current item:
+
+\vspace*{0.75em}
+% declarative-uis/models-views/list-model-current-item.qml
+\begin{qml}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~\qc{type}{id}:~listView}\\
+\qtt{~~~~...}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Text}~\{}\\
+\qtt{~~~~\qc{type}{id}:~label}\\
+\qtt{~~~~\qc{type}{anchors.bottom}:~parent.bottom}\\
+\qtt{~~~~\qc{type}{anchors.horizontalCenter}:~parent.horizontalCenter}\\
+\qtt{~~~~\qc{type}{text}:~\qc{string}{"<b>"}~\qc{operator}{+}~listView.currentItem.text~\qc{operator}{+}}\\
+\qtt{~~~~~~~~~~\qc{string}{"</b>~is~current"}}\\
+\qtt{~~~~\qc{type}{font.pixelSize}:~\qc{number}{16}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Recall that, in this case, each item has a \qic{type}{text} property
+  \begin{itemize}
+  \item re-use the \qtt{listView}'s \qic{type}{currentItem}'s \qic{type}{text}
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-presenting-data/ex-models-views/list-view-current-item.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1475}\frametitle{Adding Sections}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-view-sections.png}
+\begin{itemize}
+\item Data in a \qic{class}{ListView} can be ordered by section
+\item Categorize the list items by
+  \begin{itemize}
+  \item choosing a property name; e.g. \qic{type}{team}
+  \item adding this property to each \qic{class}{ListElement}
+  \item storing the section in this property
+  \end{itemize}
+\end{itemize}
+
+\vspace*{1.5em}
+\begin{qml}
+\qtt{\qc{class}{ListModel}~\{}\\
+\qtt{~~~~\qc{type}{id}:~nameModel}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{name}:~\qc{string}{"Alice"};~\qc{type}{team}:~\qc{string}{"Crypto"}~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{name}:~\qc{string}{"Bob"};~\qc{type}{team}:~\qc{string}{"Crypto"}~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{name}:~\qc{string}{"Jane"};~\qc{type}{team}:~\qc{string}{"QA"}~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{name}:~\qc{string}{"Victor"};~\qc{type}{team}:~\qc{string}{"QA"}~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{name}:~\qc{string}{"Wendy"};~\qc{type}{team}:~\qc{string}{"Graphics"}~\}}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1474}\frametitle{Displaying Sections}
+
+Using the \qic{class}{ListView}
+
+\begin{itemize}
+\item Set \qic{type}{section.property}
+  \begin{itemize}
+  \item refer to the \qic{class}{ListElement} property holding the section name
+  \end{itemize}
+\item Set \qic{type}{section.criteria} to control what to show
+  \begin{itemize}
+  \item \qtt{ViewSection.FullString} for complete section names
+  \item \qtt{ViewSection.FirstCharacter} for alphabetical groupings
+  \end{itemize}
+\item Set \qic{type}{section.delegate}
+  \begin{itemize}
+  \item create a delegate for section headings
+  \item either include it inline or reference it
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1473}\frametitle{Displaying Sections}
+
+\begin{qml}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~\qc{type}{model}:~nameModel}\\
+\qtt{~~~~...}\\
+\qtt{~~~~\qc{type}{section.property}:~\qc{string}{"team"}}\\
+\qtt{~~~~\qc{type}{section.criteria}:~\qc{class}{ViewSection}.FullString}\\
+\qtt{~~~~\qc{type}{section.delegate}:~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"\#b0dfb0"}}\\
+\qtt{~~~~~~~~\qc{type}{width}:~parent.width}\\
+\qtt{~~~~~~~~\qc{type}{height}:~childrenRect.height~\qc{operator}{+}~\qc{number}{4}}\\
+\qtt{~~~~~~~~~~~~\qc{class}{Text}~\{~\qc{type}{anchors.centerIn}:~parent}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\qc{type}{font.pixelSize}:~\qc{number}{16}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\qc{type}{font.bold}:~\qc{number}{true}}\\
+\qtt{~~~~~~~~~~~~~~~~~~~\qc{type}{text}:~section~\}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item The \qic{type}{section.delegate} is defined like the \qic{type}{highlight} delegate
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1472}\frametitle{Grid Views}
+
+Set up a list model with items:
+
+\vspace*{0.75em}
+% declarative-uis/models-views/list-model-grid-view.qml
+\begin{qml}
+\qtt{\qc{class}{ListModel}~\{}\\
+\qtt{~~~~\qc{type}{id}:~nameModel}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{file}:~\qc{string}{"../images/rocket.svg"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{type}{name}:~\qc{string}{"rocket"}~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{file}:~\qc{string}{"../images/clear.svg"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{type}{name}:~\qc{string}{"clear"}~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{file}:~\qc{string}{"../images/arrow.svg"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{type}{name}:~\qc{string}{"arrow"}~\}}\\
+\qtt{~~~~\qc{class}{ListElement}~\{~\qc{type}{file}:~\qc{string}{"../images/book.svg"}}\\
+\qtt{~~~~~~~~~~~~~~~~~~\qc{type}{name}:~\qc{string}{"book"}~\}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item Define string properties to use in the delegate
+\end{itemize}
+
+\demo{qml-presenting-data/ex-models-views/list-model-grid-view.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1471}\frametitle{Grid Views}
+
+Set up a delegate:
+
+\vspace*{0.75em}
+% declarative-uis/models-views/list-model-grid-view.qml
+\begin{qml}
+\qtt{\qc{class}{Component}~\{}\\
+\qtt{~~~\qc{type}{id}:~nameDelegate}\\
+\qtt{~~~\qc{class}{Column}~\{}\\
+\qtt{~~~~~~\qc{class}{Image}~\{}\\
+\qtt{~~~~~~~~~\qc{type}{id}:~delegateImage}\\
+\qtt{~~~~~~~~~\qc{type}{anchors.horizontalCenter}:~delegateText.horizontalCenter}\\
+\qtt{~~~~~~~~~\qc{type}{source}:~file;~\qc{type}{width}:~\qc{number}{64};~\qc{type}{height}:~\qc{number}{64};~\qc{type}{smooth}:~\qc{number}{true}}\\
+\qtt{~~~~~~~~~\qc{type}{fillMode}:~\qc{class}{Image}.PreserveAspectFit}\\
+\qtt{~~~~~~\}}\\
+\qtt{~~~~~~\qc{class}{Text}~\{}\\
+\qtt{~~~~~~~~~\qc{type}{id}:~delegateText}\\
+\qtt{~~~~~~~~~\qc{type}{text}:~name;~\qc{type}{font.pixelSize}:~\qc{number}{24}}\\
+\qtt{~~~~~~\}}\\
+\qtt{~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1470}\frametitle{Grid Views}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/list-model-grid-view.png}
+% declarative-uis/models-views/list-model-grid-view.qml
+\begin{qml}
+\qtt{\qc{class}{GridView}~\{}\\
+\qtt{~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~\qc{type}{model}:~nameModel}\\
+\qtt{~~~~\qc{type}{delegate}:~nameDelegate}\\
+\qtt{~~~~\qc{type}{clip}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\begin{itemize}
+\item The same as \qic{class}{ListView} to set up
+\item Uses data from a list model
+  \begin{itemize}
+  \item not like Qt's table view
+  \item more like Qt's list view in icon mode
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1469}\frametitle{Decoration and Navigation}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/grid-view-decoration.pdf}
+Like \qic{class}{ListView}, \qic{class}{GridView} is
+
+\begin{itemize}
+\item undecorated
+\item a flickable surface
+  \begin{itemize}
+  \item (can be dragged and flicked)
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.75em}
+\begin{itemize}
+\item To add decoration:
+  \begin{itemize}
+  \item define \qic{type}{header} and \qic{type}{footer}
+  \item define \qic{type}{highlight} item to show\\
+        the current item
+  \end{itemize}
+
+\vspace*{0.75em}
+\item To configure for navigation:
+  \begin{itemize}
+  \item set \qic{type}{focus} to allow keyboard navigation
+  \item \qic{type}{highlight} also helps the user with navigation
+  \item unset \qic{type}{interactive} to disable dragging and flicking
+  \end{itemize}
+\end{itemize}
+
+\vspace*{0.5em}
+\demo{qml-presenting-data/ex-models-views/grid-view-decoration.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{1468}\frametitle{Decoration and Navigation}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/grid-view-decoration.pdf}
+% declarative-uis/models-views/grid-view-decoration.qml
+\begin{qml}
+\qtt{\qc{class}{GridView}~\{}\\
+\qtt{~~~~...}\\
+\qtt{~~~~\qc{type}{header}:~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~\qc{type}{width}:~parent.width}\\
+\qtt{~~~~~~~~\qc{type}{height}:~\qc{number}{10}}\\
+\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"pink"}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{footer}:~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~\qc{type}{width}:~parent.width}\\
+\qtt{~~~~~~~~\qc{type}{height}:~\qc{number}{10}}\\
+\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{highlight}:~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~\qc{type}{width}:~parent.width}\\
+\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"lightgray"}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{focus}:~\qc{number}{true};~\qc{type}{clip}:~\qc{number}{true}}\\
+\qtt{\}}
+\end{qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+%
+%\begin{slide}{1467}\frametitle{Path Views}
+%
+%%% Path views
+%\begin{center}
+%\textbf{Not covered at the moment}
+%\end{center}
+%
+%\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1466}\frametitle{Lab~\textendash~Contacts}
+
+\flushedImageDoubleWidth{qml-presenting-data/images/contacts.png}
+
+\begin{itemize}
+\item Create a \qic{class}{ListItemModel}, fill it with\\
+      \qic{class}{ListElement} elements, each with
+  \begin{itemize}
+  \item a \qic{type}{name} property
+  \item a \qic{type}{file} property referring to an image
+  \end{itemize}
+\item Add a \qic{class}{ListView} and a \qic{class}{Component}\\
+      to use as a delegate
+\item Add \qic{type}{header}, \qic{type}{footer} and \qic{type}{highlight}
+      properties to the view
+\item Add \qic{type}{states} and \qic{type}{transitions} to the delegate
+  \begin{itemize}
+  \item activate the state when the delegate item is current
+  \item use a state condition with the \qic{type}{ListView.isCurrentItem}
+        attached property
+  \item make a transition that animates the height of the item
+  \end{itemize}
+\end{itemize}
+
+\end{slide}

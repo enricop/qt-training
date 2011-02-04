@@ -1,0 +1,84 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Item Animation}
+%----------------------------------------------------------------------
+\begin{slide}{0994}\frametitle{Animation - Introduction}
+\begin{itemize}
+\item Animation is supported both for individual items and at the scene level.
+\item Individual item animation works best when items dont interact.
+\item Scene level animation is suitable for interacting items (for example colliding items).
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0995}\frametitle{Animation - Single Items}
+\begin{itemize}
+\item Single items can be animated by using a \iCls{QGraphicsItemAnimation}.
+\item \iCls{QGraphicsItemAnimation} can animate an item by interpolating the items position and transformation over a timeline.
+\begin{alltt}
+\footnotesize
+QGraphicsItem\pointerStar myitem = ...;
+QTimeLine\pointerStar timeline = new QTimeLine(500);
+timeline\pointerDeref{}setFrameRange(0,100);
+QGraphicsItemAnimation\pointerStar animation = new QGraphicsItemAnimation;
+animation\pointerDeref{}setItem(myitem);
+animation\pointerDeref{}setTimeLine(timeline);
+animation\pointerDeref{}setPosAt(0.0,QPointF(0.0,0.0));
+animation\pointerDeref{}setPosAt(0.5,QPointF(100.0,100.0));
+animation\pointerDeref{}setPosAt(1.0,QPointF(0.0,50.0));
+timeline\pointerDeref{}start();
+\end{alltt}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0996}\frametitle{Animation - Whole Scene}
+\begin{itemize}
+\item The main entrypoint for whole scene animation is \iClsFnPar{QGraphicsScene}{advance}{}.
+\item \iClsFnPar{QGraphicsScene}{advance}{} calls the virtual member function 
+\hClsFnPar{QGraphicsItem}{advance}{int phase} \emph{twice} on each item in the scene. First
+with \texttt{phase=0} for each item and then with \texttt{phase=1} for each item.
+\item \iClsFnPar{QGraphicsScene}{advance}{} should be called at regular intervals, for example by using a \iCls{QTimer}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0997}\frametitle{QGraphicsItem::advance(int phase)}
+\begin{itemize}
+\item Override \texttt{advance} to provide the logic for moving the item.
+\item The method is called in two steps, specified using the integer
+  argument \texttt{phase}.
+\item Phase 0 is the \emph{calculation phase}, no items should move in this
+  phase, instead they should calculate their movement, optionally on the basis of
+  placement of other items.
+\item Phase 1 is the \emph{movement phase}. Here, items should move
+  unconditionally on the basis of the calculation in phase 0.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0998}\frametitle{Collision Detection}
+\begin{itemize}
+\item \iCls{QGraphicsItem} offers two methods for detecting collisions with other items:
+{\footnotesize
+\begin{itemize}
+\item \texttt{bool} \hClsFnPar{QGraphicsItem}{collidesWithItem}{const QGraphicsItem\pointerStar other, Qt\classsep{}ItemSelectionMode mode = Qt\classsep{}IntersectsItemShape}
+\item \texttt{QList<QGraphicsItem\pointerStar{}>} \hClsFnPar{QGraphicsItem}{collidingItems}{Qt\classsep{}ItemSelectionMode mode = Qt\classsep{}IntersectsItemShape}
+\end{itemize}
+}
+\item \hClsFn{QGraphicsItem}{shape} returns the QPainterPath used for collision detection.
+\item Those can be used for example in \emph{phase 0} in \hClsFn{QGraphicsItem}{advance} to determine how the items should move around.
+\item See example \iExample{QGraphicsView/breakout}
+\end{itemize}
+\end{slide}
