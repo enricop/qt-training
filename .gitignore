@@ -17,3 +17,4 @@ moc_*
 .svn/
 config.tex
 .~locak*
+scripts/legal/check.py
