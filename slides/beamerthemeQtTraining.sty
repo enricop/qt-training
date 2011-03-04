@@ -2,7 +2,7 @@
 \mode<presentation>
 
 
-%\usefonttheme{structurebold}  
+%\usefonttheme{structurebold}
 \useinnertheme{circles}
 
 \definecolor{qtdarkgreen}{RGB}{2,76,28}
@@ -11,7 +11,8 @@
 \definecolor{qtlightgray}{RGB}{208,208,208}
 
 
-\usecolortheme[RGB={2,76,28}]{structure}  
+% \usecolortheme[RGB={2,76,28}]{structure}
+\usecolortheme[RGB={68,165,28}]{structure}
 
 
 \setbeamertemplate{blocks}[rounded][shadow=true]
@@ -34,10 +35,10 @@
 \makebox[10mm][r]{\raisebox{4mm}{
     \ifthenelse{\boolean{show-page-numbers}}{\insertframenumber/\inserttotalframenumber}{\strut}
     \ifthenelse{\boolean{show-slide-id}}{~(\slideId)}{\strut}
-  } 
+  }
 }
 \hspace{0mm}
-\ifthenelse{\boolean{cc-license}} 
+\ifthenelse{\boolean{cc-license}}
   {
   \makebox[15mm][c]{\raisebox{3mm}{\includegraphics[scale=0.2, keepaspectratio]{images/cc-by-sa}}}
   } % else 
