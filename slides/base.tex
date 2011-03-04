@@ -36,12 +36,9 @@
 
 \usetheme{QtTraining}
 
-\definecolor{code_bg}{RGB}{255, 255, 204}
+% \definecolor{code_bg}{RGB}{255, 255, 204}
 
-
-\lstdefinelanguage[Qt]{C++}[]{C++}%
-  { keywordsprefix=Q
-  }
+\include{qtcxx}
 
 \lstdefinelanguage{qmake}%
   { morekeywords={SOURCES,HEADERS,RESOURCES,FORMS},
@@ -50,27 +47,37 @@
     comment=[l]\#,
  }
 
+\definecolor{devnet_magenta} {RGB}{255, 20,147}
+\definecolor{devnet_green}   {RGB}{108,226,108}
+\definecolor{devnet_gray}    {RGB}{175,175,175}
+\definecolor{devnet_silver}  {RGB}{128,128,128}
+\definecolor{devnet_blue}    {RGB}{  0,102,153}
+\definecolor{devnet_fullblue}{RGB}{  0,  0,255}
+\definecolor{devnet_qtgreen} {RGB}{  0,130,  0}
+
 \lstset{ %
   language=[Qt]C++,
   basicstyle=\ttfamily\footnotesize,
-  keywordstyle=\bfseries,
-  stringstyle=\color{blue},
-  commentstyle=\color{qtlightgreen}, 
+  keywordstyle=\bfseries\color{devnet_silver},
+  keywordstyle=[2]\bfseries\color{devnet_blue},
+  keywordstyle=[3]\bfseries\color{devnet_magenta},
+  stringstyle=\color{devnet_fullblue},
+  commentstyle=\color{devnet_qtgreen},
   %numbers=left,
   %numberstyle=\tiny,
   %stepnumber=1,
-  %numbersep=10pt, 
+  %numbersep=10pt,
   showspaces=false,
   showstringspaces=false,
-  frame=l, 
+  frame=l,
   framerule=1pt,
   framesep=4pt,
   %rulecolor=\color{black!30},
-rulecolor=\color{qtlightgreen},
+  rulecolor=\color{devnet_qtgreen},
   aboveskip=1mm,
   belowskip=1mm,
   showlines=false,
-} 
+}
 
 \lstnewenvironment{cpp}{\lstset{language=[Qt]C++}}{}
 \lstnewenvironment{qmake}{\lstset{language=qmake}}{}
