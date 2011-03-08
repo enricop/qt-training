@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="640"
-   height="480"
+   width="453.5433"
+   height="340.15747"
    id="svg2873"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="background.svg"
+   sodipodi:docname="background.pdf"
    inkscape:export-filename="/home/frank/gitorious/course-material/slides/images/background.png"
    inkscape:export-xdpi="450"
    inkscape:export-ydpi="450">
@@ -36,7 +36,8 @@
        sodipodi:type="inkscape:persp3d" />
     <filter
        inkscape:collect="always"
-       id="filter3737">
+       id="filter3737"
+       color-interpolation-filters="sRGB">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="2.7200001"
@@ -51,17 +52,17 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.5494505"
-     inkscape:cx="149.11666"
-     inkscape:cy="504.20197"
+     inkscape:cx="247.55426"
+     inkscape:cy="176.02242"
      inkscape:current-layer="layer1"
      inkscape:document-units="cm"
      showgrid="false"
-     units="px"
+     units="mm"
      objecttolerance="6"
      guidetolerance="6"
      inkscape:window-width="1342"
      inkscape:window-height="892"
-     inkscape:window-x="330"
+     inkscape:window-x="120"
      inkscape:window-y="25"
      inkscape:window-maximized="0">
     <inkscape:grid
@@ -88,17 +89,18 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     transform="translate(0,5.059375e-5)">
+     transform="translate(0,-139.84247)">
     <rect
        style="fill:#e8e8e8;fill-opacity:1"
        id="rect3657"
-       width="640"
-       height="480"
+       width="453.5433"
+       height="340.15747"
        x="0"
-       y="-5.059375e-05" />
+       y="139.84248" />
     <g
        id="g3627"
-       style="fill:#000000;opacity:0.2;filter:url(#filter3737)">
+       style="opacity:0.2;fill:#000000;filter:url(#filter3737)"
+       transform="matrix(0.70866142,0,0,0.70866139,0,139.84251)">
       <rect
          style="fill:#000000"
          id="rect3629"
@@ -123,7 +125,8 @@
          y="7.9999304" />
     </g>
     <g
-       id="g3606">
+       id="g3606"
+       transform="matrix(0.70866142,0,0,0.70866139,0,139.84251)">
       <rect
          ry="25"
          y="7.9999495"
