@@ -8,7 +8,7 @@
  *************************************************************************/
 
 #include <QtGui>
-#include "QuoteButton.h"
+#include "quotebutton.h"
 
 int main(int argc, char *argv[])
 {
