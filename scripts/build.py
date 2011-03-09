@@ -93,7 +93,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('lists', metavar='FILE', type=file, nargs='+', help='Contain list of module paths')
 parser.add_argument('-d', '--dry-run', action='store_true', help='Print all commands without executing')
-parser.add_argument('-o', '--once', action='store_true', help='Run pdflatex just once, instead of twice')
+parser.add_argument('-o', '--once', action='store_true', help='Run pdflatex just once, instead twice')
 parser.add_argument('-v', '--verbose', action='store_true', help='Verbose log output')
 
 args = parser.parse_args()
