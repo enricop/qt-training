@@ -10,7 +10,7 @@ LICENSES_PATH = "licenses"
 LICENSE_FILENAME = "LICENSE.txt"
 
 # ignore file paths containing given components
-IGNORE = [ ".git", ".svn", "LICENSE.txt", "legal", "disclaimer.tex" ]
+IGNORE = [ ".git", ".svn", "LICENSE.txt", "legal", "disclaimer.tex", ".moc", "moc_" ]
 
 # directory where to start scanning
 TOPLEVEL = "../.."
