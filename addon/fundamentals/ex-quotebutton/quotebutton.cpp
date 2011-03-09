@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include "QuoteButton.h"
+#include "quotebutton.h"
 
 
 QuoteButton::QuoteButton(const QString &text, QWidget *parent)
