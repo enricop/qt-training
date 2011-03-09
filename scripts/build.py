@@ -43,14 +43,25 @@ def copy_addons(output_path, module_name, module_count, dry_run):
     if not dry_run:
         shutil.copytree(src, dst)
 
+def lookup_module(module_path):
+    if "QT_TRAINING_SOURCES" in os.environ:
+       sources = os.environ["QT_TRAINING_SOURCES"].split(";")
+       for prefix in sources:
+           candidate = os.path.join(prefix, "slides", module_path)
+           if os.access(candidate, os.F_OK):
+               module_path = candidate
+               break;
+    return module_path
+
 def compile_module(module_path, output_path, module_count, verbose, dry_run, once):
+    module_path = lookup_module(module_path)
     super_path = os.path.dirname(module_path)
     module_name = os.path.basename(module_path)
     pdf_path = "%s/%s.tex" % (module_name, module_name)
+    print module_path, super_path, module_name
     if os.getcwd() != super_path:
         log("cd %s" % super_path)
         os.chdir(super_path)
-    # log("Compiling module \"%s\":" % module_name)
     args = [
         "pdflatex",
         "-output-directory", output_path,
@@ -87,16 +98,22 @@ parser = argparse.ArgumentParser(
     description = '''
         Compiles lists of training modules into enumerated PDF files.
         Each FILE contains a list of module paths for each module to be compiled.
+        The QT_TRAINING_SOURCES environment variable allows to provide default locations
+        for training material.
     ''',
     epilog = "Report bugs to ext-frank.mertens@nokia.com"
 );
 
-parser.add_argument('lists', metavar='FILE', type=file, nargs='+', help='Contain list of module paths')
+parser.add_argument('lists', metavar='FILE', type=file, nargs='+', help='Contains list of module paths')
 parser.add_argument('-d', '--dry-run', action='store_true', help='Print all commands without executing')
-parser.add_argument('-o', '--once', action='store_true', help='Run pdflatex just once, instead twice')
+parser.add_argument('-1', '--once', action='store_true', help='Run pdflatex just once, instead twice')
+parser.add_argument('-s', '--sources', type=str, default="", help='Override QT_TRAINING_SOURCES environment variable')
 parser.add_argument('-v', '--verbose', action='store_true', help='Verbose log output')
 
 args = parser.parse_args()
+
+if args.sources != "":
+    os.environ["QT_TRAINING_SOURCES"] = args.sources
 
 cwd_saved = os.getcwd()
 try:
