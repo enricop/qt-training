@@ -34,7 +34,13 @@
 \usepackage{listings}
 %\usepackage{multimedia}
 
-\usetheme{QtTraining}
+\ifthenelse{\boolean{cc-license}}
+{
+  \usetheme{QtTraining}
+} % else
+{
+  \usetheme{QtNokia}
+}
 
 % \definecolor{code_bg}{RGB}{255, 255, 204}
 
@@ -434,7 +440,13 @@
 
 \newenvironment{questionize}{\begin{itemize}[<+>]}{\end{itemize}}
 
-\usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/background}}
+\ifthenelse{\boolean{cc-license}}
+{
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/background_cc}}
+} % else
+{
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/background}}
+}
 
 % Highlighting in {alltt}, slides style:
 \newcommand{\highlight}[1]{\textcolor{red}{#1}}
