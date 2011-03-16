@@ -15,11 +15,12 @@ Makefile
 moc_*
 *.moc
 .svn/
-config.tex
 .~locak*
 scripts/legal/check.py
+slides/config.tex
 slides/images/background.pdf
 slides/images/titlepage-background.pdf
-slides/diagrams/nokia-logo.pdf
-slides/diagrams/qt-logo.pdf
-slides/beamerthemeQtNokia.pdf
+slides/images/nokia-logo.pdf
+slides/images/qt-logo.pdf
+slides/beamerthemeQtNokia.sty
+
