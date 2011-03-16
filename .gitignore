@@ -18,3 +18,8 @@ moc_*
 config.tex
 .~locak*
 scripts/legal/check.py
+slides/images/background.pdf
+slides/images/titlepage-background.pdf
+slides/diagrams/nokia-logo.pdf
+slides/diagrams/qt-logo.pdf
+slides/beamerthemeQtNokia.pdf

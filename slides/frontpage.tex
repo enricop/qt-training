@@ -12,11 +12,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % background for title page
-\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{images/titlepage-background}}
+\ifthenelse{\boolean{cc-license}}
+{
+  \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{images/titlepage-background_cc}}
+  \begin{slide}[plain]{0449}
+    \titlepage
+  \end{slide}
 
-\begin{slide}[plain]{0449}
-  \titlepage
-\end{slide}
+  % simple slide background
+  \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{images/background_cc}}
+} % else
+{
+  \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{images/titlepage-background}}
+  \begin{slide}[plain]{0449}
+    \titlepage
+  \end{slide}
 
-% simple slide background
-\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{images/background}}
+  % simple slide background
+  \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth,height=\paperheight]{images/background}}
+}
