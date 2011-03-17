@@ -44,8 +44,6 @@
 
 % \definecolor{code_bg}{RGB}{255, 255, 204}
 
-\include{qtcxx}
-
 \lstdefinelanguage{qmake}%
   { morekeywords={SOURCES,HEADERS,RESOURCES,FORMS},
     morestring=[b]",
@@ -53,36 +51,68 @@
     comment=[l]\#,
  }
 
-\definecolor{devnet_magenta} {RGB}{255, 20,147} % {216,  0,117}
-\definecolor{devnet_green}   {RGB}{108,226,108} % { 58,216, 58}
-\definecolor{devnet_gray}    {RGB}{175,175,175} % {145,145,145}
-\definecolor{devnet_silver}  {RGB}{128,128,128} % { 98, 98, 98}
-\definecolor{devnet_blue}    {RGB}{  0,102,153} % {  0, 61, 92}
-\definecolor{devnet_fullblue}{RGB}{  0,  0,255} % {  0,  0,225}
-\definecolor{devnet_qtgreen} {RGB}{  0,130,  0} % {  0,100,  0}
-                                                % -30 lum points
-\lstset{ %
-  language=[Qt]C++,
-  basicstyle=\ttfamily\footnotesize,
-  keywordstyle=\bfseries\color{devnet_blue},
-  keywordstyle=[2]\bfseries\color{devnet_blue},
-  keywordstyle=[3]\bfseries\color{devnet_magenta},
-  stringstyle=\color{devnet_fullblue},
-  commentstyle=\color{devnet_qtgreen},
-  %numbers=left,
-  %numberstyle=\tiny,
-  %stepnumber=1,
-  %numbersep=10pt,
-  showspaces=false,
-  showstringspaces=false,
-  frame=l,
-  framerule=1pt,
-  framesep=4pt,
-  %rulecolor=\color{black!30},
-  rulecolor=\color{devnet_qtgreen},
-  aboveskip=1mm,
-  belowskip=1mm,
-  showlines=false,
+\ifthenelse{\boolean{cc-license}}
+{
+  \include{qtcxx}
+
+  \definecolor{devnet_magenta} {RGB}{255, 20,147} % {216,  0,117}
+  \definecolor{devnet_green}   {RGB}{108,226,108} % { 58,216, 58}
+  \definecolor{devnet_gray}    {RGB}{175,175,175} % {145,145,145}
+  \definecolor{devnet_silver}  {RGB}{128,128,128} % { 98, 98, 98}
+  \definecolor{devnet_blue}    {RGB}{  0,102,153} % {  0, 61, 92}
+  \definecolor{devnet_fullblue}{RGB}{  0,  0,255} % {  0,  0,225}
+  \definecolor{devnet_qtgreen} {RGB}{  0,130,  0} % {  0,100,  0}
+                                                  % -30 lum points
+  \lstset{ %
+    language=[Qt]C++,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries\color{devnet_blue},
+    keywordstyle=[2]\bfseries\color{devnet_blue},
+    keywordstyle=[3]\bfseries\color{devnet_magenta},
+    stringstyle=\color{devnet_fullblue},
+    commentstyle=\color{devnet_qtgreen},
+    %numbers=left,
+    %numberstyle=\tiny,
+    %stepnumber=1,
+    %numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    frame=l,
+    framerule=1pt,
+    framesep=4pt,
+    %rulecolor=\color{black!30},
+    rulecolor=\color{devnet_qtgreen},
+    aboveskip=1mm,
+    belowskip=1mm,
+    showlines=false,
+  }
+}
+{
+  \lstdefinelanguage[Qt]{C++}[]{C++}%
+  { keywordsprefix=Q
+  }
+
+  \lstset{ % 
+    language=[Qt]C++,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\bfseries,
+    stringstyle=\color{blue},
+    commentstyle=\color{qtlightgreen}, 
+    %numbers=left,
+    %numberstyle=\tiny,
+    %stepnumber=1,
+    %numbersep=10pt, 
+    showspaces=false,
+    showstringspaces=false,
+    frame=l, 
+    framerule=1pt,
+    framesep=4pt,
+    %rulecolor=\color{black!30},
+    rulecolor=\color{qtlightgreen},
+    aboveskip=1mm,
+    belowskip=1mm,
+    showlines=false,
+  }
 }
 
 \lstnewenvironment{cpp}{\lstset{language=[Qt]C++}}{}
