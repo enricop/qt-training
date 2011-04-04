@@ -1,0 +1,53 @@
+\subsection{Effects}
+
+%----------------------------------------------------------------------
+\begin{slide}{1086}\frametitle{Graphics Effects}
+
+Effects can be applied to graphics items:
+
+\begin{itemize}
+\item Base class for effects is \iCls{QGraphicsEffect}.
+\item Standard effects include blur, colorize, opacity and drop shadow.
+\item Effects are set on items.
+  \begin{itemize}
+  \item \iClsFn{QGraphicsItem}{setGraphicsEffect}
+  \end{itemize}
+\item Effects cannot be shared or layered.
+\item Custom effects can be written.
+\end{itemize}
+
+\begin{center}
+\image{graphicsview2/images/graphics-effect-blur.png}
+\image{graphicsview2/images/graphics-effect-colorize.png}
+\image{graphicsview2/images/graphics-effect-opacity.png}
+\image{graphicsview2/images/graphics-effect-drop-shadow.png}
+\end{center}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1087}\frametitle{Using a Graphics Effect}
+
+\flushedImage{graphicsview2/images/graphics-effect-blur.png}
+\begin{itemize}
+\item Applying a blur effect to a pixmap.
+\end{itemize}
+
+\begin{lstlisting}
+    QPixmap pixmap(":/images/qt-banner.png");
+
+    QGraphicsItem *blurItem = scene->addPixmap(pixmap);
+
+    QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect();
+    blurItem->setGraphicsEffect(blurEffect);
+    blurEffect->setBlurRadius(5);
+\end{lstlisting}
+
+\begin{itemize}
+\item An effect is owned by the item that uses it.
+\item Updating an effect causes the item to be updated.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------

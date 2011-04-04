@@ -1,0 +1,118 @@
+% ----------------------------------------------------------------------
+\subsection{Widgets in a Scene}
+% ----------------------------------------------------------------------
+\begin{slide}{1975}
+\frametitle{Widgets in a Scene}
+\centeredImage{graphicsview2/images/padnavigator} \\
+\qtdemo{examples/graphicsview/padnavigator}
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}{1974}
+\frametitle{Items are not widgets}
+\begin{itemize}
+\item \iCls{QGraphicsItem}:
+    \begin{itemize}
+    \item Lightweight compared to \iCls{QWidget}
+    \item No signals/slots/properties
+    \item Scenes can easily contain thousands of Items
+    \item Uses different \iCls{QEvent} sub-hierarchy (derived from \iCls{QGraphicsSceneEvent})
+    \item Supports transformations directly
+    \end{itemize}
+\item \iCls{QWidget}:
+    \begin{itemize}
+    \item Derived from \iCls{QObject} (less light-weight)
+    \item supports signals, slots, properties, etc
+    \item can be embedded in a \iCls{QGraphicsScene} with a \iCls{QGraphicsProxyWidget}
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1973}
+\frametitle{QGraphicsWidget}
+\begin{itemize}
+\item Advanced functionality graphics item
+\item Provides signals/slots, layouts, geometry, palette, etc.
+\item \textit{Not} a QWidget!
+\item Base class for \texttt{QGraphicsProxyWidget}
+\end{itemize}
+\centeredImageFullWidth{graphicsview2/images/qgraphicswidget-uml}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1972}
+\frametitle{QGraphicsProxyWidget}
+\begin{itemize}
+\item \texttt{QGraphicsItem} that can embed a \texttt{QWidget} in a \texttt{QGraphicsScene}
+\item Handles complex widgets like \texttt{QFileDialog}
+\item Takes \textit{ownership} of related widget
+    \begin{itemize}
+    \item Synchronizes states/properties:
+        \begin{itemize}
+        \item \texttt{visible}, \texttt{enabled}, \texttt{geometry}, \texttt{style}, \texttt{palette}, \texttt{font}, \texttt{cursor}, \texttt{sizeHint}, \texttt{windowTitle}, etc
+        \item Proxies events between Widget and GraphicsView
+        \end{itemize}
+    \item If either (widget or proxy) is deleted, the other is also!
+    \end{itemize}
+\item Widget must not already have a parent
+    \begin{itemize}
+    \item Only top-level widgets can be added to a scene
+    \end{itemize}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1966}
+\frametitle{Embedded Widget Example}
+\begin{cpp}
+#include <QtGui>
+int main(int argc, char **argv) {
+   QApplication app(argc, argv);
+
+   QCalendarWidget *calendar = new QCalendarWidget;
+
+   QGraphicsScene scene;
+   QGraphicsProxyWidget *proxy = scene.addWidget(calendar);
+
+   QGraphicsView view(&scene);
+   view.show();
+
+   return app.exec();
+}
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1971}
+\frametitle{QGraphicsLayout}
+
+\begin{itemize}
+
+\item For layout of \texttt{QGraphicsLayoutItem} (+derived) classes in \texttt{QGraphicsView}
+\item Concrete classes:
+    \begin{itemize}
+    \item \texttt{QGraphicsLinearLayout}: equivalent to \texttt{QBoxLayout}, arranges items horizontally or vertically
+    \item \texttt{QGraphicsGridLayout}: equivalent to \texttt{QGridLayout}, arranges items in a grid
+    \end{itemize}
+\item \texttt{QGraphicsWidget::setLayout()} - set layout for child items of this \texttt{QGraphicsWidget}
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1970}
+\frametitle{Lab: Widgets in a Scene}
+\begin{itemize}
+\item Starting with the \texttt{graphicsview/lab-mapviewer} handout, add zooming controls.
+\item Suggested widgets:
+    \begin{itemize}
+    \item \texttt{QPushButtons} for +/-
+    \item \texttt{QSlider} for selecting zoom level directly. 
+    \end{itemize}
+\item Use \texttt{QGraphicsLayout} to lay out the widgets
+\item Make the mouse work like a "hand-grab" tool on drag, so we can see different zoomed areas. 
+\end{itemize}
+\centeredImage{graphicsview2/images/mapviewer}
+\end{slide}
+

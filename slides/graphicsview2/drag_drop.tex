@@ -1,0 +1,141 @@
+% ----------------------------------------------------------------------
+\subsection{Drag and Drop}
+% ----------------------------------------------------------------------
+\begin{slide}{1988}
+
+\frametitle{Drag and Drop}
+\begin{itemize}
+\item Items can be:
+    \begin{itemize}
+    \item Dragged
+    \item Dropped onto other items
+    \item Dropped onto scenes
+        \begin{itemize}
+        \item for handling empty drop areas
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}{1987}
+\frametitle{Start Drag}
+Starting an item drag is similar to dragging from a QWidget.
+ \begin{itemize}
+ \item Override event handlers:
+     \begin{itemize}
+     \item \texttt{mousePressEvent()}
+     \item \texttt{mouseMoveEvent()}
+     \end{itemize}
+ \item In \texttt{mouseMoveEvent()}, decide if drag started? if so:
+    \begin{itemize}
+    \item Create a \iCls{QDrag} instance
+    \item Attach a \iCls{QMimeData} to it
+        \begin{itemize}
+        \item See section on Drag and Drop for \texttt{QMimeData info}
+        \end{itemize}
+    \item Call \iClsFn{QDrag}{exec}
+        \begin{itemize}
+        \item Function returns when user drops
+        \item Does not block event loop
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\end{slide}
+% ----------------------------------------------------------------------
+
+\begin{slide}{1986}
+\frametitle{Drop on a scene}
+\begin{itemize}
+\item Override \iClsFn{QGraphicsScene}{dropEvent}
+    \begin{itemize}
+    \item To accept drop:
+        \begin{itemize}
+        \item \texttt{acceptProposedAction()}
+        \item \texttt{setDropAction(Qt::DropAction); accept();}
+        \end{itemize}
+    \end{itemize}
+\item Override \iClsFn{QGraphicsScene}{dragMoveEvent}
+\item Optional overrides:
+    \begin{itemize}
+    \item \texttt{dragEnterEvent()}, \texttt{dragLeaveEvent()}
+    \end{itemize}
+\end{itemize}
+\end{slide}
+\begin{slide}[fragile]{1985}
+\frametitle{startDrag example}
+\begin{cpp}
+void startDrag( Qt::DropActions supportedActions ) {
+    if ( selectedItems().size()>0 ) {
+        QListWidgetItem *item = selectedItems()[0];
+        QDrag* drag = new QDrag( this );
+        QMimeData *mimeData = new QMimeData; [...]
+        QGraphicsItem* gitem = 
+               DiagramItem::createItem( item->toolType() );
+        mimeData->setData( "application/x-qgraphicsitem-ptr",
+                           QByteArray::number( ( qulonglong )gitem ) );
+        drag->setMimeData( mimeData );
+        QPixmap pix = item->icon().pixmap( 111,111 );
+        drag->setPixmap( pix );
+        drag->setHotSpot( pix.rect().center() );
+        if ( drag->exec(supportedActions) == Qt::IgnoreAction ) {
+            delete gitem; // drag cancelled, must delete item
+        }
+\end{cpp}
+\demo{graphicsview/ex-dragdrop}
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1984}
+\frametitle{dropEvent() on a scene}
+\begin{cpp}
+void DiagramScene::dropEvent( QGraphicsSceneDragDropEvent* event ) {
+    if (event->mimeData()->hasFormat("application/x-qgraphicsitem-ptr")) {
+         QGraphicsItem* item = reinterpret_cast<QGraphicsItem*>(
+              event->mimeData()->data (
+              "application/x-qgraphicsitem-ptr").toULongLong() );
+         if ( item ) {
+             addItem( item );
+             item->setFlag( QGraphicsItem::ItemIsMovable );
+             item->setFlag( QGraphicsItem::ItemIsSelectable );
+             item->setFlag( QGraphicsItem::ItemIsFocusable );
+             item->setPos( event->scenePos() );
+             event->acceptProposedAction();
+         }
+    } else
+        /* Call baseclass to allow per-item dropEvent */
+
+        QGraphicsScene::dropEvent( event );
+}
+\end{cpp}
+\demo{graphicsview/ex-dragdrop}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1983}
+\frametitle{Drop on an item}
+\begin{itemize}
+\item To drop into an item:
+    \begin{itemize}
+    \item Override \texttt{dragEnterEvent()}
+    \item Optional override: \texttt{dragMoveEvent()} 
+       (if the item can only accept drops in some parts of its area)
+    \end{itemize}
+
+\begin{cpp}
+void DiagramItem::dragEnterEvent(QGraphicsSceneDragDropEvent* e){
+    if ( e->mimeData()->hasColor() )
+        e->acceptProposedAction();
+}
+
+void DiagramScene::dragEnterEvent(QGraphicsSceneDragDropEvent* e){
+     if (e->mimeData()->hasFormat(
+     "application/x-qgraphicsitem-ptr"))
+         e->acceptProposedAction();
+     else
+         QGraphicsScene::dragEnterEvent(e);
+}
+\end{cpp}
+\demo{graphicsview/ex-dragdrop}
+\end{itemize}
+\end{slide}
+

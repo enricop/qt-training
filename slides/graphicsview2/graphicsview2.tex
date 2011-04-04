@@ -1,0 +1,20 @@
+% workaround to use new version of texlive/beamer:
+\makeatletter
+\newif\ifGm@compatii
+\makeatother
+
+\documentclass[t]{beamer}
+\input{config}
+\input{base}
+
+\coursetitle{Qt Essentials - Graphics View 2 Module}
+
+%------------ PAGES ----------------------------------------
+\begin{document}
+
+\input{frontpage}
+
+\input{graphicsview2/content}
+
+\input{disclaimer.tex}
+\end{document}
