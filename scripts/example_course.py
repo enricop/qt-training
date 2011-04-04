@@ -1,0 +1,7 @@
+course = Course()
+course.add_source("git", "~/gitorious/course-material")
+course.add_source("svn", "~/qt-training-svn/trunk/course-material")
+course.add_module("fundamentals")
+course.add_module("objects")
+course.add_module("widgets", 'svn')
+course.compile()
