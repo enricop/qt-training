@@ -1,5 +1,63 @@
-This is the opensource repository for qt-training material.
+Welcome to the opensource repository for qt-training material !
 
+================================
+Building the Presentations (PDF)
+================================
+
+Prequisites
+===========
+
+On Ubuntu/Debian systems you have to install the following packages:
+
+apt-get install texlive-science texlive-pictures
+apt-get install texlive-latex-extra texlive-formats-extra
+apt-get install latex-beamer pdfjam transfig graphicsmagick
+
+Build standard course works using 'pdflatex'
+===========================================
+
+After cloning the training sources enter the 'slides' subdirectory.
+From there you can build standard course works using 'pdflatex':
+
+cd slides
+pdflatex course/qt-essentials.tex
+
+Compile your own course works using 'tm_builder.py'
+===================================================
+
+You have to specify the course works using a Python file and run the
+'tm_builder.py' script you find in the 'scripts' subfolder. Check out
+the 'example_course.py':
+
+course = Course()
+course.add_source("git", "~/gitorious/course-material")
+course.add_source("svn", "~/qt-training-svn/trunk/course-material")
+course.add_module("fundamentals")
+course.add_module("objects")
+course.add_module("widgets", 'svn')
+course.compile()
+
+Enter the scripts folder and launch 'tm_builder.py':
+
+cd scripts
+tm_builder.py example_course.py
+
+Check out the builtin help for further information:
+
+tm_builder -h
+
+====================
+Contributing Changes
+====================
+
+Once you have up a working Latex setup check out the Contributors Guide.
+You can build it from the 'slides' subfolder:
+
+cd slides
+pdflatex contributors-guide/contributors-guide.tex
+
+==========
 Disclaimer
 ==========
-The Nokia, Qt and their respective logos are trademarks of Nokia Corpo- ration in Finland and/or other countries worldwide. All other prod- ucts named are trademarks of their respective owners.
+
+The Nokia, Qt and their respective logos are trademarks of Nokia Corporation in Finland and/or other countries worldwide. All other products named are trademarks of their respective owners.
