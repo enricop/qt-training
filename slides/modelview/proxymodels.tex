@@ -12,6 +12,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Proxy Models}
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1586}\frametitle{Proxy Model - \iCls{QSortFilterProxyModel}}
+  \begin{itemize}
+  \item \iCls{QSortFilterProxyModel}
+    \begin{itemize}
+    \item Transforms structure of source model
+    \item Maps indexes to new indexes
+    \end{itemize}
+\begin{cpp}
+view = new QListView(parent);
+// insert proxy model between model and view
+proxy = new QSortFilterProxyModel(parent);
+proxy->setSourceModel(model);
+view->setModel(proxy);
+\end{cpp}
+  \end{itemize}
+\textit{Note:} Need to load all data to sort or filter
+\end{slide}
+% ----------------------------------------------------------------------
 \begin{slide}[fragile]{1585}\frametitle{Sorting/Filtering - \iCls{QSortFilterProxyModel}}
   \begin{itemize}
   \item \textbf{Filter with Proxy Model}
