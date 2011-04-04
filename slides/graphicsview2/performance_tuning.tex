@@ -1,0 +1,145 @@
+\subsection{Performance Tuning}
+
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1982}
+\frametitle{Level of Detail}
+\begin{itemize}
+\item Don't draw what you can't see!
+\item \iCls{QStyleOptionGraphicsItem} passed to \texttt{paint()}
+    \begin{itemize}
+    \item Contains \texttt{palette}, \texttt{state}, \texttt{matrix
+    } members
+    \item \texttt{qreal levelOfDetailFromTransform(QTransform T)} method   
+    \end{itemize}
+\item "levelOfDetail" is max width/height of the unity rectangle
+needed to draw this shape onto a QPainter with a QTransform of T.
+\item use \texttt{worldTransform()} of \texttt{painter} for current transform.
+    \begin{itemize}
+    \item Zoomed out: \texttt{levelOfDetail} < 1.0
+    \item Zoomed in: \texttt{levelOfDetail} > 1.0
+    \end{itemize}
+\end{itemize}
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1981}
+\frametitle{Level of detail: Chip demo}
+\centeredImage{graphicsview2/images/chips}
+
+\qtdemo{demos/chip}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1980}
+\frametitle{Level of detail: Chip demo 2}
+\begin{cpp}
+void Chip::paint(QPainter *painter, 
+    const QStyleOptionGraphicsItem *option, QWidget *)
+{
+    const qreal lod = option->levelOfDetailFromTransform(
+                    painter->worldTransform());
+    [ ... ]
+    if (lod >= 2) {
+        QFont font("Times", 10);
+        font.setStyleStrategy(QFont::ForceOutline);
+        painter->save();        
+        painter->setFont(font);
+        painter->scale(0.1, 0.1);
+        painter->drawText(170, 180, QString("Model: VSC-2000 ..."
+        painter->drawText(170, 220, QString("Manufacturer: ..."
+        painter->restore();
+    }
+\end{cpp}
+\qtdemo{demos/chip}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1979}
+\frametitle{Caching tips}
+\begin{itemize}
+\item Cache item painting into a pixmap
+    \begin{itemize}
+    \item So \texttt{paint()} runs faster
+    \end{itemize}
+\item Cache \texttt{boundingRect()} and \texttt{shape()}
+    \begin{itemize}
+    \item Avoid recomputing expensive operations that stay the same
+    \item Be sure to invalidate manually cached items after zooming and other transforms
+    \end{itemize}
+\begin{cpp}
+QRectF MyItem::boundingRect() const {
+    if (m_rect.isNull()) calculateBoundingRect();
+    return m_rect;
+}
+
+QPainterPath MyItem::shape() const {
+    if (m_shape.isEmpty()) calculateShape();
+    return m_shape;
+}
+\end{cpp}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1978}
+\frametitle{setCacheMode()}
+\begin{itemize}
+\item Property of \iCls{QGraphicsView} and \iCls{QGraphicsItem}
+\item Allows caching of pre-rendered content in a \iCls{QPixmap}
+    \begin{itemize}
+    \item Drawn on the viewport
+    \item Especially useful for gradient shape backgrounds
+    \item Invalidated whenever view is transformed.
+    \end{itemize}
+\begin{cpp}
+ QGraphicsView view;
+ view.setBackgroundBrush(QImage(":/images/backgroundtile.png"));
+ view.setCacheMode(QGraphicsView::CacheBackground);
+\end{cpp}
+\end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1977}
+\frametitle{Tweaking}
+The following methods allow you to tweak performance of view/scene/items:
+\begin{itemize}
+\item \iClsFn{QGraphicsView}{setViewportUpdateMode}
+\item \iClsFn{QGraphicsView}{setOptimizationFlags}
+\item \iClsFn{QGraphicsScene}{setItemIndexMethod}
+\item \iClsFn{QGraphicsScene}{setBspTreeDepth}
+\item \iClsFn{QGraphicsItem}{setFlags}
+    \begin{itemize}
+    \item \texttt{ItemDoesntPropagateOpacityToChildren} and \texttt{ItemIgnoresParentOpacity} especially recommended if your items are opaque! 
+    \end{itemize}
+\end{itemize}
+See API documentation for details. 
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1976}
+\frametitle{Tips for better performance}
+\begin{itemize}
+   \item \texttt{boundingRect()} and \texttt{shape()} are called frequently so they should run fast!
+        \begin{itemize}
+            \item \texttt{boundingRect()} should be as small as possible
+            \item \texttt{shape()} should return simplest reasonable path
+        \end{itemize}
+   \item Try to avoid drawing gradients on the painter. Consider using pre-rendered backgrounds from images instead.
+   \item It is costly to dynamically insert/remove items from the scene.  Consider hiding and reusing items instead. 
+   \item Embedded widgets in a scene is costly.
+   \item Try using a different paint engine (OpenGL, Direct3D, etc)
+        \begin{itemize}
+        \item \texttt{setViewport (new QGLWidget);}
+        \end{itemize}
+   \item Avoid curved and dashed lines
+   \item Alpha blending and antialiasing are expensive
+
+   
+\end{itemize} 
+\end{slide}
+   
+  
