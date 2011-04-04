@@ -40,7 +40,7 @@ course.compile()
 Enter the scripts folder and launch 'tm_builder.py':
 
 cd scripts
-tm_builder.py example_course.py
+./tm_builder.py example_course.py
 
 Check out the builtin help for further information:
 
