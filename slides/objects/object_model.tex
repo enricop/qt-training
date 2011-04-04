@@ -184,7 +184,7 @@ QColor color;
   \frametitle{Example Container Widget}
   \begin{cpp}
 // container (window) widget creation
-QWidget container;          // top-level widget on stack 
+QWidget* container = new QWidget; // top-level widget has no parent
 QLabel* label = new QLabel("Note:", container);
 QTextEdit* edit = new QTextEdit(container);
 QPushButton* clear = new QPushButton("Clear", container);
@@ -201,7 +201,7 @@ inner->addWidget(clear);
 inner->addWidget(save);
     \end{cpp} 
   \begin{cpp}
-container.setLayout(outer);
+container->setLayout(outer);
 outer->addLayout(inner); // nesting layouts
     \end{cpp}
   \demo{objects/ex-simplelayout}

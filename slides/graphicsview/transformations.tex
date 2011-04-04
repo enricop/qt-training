@@ -21,14 +21,15 @@
 
 \begin{itemize}
 \item Each View and Item has its own local coordinate system
-\item "Viewport" and "Scene" coordinates refer to the same thing:  \iCls{QGraphicsView}'s coordinate system.
 \centeredImageFullWidth{graphicsview/images/qgv-coordinate-systems}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1757}
+\begin{slide}{1757}
+
 \frametitle{Coordinates}
 \begin{itemize}
 \item Coordinates are local to an item
@@ -46,11 +47,14 @@
     \item in increasing zValue order
     \end{itemize}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 %----------------------------------------------------------------------
 
-\begin{slide}[fragile]{1756}
+\begin{slide}[fragile]{1756}
+
+
 \frametitle{QTransform}
 \begin{itemize}
 \item Coordinate systems can be transformed using \texttt{QTransform}
@@ -86,10 +90,12 @@ if projected:
 \item \wiki{Affine_transformation}{Affine Transformations}
 \end{itemize}
 
-\end{slide}
+\end{slide}
+
 
 %----------------------------------------------------------------------
-\begin{slide}{1755}
+\begin{slide}{1755}
+
 \frametitle{Common Transformations}
 \begin{itemize}
 
@@ -108,10 +114,13 @@ if projected:
     \end{itemize}
 \centeredImage{graphicsview/images/xyzaxis}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1754}\frametitle{View transformations}
+\begin{slide}[fragile]{1754}\frametitle{View transformations}
+
+
 \begin{itemize}
 \item[] \begin{cpp}
 
@@ -129,12 +138,14 @@ if projected:
     \item \texttt{NoAnchor}: Scrollbars remain unchanged.
     \end{itemize}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 %----------------------------------------------------------------------
 \begin{slide}{1632}\frametitle{Item Transformations}
 \begin{itemize}
-\item \iCls{QGraphicsItem} supports same transform operations:
+\item \iCls{QGraphicsItem} supports same transform operations:
+
     \begin{itemize}
     \item \texttt{setTransform()}, \texttt{transform()}
     \item \texttt{rotate()}, \texttt{scale()}, \texttt{shear()}, \texttt{translate()} 
@@ -145,12 +156,15 @@ if projected:
 The product of its own and all its ancestors' transformations
 \end{block}
 
-{\small TIP: When managing the transformation of items, store the desired rotation, scaling etc. in member variables and build a \iCls{QTransform} from the identity transformation when they change. Don't try to deduce values from the current transformation and/or try to use it as the base for further changes.}
+{\small TIP: When managing the transformation of items, store the desired rotation, scaling etc. in member variables and build a \iCls{QTransform} from the identity transformation when they change. Don't try to deduce values from the current transformation and/or try to use it as the base for further changes.}
 
-\end{slide}
+
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]
+\begin{slide}[fragile]
+
 \frametitle{Zooming}
 \begin{itemize}
 \item Zooming is done with \texttt{view->scale()}
@@ -166,7 +180,8 @@ void MyView::zoom(double factor)
 }
 \end{cpp}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 
 %----------------------------------------------------------------------
@@ -177,7 +192,7 @@ void MyView::zoom(double factor)
 \begin{itemize}
 \item \hClsFnPar{QGraphicsItem}{mapFromScene}{const QPointF\&}:
     \begin{itemize}
-    \item Maps a point from viewport coordinates to item coordinates. Inverse:  \hClsFnPar{QGraphicsItem}{mapToScene}{const QPointF\&}
+    \item Maps a point from scene coordinates to item coordinates. Inverse:  \hClsFnPar{QGraphicsItem}{mapToScene}{const QPointF\&}
     \end{itemize}
 
 \item \hClsFnPar{QGraphicsItem}{mapFromItem}{const QGraphicsItem*, const QPointF\&}
@@ -188,7 +203,8 @@ void MyView::zoom(double factor)
 \end{itemize}
 
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 %----------------------------------------------------------------------
 \begin{slide}{1630}\frametitle{Ignoring Transformations}
@@ -202,13 +218,16 @@ void MyView::zoom(double factor)
 }
 
 
-\end{slide}
+\end{slide}
 
-\begin{slide}{1750}
+
+\begin{slide}{1750}
+
 \frametitle{Transforms Demo}
 \imageFullWidth{graphicsview/images/transformination-screenshot}
 
 \demo{graphicsview/ex-transformination}
 
-\end{slide}
+\end{slide}
+
 
