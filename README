@@ -27,24 +27,15 @@ Compile your own course works using 'tm_builder.py'
 
 You have to specify the course works using a Python file and run the
 'tm_builder.py' script you find in the 'scripts' subfolder. Check out
-the 'example_course.py':
-
-course = Course()
-course.add_source("git", "~/gitorious/course-material")
-course.add_source("svn", "~/qt-training-svn/trunk/course-material")
-course.add_module("fundamentals")
-course.add_module("objects")
-course.add_module("widgets", 'svn')
-course.compile()
-
-Enter the scripts folder and launch 'tm_builder.py':
+the 'example_course.py' inside the scripts folder. Select your sources
+and modules to build and launch 'tm_builder.py':
 
 cd scripts
 ./tm_builder.py example_course.py
 
 Check out the builtin help for further information:
 
-tm_builder -h
+./tm_builder -h
 
 ====================
 Contributing Changes
