@@ -26,7 +26,7 @@ def enumerate_module(output_path, module_name, module_count, verbose, dry_run):
             shutil.move(log_path, enumerated_log_path)
 
 def cleanup_auxiliaries(output_path, module_name, verbose, dry_run):
-    ext_list = ["pdfsync", "snm", "toc", "nav", "aux", "out", "tex", "vrb"]
+    ext_list = ["pdfsync", "snm", "toc", "nav", "aux", "out", "tex", "vrb", "idx"]
     if not verbose:
         ext_list.append("log")
     for ext in ext_list:

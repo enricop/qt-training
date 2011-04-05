@@ -7,7 +7,9 @@ Building the Presentations (PDF)
 Prequisites
 ===========
 
-On Ubuntu/Debian systems you have to install the following packages:
+The training slides are produced in Latex. The resulting PDF files can
+be displayed with any PDF viewer. On Ubuntu/Debian systems you have to
+install the following packages:
 
 apt-get install texlive-science texlive-pictures
 apt-get install texlive-latex-extra texlive-formats-extra
@@ -21,17 +23,25 @@ From there you can build standard course works using 'pdflatex':
 
 cd slides
 pdflatex course/qt-essentials.tex
+# run a second time to include the table of contents
 
 Compile your own course works using 'tm_builder.py'
 ===================================================
 
-You have to specify the course works using a Python file and run the
-'tm_builder.py' script you find in the 'scripts' subfolder. Check out
-the 'example_course.py' inside the scripts folder. Select your sources
-and modules to build and launch 'tm_builder.py':
+The 'tm_builder.py' script is specifically designed for the needs
+of trainers. It builds your selection of modules and places these together
+with associated example programs into a single output directory.
 
+The 'tm_builder.py' is run from the command line passing a course description
+file written in Python. You find both the 'tm_builder.py' and an example
+course description ('example_course.py') in the scripts subfolder.
+
+Example:
+
+# edit example_course.py
 cd scripts
-./tm_builder.py example_course.py
+./tm_builder.py -d example_course.py # dry-run
+./tm_builder.py example_course.py    # actually build PDF files
 
 Check out the builtin help for further information:
 
@@ -41,7 +51,7 @@ Check out the builtin help for further information:
 Contributing Changes
 ====================
 
-Once you have up a working Latex setup check out the Contributors Guide.
+Once you have up a working Latex setup check out the "Contributors Guide".
 You can build it from the 'slides' subfolder:
 
 cd slides
