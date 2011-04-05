@@ -1,5 +1,64 @@
-This is the opensource repository for qt-training material.
+Welcome to the opensource repository for qt-training material !
 
+================================
+Building the Presentations (PDF)
+================================
+
+Prequisites
+===========
+
+The training slides are produced in Latex. The resulting PDF files can
+be displayed with any PDF viewer. On Ubuntu/Debian systems you have to
+install the following packages:
+
+apt-get install texlive-science texlive-pictures
+apt-get install texlive-latex-extra texlive-formats-extra
+apt-get install latex-beamer pdfjam transfig graphicsmagick
+
+Build standard course works using 'pdflatex'
+===========================================
+
+After cloning the training sources enter the 'slides' subdirectory.
+From there you can build standard course works using 'pdflatex':
+
+cd slides
+pdflatex course/qt-essentials.tex
+# run a second time to include the table of contents
+
+Compile your own course works using 'tm_builder.py'
+===================================================
+
+The 'tm_builder.py' script is specifically designed for the needs
+of trainers. It builds your selection of modules and places these together
+with associated example programs into a single output directory.
+
+The 'tm_builder.py' is run from the command line passing a course description
+file written in Python. You find both the 'tm_builder.py' and an example
+course description ('example_course.py') in the scripts subfolder.
+
+Example:
+
+# edit example_course.py
+cd scripts
+./tm_builder.py -d example_course.py # dry-run
+./tm_builder.py example_course.py    # actually build PDF files
+
+Check out the builtin help for further information:
+
+./tm_builder -h
+
+====================
+Contributing Changes
+====================
+
+Once you have up a working Latex setup check out the "Contributors Guide".
+You can build it from the 'slides' subfolder:
+
+cd slides
+pdflatex contributors-guide/contributors-guide.tex
+
+==========
 Disclaimer
 ==========
-The Nokia, Qt and their respective logos are trademarks of Nokia Corpo- ration in Finland and/or other countries worldwide. All other prod- ucts named are trademarks of their respective owners.
+
+The Nokia, Qt and their respective logos are trademarks of Nokia Corporation in Finland and/or other countries worldwide. All other products named are trademarks of their respective owners.
