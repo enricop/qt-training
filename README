@@ -34,7 +34,8 @@ with associated example programs into a single output directory.
 
 The 'tm_builder.py' is run from the command line passing a course description
 file written in Python. You find both the 'tm_builder.py' and an example
-course description ('example_course.py') in the scripts subfolder.
+course description ('example_course.py') in the 'scripts' subfolder with
+further information how to create your own course files.
 
 Example:
 
