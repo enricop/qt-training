@@ -18,12 +18,10 @@ SelectColor::SelectColor(QWidget *parent)
     QPushButton *button = new QPushButton("Select Color");
 
     QVBoxLayout *col = new QVBoxLayout;
-    {
-        QHBoxLayout *row = new QHBoxLayout;
-        row->addWidget(new QLabel("Color is: "));
-        row->addWidget(m_label);
-        col->addLayout(row);
-    }
+    QHBoxLayout *row = new QHBoxLayout;
+    row->addWidget(new QLabel("Color is: "));
+    row->addWidget(m_label);
+    col->addLayout(row);
     col->addWidget(button);
 
     setLayout(col);

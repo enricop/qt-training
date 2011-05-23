@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
 
     QHBoxLayout *hbox = new QHBoxLayout;
     hbox->addWidget(itemList);
+
     QVBoxLayout *editRemoveLayout = new QVBoxLayout;
     editRemoveLayout->addWidget(new QPushButton("Edit"));
     editRemoveLayout->addWidget(new QPushButton("Remove"));

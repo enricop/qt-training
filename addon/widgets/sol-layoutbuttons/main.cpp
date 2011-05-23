@@ -22,13 +22,12 @@ int main(int argc, char *argv[])
         QPushButton *two = new QPushButton("Two");
         QPushButton *three = new QPushButton("Three");
 
-        QGroupBox *box = new QGroupBox("Starting Point");
-        windowLayout->addWidget(box);
 
-        QHBoxLayout *layout = new QHBoxLayout(box);
+        QHBoxLayout *layout = new QHBoxLayout;
         layout->addWidget(one);
         layout->addWidget(two);
         layout->addWidget(three);
+        windowLayout->addLayout(layout);
     }
 
     // Exercise 1: Stretch 2-1-1
@@ -37,13 +36,11 @@ int main(int argc, char *argv[])
         QPushButton *two = new QPushButton("Two");
         QPushButton *three = new QPushButton("Three");
 
-        QGroupBox *box = new QGroupBox("Exercise 1: Stretch 2-1-1");
-        windowLayout->addWidget(box);
-
-        QHBoxLayout *layout = new QHBoxLayout(box);
+        QHBoxLayout *layout = new QHBoxLayout;
         layout->addWidget(one, 2);
         layout->addWidget(two, 1);
         layout->addWidget(three, 1);
+        windowLayout->addLayout(layout);
     }
 
     // Exercise 2: Find this stretch
@@ -52,13 +49,11 @@ int main(int argc, char *argv[])
         QPushButton *two = new QPushButton("Two");
         QPushButton *three = new QPushButton("Three");
 
-        QGroupBox *box = new QGroupBox("Exercise 2: Find this stretch");
-        windowLayout->addWidget(box);
-
-        QHBoxLayout *layout = new QHBoxLayout(box);
+        QHBoxLayout *layout = new QHBoxLayout;
         layout->addWidget(one, 1);
         layout->addWidget(two);
         layout->addWidget(three);
+        windowLayout->addLayout(layout);
     }
 
     // Exercise 3: Stretch at the end
@@ -67,14 +62,12 @@ int main(int argc, char *argv[])
         QPushButton *two = new QPushButton("Two");
         QPushButton *three = new QPushButton("Three");
 
-        QGroupBox *box = new QGroupBox("Exercise 3: Stretch at the end");
-        windowLayout->addWidget(box);
-
-        QHBoxLayout *layout = new QHBoxLayout(box);
+        QHBoxLayout *layout = new QHBoxLayout;
         layout->addWidget(one);
         layout->addWidget(two);
         layout->addWidget(three);
         layout->addStretch(1);
+        windowLayout->addLayout(layout);
     }
 
     // Exercise 4: Stretch the middle
@@ -83,29 +76,13 @@ int main(int argc, char *argv[])
         QPushButton *two = new QPushButton("Two");
         QPushButton *three = new QPushButton("Three");
 
-        QGroupBox *box = new QGroupBox("Exercise 4: Stretch the middle");
-        windowLayout->addWidget(box);
-
-        QHBoxLayout *layout = new QHBoxLayout(box);
+        QHBoxLayout *layout = new QHBoxLayout;
         layout->addWidget(one);
         layout->addStretch(1);
         layout->addWidget(two);
         layout->addStretch(1);
         layout->addWidget(three);
-    }
-
-    // Exercise 5: Make all buttons vertical expanding
-    {
-        QGroupBox *box = new QGroupBox("Exercise 5: Make all buttons vertical expanding");
-        windowLayout->addWidget(box);
-
-        QHBoxLayout *layout = new QHBoxLayout(box);
-        layout->addWidget(
-            new QLabel(
-                "Make all buttons expand vertically using QSizePolicy. \n"
-                "Hint use QObject::findChildren<T>()."
-            )
-        );
+        windowLayout->addLayout(layout);
     }
 
     // This is how you would make the buttons take up the available space
