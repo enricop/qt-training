@@ -56,12 +56,11 @@
     \item combine with \texttt{QString::arg()} for dynamic text
     \end{itemize}        
  \begin{cpp}
- void MyWidget::someFunction(QString name, QDate d) {
+  setWindowTitle(tr("File: %1 Line: %2").arg(f).arg(l));
+
   //: This comment is seen by translation staff
   label->setText(tr("Name: %1  Date: %2")
-                .arg(name).arg(d.toString()));
-  setWindowTitle(tr("File: %1 Line: %2 [*]").arg(f).arg(l));
-  // ...  
+                .arg(name, d.toString()));
 \end{cpp}
 \item \doc{i18n-source-translation.html}{Writing Source Code for Translation}
   \end{itemize}

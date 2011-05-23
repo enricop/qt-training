@@ -243,7 +243,12 @@ connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
   \begin{itemize}
   \item In \iCls{QColorDialog}, honor the user clicking
     ``cancel'', and provide it with the current color to start from.
-  \item Set the selected color as the label's background (Hint: see \iCls{QPalette})
+  \item Set the selected color as the label's background 
+    \begin{itemize}
+    \item Hint: see \iCls{QPalette}
+    \item Hint: see \iClsFn{QWidget}{setAutoFillBackground}
+    \end{itemize}
+
   \end{itemize}
 \end{itemize}
 \vfill

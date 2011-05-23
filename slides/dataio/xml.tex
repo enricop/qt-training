@@ -145,8 +145,8 @@ reader.setErrorHandler( &handler );
 \item Print tag names of all elements
    \begin{cpp}
 QFile xmlFile ...;
-QDomDocument doc();      
-doc.setContent(&file);
+QDomDocument doc;      
+doc.setContent(&xmlFile);
 // retrieve root element
 QDomElement root = doc.documentElement();
 QDomNode node = root.firstChild();
