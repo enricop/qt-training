@@ -10,14 +10,14 @@ LICENSES_PATH = "licenses"
 LICENSE_FILENAME = "LICENSE.txt"
 
 # ignore file paths containing given components
-IGNORE = [ ".git", ".svn", "LICENSE.txt", "legal", "disclaimer.tex", ".moc", "moc_", ".pdf" ]
+IGNORE = [ ".git", ".svn", "LICENSE.txt", "legal", "disclaimer.tex", ".moc", "moc_" ]
 
 # directory where to start scanning
 TOPLEVEL = "../.."
 
 # automatically fix license headers / license distribution
 # WARNING: Setting AUTFIX to "True" may destroy your files!
-AUTOFIX = False
+AUTOFIX = True
 
 import os, sys
 
