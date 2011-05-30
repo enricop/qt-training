@@ -39,7 +39,7 @@ class Course:
         try:
             for module in self.modules:
                 module_count += 1
-                tm_utils.compile_module(
+                exit_code = tm_utils.compile_module(
                     self.module_path(module),
                     options.output,
                     module_count,
@@ -47,6 +47,9 @@ class Course:
                     options.dry_run,
                     options.once
                 )
+                if exit_code != 0:
+                    if not options.resilent:
+                        break
         finally:
             os.chdir(cwd_saved)
 
@@ -66,6 +69,7 @@ Take a look at the example_course.py for an example COURSE file.''',
     parser.add_option('-d', '--dry-run', action='store_true', help='Print all commands without executing')
     parser.add_option('-1', '--once', action='store_true', help='Run pdflatex just once, instead twice')
     parser.add_option('-o', '--output', type='string', default=os.getcwd(), help='Output directory')
+    parser.add_option('-r', '--resilent', action='store_true', help='Continue on error')
     parser.add_option('-v', '--verbose', action='store_true', help='Verbose log output')
 
     (options, courses) = parser.parse_args()

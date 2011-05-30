@@ -54,6 +54,7 @@ def copy_addons(output_path, module_name, module_count, dry_run):
 
 def exec_and_show_progress(args, verbose):
     p = subprocess.Popen(args, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    cached_output = []
     if verbose:
         print HORIZ_BAR
     for line in p.stdout:
@@ -62,12 +63,18 @@ def exec_and_show_progress(args, verbose):
             sys.stdout.flush()
         else:
             sys.stdout.write('.')
+            cached_output.append(line)
             sys.stdout.flush()
     if verbose:
         print HORIZ_BAR
     else:
         sys.stdout.write('\n')
-    return p.wait()
+    exit_code = p.wait()
+    if exit_code != 0 and not verbose:
+        for line in cached_output:
+            sys.stdout.write(line)
+        sys.stdout.flush()
+    return exit_code
 
 def compile_module(module_path, output_path, module_count, verbose, dry_run, once):
     """ Compiles the given module with pdflatex into a file prefixed with the module_count
@@ -75,12 +82,14 @@ def compile_module(module_path, output_path, module_count, verbose, dry_run, onc
     """
     super_path = os.path.dirname(module_path)
     module_name = os.path.basename(module_path)
-    pdf_path = "%s/%s.tex" % (module_name, module_name)
+    pdf_path = "%s/%s.tex" % (module_name, module_name.lower())
+    module_name = module_name.lower()
     if os.getcwd() != super_path:
         log("cd %s" % super_path)
         os.chdir(super_path)
     args = [
         "pdflatex",
+        "-interaction=nonstopmode",
         "-output-directory", output_path,
         # "-interaction", "errorstopmode",
         pdf_path
@@ -92,6 +101,8 @@ def compile_module(module_path, output_path, module_count, verbose, dry_run, onc
         exit_code = exec_and_show_progress(args, verbose)
         if exit_code != 0:
             log("FAILED, exit_code = %d" % exit_code)
+            return exit_code
     enumerate_module(output_path, module_name, module_count, verbose, dry_run)
     cleanup_auxiliaries(output_path, module_name, verbose, dry_run)
     copy_addons(output_path, module_name, module_count, dry_run)
+    return 0
