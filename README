@@ -15,16 +15,6 @@ apt-get install texlive-science texlive-pictures
 apt-get install texlive-latex-extra texlive-formats-extra
 apt-get install latex-beamer pdfjam transfig graphicsmagick
 
-Build standard course works using 'pdflatex'
-===========================================
-
-After cloning the training sources enter the 'slides' subdirectory.
-From there you can build standard course works using 'pdflatex':
-
-cd slides
-pdflatex course/qt-essentials.tex
-# run a second time to include the table of contents
-
 Compile your own course works using 'tm_builder.py'
 ===================================================
 
@@ -37,16 +27,10 @@ file written in Python. You find both the 'tm_builder.py' and an example
 course description ('example_course.py') in the 'scripts' subfolder with
 further information how to create your own course files.
 
-Example:
+The standard course works reside in the 'course' subfolder.
+Enter the directory and enter the following commands to build a course:
 
-# edit example_course.py
-cd scripts
-./tm_builder.py -d example_course.py # dry-run
-./tm_builder.py example_course.py    # actually build PDF files
-
-Check out the builtin help for further information:
-
-./tm_builder -h
+../scripts/tm_builder.py qtquick.py
 
 ====================
 Contributing Changes
