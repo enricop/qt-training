@@ -1,6 +1,7 @@
 TEMPLATE=subdirs
 SUBDIRS= \
 graphicsview \
+graphicsview2 \
 dataio \
 modelview2 \
 modelview \
