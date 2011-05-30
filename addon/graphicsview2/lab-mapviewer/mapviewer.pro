@@ -1,4 +1,4 @@
-include (../../examples.pri)
+include (../examples.pri)
 
 OTHER_FILES += readme.txt
 

@@ -1,4 +1,4 @@
-include(../../examples.pri)
+include(../examples.pri)
 TARGET=diagram
 
 HEADERS += mainwindow.h toolbox.h diagramscene.h diagramitem.h
