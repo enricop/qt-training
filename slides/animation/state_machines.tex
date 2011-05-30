@@ -1,0 +1,590 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{States and Animations}
+
+\begin{slide}{46130}\frametitle{States and Animations}
+\vspace*{1.5em}
+Qt 4.6 and newer includes a state machine that can be used with animations:
+\begin{itemize}
+\item Includes features specifically for animation.
+\item It can be used for other purposes.
+\item Processing is handled by \iCls{QStateMachine} instances.
+\item \iCls{QAbstractState} defines the state API.
+\item \iCls{QAbstractTransition} defines the transition API.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46135}\frametitle{Statecharts}
+\vspace*{1.5em}
+Each statechart contains all the states the machine can be in.
+
+\begin{itemize}
+\item Statecharts always contain an initial state.
+\item There may be one or more final states.
+\item States are connected by transitions.
+\item Transitions define how the current state of the machine can change.
+\end{itemize}
+
+The state machine API is used to describe how states are connected.
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46136}\frametitle{Statecharts}
+\textbf{Example:} A button that changes state when clicked.
+
+\vspace*{1.5em}
+\centeredImage{animation/diagrams/statemachine-twowaybutton.pdf}
+\vspace*{1.5em}
+
+\begin{itemize}
+\item The black circle and arrow indicate the initial state.
+\item When the button is clicked, there is a transition from one state to
+the other.
+\item There is no final state.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46140}\frametitle{States}
+\label{Animation-States-States}
+\vspace*{1.0em}
+The state chart contains all the states the machine can be in.
+
+\begin{itemize}
+\item Each state can define values for Qt properties.
+\item One state is defined to be the initial state.
+\item States can encapsulate other states (composite states).
+\item States can be saved and restored (history states).
+\item One or more states can be final states, where execution stops.
+\item The main state class is \iCls{QState}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46137}\frametitle{States and Properties}
+\label{Animation-States-Properties}
+\vspace*{1.0em}
+States can be associated with object properties:
+
+\vspace*{1.5em}
+\centeredImage{animation/diagrams/statemachine-twowaybutton-properties.pdf}
+\vspace*{1.0em}
+
+\begin{itemize}
+\item \iClsFn{QState}{assignProperty}
+\begin{itemize}
+\item Assigns a value to a property when the state is entered.
+\item Used to drive a user interface or animation.
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46138}\frametitle{States and Properties}
+\vspace*{1.5em}
+\small
+% From examples/animation/states/twowaybutton/main.cpp
+\begin{lstlisting}
+QPushButton *button = new QPushButton();
+QStateMachine *machine = new QStateMachine();
+
+QState *offState = new QState();
+offState->assignProperty(button, "text", "Off");
+QState *onState = new QState();
+onState->assignProperty(button, "text", "On");
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-twowaybutton}
+\vfill
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46145}\frametitle{States and Transitions}
+\label{Animation-States-Transitions}
+Transitions describe how the machine changes from one state to another.
+
+\vspace*{1.5em}
+\centeredImage{animation/diagrams/statemachine-twowaybutton-transitions.pdf}
+\vspace*{1.0em}
+
+\begin{itemize}
+\item \iClsFn{QState}{addTransition}
+\begin{itemize}
+\item Can define conditions or be unconditional.
+\end{itemize}
+\item Can apply conditions based on external input:
+\begin{itemize}
+\item From a signal, such as \iClsSig{QPushButton}{clicked}.
+\item From an event, such as \iCls{QKeyEvent}.
+\end{itemize}
+\item Can also be linked to animations.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46238}\frametitle{States and Transitions}
+\vspace*{1.5em}
+\small
+% From examples/animation/states/twowaybutton/main.cpp
+\begin{lstlisting}
+offState->addTransition(button, SIGNAL(clicked()), onState);
+onState->addTransition(button, SIGNAL(clicked()), offState);
+
+machine->addState(offState);
+machine->addState(onState);
+machine->setInitialState(offState);
+machine->start();
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-twowaybutton}
+\vfill
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46150}\frametitle{Final States}
+\vspace*{1.0em}
+A final state is a state at which the machine stops execution.
+
+\vspace*{0.5em}
+To make a state machine terminate:
+\begin{itemize}
+\item Define a top-level final state.
+\item Make it the target of transitions from other states.
+\item More than one final state can be defined.
+\end{itemize}
+
+\vspace*{0.5em}
+When a top-level final state is entered:
+\begin{itemize}
+\item The state machine emits the \iClsSig{QStateMachine}{finished} signal.
+\item The state machine halts.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46338}\frametitle{Final States}
+\textbf{Example:} Accepting input from the user.
+
+\vspace*{1.25em}
+\centeredImage{animation/diagrams/statemachine-initial-final.pdf}
+\vspace*{1.5em}
+
+\begin{itemize}
+\item In the initial \textbf{questionState}, an input window is opened.
+\item When the user enters a name, the window emits the \hClsSig{Window}{nameEntered}
+signal.
+\item The transition leads to the final state, \textbf{answeredState}, where
+the machine emits the \hClsSig{QStateMachine}{finished} signal.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46139}\frametitle{Final States}
+\vspace*{-0.5em}
+\small
+% From examples/animation/states/initial-final/main.cpp
+\begin{lstlisting}
+Window *window = new Window();
+QStateMachine *machine = new QStateMachine();
+
+QState *questionState = new QState();
+QFinalState *answeredState = new QFinalState();
+questionState->assignProperty(window, "visible", true);
+questionState->addTransition(window, SIGNAL(nameEntered(QString)),
+                             answeredState);
+
+machine->addState(questionState);
+machine->addState(answeredState);
+machine->setInitialState(questionState);
+QObject::connect(machine, SIGNAL(finished()), app, SLOT(quit()));
+machine->start();
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-initial-final}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46155}\frametitle{Composite and Child States}
+\label{Animation-States-Composite}
+\vspace*{1.0em}
+Composite states:
+
+\begin{itemize}
+\item Are used to group states and transitions.
+\item Can be used to encapsulate ``internal'' states.
+\begin{itemize}
+\item Example: the states of buttons in a dialog.
+\end{itemize}
+\end{itemize}
+
+States in a group are known as child states.
+
+\begin{itemize}
+\item One child state must be made an initial state of its parent.
+\item Child states are executed one at a time.
+\item Child states inherit transitions from their parents.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46156}\frametitle{Child States and Transitions}
+\centeredImage{animation/diagrams/statemachine-inheritedtransitions.pdf}
+\vfill
+
+\begin{itemize}
+\item Many states can share the same transition to another state.
+\item The parent defines a common transition for all children.
+\item When we leave a state, its internal state is not important.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46157}\frametitle{Child States and Transitions}
+\textbf{Example:} A set of traffic lights with a quit button.
+
+\centeredImage{animation/diagrams/statemachine-trafficlights.pdf}
+
+\vspace*{0.5em}
+When the user clicks the quit button, it does not matter which child state
+the machine was in.
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46158}\frametitle{Child States and Transitions}
+\vspace*{1.5em}
+\small
+% From examples/animation/states/trafficlights/main.cpp
+\begin{lstlisting}
+QState *runningState = new QState();
+QState *stopState = new QState(runningState);
+QState *waitState = new QState(runningState);
+QState *driveState = new QState(runningState);
+QState *slowState = new QState(runningState);
+runningState->setInitialState(stopState);
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-trafficlights}
+\vfill
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46165}\frametitle{Final Child States}
+States can contain final states
+
+\vspace*{1.0em}
+\centeredImage{animation/diagrams/statemachine-trafficlights-final-childstates.pdf}
+\vfill
+\small
+% From examples/animation/states/trafficlights-final/main.cpp
+\begin{lstlisting}
+QState *runningState = new QState();
+QState *stopState = new QState(runningState);
+QState *waitState = new QState(runningState);
+QState *driveState = new QState(runningState);
+QFinalState *childFinalState = new QFinalState(runningState);
+runningState->setInitialState(stopState);
+\end{lstlisting}
+\normalsize
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46166}\frametitle{Final Child States}
+\centeredImage{animation/diagrams/statemachine-trafficlights-final.pdf}
+\vfill
+When a final child state is entered:
+\begin{itemize}
+\item No more processing occurs in the state.
+\item The state emits the \hClsSig{QState}{finished} signal.
+\end{itemize}
+
+We can use this signal to start a transition.
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46170}\frametitle{History States}
+\centeredImage{animation/diagrams/statemachine-history.pdf}
+\vfill
+A history state contains information about a state and its children.
+
+\begin{itemize}
+\item It retains information when its parent state is left.
+\item This enables execution of a state to be interrupted.
+\item The history state is used to restore the state when it is returned to.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1249}\frametitle{History States}
+\centeredImage{animation/diagrams/statemachine-history.pdf}
+\vfill
+To record and restore a state:
+
+\begin{itemize}
+\item Make a history state as a child of the state.
+\item Make a transition from the state to another state.
+\item Make a transition back to the history state.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46171}\frametitle{History States}
+\textbf{Example:} A set of traffic lights widget with pause and quit buttons.
+
+\vspace*{0.5em}
+\centeredImage{animation/diagrams/statemachine-trafficlights-history.pdf}
+\vfill
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46172}\frametitle{History States}
+\vspace*{-0.5em}
+\centeredImage{animation/diagrams/statemachine-trafficlights-history-detail.pdf}
+\vspace*{-1.0em}
+\small
+% From examples/animation/states/trafficlights-history/main.cpp
+\begin{lstlisting}
+QHistoryState *historyState = new QHistoryState(runningState);
+QState *pausedState = new QState();
+...
+runningState->addTransition(pauseButton, SIGNAL(toggled(bool)),
+                            pausedState);
+pausedState->addTransition(pauseButton, SIGNAL(toggled(bool)),
+                           historyState);
+\end{lstlisting}
+\normalsize
+\vfill
+\demo{animation/ex-trafficlights}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46180}\frametitle{Parallel States}
+\label{Animation-States-Parallel}
+\vspace*{1.5em}
+Parallel child states are executed simultaneously.
+
+\begin{itemize}
+\item They can be used to represent
+\begin{itemize}
+\item independent components in a user interface,
+\item independent properties of a component,
+\item components that run in parallel.
+\end{itemize}
+\item Passing \iClsEnum{QState}{ParallelStates} to the \iCls{QState}
+constructor makes a state parallel.
+\item There is no initial child state~\textendash~all are executed
+simultaneously.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46181}\frametitle{Parallel States}
+\textbf{Example:} Cursor key input widget.
+
+\vspace*{0.5em}
+\centeredImage{animation/diagrams/statemachine-parallel.pdf}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46182}\frametitle{Parallel States}
+
+\vspace*{-0.5em}
+\small
+% From examples/animation/states/parallel/window.cpp
+\begin{lstlisting}
+QState *runningState = new QState(QState::ParallelStates);
+QState *horizontalState = new QState(runningState);
+QState *verticalState = new QState(runningState);
+
+QState *hcenterState = new QState(horizontalState);
+QState *leftState = new QState(horizontalState);
+QState *rightState = new QState(horizontalState);
+horizontalState->setInitialState(hcenterState);
+
+QState *vcenterState = new QState(verticalState);
+QState *upState = new QState(verticalState);
+QState *downState = new QState(verticalState);
+verticalState->setInitialState(vcenterState);
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-parallel-states}
+\vfill
+\end{slide}
+
+%----------------------------------------------------------------------
+\subsection{Events and Transitions}
+
+\begin{slide}{46185}\frametitle{Events and Transitions}
+\label{Animation-States-Events}
+\iCls{QSignalTransition} causes a transition to occur when a signal
+is emitted.
+
+\begin{itemize}
+\item We normally call \hClsFn{QState}{addTransition} with
+a sender, signal and target state.
+\item Create a subclass to check signal arguments.
+\end{itemize}
+
+\iCls{QEventTransition} causes a transition to occur when a Qt event
+is received.
+
+\begin{itemize}
+\item There is no convenience function for this.
+\item Create new instances and set them up by hand.
+\item Create a subclass to check event properties.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{46188}\frametitle{Key Event Transitions}
+The \iCls{QKeyEventTransition} ties a transition to a key press or release:
+
+\vspace*{0.5em}
+\small
+% From examples/animation/states/parallel-animations/main.cpp
+\begin{lstlisting}
+QKeyEventTransition *upTransition;
+upTransition = new QKeyEventTransition(this,
+                   QEvent::KeyPress, Qt::Key_Up);
+upTransition->setTargetState(upState);
+vcenterState->addTransition(upTransition);
+
+QKeyEventTransition *upCenterTransition;
+upCenterTransition = new QKeyEventTransition(this,
+                         QEvent::KeyRelease, Qt::Key_Up);
+upCenterTransition->setTargetState(vcenterState);
+upState->addTransition(upCenterTransition);
+\end{lstlisting}
+\normalsize
+
+\begin{itemize}
+\item Pressing and releasing the up arrow causes transitions between the \texttt{vcenterState}
+and \texttt{upState} states.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46190}\frametitle{Animated Transitions}
+\label{Animation-Animated-Transitions}
+Animated transitions blend the values of properties between states over time.
+
+\begin{itemize}
+\item Often used for cosmetic effects.
+\item Animations do not block transitions; they run in parallel to them.
+\item A default animation can be set for all transitions.
+\end{itemize}
+
+\small
+% From examples/animation/states/parallel-animations/main.cpp
+\begin{lstlisting}
+QPropertyAnimation *upAnimation;
+upAnimation = new QPropertyAnimation(upButton, "brightness", this);
+upAnimation->setDuration(1000);
+upTransition->addAnimation(upAnimation);
+upCenterTransition->addAnimation(upAnimation);
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-parallel-animations}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46199}\frametitle{State Machine Summary}
+
+\vspace*{1.5em}
+\begin{itemize}
+\item \showHyperlink{Animation-States-States}{States} and
+\showHyperlink{Animation-States-Transitions}{transitions} help
+manage application logic.
+\item \showHyperlink{Animation-States-Properties}{States} can be associated
+with property values.
+\item States can contain \showHyperlink{Animation-States-Composite}{child states}.
+\item Child states can be executed sequentially or in parallel.
+\item Transitions can be linked to \showHyperlink{Animation-States-Events}{events}.
+
+\item State machines can be used with animations:
+\begin{itemize}
+\item Animations can be \showHyperlink{Animation-Animated-Transitions}{applied to transitions}.
+\item States define the start and end points of animations.
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46210}\frametitle{Additional Material}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46220}\frametitle{Hints and Tips}
+
+States and transitions:
+\begin{itemize}
+\item Ensure that there is an initial state for each composite
+state~\textemdash~unless it is a parallel state.
+\item Call \hClsFn{QObject}{setObjectName} on each state to set a readable
+name for debugging.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46186}\frametitle{Custom Signal Transitions}
+
+Custom signal transitions are created by subclassing \iCls{QSignalTransition}.
+
+\vspace*{-0.5em}
+\small
+% From examples/animation/states/imageviewer/selecttransition.h
+\begin{lstlisting}
+class SelectTransition : public QSignalTransition
+{
+public:
+    SelectTransition(QState *sourceState = 0);
+
+protected:
+    bool eventTest(QEvent *event);
+};
+\end{lstlisting}
+\normalsize
+\vfill
+We check events by reimplementing the \hClsFn{QSignalTransition}{eventTest} function.
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46187}\frametitle{Custom Signal Transitions}
+Here, we make sure we only look at signal events.
+
+\vspace*{-0.5em}
+\small
+% From examples/animation/states/imageviewer/selecttransition.cpp
+\begin{lstlisting}
+bool SelectTransition::eventTest(QEvent *event)
+{
+    if (!QSignalTransition::eventTest(event))
+        return false;
+
+    QStateMachine::SignalEvent *e = static_cast<QStateMachine::SignalEvent*>(event);
+
+    QVariant argument = e->arguments()[0];
+    QModelIndex index = qvariant_cast<QModelIndex>(argument);
+    return index.isValid();
+}
+\end{lstlisting}
+\normalsize
+
+In this example, the transition is only allowed if the model index is valid.
+\end{slide}

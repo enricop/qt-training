@@ -1,13 +1,3 @@
-#!/usr/bin/env python
-##########################################################################
-#
-# Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
-# All rights reserved.
-#
-# See the LICENSE.txt file shipped along with this file for the license.
-#
-##########################################################################
-
 #! /usr/bin/env python
 
 import os, optparse, tm_utils
@@ -90,7 +80,12 @@ Take a look at the example_course.py for an example COURSE file.''',
     module_count = 1
     for path in courses:
         path = os.path.expanduser(path)
+        outputSaved = options.output
+        options.output = os.path.join(options.output, os.path.basename(path).split('.')[0])
+        if not os.path.isdir(options.output):
+            os.mkdir(options.output)
         execfile(path)
+        options.output = outputSaved
 
 if __name__ == "__main__":
     main()

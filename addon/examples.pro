@@ -1,5 +1,6 @@
 TEMPLATE=subdirs
 SUBDIRS= \
+animation \
 graphicsview \
 graphicsview2 \
 dataio \

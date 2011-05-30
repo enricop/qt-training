@@ -1,13 +1,3 @@
-#!/usr/bin/env python
-##########################################################################
-#
-# Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
-# All rights reserved.
-#
-# See the LICENSE.txt file shipped along with this file for the license.
-#
-##########################################################################
-
 #! /usr/bin/env python
 
 import sys, os, subprocess, shutil
@@ -35,17 +25,20 @@ def enumerate_module(output_path, module_name, module_count, verbose, dry_run):
         if verbose:
             shutil.move(log_path, enumerated_log_path)
 
+def cleanup(path, dry_run):
+    if os.access(path, os.F_OK):
+        log("rm %s" % path)
+        if not dry_run:
+            os.unlink(path)
+
 def cleanup_auxiliaries(output_path, module_name, verbose, dry_run):
     ext_list = ["pdfsync", "snm", "toc", "nav", "aux", "out", "tex", "vrb", "idx"]
     if not verbose:
         ext_list.append("log")
     for ext in ext_list:
         path = os.path.join(output_path, "%s.%s" % (module_name, ext))
-        if not os.access(path, os.F_OK):
-            continue
-        log("rm %s" % path)
-        if not dry_run:
-            os.unlink(path)
+        cleanup(path, dry_run)
+    cleanup(os.path.join(output_path, "qtcxx.aux"), dry_run)
 
 def copy_addons(output_path, module_name, module_count, dry_run):
     src = os.path.join("..", "addon", module_name)

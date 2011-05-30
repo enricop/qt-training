@@ -1,0 +1,387 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Starting Animation}
+
+%----------------------------------------------------------------------
+\begin{slide}{46100}\frametitle{Overview}
+\label{animations}
+\xConcept{Animation}
+\vspace*{1.5em}
+Qt 4.6 and newer contains an animation API:
+\begin{itemize}
+\item Animations based on changing Qt properties.
+\item Can be used with widgets and with Graphics View.
+\item Easing curves for controlling the rate of animation.
+\item Groups of animations, performed in series or parallel.
+\item State-based animations.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{46101}\frametitle{Architecture}
+\vspace*{1.5em}
+\begin{itemize}
+\item All animation classes are derived from \iCls{QAbstractAnimation}.
+\item \iCls{QPropertyAnimation} class changes Qt properties to create animations.
+\item \iCls{QAnimationGroup} and its subclasses group animations together.
+\end{itemize}
+
+\iCls{QPropertyAnimation} helps fit the animation framework into Qt:
+\begin{itemize}
+\item All \iCls{QObject}-based classes can be animated.
+\item Graphics items with properties can be animated.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{46102}\frametitle{Property Animations}
+Animations can be created with the \iCls{QPropertyAnimation} class:
+\small
+% From examples/animation/widget/main.cpp
+\begin{lstlisting}
+QPushButton button("Animated Button");
+button.show();
+
+QPropertyAnimation animation(&button, "geometry");
+animation.setDuration(10000);
+animation.setStartValue(QRect(0, 0, 100, 30));
+animation.setEndValue(QRect(250, 250, 100, 30));
+\end{lstlisting}
+\normalsize
+
+\begin{itemize}
+\item The animation interpolates between the start and end property values
+(like \iCls{QTimeLine}).
+\item By default, a linear interpolation between start and end values is
+performed.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46103}\frametitle{Property Animations}
+\vspace*{1.0em}
+\textbf{Example:} The button moves smoothly from the start point to the end point.
+
+\vspace*{1.5em}
+\centeredImage{animation/diagrams/animation-widget.pdf}
+
+\small
+% From examples/animation/widgets-widget-figure/main.cpp
+\begin{lstlisting}
+    QPropertyAnimation animation(&button, "geometry");
+    animation.setDuration(10000);
+    animation.setStartValue(QRect(0, 0, 64, 30));
+    animation.setEndValue(QRect(850, 0, 64, 30));
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-widget}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\label{Animation-Key-Values}
+
+\begin{slide}[fragile]{46104}\frametitle{Key Values}
+Key values set the value of a property at different times in an animation.
+\small
+% From examples/animation/widget-keyvalues/main.cpp
+\begin{lstlisting}
+QPropertyAnimation animation(&button, "geometry");
+animation.setDuration(10000);
+
+animation.setKeyValueAt(0, QRect(0, 0, 100, 30));
+animation.setKeyValueAt(0.8, QRect(250, 250, 100, 30));
+animation.setKeyValueAt(1, QRect(0, 0, 100, 30));
+\end{lstlisting}
+\normalsize
+\begin{itemize}
+\item Property values are interpolated between key values.
+\item A value of 0 corresponds to the start value.
+\item A value of 1 corresponds to the end value.
+\item They can be used to break an animation into stages...
+\item ...or make the property change at a non-constant rate.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46105}\frametitle{Key Values}
+\textbf{Example:} The label takes 80\% of the time to travel half the total
+distance.
+
+\vspace*{1.5em}
+\centeredImage{animation/diagrams/animation-keyvalues.pdf}
+
+\small
+% From examples/animation/widgets-keyvalues-figure/main.cpp
+\begin{lstlisting}
+    QPropertyAnimation animation(label, "geometry");
+    animation.setDuration(10000);
+    animation.setKeyValueAt(0, QRect(0, 0, 64, 64));
+    animation.setKeyValueAt(0.8, QRect(425, 0, 64, 64));
+    animation.setKeyValueAt(1, QRect(850, 0, 64, 64));
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-widget-keyvalues-figures}
+\end{slide}
+
+%----------------------------------------------------------------------
+\label{Animation-Easing-Curves}
+
+\begin{slide}[fragile]{46106}\frametitle{Easing Curves}
+Easing curves are used to create animations that can change speed and direction.
+
+\centeredImage{animation/diagrams/animation-easing-bounce.pdf}
+\vspace*{1.5em}
+
+\begin{itemize}
+\item Each curve transforms the animation parameter to another
+value between 0 and 1.
+\item Some curves change the speed of the animation: \texttt{InOutExpo}
+\item Other curves change the direction: \texttt{OutBounce}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46107}\frametitle{Easing Curves}
+\textbf{Example:} Using an \texttt{OutQuad} curve makes the start of the
+animation run quickly and get slower towards the end.
+
+\vspace*{1.5em}
+\centeredImage{animation/diagrams/animation-easing.pdf}
+
+\small
+% From examples/animation/easingcurves-figure/main.cpp
+\begin{lstlisting}
+QPropertyAnimation animation(label, "geometry");
+animation.setDuration(3000);
+animation.setStartValue(QRect(0, 0, 64, 64));
+animation.setEndValue(QRect(850, 0, 64, 64));
+animation.setEasingCurve(QEasingCurve::OutQuad);
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-easingcurves-figure}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{46108}\frametitle{Looping, Changing Direction}
+\vspace*{0.5em}
+Animations can be looped:
+
+\begin{itemize}
+\item \hClsFn{QAbstractAnimation}{setLoopCount}
+\begin{itemize}
+\item Set the number of times an animation is played (default 1).
+\end{itemize}
+\item \hClsSig{QAbstractAnimation}{currentLoopChanged}
+\begin{itemize}
+\item Emitted with the current iteration when a new loop begins.
+\end{itemize}
+\end{itemize}
+
+The playing direction can be changed:
+
+\begin{itemize}
+\item \hClsFn{QAbstractAnimation}{setDirection}
+\begin{itemize}
+\item Sets the animation direction.
+\item Either \hClsEnum{QAbstractAnimation}{Forward} or \hClsEnum{QAbstractAnimation}{Backward}.
+\end{itemize}
+\item \hClsSig{QAbstractAnimation}{directionChanged}
+\begin{itemize}
+\item Emitted with the new direction when it changes.
+\end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{46109}\frametitle{Starting and Pausing}
+\vspace*{1.5em}
+
+Animations can be controlled using slots:
+
+\begin{itemize}
+\item \hClsFn{QAbstractAnimation}{start}
+\begin{itemize}
+\item Starts the animation from the beginning.
+\end{itemize}
+\item \hClsFn{QAbstractAnimation}{stop}
+\begin{itemize}
+\item Stops the animation completely.
+\end{itemize}
+\item \hClsFn{QAbstractAnimation}{pause}
+\begin{itemize}
+\item Pauses the animation, allowing it to continue later.
+\end{itemize}
+\item \hClsFn{QAbstractAnimation}{resume}
+\begin{itemize}
+\item Continues playing the animation from where it was paused.
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{46110}\frametitle{Monitoring}
+\vspace*{1.5em}
+
+In general:
+\begin{itemize}
+\item \hClsSig{QAbstractAnimation}{stateChanged}
+\begin{itemize}
+\item Emitted with an animation's state when it changes.
+\item The state is \hClsEnum{QAbstractAnimation}{Stopped},
+\hClsEnum{QAbstractAnimation}{Paused} or \hClsEnum{QAbstractAnimation}{Running}.
+\end{itemize}
+\item \hClsSig{QAbstractAnimation}{finished}
+\begin{itemize}
+\item Emitted when the animation has finished playing.
+\end{itemize}
+\end{itemize}
+
+For \iCls{QVariantAnimation} and \iCls{QPropertyAnimation}:
+\begin{itemize}
+\item \hClsSig{QVariantAnimation}{valueChanged}
+\begin{itemize}
+\item Emitted with the current value of the property.
+\end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{46111}\frametitle{Animating Graphics Items}
+\label{Animation-Graphics-Items}
+
+Most \iCls{QGraphicsItem}s are not \iCls{QObject} subclasses.
+\begin{itemize}
+\item As a result, they do not have Qt properties.
+\item Subclass \iCls{QGraphicsObject} to create new items.
+\item Or subclass from \iCls{QObject} and another item class.
+\end{itemize}
+\small
+% From examples/animation/graphicsitem/graphicspixmapitem.h
+\begin{lstlisting}
+class GraphicsPixmapItem : public QObject,
+                           public QGraphicsPixmapItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QPointF pos READ pos WRITE setPos)
+
+public:
+    GraphicsPixmapItem(const QPixmap &pixmap,
+                       QGraphicsItem *parent = 0);
+};
+\end{lstlisting}
+\normalsize
+\demo{animation/ex-graphicsitem}
+\end{slide}
+
+%----------------------------------------------------------------------
+\subsection{Animation Groups}
+\begin{slide}{46120}\frametitle{Animation Groups}
+Animations can be placed in groups.
+
+\begin{itemize}
+\item Sequential groups run multiple animations one after the other.
+\end{itemize}
+\vfill
+\centeredImage{animation/diagrams/animation-sequential.pdf}
+\vfill
+\begin{itemize}
+\item Parallel groups run multiple animations at the same time.
+\end{itemize}
+\vfill
+\centeredImage{animation/diagrams/animation-parallel.pdf}
+\vfill
+\begin{itemize}
+\item Groups help you to organize animations.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{46122}\frametitle{Sequential Animations}
+\label{Animation-Sequential-Animations}
+
+\small
+% From examples/animation/sequential/main.cpp
+\begin{lstlisting}
+QPropertyAnimation *anim1 =
+        new QPropertyAnimation(label1, "pos");
+QPropertyAnimation *anim2 =
+        new QPropertyAnimation(label2, "pos");
+\end{lstlisting}
+\vfill
+\centeredImage{animation/diagrams/animation-sequential.pdf}
+\vfill
+\begin{lstlisting}
+QSequentialAnimationGroup group;
+group.addAnimation(anim1);
+group.addAnimation(anim2);
+group.start();
+\end{lstlisting}
+\normalsize
+\vfill
+\demo{animation/ex-sequential}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{46124}\frametitle{Parallel Animations}
+\label{Animation-Parallel-Animations}
+
+\centeredImage{animation/diagrams/animation-parallel.pdf}
+\vfill
+\small
+% From examples/animation/parallel/main.cpp
+\begin{lstlisting}
+QParallelAnimationGroup group;
+group.addAnimation(anim1);
+group.addAnimation(anim2);
+group.start();
+\end{lstlisting}
+\normalsize
+\vfill
+\demo{animation/ex-parallel}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{46200}\frametitle{Animation Summary}
+
+\vspace*{1.5em}
+\begin{itemize}
+\item Animations change the properties of \iCls{QObject}s over time.
+\item Use \showHyperlink{Animation-Key-Values}{key values} to create variable
+speed animations.
+\item Use \showHyperlink{Animation-Easing-Curves}{easing curves} to implement
+smooth flowing animations.
+\item Groups of animations can be played
+\showHyperlink{Animation-Sequential-Animations}{in sequence}
+or \showHyperlink{Animation-Parallel-Animations}{in parallel}.
+\item Animations can be use to \showHyperlink{Animation-Graphics-Items}{animate graphics items}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
