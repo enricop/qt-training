@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import os, optparse, tm_utils
+import sys, os, optparse, tm_utils
 
 class Module:
     def __init__(self, name, source = None):
@@ -88,7 +88,14 @@ Take a look at the example_course.py for an example COURSE file.''',
         options.output = os.path.join(options.output, os.path.basename(path).split('.')[0])
         if not os.path.isdir(options.output):
             os.mkdir(options.output)
-        execfile(path)
+        cwd_saved = os.getcwd()
+        try:
+            course_path = os.path.dirname(path)
+            if course_path != cwd_saved:
+                os.chdir(course_path)
+            execfile(path)
+        finally:
+            os.chdir(cwd_saved)
         options.output = outputSaved
 
 if __name__ == "__main__":
