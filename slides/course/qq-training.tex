@@ -1,0 +1,50 @@
+ % this is the driver for presentations
+\documentclass[t]{beamer}
+\input{config}
+\input{base}
+
+% General course title
+\title{Essentials Qt Quick}
+
+\begin{document}
+
+\input{frontpage}
+
+\begin{frame}
+  \frametitle{Day 1 - Introduction to the Qt Quick layer}
+  \tableofcontents[part=1]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Day 2 - Under the hood - the Qt C++ layer}
+  \tableofcontents[part=2]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Day 3 - Qt Quick Advanced}
+  \tableofcontents[part=3]
+\end{frame}
+
+\part{Day 1 - Introduction to the Qt Quick layer}
+\input{qml-intro/content}
+\input{qml-composing-uis/content}
+\input{qml-user-interaction/content}
+\input{qml-animations/content}
+
+
+\part{Day 2 - Under the hood - the Qt C++ layer}
+\input{objects/content}
+\input{coretypes/content}
+\input{qml-cpp-integration/qml-environment}
+\input{qml-cpp-integration/exposing-objects}
+
+\part{Day 3 - Qt Quick Advanced}
+\input{qml-presenting-data/content.tex}
+\input{modelview/content.tex}
+\input{dataio/xml.tex}
+\input{dataio/sql.tex}
+%\input{graphics-effects}
+
+\input{disclaimer.tex}
+
+\end{document}
