@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 2.0
 
 // Board and Knight are implicitly imported from Board.qml and Knight.qml.
 

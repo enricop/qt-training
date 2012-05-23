@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 2.0
 
 Grid {
     x: 15; y: 15; width: 300; height: 300

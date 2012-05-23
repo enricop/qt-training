@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 2.0
 
 Rectangle {
     width: label.width + 32
@@ -11,6 +11,7 @@ Rectangle {
         id: label
         font.family: "Helvetica"
         anchors.centerIn: parent
+        text: "Hello World"
     }
 
     MouseArea {

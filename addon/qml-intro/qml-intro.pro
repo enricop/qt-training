@@ -1,6 +1,6 @@
 TEMPLATE=subdirs
 SUBDIRS= \
   ex-concepts \
-  lab-composing-uis \
-  qml-intro.qmlproject \
-  sol-composing-uis \
+  sol-colors-and-gradients \
+  sol-nested-elements \
+  sol-text-images-anchors \
