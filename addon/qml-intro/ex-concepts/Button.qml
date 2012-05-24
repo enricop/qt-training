@@ -11,7 +11,6 @@ Rectangle {
         id: label
         font.family: "Helvetica"
         anchors.centerIn: parent
-        text: "Hello World"
     }
 
     MouseArea {
