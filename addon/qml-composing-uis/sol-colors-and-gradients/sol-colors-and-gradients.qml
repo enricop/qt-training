@@ -38,7 +38,7 @@ Rectangle {
         width: 100; height: 100
         color: "black"
         clip: true
-        
+
         Rectangle {
             x: -21; y: -21
             width: 142; height: 142
