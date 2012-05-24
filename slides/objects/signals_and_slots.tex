@@ -29,7 +29,7 @@
     \item Observer Pattern (Listener)
       \begin{itemize}
       \item Based on interface classes
-      \item Needs listener registraction
+      \item Needs listener registration
       \item Many interface classes
       \end{itemize}  
     \end{itemize}
@@ -297,22 +297,22 @@ connect( \=m\_slider, \=SIGNAL( valueChanged( int \incorrecttext{value} ) )\\
  \begin{tabular}{r|c|l}
 \textbf{Signal}                &    & \textbf{Slot} \\
 \hline
-\multirow{3}{*}{rangeChanged(int,int)} & \uncover<2->{\correct} & setRange(int,int) \\
- & \uncover<3->{\correct} & setValue(int) \\
- & \uncover<4->{\correct} & updateUi() \\
+\multirow{3}{*}{rangeChanged(int,int)} & \correct & setRange(int,int) \\
+ & \correct & setValue(int) \\
+ & \correct & update() \\
 \hline
 
-\multirow{3}{*}{valueChanged(int)}     & \uncover<5->{\correct} & setValue(int) \\
- & \uncover<6->{\correct} & updateUi() \\
- & \uncover<7->{\incorrect} & setRange(int,int) \\ 
- & \uncover<8->{\incorrect} & setValue(float) \\
+\multirow{3}{*}{valueChanged(int)}     & \correct & setValue(int) \\
+ & \correct & update() \\
+ & \incorrect & setRange(int,int) \\ 
+ & \incorrect & setValue(float) \\
 \hline                                   
 
-textChanged(QString) & \uncover<9->{\incorrect} & setValue(int) \\
+textChanged(QString) & \incorrect & setValue(int) \\
 \hline
 
-\multirow{2}{*}{clicked()}  & \uncover<10->{\correct} & updateUi() \\
-& \uncover<11->{\incorrect} & setValue(int) \\
+\multirow{2}{*}{clicked()}  & \correct & update() \\
+& \incorrect & setValue(int) \\
 
   \end{tabular}
   \end{center}
