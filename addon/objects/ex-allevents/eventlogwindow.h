@@ -10,7 +10,7 @@
 #ifndef EVENTLOGWINDOW_H
 #define EVENTLOGWINDOW_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class EventLogWindow : public QWidget
 {

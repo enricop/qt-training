@@ -3,3 +3,4 @@ HEADERS   = widget.h \
 SOURCES   = main.cpp \
             widget.cpp \
     eventlogwindow.cpp
+QT += widgets

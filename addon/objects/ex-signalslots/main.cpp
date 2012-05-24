@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "myemitter.h"
 #include "myreceiver.h"
 

@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "selectcolor.h"
 
 SelectColor::SelectColor(QWidget *parent)

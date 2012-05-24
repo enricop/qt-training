@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "widget.h"
 
 Widget::Widget(QWidget *parent)

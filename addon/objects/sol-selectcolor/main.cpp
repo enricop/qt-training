@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "selectcolor.h"
 
 int main(int argc, char *argv[])

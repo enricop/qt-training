@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "stopwatch.h"
 
 StopWatch::StopWatch(QWidget *parent)

@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "stopwatch.h"
 
 int main(int argc, char *argv[])
