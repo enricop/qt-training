@@ -1082,7 +1082,7 @@ void ChartItem::append_bar(QDeclarativeListProperty<BarItem> *list,
   \item use placeholders for C++ components until they are ready
   \end{itemize}
 \vspace*{0.5em}
-\item Plugins can be loaded by the \qtt{qmlviewer} tool
+\item Plugins can be loaded by the \qtt{qmlscene} tool
   \begin{itemize}
   \item with an appropriate \qtt{qmldir} file
   \end{itemize}
@@ -1180,7 +1180,7 @@ DESTDIR   = ../plugins
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1532}\frametitle{Using an Extension Plugin}
 
-To use the plugin with the \qtt{qmlviewer} tool:
+To use the plugin with the \qtt{qmlscene} tool:
 
 \flushedImageDoubleWidth{qml-cpp-integration/images/plugin-location.pdf}
 \begin{itemize}
@@ -1304,7 +1304,7 @@ plugin->registerTypes("com.nokia.qt.examples.Shapes");
   \item build a Qt plugin project with the \qtt{declarative} option enabled
   \end{itemize}
 \vspace*{0.5em}
-\item Plugins can be loaded by the \qtt{qmlviewer} tool
+\item Plugins can be loaded by the \qtt{qmlscene} tool
   \begin{itemize}
   \item write a \qtt{qmldir} file
   \item declare the plugin's name and location relative to the file
