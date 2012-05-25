@@ -1,0 +1,117 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------
+\subsection{Meet Qt}
+
+%----------------------------------------------------------------------
+\begin{slide}{2003}\frametitle{The Qt SDK}
+\vspace*{0.5em}
+\centeredImageFullWidth{qml-intro/images/qt_architecture.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{2002}\frametitle{Qt modules}
+\vspace*{1.5em}
+The Qt framework is split in modules:
+\begin{itemize}
+\item each module has is own repository
+\item QtBase is the only mandatory module for all Qt application
+\item QtTools is a special module containing Qt applications
+\item examples: QtDeclarative, QtWebKit, QtMultimedia...
+\end{itemize}
+Modules are themselves split into one or more libraries
+\begin{itemize}
+\item libraries are linked to your applications
+\item they group a set of common features (xml, dbus, network...)
+\item QtCore (part of QtBase) is mandatory for all Qt applications
+\item examples: QtNetwork, QtGui, QtDeclrative
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{Creating user interface}
+\vspace*{1.5em}
+Using widgets (C++)
+\begin{itemize}
+\item fixed interface
+\item mostly targeting desktop application
+\end{itemize}
+\centeredImageFullWidth{qml-intro/images/ui-widget.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{Creating user interface}
+\vspace*{1.5em}
+Using graphics view (C++)
+\begin{itemize}
+\item 2D canvas (with z axis)
+\item handle a high number of 2D items
+\item transformations and animations of items
+\end{itemize}
+\centeredImageFullWidth{qml-intro/images/ui-graphicsview.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{Creating user interface}
+\vspace*{1.5em}
+Using openGL (C++/OpenGL)
+\begin{itemize}
+\item full strength of OpenGL
+\item user interaction (mouse and keybboard) using Qt API
+\item all classes from Qt are usable
+\end{itemize}
+%\centeredImageFullWidth{qml-intro/images/ui-opengl.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{Creating user interface}
+\vspace*{1.5em}
+Using QtQuick (QML/Javascript/C++/OpenGL)
+\begin{itemize}
+\item declarative langage using the QML langage
+\item provide smooth animation
+\item easily linked to C++
+\end{itemize}
+\centeredImageFullWidth{qml-intro/images/ui-quick.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2000}\frametitle{Qt Quick requirement}
+\vspace*{1.5em}
+\begin{itemize}
+\item Platform must support OpenGL ES2
+\item Needs at least QtBase, QtJsBackend and QtDeclarative module
+\item Other module can be used to add new features:
+\begin{itemize}
+\item QtGraphicalEffects: add effects like blur, drop shadow...
+\item Qt3D: 3D programming in QML
+\item QtMultimedia: audio and video items
+\item ...
+\end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
