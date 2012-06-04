@@ -7,16 +7,16 @@
  *
  *************************************************************************/
 
-#include <QApplication>
-#include <QDeclarativeView>
+#include <QGuiApplication>
+#include <QQuickView>
 #include "ellipseitem.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     qmlRegisterType<EllipseItem>("Shapes", 3, 0, "Ellipse");
 
-    QDeclarativeView view;
+    QQuickView view;
     view.setSource(QUrl("qrc:ellipse3.qml"));
     view.show();
     return app.exec();

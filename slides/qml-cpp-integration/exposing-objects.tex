@@ -399,10 +399,9 @@ In the \textit{ellipseitem.cpp} file:
 
 \vspace*{0.5em}
 \begin{lstlisting}
-EllipseItem::EllipseItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+EllipseItem::EllipseItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
     QTimer::singleShot(2000, this, SIGNAL(ready()));
 }
 \end{lstlisting}
