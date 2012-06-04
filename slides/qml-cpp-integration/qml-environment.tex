@@ -36,15 +36,15 @@ Qt Quick is a combination of technologies:
 \begin{slide}[fragile]{1526}\frametitle{Setting up a Declarative View}
 
 \begin{lstlisting}
-#include <QApplication>
-#include <QDeclarativeView>
+#include <QGuiApplication>
+#include <QQuickView>
 #include <QUrl>
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    QDeclarativeView view;
-    view.setSource(QUrl("qrc:files/animation.qml"));
+    QGuiApplication app(argc, argv);
+    QQuickView view;
+    view.setSource(QUrl("qrc:animation.qml"));
     view.show();
     return app.exec();
 }
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 \begin{slide}[fragile]{1525}\frametitle{Setting up QtDeclarative}
 
 \begin{qmake}
-QT       += declarative
+QT       += quick
 RESOURCES = simpleviewer.qrc
 SOURCES   = main.cpp
 \end{qmake}

@@ -1,4 +1,4 @@
-QT       += declarative
+QT       += quick
 RESOURCES = simpleviewer.qrc
 SOURCES   = main.cpp
 

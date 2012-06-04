@@ -7,14 +7,14 @@
  *
  *************************************************************************/
 
-#include <QApplication>
-#include <QDeclarativeView>
+#include <QGuiApplication>
+#include <QQuickView>
 #include <QUrl>
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    QDeclarativeView view;
+    QGuiApplication app(argc, argv);
+    QQuickView view;
     view.setSource(QUrl("qrc:animation.qml"));
     view.show();
     return app.exec();
