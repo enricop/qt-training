@@ -493,7 +493,7 @@ In the \textit{ellipse4.qml} file:
 
 \vspace*{0.5em}
 \begin{itemize}
-\item \qtt{Ellipse} now has a \qtt{setColor()} method
+\item \qtt{Ellipse} has a \qtt{setColor()} method
   \begin{itemize}
   \item accepts a color
   \item also accepts strings containing colors
@@ -511,7 +511,7 @@ In the \textit{ellipseitem.h} file:
 \vspace*{0.25em}
 \begin{lstlisting}
 ...
-    const QColor &color() const;
+    const QColor color() const;
 
 signals:
     void colorChanged();
