@@ -220,7 +220,7 @@ In the \textit{ellipseitem.h} file:
 
 \vspace*{0.5em}
 \begin{lstlisting}
-class EllipseItem : public QDeclarativeItem
+class EllipseItem : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor
@@ -254,7 +254,7 @@ In the \textit{ellipseitem.h} file:
 \begin{lstlisting}
 public:
     ...
-    const QColor &color() const;
+    const QColor color() const;
     void setColor(const QColor &newColor);
 
 signals:
@@ -279,7 +279,7 @@ In the \textit{ellipseitem.cpp} file:
 
 \vspace*{0.25em}
 \begin{lstlisting}
-const QColor &EllipseItem::color() const {
+const QColor EllipseItem::color() const {
     return m_color;
 }
 
@@ -302,13 +302,12 @@ In the \textit{ellipseitem.cpp} file:
 
 \vspace*{0.5em}
 \begin{lstlisting}
-void EllipseItem::paint(QPainter *painter,
-    const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void EllipseItem::paint(QPainter *painter) {
     painter->save(); // save painter state
     painter->setPen(Qt::NoPen); // we use no pen
     // setup brush as described by property 'color'
     painter->setBrush(m_color); 
-    painter->drawEllipse(option->rect);
+    painter->drawEllipse(boundingRect());
     painter->restore(); // restore painter state
 }
 \end{lstlisting}
@@ -321,7 +320,7 @@ void EllipseItem::paint(QPainter *painter,
 \begin{itemize}
 \item Register new QML types using \iCls{qmlRegisterType}
   \begin{itemize}
-  \item new types are subclasses of \iCls{QDeclarativeItem}
+  \item new types are subclasses of \iCls{QQuickItem}
   \end{itemize}
 \vspace*{0.5em}
 \item Add QML properties

@@ -10,23 +10,21 @@
 #include <QtGui>
 #include "ellipseitem.h"
 
-EllipseItem::EllipseItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+EllipseItem::EllipseItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
-void EllipseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                        QWidget * /*widget*/)
+void EllipseItem::paint(QPainter *painter)
 {
     painter->save();
     painter->setPen(Qt::NoPen);
     painter->setBrush(m_color);
-    painter->drawEllipse(option->rect);
+    painter->drawEllipse(boundingRect());
     painter->restore();
 }
 
-const QColor &EllipseItem::color() const
+const QColor EllipseItem::color() const
 {
     return m_color;
 }
