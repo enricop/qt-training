@@ -23,9 +23,9 @@ QML environment as new types.
 \vspace*{0.5em}
 \begin{itemize}
 \item Non-visual types are \iCls{QObject} subclasses
-\item Visual types (items) are \iCls{QDeclarativeItem} subclasses
+\item Visual types (items) are \iCls{QQuickItem} subclasses
   \begin{itemize}
-  \item \iCls{QDeclarativeItem} is the C++ equivalent of \qic{class}{Item}
+  \item \iCls{QQuickItem} is the C++ equivalent of \qic{class}{Item}
   \end{itemize}
 \end{itemize}
 
@@ -33,7 +33,7 @@ QML environment as new types.
 To define a new type:
 
 \begin{itemize}
-\item In C++: Subclass either \iCls{QObject} or \iCls{QDeclarativeItem}
+\item In C++: Subclass either \iCls{QObject} or \iCls{QQuickItem}
 \item In C++: Register the type with the QML environment
 \item In QML: Import the module containing the new item
 \item In QML: Use the item like any other standard item
@@ -70,21 +70,19 @@ In the \textit{ellipseitem.h} file:
 
 \medskip
 \begin{lstlisting}
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
-class EllipseItem : public QDeclarativeItem
+class EllipseItem : public QQuickPaintedItem
 {
     Q_OBJECT
 public:
-    EllipseItem(QDeclarativeItem *parent = 0);
-    void paint(QPainter *painter,
-               const QStyleOptionGraphicsItem *option,
-               QWidget *widget = 0);
+    EllipseItem(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
 };
 \end{lstlisting}
 
 \begin{itemize}
-\item \qtt{EllipseItem} is a \iCls{QDeclarativeItem} subclass
+\item \qtt{EllipseItem} is a \iCls{QQuickPaintedItem} subclass, which is a \iCls{QQuickItem} subclass
 \item As with Qt widgets, each item can have a parent
 \item Each custom item needs to paint itself
 \end{itemize}
@@ -101,18 +99,15 @@ In the \textit{ellipseitem.cpp} file:
 #include <QtGui>
 #include "ellipseitem.h"
 
-EllipseItem::EllipseItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+EllipseItem::EllipseItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 ...
 \end{lstlisting}
 
 \begin{itemize}
 \item As usual, call the base class's constructor
-\item It is necessary to clear the \hClsEnum{QGraphicsItem}{ItemHasNoContents}
-      flag
 \end{itemize}
 
 \end{slide}
@@ -125,16 +120,22 @@ In the \textit{ellipseitem.cpp} file:
 \vspace*{0.5em}
 \begin{lstlisting}
 ...
-void EllipseItem::paint(QPainter *painter,
-    const QStyleOptionGraphicsItem *option, QWidget *widget)
+void EllipseItem::paint(QPainter *painters)
 {
-    painter->drawEllipse(option->rect);
+    const qreal halfPenWidth =
+      qMax(painter->pen().width() / 2.0, 1.0);
+    
+    QRectF rect = boundingRect();
+    rect.adjust(halfPenWidth, halfPenWidth,
+                -halfPenWidth, -halfPenWidth);
+    
+    painter->drawEllipse(rect);
 }
 \end{lstlisting}
 
 \begin{itemize}
-\item A simple \hClsFn{QDeclarativeItem}{paint} function implementation
-\item Ignore style information and use the default pen
+\item A simple \hClsFn{QQuickPaintedItem}{paint} function implementation
+\item Adjust drawing area by half of the pen width on all sides
 \end{itemize}
 
 \end{slide}
@@ -143,17 +144,17 @@ void EllipseItem::paint(QPainter *painter,
 \begin{slide}[fragile]{1571}\frametitle{Registering the Item}
 
 \begin{lstlisting}
-#include <QApplication>
-#include <QDeclarativeView>
+#include <QGuiApplication>
+#include <QQuickView>
 #include "ellipseitem.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     qmlRegisterType<EllipseItem>("Shapes", 1, 0, "Ellipse");
 
-    QDeclarativeView view;
-    view.setSource(QUrl("qrc:files/ellipse1.qml"));
+    QQuickView view;
+    view.setSource(QUrl("qrc:ellipse1.qml"));
     view.show();
     return app.exec();
 }
