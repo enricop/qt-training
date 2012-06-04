@@ -578,11 +578,10 @@ In the \textit{ellipseitem.h} file:
 \begin{lstlisting}
 ...
 public:
-    EllipseItem(QDeclarativeItem *parent = 0);
-    void paint(QPainter *painter,
-      const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    EllipseItem(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
 
-    const QColor &color() const;
+    const QColor color() const;
     void setColor(const QColor &newColor);
 
     Q_INVOKABLE QColor randomColor() const;
