@@ -41,7 +41,7 @@ class QAnstractItemModel {
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0238}\frametitle{QVariant}
+\begin{slide}[fragile]{1020}\frametitle{QVariant}
 \begin{itemize}
   \item For \texttt{QtCore} types  
   \item[] \begin{cpp}
@@ -61,7 +61,7 @@ qDebug() << variant.typeName(); // "QColor"
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0240}
-\frametitle{Q\_DECLARE\_METATYPE}
+\frametitle{Custom data types in variants}
 \begin{itemize}
 \item[]
 \begin{cpp}
@@ -76,9 +76,9 @@ class Contact
 };
 
 Q_DECLARE_METATYPE(Contact);
-\end{cpp}\vspace*{5mm}
-\item Type must support default construction, copy and assignment.
-\item Should appear after class definition in header file.
+\end{cpp}\medskip
+\item Type must support default construction, copy and assignment.\medskip
+\item Q\_DECLARE\_METATYPE shoud after class definition in header file.
 \doc{qmetatype.html\#Q_DECLARE_METATYPE}{Q\_DECLARE\_METATYPE}
 \end{itemize}
 \end{slide}
