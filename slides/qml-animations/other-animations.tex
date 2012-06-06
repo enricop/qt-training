@@ -104,6 +104,68 @@
 
 %----------------------------------------------------------------------
 
+\begin{slide}{12821}\frametitle{Path Animation}
+
+\begin{itemize}
+\item \qic{class}{PathAnimation} animates an item along a path
+\item Manipulates the \qic{type}{x}, \qic{type}{y} and \qic{type}{rotation} properties of an element
+\item The \qic{type}{target} element will be animated along the \qic{type}{path}
+\item Value of \qic{type}{orientation} property controls the \qic{type}{target} rotation:
+  \begin{itemize}
+  \item \qtt{\qc{class}{PathAnimation}.Fixed}
+  \item \qtt{\qc{class}{PathAnimation}.RightFirst}
+  \item \qtt{\qc{class}{PathAnimation}.LeftFirst}
+  \item \qtt{\qc{class}{PathAnimation}.TopFirst}
+  \item \qtt{\qc{class}{PathAnimation}.BottomFirst}
+  \end{itemize}
+\item Value of \qic{type}{path} is specified using \qic{class}{Path} element and its helpers
+  \begin{itemize}
+  \item \qc{class}{PathLine}
+  \item \qc{class}{PathQuad}
+  \item \qc{class}{PathCubic}
+  \item \qc{class}{PathCurve}
+  \item \qc{class}{PathArc}
+  \item \qc{class}{PathSvg}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{12821}\frametitle{Path Animation}
+
+\flushedImage{qml-animations/images/path-animation.png}
+
+\begin{qml}
+\qtt{\qc{class}{PathAnimation}~\{}\\
+\qtt{~~~~\qc{type}{duration}:~\qc{number}{2000}}\\
+\qtt{~~~~\qc{type}{easing.type}:~\qc{class}{Easing}.InOutQuad}\\
+\qtt{~~~~\qc{type}{target}:~rocket}\\
+\qtt{~~~~\qc{type}{orientation}:~\qc{class}{PathAnimation}.RightFirst}\\
+\qtt{~~~~\qc{type}{anchorPoint}:~\qc{class}{Qt}.point(rocket.width/2,}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~~~~rocket.height/2)}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{type}{path}:~\qc{class}{Path}~\{}\\
+\qtt{~~~~~~~~\qc{type}{startX}: rocket.width/2}\\
+\qtt{~~~~~~~~\qc{type}{startY}: rocket.height/2}\\
+\qtt{~~~~~~~~\qc{class}{PathCubic}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{x}:~window.width - rocket.width/2}\\
+\qtt{~~~~~~~~~~~~\qc{type}{y}:~window.height - rocket.height/2}\\
+\qtt{~~~~~~~~~~~~\qc{type}{control1X}:~x;~\qc{type}{control1Y}:~rocket.height/2}\\
+\qtt{~~~~~~~~~~~~\qc{type}{control2X}:~rocket.width/2;~\qc{type}{control2Y}:~y}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}
+\end{qml}
+
+\demo{qml-animations/ex-animations/path-animation.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+
 \begin{EXCLUDE}
 \begin{slide}{1282}\frametitle{Vector3d Animation}
 
