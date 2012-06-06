@@ -139,8 +139,45 @@ int main(int argc, char* argv[])
 \doc{qmetatype.html\#construct}{construct}
 \end{slide}
 
+
 % ----------------------------------------------------------------------
 \subsubsection{Properties}
+\begin{slide}[fragile]{1021}
+\frametitle{Properties}
+\begin{itemize}
+\item Qt Quick example\\[2mm]
+\begin{EXCLUDE}
+Rectangle {
+    objectName: "myRect"
+    height: 100
+    ...
+}
+\end{EXCLUDE}
+\begin{qml}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{objectName}:~\qc{string}{"myRect"}}\\
+\qtt{~~~~\qc{type}{height}:~\qc{number}{100}}\\
+\qtt{~~~~...}\\
+\qtt{\}}\\
+\end{qml}\medskip
+
+\item Direct access (Broken, due to private headers)
+  \begin{cpp}
+QQuickRectangle* rectangle
+  = root->findChild<QQuickRectangle*>("myRect");
+int height = rectangle->height();
+  \end{cpp}\medskip
+
+\item Generic property access:\\
+\begin{cpp}
+QObject* rectangle = root->findChild<QObject*>("myRect");
+int height = rectangle->property("height").value<int>();
+\end{cpp}
+\end{itemize}
+\hfill\tiny\textcolor{red}{Using findChild is almost always a bad idea!}
+\end{slide}
+
+% ----------------------------------------------------------------------
 \begin{slide}[fragile]{2084}
 \frametitle{Properties}
 \begin{itemize}
