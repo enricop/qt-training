@@ -120,57 +120,59 @@ int main(int argc, char* argv[])
 
 % ----------------------------------------------------------------------
 \subsubsection{Properties}
-\begin{frame}[fragile]
+\begin{slide}[fragile]{2084}
 \frametitle{Properties}
-\begin{cpp}
-    Q_PROPERTY( type name READ getFunction [WRITE setFunction]
-    [RESET resetFunction] [NOTIFY notifySignal] [DESIGNABLE bool]
-    [SCRIPTABLE bool] [STORED bool] )
-\end{cpp}
 \begin{itemize}
-\item Macro for mapping property names to getter/setter functions
-    \begin{itemize}
-    \item optional - emit NOTIFY signals for change notification 
-    \end{itemize}
-\item An indirect way to call getters/setters of \texttt{QObject}s
-    \begin{itemize}
-    \item \texttt{property(char*)} calls a getter, returns value in \iCls{QVariant}
-    \item \texttt{setProperty(char*, QVariant)} calls a setter
-    \end{itemize}
-\item Q\_OBJECT macro required for properties to work
-
-\item If name is not declared as a \texttt{Q\_PROPERTY}
-    \begin{itemize}
-    \item store as \textbf{dynamic property} in \texttt{QObject}
-    \item using \iCls{QVariantMap}  
-    \end{itemize}
-\item Class-reflection provided by \iCls{QMetaObject}, \iCls
-{QMetaProperty}
-    \begin{itemize}
+  \item Macro for mapping property names to getter/setter functions
+\begin{cpp}
+  Q_PROPERTY( type name READ getFunction [WRITE setFunction]
+  [RESET resetFunction] [NOTIFY notifySignal] [DESIGNABLE bool]
+  [SCRIPTABLE bool] [STORED bool] )
+\end{cpp}
+  \vspace*{0.5em}
+  \item An indirect way to call getters/setters of \iCls{QObject}s
+\begin{cpp}
+  QVariant property(const char* name) const;
+  void setProperty(const char* name, const QVariant &value);
+\end{cpp}
+  \vspace*{0.5em}
+  \item If name is not declared as a \texttt{Q\_PROPERTY}
+  \begin{itemize}
+    \item[] -> \textbf{dynamic property}
+  \end{itemize}
+  \vspace*{0.5em}
+  \item Class-reflection provided by \iCls{QMetaObject} and \iCls{QMetaProperty}
+  \vspace*{0.5em}
+  \item Note:
+  \begin{itemize}
+    \item Q\_OBJECT macro required for properties to work
     \item \texttt{QMetaObject} knows nothing about dynamic properties
-    \end{itemize}
+  \end{itemize}
 \end{itemize}
-\end{frame}
+\end{slide}
 
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1422}
 \frametitle{QObject with Properties Example}
 \begin{cpp}
-class Customer : public QObject {
-    Q_OBJECT  /* macro required for moc to preprocess class */
+class Customer : public QObject
+{
+    Q_OBJECT
 
-    Q_PROPERTY( QString id READ getId WRITE setId);
-    Q_PROPERTY( QString name READ getName WRITE setName);
-    Q_PROPERTY( QString address READ getAddress WRITE setAddress);
+    Q_PROPERTY(QString id READ getId WRITE setId);
+    Q_PROPERTY(QString name READ getName WRITE setName);
+    Q_PROPERTY(QString address READ getAddress WRITE setAddress);
     // Read-only
-    Q_PROPERTY( QDate dateEstablished READ getDateEstablished );
-    Q_PROPERTY( CustomerType type READ getType WRITE setType);   
+    Q_PROPERTY(QDate dateEstablished READ getDateEstablished );
+    Q_PROPERTY(CustomerType type READ getType WRITE setType);
+
   public:
-    enum CustomerType
-    { Corporate, Individual, Educational, Government }; /* enum type
-        must be in the same class as Q_ENUMS macro. */
-    Q_ENUMS( CustomerType ) ;  /* generates string-to-enum
-        conversion functions - also must be in same class */
+    enum CustomerType {
+      Corporate, Individual, Educational, Government
+    };
+    Q_ENUMS(CustomerType);
+    ...
+};
 \end{cpp}
 \end{slide}
 
@@ -179,50 +181,63 @@ class Customer : public QObject {
 \frametitle{Using Properties}
 \begin{itemize}
 \item Direct vs indirect setting/getting:
-\end{itemize}
+\item[]
 \begin{cpp}
-Customer cust;
-cust.setProperty("name", QString("qt.nokia.com"));
-cust.setAddress("54B East Middlesex Turnpike");
-QVariant qv = cust.property("address");
-Q_ASSERT(qv.toString() == cust.address());
-Q_ASSERT(cust.name() == QString("qt.nokia.com"));
+Customer customer;
+
+customer.setProperty("name", QString("qt.nokia.com"));
+Q_ASSERT(customer.getName() == QString("qt.nokia.com"));
+
+customer.setAddress("54B East Middlesex Turnpike");
+const QVariant variant = customer.property("address");
+Q_ASSERT(variant.toString() == customer.getAddress());
 \end{cpp}
+\end{itemize}
 \end{slide}
 
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1424}
-\frametitle{Iterating through properties}                    
+\frametitle{Iterating through properties}
+\lstset{basicstyle=\ttfamily\fontsize{9}{9}\selectfont}
 \begin{cpp}
-QString objToString(const QObject* obj) {
-    QStringList result;
-    const QMetaObject *meta = obj->metaObject(); 
-    result += QString("class %1 : public %2 {")
-              .arg(meta->className())
-              .arg(meta->superClass()->className());
-    for (int i=0; i < meta->propertyCount(); ++i) {
-        const QMetaProperty qmp = meta->property(i);
-        QVariant value = obj->property(qmp.name());     
-        result += QString("  %1 %2 = %3;")
-            .arg(qmp.typeName()).arg(qmp.name())
-            .arg(value.toString()); }
-    result += "};";
-    return result.join("\n");
+QString objToString(const QObject* object)
+{
+  QStringList result;
+
+  const QMetaObject *metaObject = object->metaObject();
+  result += QString("class %1 : public %2 {")
+            .arg(metaObject->className())
+            .arg(metaObject->superClass()->className());
+
+  for (int i = 0; i < metaObject->propertyCount(); ++i) {
+    const QMetaProperty metaProperty = metaObject->property(i);
+    const QVariant value = object->property(metaProperty.name());
+
+    result += QString("  %1 %2 = %3;")
+              .arg(metaProperty.typeName())
+              .arg(metaProperty.name())
+              .arg(value.toString());
+  }
+
+  result += "};";
+  return result.join("\n");
 }
 \end{cpp}
-\demo{coretypes/ex-properties}
 \end{slide}
 
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1425}
 \frametitle{Example QObject with properties}
 \begin{cpp}
-int main (int argc, char* argv[]) {
-    QApplication app(argc, argv);
-    app.setOrganizationName("nokia");
-    app.setApplicationName("testproperties");
-    app.setOrganizationDomain("com");
-    qDebug() << objToString(&app);
+int main (int argc, char* argv[])
+{
+  QApplication app(argc, argv);
+
+  app.setOrganizationName("nokia");
+  app.setApplicationName("testproperties");
+  app.setOrganizationDomain("com");
+
+  qDebug() << objToString(&app);
 }
 \end{cpp}
 \demo{coretypes/ex-properties}
