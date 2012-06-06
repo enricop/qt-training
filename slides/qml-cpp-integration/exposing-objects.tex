@@ -931,15 +931,14 @@ In the \textit{chartitem.h} file:
 \begin{lstlisting}
 class BarItem;
 
-class ChartItem : public QDeclarativeItem
+class ChartItem : public QQuickPaintedItem
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<BarItem> bars READ bars
+    Q_PROPERTY(QQmlListProperty<BarItem> bars READ bars
                NOTIFY barsChanged)
 public:
-    ChartItem(QDeclarativeItem *parent = 0);
-    void paint(QPainter *painter,
-      const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    ChartItem(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
 ...
 \end{lstlisting}
 
@@ -962,13 +961,13 @@ In the \textit{chartitem.h} file:
 \vspace*{0.5em}
 \begin{lstlisting}
 ...
-    QDeclarativeListProperty<BarItem> bars();
+    QQmlListProperty<BarItem> bars();
 
 signals:
     void barsChanged();
 
 private:
-    static void append_bar(QDeclarativeListProperty<BarItem> *list,
+    static void append_bar(QQmlListProperty<BarItem> *list,
                            BarItem *bar);
     QList<BarItem*> m_bars;
 };
@@ -989,9 +988,9 @@ In the \textit{chartitem.cpp} file:
 
 \vspace*{0.5em}
 \begin{lstlisting}
-QDeclarativeListProperty<BarItem> ChartItem::bars()
+QQmlListProperty<BarItem> ChartItem::bars()
 {
-    return QDeclarativeListProperty<BarItem>(this, 0,
+    return QQmlListProperty<BarItem>(this, 0,
         &ChartItem::append_bar);
 }
 \end{lstlisting}
@@ -1010,12 +1009,12 @@ QDeclarativeListProperty<BarItem> ChartItem::bars()
 \begin{slide}[fragile]{1538}\frametitle{Defining the Append Function}
 
 \begin{lstlisting}
-void ChartItem::append_bar(QDeclarativeListProperty<BarItem> *list,
+void ChartItem::append_bar(QQmlListProperty<BarItem> *list,
                            BarItem *bar)
 {
     ChartItem *chart = qobject_cast<ChartItem *>(list->object);
     if (chart) {
-        bar->setParentItem(chart);
+        bar->setParent(chart);
         chart->m_bars.append(bar);
         chart->barsChanged();
     }
@@ -1042,9 +1041,9 @@ void ChartItem::append_bar(QDeclarativeListProperty<BarItem> *list,
 \begin{slide}[fragile]{1537}\frametitle{Summary of Custom Property Types}
 
 \begin{itemize}
-\item Define items as property types:
+\item Define classes as property types:
   \begin{itemize}
-  \item declare and implement a new \iCls{QDeclarativeItem} subclass
+  \item declare and implement a new \iCls{QObject} subclass
   \item declare properties to use a pointer to the new type
   \item register the item with \iCls{qmlRegisterType}
   \end{itemize}
@@ -1057,8 +1056,8 @@ void ChartItem::append_bar(QDeclarativeListProperty<BarItem> *list,
 \vspace*{1em}
 \item Define collections of custom types:
   \begin{itemize}
-  \item using a custom item that has been declared and registered
-  \item declare properties with \iCls{QDeclarativeListProperty}
+  \item using a custom class that has been declared and registered
+  \item declare properties with \iCls{QQmlListProperty}
   \item implement a getter and an append function for each property
   \item read-only properties, but read-write containers
   \item read-only containers define append functions that simply return

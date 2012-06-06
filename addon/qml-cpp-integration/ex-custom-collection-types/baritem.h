@@ -11,18 +11,18 @@
 #define BARITEM_H
 
 #include <QColor>
-#include <QDeclarativeItem>
+#include <QObject>
 
-class BarItem : public QDeclarativeItem
+class BarItem : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(qreal value READ value WRITE setValue NOTIFY valueChanged)
 
 public:
-    BarItem(QDeclarativeItem *parent = 0);
+    BarItem(QObject *parent = 0);
 
-    const QColor &color() const;
+    QColor color() const;
     void setColor(const QColor &newColor);
     qreal value() const;
     void setValue(qreal newValue);

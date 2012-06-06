@@ -1,4 +1,4 @@
-QT       += declarative
+QT       += quick
 HEADERS   = baritem.h chartitem.h
 RESOURCES = ex-custom-collection-types.qrc
 SOURCES   = baritem.cpp chartitem.cpp main.cpp

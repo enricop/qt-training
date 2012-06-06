@@ -9,12 +9,12 @@
 
 #include "baritem.h"
 
-BarItem::BarItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+BarItem::BarItem(QObject *parent)
+    : QObject(parent)
 {
 }
 
-const QColor &BarItem::color() const
+QColor BarItem::color() const
 {
     return m_color;
 }

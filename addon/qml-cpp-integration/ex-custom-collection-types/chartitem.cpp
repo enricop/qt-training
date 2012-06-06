@@ -11,14 +11,12 @@
 #include "baritem.h"
 #include "chartitem.h"
 
-ChartItem::ChartItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+ChartItem::ChartItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
-void ChartItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                        QWidget * /*widget*/)
+void ChartItem::paint(QPainter *painter)
 {
     if (m_bars.count() == 0)
         return;
@@ -36,15 +34,17 @@ void ChartItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     painter->save();
 
-    qreal scale = option->rect.height()/(maximum - minimum);
-    qreal barWidth = option->rect.width()/m_bars.count();
+    const QRectF rect = boundingRect();
+    
+    qreal scale = rect.height()/(maximum - minimum);
+    qreal barWidth = rect.width()/m_bars.count();
 
     for (int i = 0; i < m_bars.count(); ++i) {
         BarItem *bar = m_bars[i];
         qreal barEdge1 = scale * (maximum - bar->value());
         qreal barEdge2 = scale * maximum;
-        QRectF barRect(option->rect.x() + i * barWidth,
-                       option->rect.y() + qMin(barEdge1, barEdge2),
+        QRectF barRect(rect.x() + i * barWidth,
+                       rect.y() + qMin(barEdge1, barEdge2),
                        barWidth, qAbs(barEdge1 - barEdge2));
 
         painter->setBrush(bar->color());
@@ -54,16 +54,16 @@ void ChartItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->restore();
 }
 
-QDeclarativeListProperty<BarItem> ChartItem::bars()
+QQmlListProperty<BarItem> ChartItem::bars()
 {
-    return QDeclarativeListProperty<BarItem>(this, 0, &ChartItem::append_bar);
+    return QQmlListProperty<BarItem>(this, 0, &ChartItem::append_bar);
 }
 
-void ChartItem::append_bar(QDeclarativeListProperty<BarItem> *list, BarItem *bar)
+void ChartItem::append_bar(QQmlListProperty<BarItem> *list, BarItem *bar)
 {
     ChartItem *chart = qobject_cast<ChartItem *>(list->object);
     if (chart) {
-        bar->setParentItem(chart);
+        bar->setParent(chart);
         chart->m_bars.append(bar);
         chart->barsChanged();
     }
