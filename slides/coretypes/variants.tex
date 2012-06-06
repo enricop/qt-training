@@ -21,7 +21,28 @@
     \item Union for common Qt "value types" (copyable, assignable)
     \item Supports implicit sharing (fast copying)
     \item Supports user types
-  \end{itemize}\vspace*{3mm}
+  \end{itemize}\medskip
+\item Use cases
+  \begin{itemize}
+  \item[]
+\begin{cpp}
+QVariant property(const char* name) const;
+void setProperty(const char* name, const QVariant &value);
+\end{cpp}\medskip
+\item[]
+\begin{cpp}
+class QAnstractItemModel {
+  virtual QVariant data( const QModelIndex& index, int role );
+  ...
+}
+\end{cpp}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0238}\frametitle{QVariant}
+\begin{itemize}
   \item For \texttt{QtCore} types  
   \item[] \begin{cpp}
 QVariant variant(42);
