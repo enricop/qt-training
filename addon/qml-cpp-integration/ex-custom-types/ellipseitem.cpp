@@ -10,28 +10,31 @@
 #include <QtGui>
 #include "ellipseitem.h"
 
-EllipseItem::EllipseItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+EllipseItem::EllipseItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
-void EllipseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                        QWidget * /*widget*/ )
+void EllipseItem::paint(QPainter *painter)
 {
+    QRectF rect = boundingRect();
+  
     painter->save();
     if (m_style == Outline) {
         painter->setPen(m_color);
         painter->setBrush(Qt::NoBrush);
+        
+        const qreal halfPenWidth = qMax(painter->pen().width() / 2.0, 1.0);
+        rect.adjust(halfPenWidth, halfPenWidth, -halfPenWidth, -halfPenWidth);
     } else {
         painter->setPen(Qt::NoPen);
         painter->setBrush(m_color);
     }
-    painter->drawEllipse(option->rect);
+    painter->drawEllipse(rect);
     painter->restore();
 }
 
-const QColor &EllipseItem::color() const
+QColor EllipseItem::color() const
 {
     return m_color;
 }
@@ -45,7 +48,7 @@ void EllipseItem::setColor(const QColor &newColor)
     }
 }
 
-const EllipseItem::Style &EllipseItem::style() const
+EllipseItem::Style EllipseItem::style() const
 {
     return m_style;
 }

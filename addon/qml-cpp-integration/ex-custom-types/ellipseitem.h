@@ -10,9 +10,9 @@
 #ifndef ELLIPSEITEM_H
 #define ELLIPSEITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
-class EllipseItem : public QDeclarativeItem
+class EllipseItem : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
@@ -25,13 +25,12 @@ public:
         Filled
     };
 
-    EllipseItem(QDeclarativeItem *parent = 0);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-               QWidget *widget = 0);
+    EllipseItem(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
 
-    const QColor &color() const;
+    QColor color() const;
     void setColor(const QColor &newColor);
-    const Style &style() const;
+    Style style() const;
     void setStyle(const Style &newStyle);
 
 signals:
