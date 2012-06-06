@@ -10,14 +10,17 @@
 #include <QtGui>
 #include "ellipseitem.h"
 
-EllipseItem::EllipseItem(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+EllipseItem::EllipseItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
 {
-    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
-void EllipseItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                        QWidget *widget)
+void EllipseItem::paint(QPainter *painter)
 {
-    painter->drawEllipse(option->rect);
+    const qreal halfPenWidth = qMax(painter->pen().width() / 2.0, 1.0);
+    
+    QRectF rect = boundingRect();
+    rect.adjust(halfPenWidth, halfPenWidth, -halfPenWidth, -halfPenWidth);
+    
+    painter->drawEllipse(rect);
 }

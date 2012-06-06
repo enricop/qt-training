@@ -10,16 +10,15 @@
 #ifndef ELLIPSEITEM_H
 #define ELLIPSEITEM_H
 
-#include <QDeclarativeItem>
+#include <QQuickPaintedItem>
 
-class EllipseItem : public QDeclarativeItem
+class EllipseItem : public QQuickPaintedItem
 {
     Q_OBJECT
 
 public:
-    EllipseItem(QDeclarativeItem *parent = 0);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-               QWidget *widget = 0);
+    EllipseItem(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
 };
 
 #endif

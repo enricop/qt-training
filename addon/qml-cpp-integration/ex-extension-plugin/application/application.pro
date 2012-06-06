@@ -1,4 +1,4 @@
-QT       += declarative
+QT       += quick
 RESOURCES = application.qrc
 SOURCES   = main.cpp
 

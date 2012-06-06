@@ -1095,11 +1095,13 @@ void ChartItem::append_bar(QQmlListProperty<BarItem> *list,
 \begin{slide}[fragile]{1535}\frametitle{Defining an Extension Plugin}
 
 \begin{lstlisting}
-#include <QDeclarativeExtensionPlugin>
+#include <QQmlExtensionPlugin>
 
-class EllipsePlugin : public QDeclarativeExtensionPlugin
+class EllipsePlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID
+      "org.qt-project.Qt.QQmlExtensionInterface/1.0")
 
 public:
     void registerTypes(const char *uri);
@@ -1108,8 +1110,9 @@ public:
 
 \vspace*{0.5em}
 \begin{itemize}
-\item Create a \iCls{QDeclarativeExtensionPlugin} subclass
+\item Create a \iCls{QQmlExtensionPlugin} subclass
   \begin{itemize}
+  \item add type information for Qt's plugin system
   \item only one function to reimplement
   \end{itemize}
 \end{itemize}
@@ -1120,7 +1123,6 @@ public:
 \begin{slide}[fragile]{1534}\frametitle{Implementing an Extension Plugin}
 
 \begin{lstlisting}
-#include <qdeclarative.h>
 #include "ellipseplugin.h"
 #include "ellipseitem.h"
 
@@ -1129,7 +1131,6 @@ void EllipsePlugin::registerTypes(const char *uri)
     qmlRegisterType<EllipseItem>(uri, 9, 0, "Ellipse");
 }
 
-Q_EXPORT_PLUGIN2(ellipseplugin, EllipsePlugin);
 \end{lstlisting}
 
 \vspace*{0.5em}
@@ -1137,11 +1138,6 @@ Q_EXPORT_PLUGIN2(ellipseplugin, EllipsePlugin);
 \item Register the custom type using the \qtt{uri} supplied
   \begin{itemize}
   \item the same custom type we started with
-  \end{itemize}
-\item Export the plugin using
-  \begin{itemize}
-  \item the name of the plugin library (\qtt{ellipseplugin})
-  \item the name of the plugin class (\qtt{EllipsePlugin})
   \end{itemize}
 \end{itemize}
 
@@ -1153,7 +1149,7 @@ Q_EXPORT_PLUGIN2(ellipseplugin, EllipsePlugin);
 \begin{qmake}
 TEMPLATE  = lib
 CONFIG   += qt plugin
-QT       += declarative
+QT       += quick
 
 HEADERS  += ellipseitem.h \
             ellipseplugin.h
@@ -1167,7 +1163,7 @@ DESTDIR   = ../plugins
 \vspace*{0.5em}
 \begin{itemize}
 \item Ensure that the project is built as a Qt plugin
-\item Declarative module is added to the Qt configuration
+\item QtQuick module is added to the Qt configuration
 \item Plugin is written to a \qtt{plugins} directory
 \end{itemize}
 
@@ -1248,10 +1244,10 @@ To load the plugin in a C++ application:
 QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
 \end{lstlisting}
 \vspace*{0.5em}
-\item Cast the plugin object to a \iCls{QDeclarativeExtensionPlugin}
+\item Cast the plugin object to a \iCls{QQmlExtensionPlugin}
 \begin{lstlisting}
-QDeclarativeExtensionPlugin *plugin =
-  qobject_cast<QDeclarativeExtensionPlugin *>(loader.instance());
+QQmlExtensionPlugin *plugin =
+  qobject_cast<QQmlExtensionPlugin *>(loader.instance());
 \end{lstlisting}
 \vspace*{0.5em}
 \item Register the extension with a URI
@@ -1295,9 +1291,9 @@ plugin->registerTypes("com.nokia.qt.examples.Shapes");
 \begin{itemize}
 \item Extensions can be compiled as plugins
   \begin{itemize}
-  \item define and implement a \iCls{QDeclarativeExtensionPlugin} subclass
+  \item define and implement a \iCls{QQmlExtensionPlugin} subclass
   \item define the version of the plugin in the extension
-  \item build a Qt plugin project with the \qtt{declarative} option enabled
+  \item build a Qt plugin project with the \qtt{quick} option enabled
   \end{itemize}
 \vspace*{0.5em}
 \item Plugins can be loaded by the \qtt{qmlscene} tool
