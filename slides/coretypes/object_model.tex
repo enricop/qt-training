@@ -46,15 +46,10 @@
     \item Parent adds object to list of children
     \item Parent owns children
     \end{itemize}
-  \item Construction/Destruction
+  \item Widget Centric
     \begin{itemize}
-   \item Tree can be constructed in any order
-    \item Tree can be destroyed in any order
-      \begin{itemize}
-      \item if object has parent: object first removed from parent
-      \item if object has children: deletes each child first
-      \item No object is deleted twice
-      \end{itemize}
+    \item Used intensively with QtWidget
+    \item Less so when using Qt/C++ from QML
     \end{itemize}
  \end{itemize}
  \medskip
