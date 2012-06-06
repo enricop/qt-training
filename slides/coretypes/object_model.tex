@@ -58,37 +58,30 @@
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{0552}\frametitle{Creating Objects}
+\begin{slide}[fragile]{0552}\frametitle{Creating Objects - General Guideline}
   \xConcept{QObject!allocating}
  \begin{itemize}
 
- \item \textbf{On Heap} - \iCls{QObject} with parent:
+ \item \textbf{On Heap} - \iCls{QObject} with parent
    \begin{itemize}
+   \item[]
    \begin{cpp}
 QLabel *label = new QLabel("Some Text", parent);
     \end{cpp}
-\item \texttt{QLayout::addWidget()} and \texttt{QWidget::setLayout()} reparent children automatically
-    \end{itemize}
+   \end{itemize}\medskip
 
     \item \textbf{On Stack} - \texttt{QObject} without parent:
     \begin{itemize}
-    \item \texttt{QFile}, usually local to a function
-    \item \texttt{QApplication} (local to \texttt{main()})
+    \item \texttt{QFile}, \texttt{QApplication}
     \item Top level \texttt{QWidget}s: \texttt{QMainWindow}
     \end{itemize}
     \medskip
-\item \textbf{On Stack} - "value" types  \doc{qvariant.html\#Type-enum}{\texttt{QVariant::Type}}
-    \begin{itemize}    
-     \begin{cpp}
-QString name;
-QStringList list;
-QColor color;
-    \end{cpp}
-    \item Do not inherit QObject
-    \item Passed by value everywhere
-    \item Exception: QString is implicitly shared (COW strategy)
-          % which is different from std::string (nowadays deep-copied for simplicity)
-   \end{itemize}
+
+\item \textbf{On Stack} - value types
+    \begin{itemize}
+    \item QString, QStringList, QColor
+   \end{itemize}\medskip
+
 \item \textbf{Stack or Heap} - \texttt{QDialog} - depending on lifetime 
   \end{itemize}
 \end{slide}
