@@ -39,13 +39,15 @@
   \item \iCls{QObjects} organize themselves in object trees
     \begin{itemize}
     \item Based on parent-child relationship
-    \end{itemize}
+    \end{itemize}\medskip
   \flushedImage{ooo/reference}
+
   \item \texttt{QObject(QObject *parent = 0)}
     \begin{itemize}
     \item Parent adds object to list of children
     \item Parent owns children
-    \end{itemize}
+    \end{itemize}\medskip
+
   \item Widget Centric
     \begin{itemize}
     \item Used intensively with QtWidget
@@ -92,15 +94,15 @@ QTimer* timer = new QTimer(this);
   \frametitle{Qt's Widget Model - \texttt{QWidget}}
  \flushedImage{ooo/qobject-inherited}
   \begin{itemize}
- \item \textbf{Derived from \iCls{QObject}}
+ \item Derived from \iCls{QObject}
     \begin{itemize}
     \item Adds visual representation
-    \end{itemize}
-  \item \textbf{Receives events}
+    \end{itemize}\medskip
+  \item Receives events
     \begin{itemize}
     \item e.g. mouse, keyboard events
-    \end{itemize}
-  \item \textbf{Paints itself on screen}
+    \end{itemize}\medskip
+  \item Paints itself on screen
     \begin{itemize}
     \item Using styles
     \end{itemize}
@@ -111,16 +113,18 @@ QTimer* timer = new QTimer(this);
 
 \begin{slide}[fragile]{0551}\frametitle{Object Tree and QWidget}
   \begin{itemize}
-  \item \textbf{\texttt{new QWidget(0)}}
+  \item \texttt{new QWidget(0)}
     \begin{itemize}
     \item Widget with no parent $=$ "window"
-    \end{itemize}
-  \item \textbf{QWidget's children}
+    \end{itemize}\medskip
+
+  \item QWidget's children
     \begin{itemize}
     \item Positioned in parent's coordinate system
     \item Clipped by parent's boundaries
-    \end{itemize}
-  \item \textbf{QWidget parent }
+    \end{itemize}\medskip
+
+  \item QWidget parent
     \begin{itemize}
     \item Propagates state changes
       \begin{itemize}
@@ -140,12 +144,14 @@ QTimer* timer = new QTimer(this);
   \item Container Widget
     \begin{itemize}
     \item Aggregates other child-widgets
-    \end{itemize}
+    \end{itemize}\medskip
+
   \item Use layouts for aggregation
     \begin{itemize}
     \item In this example: \iCls{QHBoxLayout} and \\ \iCls{QVBoxLayout}
     \item Note: Layouts are \emph{not} widgets
-    \end{itemize}
+    \end{itemize}\medskip
+
   \item Layout Process
     \begin{itemize}
     \item Add widgets to layout
