@@ -9,12 +9,12 @@
 
 #include "style.h"
 
-Style::Style(QDeclarativeItem *parent)
-    : QDeclarativeItem(parent)
+Style::Style(QObject *parent)
+    : QObject(parent)
 {
 }
 
-const QColor &Style::color() const
+QColor Style::color() const
 {
     return m_color;
 }

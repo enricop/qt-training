@@ -1,4 +1,4 @@
-QT       += declarative
+QT       += quick
 HEADERS   = ellipseitem.h style.h
 RESOURCES = ex-custom-type-objects.qrc
 SOURCES   = main.cpp ellipseitem.cpp style.cpp

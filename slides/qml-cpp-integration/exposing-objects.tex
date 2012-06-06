@@ -792,7 +792,7 @@ In the \textit{style.h} file:
 
 \vspace*{0.5em}
 \begin{lstlisting}
-class Style : public QDeclarativeItem
+class Style : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor
@@ -801,12 +801,12 @@ class Style : public QDeclarativeItem
                NOTIFY filledChanged)
 
 public:
-    Style(QDeclarativeItem *parent = 0);
+    Style(QObject *parent = 0);
 ...
 \end{lstlisting}
 
 \begin{itemize}
-\item \qtt{Style} is a \iCls{QDeclarativeItem} subclass
+\item \qtt{Style} is a \iCls{QObject} subclass
 \item Defined like the \qtt{EllipseItem} class
   \begin{itemize}
   \item implemented in the same way
@@ -822,7 +822,7 @@ In the \textit{ellipseitem.h} file:
 
 \vspace*{0.25em}
 \begin{lstlisting}
-class EllipseItem : public QDeclarativeItem
+class EllipseItem : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(Style *style READ style WRITE setStyle
@@ -854,8 +854,7 @@ In the \textit{ellipseitem.cpp} file:
 
 \vspace*{0.25em}
 \begin{lstlisting}
-void EllipseItem::paint(QPainter *painter,
-    const QStyleOptionGraphicsItem *option, QWidget *widget)
+void EllipseItem::paint(QPainter *painter)
 {
     painter->save();
     if (!m_style->filled()) {
@@ -865,7 +864,7 @@ void EllipseItem::paint(QPainter *painter,
         painter->setPen(Qt::NoPen);
         painter->setBrush(m_style->color());
     }
-    painter->drawEllipse(option->rect);
+    painter->drawEllipse(boundingRect());
     painter->restore();
 }
 \end{lstlisting}
@@ -889,7 +888,7 @@ In the \textit{ellipseitem.cpp} file:
 \begin{lstlisting}
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QGuiApplication app(argc, argv);
     qmlRegisterType<EllipseItem>("Shapes", 7, 0, "Ellipse");
     qmlRegisterType<Style>("Shapes", 7, 0, "Style");
 ...
