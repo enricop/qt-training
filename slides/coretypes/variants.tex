@@ -21,40 +21,41 @@
     \item Union for common Qt "value types" (copyable, assignable)
     \item Supports implicit sharing (fast copying)
     \item Supports user types
-  \end{itemize}
+  \end{itemize}\vspace*{3mm}
   \item For \texttt{QtCore} types  
   \item[] \begin{cpp}
 QVariant variant(42);
 int value = variant.toInt(); // read back
-
 qDebug() << variant.typeName(); // int
-\end{cpp}
+\end{cpp}\vspace*{3mm}
 \item For non-core and custom types:
   \item[] \begin{cpp}
-variant.setValue(QColor(Qt::red));
+QVariant variant = QVariant::fromValue(QColor(Qt::red));
 QColor color = variant.value<QColor>(); // read back
 qDebug() << variant.typeName(); // "QColor"
-\end{cpp}
-\item \doc{qvariant.html\#details}{QVariant}
+\end{cpp}\vspace*{3mm}
+\item[] \doc{qvariant.html\#details}{QVariant}
 \end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0240}
 \frametitle{Q\_DECLARE\_METATYPE}
+\begin{itemize}
+\item[]
 \begin{cpp}
-// contact.h:
-class Contact {
-public:
-  void setName(const QString name);
-  QString name() const;
+#include <QMetaType>
+
+class Contact
+{
+  public:
+    void setName(const QString & name);
+    QString name() const;
   ...
 };
-// make Contact known to meta-type system
+
 Q_DECLARE_METATYPE(Contact);
-\end{cpp} 
-\begin{itemize}
-\item Adds custom type to QVariant system.
+\end{cpp}\vspace*{5mm}
 \item Type must support default construction, copy and assignment.
 \item Should appear after class definition in header file.
 \doc{qmetatype.html\#Q_DECLARE_METATYPE}{Q\_DECLARE\_METATYPE}
@@ -66,23 +67,26 @@ Q_DECLARE_METATYPE(Contact);
 \frametitle{Custom Types and QVariant}
 
 \begin{itemize}
-    
-\item Custom Type stored in \textbf{QVariant}:
-\item[] \begin{cpp}
-#include <QtGui> 
-#include "contact.h"   // must have Q_DECLARE_METATYPE there
+\item[]
+\begin{cpp}
+#include "Contact.h"
+#include <QDebug>
+#include <QVariant>
 
-int main(int argc, argv) {
-    QApplication app(argc, argv);
-    // ... 
-    Contact c; c.setName("Peter");
-    QVariant v = QVariant::fromValue(c);
-    Contact c2 = v.value<Contact>();    
-    qDebug() << c2.name(); // "Peter"
-    qDebug() << v.typeName();  // prints "Contact"    
-    
+int main(int argc, char* argv[])
+{
+    Contact contact;
+    contact.setName("Peter");
+
+    const QVariant variant = QVariant::fromValue(contact);
+
+    const Contact otherContact = variant.value<Contact>();
+    qDebug() << otherContact.name(); // "Peter"
+    qDebug() << variant.typeName();  // prints "Contact"
+
+    return 0;
+}
 \end{cpp}
-
 \end{itemize}
 \end{slide}
 
@@ -90,23 +94,27 @@ int main(int argc, argv) {
 \begin{slide}[fragile]{1253}
 \frametitle{qRegisterMetaType}
 \begin{itemize}
-\item A \textbf{registered} type has a known string typename
-\item Can be dynamically constructed with \texttt{construct()}
-\item qRegisterMetaType() belongs in code, not header file.
-\end{itemize}
+\item[]
 \begin{cpp}
-#include "contact.h"   // must have Q_DECLARE_METATYPE there
-int main(int argc, argv) {
-    QApplication app(argc, argv);
-    
+int main(int argc, char* argv[])
+{
     // Register string typename:
-    qRegisterMetaType<Contact>("Contact");
-    
-    Contact c;  c.setName("Peter");
-    QVariant v = QVariant::variantValue(c);
-    qDebug() << v.typeName();  // prints "Contact"
+    const int typeId = qRegisterMetaType<Contact>();
+
+    Contact contact;
+    contact.setName("Peter");
+
+    // Create copy of object in a generic way
+    void *object = QMetaType::construct(typeId, &contact);
+
+    Contact *otherContact = reinterpret_cast<Contact*>(object);
+    qDebug() << otherContact->name();
+
+    return 0;
+}
 \end{cpp}
-\doc{qmetatype.html\#qRegisterMetaType}{qRegisterMetaType}
+\end{itemize}
+\doc{qmetatype.html\#qRegisterMetaType-2}{qRegisterMetaType}
 \doc{qmetatype.html\#construct}{construct}
 \end{slide}
 
