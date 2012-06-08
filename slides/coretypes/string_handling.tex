@@ -146,39 +146,9 @@ WARNING:
 \begin{slide}{0209}\frametitle{Text Processing with \iCls{QStringList}}
 \xConcept{List of strings}
 \begin{itemize}
-\item \iClsFn{QString}{split}m \iClsFn{QStringList}{join}
+\item \iClsFn{QString}{split}, \iClsFn{QStringList}{join}
 \item \iClsFn{QStringList}{replaceInStrings} 
 \item \iClsFn{QStringList}{filter} 
-\end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{0210}\frametitle{\iConcept{URLs}}
-\begin{itemize}
-\item \iCls{QUrl} handles URLs
-\begin{cpp}
-QUrl url("http://qt.nokia.com");
-url.scheme()  // http
-url.host();   // qt.nokia.com
-\end{cpp}
-
-\item Convenience methods 
-\begin{itemize}
-  \item Constructing from components (user, password, protocol, etc.)
-  \item Splitting URL into components
-  \item \hClsFn{QUrl}{fromUserInput} --- recommended way to parse a URL from an input field
-\end{itemize}
-\item \iCls{QUrlInfo} provides info about the content the URL points to
-  \begin{itemize}
-  	\item similar to what \iCls{QFileInfo} does for local files.
-  \end{itemize}  
-  \item \iCls{QDesktopServices}
-  \begin{itemize}  
-  	\item can \emph{open} URLs, and configure how URLs are opened.
-  	\begin{cpp}
-QDesktopServices::openUrl(QUrl("http://qt.nokia.com"));
-  	\end{cpp}
-  \end{itemize}  
 \end{itemize}
 \end{slide}
 
