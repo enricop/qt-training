@@ -97,18 +97,17 @@ QByteArray bytes = text.toLocal8Bit();
 \item Overloaded to handle many types
 \item Optional width, precision, and floating point format 
 \item Format codes are simply \%1 .. \%9
-\end{itemize}
 \begin{cpp}
-     int i = ...;
-     int total = ...;
-     QString fileName = ...;
-     QString status = tr("Processing file %1 of %2: %3")
-                     .arg(i).arg(total).arg(fileName);
-     double d = 12.34;
-     QString str = QString::fromLatin1("delta: %1").arg(d,0,'E',3);
-     // str == "delta: 1.234E+01"               
+int i = ...;
+int total = ...;
+QString fileName = ...;
+QString status = tr("Processing file %1 of %2: %3")
+                .arg(i).arg(total).arg(fileName);
+double d = 12.34;
+QString str = QString::fromLatin1("delta: %1").arg(d,0,'E',3);
+// str == "delta: 1.234E+01"               
 \end{cpp}
-\begin{itemize}
+
 \item Safer: \hClsFnPar{QString}{arg}{QString,...,QString} (``multi-arg()'').
   \begin{itemize}
   \item But: only works with \iCls{QString} arguments.
