@@ -131,6 +131,80 @@
 
 %----------------------------------------------------------------------
 
+\begin{slide}{2142}\frametitle{Parent Changes}
+
+\begin{itemize}
+\item Used to animate an element when its parent changes
+\end{itemize}
+
+\fontsize{8}{8}\fontseries{c}\selectfont
+\begin{qml}
+\fontsize{8}{8}\fontseries{c}\selectfont
+ \qtt{\qc{type}{states}:~\qc{class}{State}~\{}\\
+\qtt{~~~~\qc{type}{name}:~\qc{string}{"reparented"}}\\
+\qtt{~~~~ParentChange~\{}\\
+\qtt{~~~~~~~~\qc{type}{target}:~myRect}\\
+\qtt{~~~~~~~~parent~:~yellowRect}\\
+\qtt{~~~~~~~~x~:~\qc{number}{60}}\\
+\qtt{~~~~~~~~y~:~\qc{number}{20}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{\qc{type}{transitions}:~\qc{class}{Transition}~\{}\\
+\qtt{~~~~ParentAnimation~\{}\\
+\qtt{~~~~~~~~\qc{class}{NumberAnimation}~\{}\\
+\qtt{~~~~~~~~~~~~properties~:~\qc{string}{"x,y"}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+
+\begin{itemize}
+\item ParentAnimation applies only when changing the parent with ParentChange in a state change
+\end{itemize}
+
+\demo{qml-animations/ex-animations/parent-animation.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{4203}\frametitle{Anchor Changes}
+\begin{itemize}
+\item Used to animate an element when its anchors change
+\end{itemize}
+
+\fontsize{8}{8}\fontseries{c}\selectfont
+\begin{qml}
+\fontsize{8}{8}\fontseries{c}\selectfont
+\qtt{\qc{type}{states}:~\qc{class}{State}~\{}\\
+\qtt{~~~~\qc{type}{name}:~\qc{string}{"reanchored"}}\\
+\qtt{~~~~AnchorChanges~\{}\\
+\qtt{~~~~~~~~target~:~myRect}\\
+\qtt{~~~~~~~~anchors.left~:~parent.left}\\
+\qtt{~~~~~~~~anchors.right~:~parent.right}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{\qc{type}{transitions}:~\qc{class}{Transition}~\{}\\
+\qtt{~~~~AnchorAnimation~\{}\\
+\qtt{~~~~~~~~duration~:~\qc{number}{1000}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+
+\begin{itemize}
+\item AnchorAnimation applies only when changing the anchors with AnchorChanges in a state change
+\end{itemize}
+
+\demo{qml-animations/ex-animations/anchors-animation.qml}
+\demo{qml-animations/ex-animations/parent-anchors-animation.qml}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
 \begin{slide}{1501}\frametitle{Using States and Transitions}
 
 \begin{itemize}
