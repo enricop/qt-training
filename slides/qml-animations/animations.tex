@@ -72,17 +72,17 @@ Number animations change the values of numeric properties
 
 \vspace*{0.5em}
 \begin{qml}
-\qtt{\qc{class}{NumberAnimation}~\qc{keyword}{on}~\qc{type}{x}~\{}\\
-\qtt{~~~~\qc{type}{from}:~\qc{number}{0};~\qc{type}{to}:~\qc{number}{150}}\\
+\qtt{\qc{class}{NumberAnimation}~\qc{keyword}{on}~\qc{type}{y}~\{}\\
+\qtt{~~~~\qc{type}{from}:~\qc{number}{350};~\qc{type}{to}:~\qc{number}{150}}\\
 \qtt{~~~~\qc{type}{duration}:~\qc{number}{1000}}\\
 \qtt{\}}
 \end{qml}
 
 \begin{itemize}
 \item Applied directly to properties with the \qic{keyword}{on} keyword
-\item The \qic{type}{x} property is changed by the \qic{class}{NumberAnimation}
+\item The \qic{type}{y} property is changed by the \qic{class}{NumberAnimation}
   \begin{itemize}
-  \item starts at \qic{number}{0}
+  \item starts at \qic{number}{350}
   \item ends at \qic{number}{150}
   \item takes \qic{number}{1000} milliseconds
   \end{itemize}
@@ -112,9 +112,9 @@ Property animations change named properties of a target
 \vspace*{0.5em}
 \begin{qml}
 \qtt{\qc{class}{PropertyAnimation}~\{}\\
-\qtt{~~~~\qc{type}{target}:~rectangle1}\\
+\qtt{~~~~\qc{type}{target}:~image}\\
 \qtt{~~~~\qc{type}{properties}:~\qc{string}{"width,height"}}\\
-\qtt{~~~~\qc{type}{from}:~\qc{number}{0};~\qc{type}{to}:~\qc{number}{100};~\qc{type}{duration}:~\qc{number}{1000}}\\
+\qtt{~~~~\qc{type}{from}:~\qc{number}{0};~\qc{type}{to}:~\qc{number}{200};~\qc{type}{duration}:~\qc{number}{1000}}\\
 \qtt{~~~~\qc{type}{running}:~\qc{number}{true}}\\
 \qtt{\}}
 \end{qml}
