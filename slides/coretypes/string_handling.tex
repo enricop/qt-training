@@ -39,7 +39,7 @@ QString text = QString::fromLocal8Bit(cmdLineInput);
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0206}\frametitle{Text Processing with QString}
+\begin{slide}[fragile]{0206}\frametitle{Text Processing with \iCls{QString}}
   \begin{itemize}
   \item Created from other strings
     \begin{itemize}
@@ -62,15 +62,16 @@ QString t = s.leftJustified(8, '.'); // t == "apple..."
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0207}\frametitle{Text Processing with QString}
+\begin{slide}[fragile]{0207}\frametitle{Text Processing with \iCls{QString}}
   Data can be extracted from strings.
   \vspace*{1em}
   
   \begin{itemize}
   \item Numbers:
  \begin{cpp}
-int value = QString::toInt();
-float value = QString::toFloat();
+QString text = ...; 
+int value = text.toInt();
+float value = text.toFloat();
   \end{cpp}
  \item Strings:
  \begin{cpp}
@@ -85,28 +86,34 @@ QByteArray bytes = text.toLocal8Bit();
 % Slide note: There are many more functions available for conversions to types.
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]
+\begin{slide}[fragile]{2079}
 \frametitle{Formatted output with QString::arg()}
 \begin{itemize}
-\item Instead of \texttt{printf()}, we have \texttt{arg()}.
+\item Instead of \texttt{sprintf()}, we have \texttt{arg()}.
 \item Overloaded to handle many types
 \item Optional width, precision, and floating point format 
 \item Format codes are simply \%1 .. \%9
 \end{itemize}
 \begin{cpp}
-     QString i;         
-     QString total;     
-     QString fileName;  
-     QString status = QString("Processing file %1 of %2: %3")
+     int i = ...;
+     int total = ...;
+     QString fileName = ...;
+     QString status = tr("Processing file %1 of %2: %3")
                      .arg(i).arg(total).arg(fileName);
      double d = 12.34;
-     QString str = QString("delta: %1").arg(d, 0, 'E', 3);
+     QString str = QString::fromLatin1("delta: %1").arg(d,0,'E',3);
      // str == "delta: 1.234E+01"               
 \end{cpp}
+\begin{itemize}
+\item Safer: \hClsFnPar{QString}{arg}{QString,...,QString} (``multi-arg()'').
+  \begin{itemize}
+  \item But: only works with \iCls{QString} arguments.
+  \end{itemize}
+\end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1255}\frametitle{Text Processing with QString}
+\begin{slide}[fragile]{1255}\frametitle{Text Processing with \iCls{QString}}
   Obtaining raw character data from a \iCls{QByteArray}:
   
   \begin{lstlisting}
@@ -117,6 +124,7 @@ QByteArray bytes = text.toLocal8Bit();
   Care must be taken:
   \begin{itemize}
   \item Character data is only valid for the lifetime of the byte array.
+  \item Calling a non-\texttt{const} member of \texttt{bytes} also invalidates \texttt{ptr}.
   \item Either copy the character data or keep a copy of the byte array.
   \end{itemize}
 \end{slide}
@@ -179,6 +187,7 @@ url.host();   // qt.nokia.com
 \begin{itemize}
   \item Constructing from components (user, password, protocol, etc.)
   \item Splitting URL into components
+  \item \hClsFn{QUrl}{fromUserInput} --- recommended way to parse a URL from an input field
 \end{itemize}
 \item \iCls{QUrlInfo} provides info about the content the URL points to
   \begin{itemize}
@@ -186,7 +195,7 @@ url.host();   // qt.nokia.com
   \end{itemize}  
   \item \iCls{QDesktopServices}
   \begin{itemize}  
-  	\item can \emph{open} URL, and configure how URLs are opened. 
+  	\item can \emph{open} URLs, and configure how URLs are opened.
   	\begin{cpp}
 QDesktopServices::openUrl(QUrl("http://qt.nokia.com"));
   	\end{cpp}
