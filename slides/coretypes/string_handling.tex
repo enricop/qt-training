@@ -160,12 +160,8 @@ WARNING:
     \item Regular expression matching
     \item Wildcard matching
   \end{itemize}
-  \item Most regular expression features are supported.
-  \item \iCls{QRegExp} objects can also be used for searching
-    strings.
-  \item \iCls{QRegExp} offers text capturing regular expressions, where
-    a subexpression can be extracted using \iCls{QString} \hClsFnPar{QRegExp}{cap}{int} and
-    \iCls{QStringList} \hClsFn{QRegExp}{capturedTexts}.
+  \item \iCls{QString} \hClsFnPar{QRegExp}{cap}{int}\\
+    \iCls{QStringList} \hClsFn{QRegExp}{capturedTexts}\medskip
  \begin{cpp}
 QRegExp rx("^\\d\\d?$");    // match integers 0 to 99
 rx.indexIn("123");          // returns -1 (no match)
