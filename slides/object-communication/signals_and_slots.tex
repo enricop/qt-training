@@ -184,48 +184,13 @@ connect(sender, signal, receiver, slot);
 
 \item Example
 \begin{cpp}
-connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
+connect(button, SIGNAL(clicked()),
+        this,   SLOT(slotButtonClicked()));
 \end{cpp}
 \end{itemize}
 \end{slide}
 
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{0807}
-\frametitle{Lab: Connect to Click}
-\label{project_signal_slot}
-\xProject{Color Tester}
-\flushedImageDoubleWidth{objects/images/colorTester}
-\begin{itemize}
-\item \textbf{Create an application as shown here}
-  \begin{itemize}
-  \item Clicking on ``Select Color'' \\
-    updates label with color's name.
-  \end{itemize}
-\item \textbf{Hints}
-  \begin{itemize}
-  \item \iClsFn{QColorDialog}{getColor} to fetch a color
-  \item \iClsFn{QColor}{name} to get the color name
- \end{itemize}
-\item \textbf{Optional}
-  \begin{itemize}
-  \item In \iCls{QColorDialog}, honor the user clicking
-    ``cancel'', and provide it with the current color to start from.
-  \item Set the selected color as the label's background 
-    \begin{itemize}
-    \item Hint: see \iCls{QPalette}
-    \item Hint: see \iClsFn{QWidget}{setAutoFillBackground}
-    \end{itemize}
-
-  \end{itemize}
-\end{itemize}
-\vfill
-\lab{objects/lab-selectcolor}
-\end{slide}
-
-%----------------------------------------------------------------------
-
-\subsection{Signal/Slot Variations}
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0803}\frametitle{Variations of Signal/Slot
@@ -301,6 +266,39 @@ need it?
 \end{questionize}
 \end{slide}
 
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0807}
+\frametitle{Lab: Connect to Click}
+\label{project_signal_slot}
+\xProject{Color Tester}
+\flushedImageDoubleWidth{objects/images/colorTester}
+\begin{itemize}
+\item \textbf{Create an application as shown here}
+  \begin{itemize}
+  \item Clicking on ``Select Color'' \\
+    updates label with color's name.
+  \end{itemize}
+\item \textbf{Hints}
+  \begin{itemize}
+  \item \iClsFn{QColorDialog}{getColor} to fetch a color
+  \item \iClsFn{QColor}{name} to get the color name
+ \end{itemize}
+\item \textbf{Optional}
+  \begin{itemize}
+  \item In \iCls{QColorDialog}, honor the user clicking
+    ``cancel'', and provide it with the current color to start from.
+  \item Set the selected color as the label's background 
+    \begin{itemize}
+    \item Hint: see \iCls{QPalette}
+    \item Hint: see \iClsFn{QWidget}{setAutoFillBackground}
+    \end{itemize}
+
+  \end{itemize}
+\end{itemize}
+\vfill
+\lab{objects/lab-selectcolor}
+\end{slide}
 
 %----------------------------------------------------------------------
 \begin{slide}{0808}
