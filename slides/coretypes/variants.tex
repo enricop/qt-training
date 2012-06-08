@@ -178,29 +178,73 @@ int height = rectangle->property("height").value<int>();
 \end{slide}
 
 % ----------------------------------------------------------------------
+\begin{slide}[fragile]{1422}
+\frametitle{Providing properties from QObject}
+\begin{cpp}
+class Customer : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QString id READ getId WRITE setId NOTIFY idChanged);
+
+  public:
+     QString getId() const;
+     void setId(const QString& id);
+  
+  signals:
+     void idChanged();
+
+  ...
+};
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1022}
+\frametitle{Enum properties}
+\begin{cpp}
+class Customer : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(CustomerType type READ getType WRITE setType 
+               NOTIFY typeChanged);
+
+  public:
+    enum CustomerType {
+      Corporate, Individual, Educational, Government
+    };
+
+    Q_ENUMS(CustomerType);
+    
+  ...
+};
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
 \begin{slide}[fragile]{2084}
 \frametitle{Properties}
 \begin{itemize}
-  \item Macro for mapping property names to getter/setter functions
+  \item Q\_Property is a macro:
 \begin{cpp}
   Q_PROPERTY( type name READ getFunction [WRITE setFunction]
   [RESET resetFunction] [NOTIFY notifySignal] [DESIGNABLE bool]
   [SCRIPTABLE bool] [STORED bool] )
 \end{cpp}
-  \vspace*{0.5em}
-  \item An indirect way to call getters/setters of \iCls{QObject}s
+  \medskip
+  \item Property access methods:
 \begin{cpp}
   QVariant property(const char* name) const;
   void setProperty(const char* name, const QVariant &value);
 \end{cpp}
-  \vspace*{0.5em}
+  \medskip
   \item If name is not declared as a \texttt{Q\_PROPERTY}
   \begin{itemize}
-    \item[] -> \textbf{dynamic property}
+    \item -> \textbf{dynamic property}
+    \item Not accessible from Qt Quick.
   \end{itemize}
-  \vspace*{0.5em}
-  \item Class-reflection provided by \iCls{QMetaObject} and \iCls{QMetaProperty}
-  \vspace*{0.5em}
+  \medskip
   \item Note:
   \begin{itemize}
     \item Q\_OBJECT macro required for properties to work
@@ -210,118 +254,21 @@ int height = rectangle->property("height").value<int>();
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1422}
-\frametitle{QObject with Properties Example}
-\begin{cpp}
-class Customer : public QObject
-{
-    Q_OBJECT
-
-    Q_PROPERTY(QString id READ getId WRITE setId);
-    Q_PROPERTY(QString name READ getName WRITE setName);
-    Q_PROPERTY(QString address READ getAddress WRITE setAddress);
-    // Read-only
-    Q_PROPERTY(QDate dateEstablished READ getDateEstablished );
-    Q_PROPERTY(CustomerType type READ getType WRITE setType);
-
-  public:
-    enum CustomerType {
-      Corporate, Individual, Educational, Government
-    };
-    Q_ENUMS(CustomerType);
-    ...
-};
-\end{cpp}
-\end{slide}
-
-% ----------------------------------------------------------------------
 \begin{slide}[fragile]{1423}
 \frametitle{Using Properties}
 \begin{itemize}
-\item Direct vs indirect setting/getting:
-\item[]
-\begin{cpp}
-Customer customer;
-
-customer.setProperty("name", QString("qt.nokia.com"));
-Q_ASSERT(customer.getName() == QString("qt.nokia.com"));
-
-customer.setAddress("54B East Middlesex Turnpike");
-const QVariant variant = customer.property("address");
-Q_ASSERT(variant.toString() == customer.getAddress());
-\end{cpp}
-\end{itemize}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{1424}
-\frametitle{Iterating through properties}
-\lstset{basicstyle=\ttfamily\fontsize{9}{9}\selectfont}
-\begin{cpp}
-QString objToString(const QObject* object)
-{
-  QStringList result;
-
+\item \iCls{QMetaObject} support property introspection\smallskip
+  \begin{cpp}
   const QMetaObject *metaObject = object->metaObject();
-  result += QString("class %1 : public %2 {")
-            .arg(metaObject->className())
-            .arg(metaObject->superClass()->className());
-
-  for (int i = 0; i < metaObject->propertyCount(); ++i) {
+  const QString className = metaObject->className();
+  const int propertyCount = metaObject->propertyCount();
+  for ( int i=0; i<propertyCount; ++i ) {
     const QMetaProperty metaProperty = metaObject->property(i);
+    const QString typeName = metaProperty.typeName()
+    const QString propertyName = metaProperty.name();
     const QVariant value = object->property(metaProperty.name());
-
-    result += QString("  %1 %2 = %3;")
-              .arg(metaProperty.typeName())
-              .arg(metaProperty.name())
-              .arg(value.toString());
   }
-
-  result += "};";
-  return result.join("\n");
-}
-\end{cpp}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{1425}
-\frametitle{Example QObject with properties}
-\begin{cpp}
-int main (int argc, char* argv[])
-{
-  QApplication app(argc, argv);
-
-  app.setOrganizationName("nokia");
-  app.setApplicationName("testproperties");
-  app.setOrganizationDomain("com");
-
-  qDebug() << objToString(&app);
-}
-\end{cpp}
-\demo{coretypes/ex-properties}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{1426}
-\frametitle{Iterating through properties example}
-\begin{cpp}
-class QApplication : public QCoreApplication {
-  QString objectName = ex-properties;
-  QString applicationName = testproperties;
-  QString applicationVersion = ;
-  QString organizationName = nokia;
-  QString organizationDomain = com;
-  Qt::LayoutDirection layoutDirection = 0;
-  int cursorFlashTime = 1000;
-  int doubleClickInterval = 400;
-  int keyboardInputInterval = 400;
-  int wheelScrollLines = 3;
-  int startDragTime = 500;
-  int startDragDistance = 4;
-  bool quitOnLastWindowClosed = true;
-  QString styleSheet = ;
-  bool autoSipEnabled = true;
-};
-\end{cpp}
+  \end{cpp}
+\end{itemize}
 \demo{coretypes/ex-properties}
 \end{slide}
