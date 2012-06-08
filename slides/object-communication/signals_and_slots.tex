@@ -161,17 +161,6 @@ c++ -o myapp moc_myclass.o myclass.o
    \end{itemize}
  \item \texttt{qmake} takes care of moc files for you
  \end{itemize}
-\item \textbf{Analyze definition of} 
-  \begin{itemize}
-  \item \texttt{Q\_OBJECT}
-  \item \texttt{signals} and \texttt{slots}
-  \item \texttt{emit}
-  \item At \textit{\texttt{\$QTDIR/src/corelib/kernel/qobjectdefs.h}}
-  \end{itemize}        
-\item \textbf{Look at moc generated files}
-  \begin{itemize}
-  \item \demo{objects/ex-signalslots}
-  \end{itemize} 
 \end{itemize}
 
 \end{slide}
@@ -344,3 +333,16 @@ need it?
   
 \end{slide}
 
+%----------------------------------------------------------------------
+\begin{slide}{8813}\frametitle{Backstage tour}
+  \begin{itemize}
+  \item \textbf{Analyze definition of}
+  \begin{itemize}
+  \item \texttt{Q\_OBJECT}
+  \item \texttt{signals} and \texttt{slots}
+  \item \texttt{emit}
+  \item At \textit{\texttt{\$QTDIR/src/corelib/kernel/qobjectdefs.h}}
+  \end{itemize}\strut\\
+\item \textbf{Look at moc generated files}
+  \end{itemize}
+\end{slide}
