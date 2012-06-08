@@ -114,15 +114,17 @@ QString str = QString::fromLatin1("delta: %1").arg(d,0,'E',3);
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1255}\frametitle{Text Processing with \iCls{QString}}
-  Obtaining raw character data from a \iCls{QByteArray}:
-  
-  \begin{lstlisting}
-    char *str = bytes.data();
-    const char *str = bytes.constData();
-  \end{lstlisting}
-  
-  Care must be taken:
   \begin{itemize}
+  \item Obtaining raw character data from a \iCls{QByteArray}:
+  
+  \begin{cpp}
+char *str = bytes.data();
+const char *str = bytes.constData();
+  \end{cpp}
+  \end{itemize}\bigskip
+
+WARNING:
+  \begin{itemize}  
   \item Character data is only valid for the lifetime of the byte array.
   \item Calling a non-\texttt{const} member of \texttt{bytes} also invalidates \texttt{ptr}.
   \item Either copy the character data or keep a copy of the byte array.
@@ -131,25 +133,11 @@ QString str = QString::fromLatin1("delta: %1").arg(d,0,'E',3);
 
 % ----------------------------------------------------------------------
 \begin{slide}{0208}\frametitle{Text Processing with \iCls{QString}}
-    Strings can be tested with:
     \begin{itemize}
       \item \hClsFn{QString}{length} 
-      \begin{itemize}    
-        \item returns the length of the string.
-      \end{itemize}
       \item \hClsFn{QString}{endsWith} and \hClsFn{QString}{startsWith} 
-      \begin{itemize}    
-        \item test whether string starts or ends with an other string
-      \end{itemize}    
-      \item \hClsFn{QString}{contains} 
-      \begin{itemize}
-        \item returns whether the string matches a given expression
-        \item \hClsFn{QString}{count} tells you how many times.
-      \end{itemize}
+      \item \hClsFn{QString}{contains}, \hClsFn{QString}{count}
       \item \hClsFn{QString}{indexOf} and \hClsFn{QString}{lastIndexOf} 
-      \begin{itemize}    
-        \item search for next matching expressions, and return its index
-      \end{itemize}    
     \end{itemize}
     Expression can be characters, strings, or regular expressions
 \end{slide}
