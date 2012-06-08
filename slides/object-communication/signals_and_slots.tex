@@ -136,6 +136,8 @@ emit valueChanged(value);
   \begin{itemize}
   \item Enhances QObject with meta-object information
   \item Required for Signals \& Slots
+  \end{itemize}\medskip
+
   \item \textbf{moc} creates meta-object information
     \begin{itemize}
     \item[] \begin{shell}
@@ -143,9 +145,9 @@ moc -o moc_myclass.cpp myclass.h
 c++ -c myclass.cpp; c++ -c moc_myclass.cpp
 c++ -o myapp moc_myclass.o myclass.o
     \end{shell}
-   \end{itemize}
- \item \texttt{qmake} takes care of moc files for you
- \end{itemize}
+ \end{itemize}\medskip
+
+ \item \textbf{qmake} takes care of mocing files for you
 \end{itemize}
 
 \end{slide}
@@ -161,11 +163,12 @@ c++ -o myapp moc_myclass.o myclass.o
   \begin{itemize}
   \item \emph{Implement a slot in your widget}
   \item \emph{Connect the button's clicked signal to the slot}
-  \end{itemize}
+  \end{itemize}\medskip
+
 \item Connect statement
 \begin{lstlisting}
 connect(sender, signal, receiver, slot);
-\end{lstlisting}
+\end{lstlisting}\medskip
 
 \item Example
 \begin{cpp}
@@ -190,11 +193,12 @@ many & \correct & one \\\hline
 one & \correct & another signal \\\hline
   \end{tabular}
 \end{center}
-\begin{itemize}
+\begin{itemize}\medskip
+
 \item Signal to Signal connection
  \item[] \begin{cpp}
 connect(bt, SIGNAL(clicked()), this, SIGNAL(okSignal()));
-  \end{cpp}
+  \end{cpp}\medskip
 
 \item \textbf{Not} allowed to name parameters
 \begin{tabbing}
