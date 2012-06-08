@@ -84,30 +84,15 @@ class MyClass : public QObject
 public slots:
   void setValue(int value); // a custom slot
 };
-  \end{cpp}
+  \end{cpp}\medskip
 \item File: \textbf{myclass.cpp}
   \begin{cpp}
 void MyClass::setValue(int value) {
   // slot implementation
 }
-
   \end{cpp}
 \end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}{0226}\frametitle{Example of Custom Slots}\label{qtimer}
-
-\begin{itemize}
-  \item \iCls{QTimer} is a class for executing functions at a later time.
-  \item Connect the QTimer's signal \hClsFn{QTimer}{timeout} to a custom slot.
-  \item Call \hClsFn{QTimer}{setSingleShot} for a single-shot timer.
-  \item Finally, call \hClsFnPar{QTimer}{start}{int msec} on the timer to start it.
-  \item For a one-time non-cancellable single-shot timer: \iClsFnPar{QTimer}{singleShot}{1000, this, SLOT(doit())}
-  \end{itemize}
-
 \demo{objects/ex-stop-watch}
-
 \end{slide}
 
 %----------------------------------------------------------------------
