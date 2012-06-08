@@ -45,17 +45,14 @@ QString text = tr("Hello Qt");
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0206}\frametitle{Text Processing with \iCls{QString}}
   \begin{itemize}
-  \item Created from other strings
-    \begin{itemize}
-    \item Using \texttt{operator+} and \texttt{operator+=}    
-    \end{itemize}
+    \item \texttt{operator+} and \texttt{operator+=}    
  \begin{cpp}    
 QString str = str1 + str2;
 fileName += ".txt";
-  \end{cpp}
+  \end{cpp}\medskip
  \item \hClsFn{QString}{simplified} // removes duplicate whitespace
  \item\hClsFn{QString}{left}, \hClsFn{QString}{mid},
-   \hClsFn{QString}{right} // part of a string
+   \hClsFn{QString}{right} // part of a string\medskip
   \item \hClsFn{QString}{leftJustified},
     \hClsFn{QString}{rightJustified} // padded version
  \begin{cpp}
