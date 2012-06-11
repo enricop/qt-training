@@ -120,5 +120,14 @@ void MyWidget::closeEvent(QCloseEvent *event) {
 \end{cpp}  
 \end{itemize}
 \demo{objects/ex-closeevent}
-
 \end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1029}\frametitle{Multi threaded object communication}
+  \begin{itemize}
+  \item Signal/slots between threads
+  \item Posting events using \iClsFnPar{QCoreApplication}{postEvent}{QObject*
+      receiver, QEvent* event}
+  \end{itemize}
+\end{slide}
+
