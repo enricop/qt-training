@@ -122,24 +122,3 @@ void MyWidget::closeEvent(QCloseEvent *event) {
 \demo{objects/ex-closeevent}
 
 \end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}{1088}
-\frametitle{Events and Signals}
-Signals and slots are used instead of events:
-
-\begin{itemize}
-\item To communicate between components.
-\item In cases where there is a well-defined sender and receiver.
-  \begin{itemize}
-  \item For example: a button and a slot to handle clicks.
-  \end{itemize}
-\item For some events, there is no sender in Qt.
-  \begin{itemize}
-  \item For example: redraw, keyboard and mouse events.
-  \end{itemize}
-\item To describe high level logic and control flow.
-\end{itemize}
-
-Developers can create custom events if they need to.
-\end{slide}
