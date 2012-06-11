@@ -11,7 +11,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Handling Events in Qt}
+\subsection{Event Handling}
 
 %----------------------------------------------------------------------
 \begin{slide}{970}
@@ -47,6 +47,28 @@
 \end{slide}
 
 %----------------------------------------------------------------------
+\begin{slide}{1025}\frametitle{}
+\image{object-communication/images/events-1.jpg}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1026}\frametitle{}
+\image{object-communication/images/events-2.jpg}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1027}\frametitle{}
+\image{object-communication/images/events-3.jpg}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1028}\frametitle{}
+\image{object-communication/images/events-4.jpg}
+
+\demo{object-communication/ex-qml-event-backtrace}
+\end{slide}
+
+%----------------------------------------------------------------------
 \begin{slide}{1080}
 \frametitle{Event Handling}
 
@@ -55,7 +77,7 @@
   \begin{itemize}
   \item Handles all events for this object
  \end{itemize}
-\item \iCls{QWidget}'s specialized event handlers
+\item Specialized event handlers for \iCls{QWidget} and \iCls{QQuickItem}:
   \begin{itemize}
   \item \hClsFn{QWidget}{mousePressEvent} for mouse clicks
   \item \hClsFn{QWidget}{keyPressEvent} for key presses
