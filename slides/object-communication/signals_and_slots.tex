@@ -58,6 +58,128 @@
 \end{slide}
 
 %----------------------------------------------------------------------
+\begin{slide}[fragile]{1032}\frametitle{Connection variants}
+  \begin{itemize}
+  \item Qt 4 style:\\
+\begin{cpp}
+connect( slider, SIGNAL(valueChanged(int)), 
+         spinbox, SLOT(setValue(int)));
+\end{cpp}\bigskip
+
+\item Using function pointers:\\
+\begin{cpp}
+connect( slider, &QSlider::valueChanged,
+         spinbox, &QSpinBox::setValue );
+\end{cpp}\bigskip
+
+\item Using functors:\\
+\begin{cpp}
+static void printValue(int value) {...}
+connect( slider, &QSignal::valueChanged, &printValue );
+\end{cpp}\bigskip
+
+\item Using C++11 lambda functions:\\
+\begin{cpp}
+connect( slider, &QSlider::valueChanged, 
+         [=] (int value) {...} );
+\end{cpp}
+  \end{itemize}
+\end{slide}
+
+\newcommand{\advantage}{\hspace{-5mm}\makebox[6mm]{\correct}}
+\newcommand{\disadvantage}{\hspace{-5mm}\makebox[6mm]{\incorrect}}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1030}\frametitle{Qt5 components}
+  \begin{itemize}
+\item Qt 5 components
+\begin{cpp}
+connect( slider, &QSlider::valueChanged,
+         spinbox, &QSpinBox::setValue );
+\end{cpp}\medskip
+\item Primary choice when connecting objects\medskip
+\item[]\advantage Type safe
+\item[]\advantage No special syntax for slots
+\item[]\advantage \texttt{Q\_OBJECT} not need for slots
+\item[]\disadvantage connecting to overloaded slots is hard
+  \end{itemize}
+\demo{object-communication/ex-connect-function-pointers}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1033}\frametitle{Qt4 ported code}
+  \begin{itemize}
+  \item Qt 4 ported code:\\
+\begin{cpp}
+connect( slider, SIGNAL(valueChanged(int)), 
+         spinbox, SLOT(setValue(int)));
+\end{cpp}\medskip
+\hspace{-3mm}Receiving object: 
+\item[]\disadvantage need to declare the slot in a \textit{slots}
+  section
+\item[]\disadvantage need the Q\_OBJECT macro
+\item[]\disadvantage need to have \texttt{moc} run on it\bigskip
+
+\item[]\disadvantage Not type safe
+\item[]\advantage overloaded slot are easy
+\item[]\advantage Existing Qt4 code do not need to be rewritten
+\end{itemize}
+\demo{object-communication/ex-connect}\bigskip\bigskip
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1031}\frametitle{Inlined code}
+  \begin{itemize}
+\item Using functors:\\
+\begin{cpp}
+static void printValue(int value) {
+  qDebug( "value = %d", value );
+}
+
+connect( slider, &QSignal::valueChanged, &printValue );
+\end{cpp}
+\end{itemize}
+\demo{object-communication/ex-connect-functors}\bigskip\bigskip
+
+\begin{itemize}
+\item Using C++11 lambda functions:\\
+\begin{cpp}
+connect( slider, &QSlider::valueChanged, 
+         [=] (int value) { qDebug("%d", value); } );
+\end{cpp}
+  \end{itemize}
+\demo{object-communication/ex-connect-lambda}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{}\frametitle{}
+  \begin{itemize}
+  \item 
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{}\frametitle{}
+  \begin{itemize}
+  \item 
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{}\frametitle{}
+  \begin{itemize}
+  \item 
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{}\frametitle{}
+  \begin{itemize}
+  \item 
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
 \begin{slide}[fragile]{0798}\frametitle{Custom Slots}
  \label{codeForSlots1}
 \xConcept{connect}
