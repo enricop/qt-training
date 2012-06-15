@@ -127,6 +127,33 @@ connect( slider, SIGNAL(valueChanged(int)),
 \demo{object-communication/ex-connect}\bigskip\bigskip
 \end{slide}
 
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0798}\frametitle{Custom Slots - the Qt4 style}
+ \label{codeForSlots1}
+\xConcept{connect}
+\xConcept{Q\_OBJECT}
+\begin{itemize}
+\item File: \textbf{myclass.h} 
+  \begin{cpp}
+class MyClass : public QObject 
+{
+  Q_OBJECT // marker for moc
+  // ...
+public slots:
+  void setValue(int value); // a custom slot
+};
+  \end{cpp}\medskip
+\item File: \textbf{myclass.cpp}
+  \begin{cpp}
+void MyClass::setValue(int value) {
+  // slot implementation
+}
+  \end{cpp}
+\end{itemize}
+\demo{object-communication/ex-stop-watch}
+\end{slide}
+
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1031}\frametitle{Inlined code}
   \begin{itemize}
@@ -178,33 +205,6 @@ connect( slider, &QSlider::valueChanged,
   \item 
   \end{itemize}
 \end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{0798}\frametitle{Custom Slots}
- \label{codeForSlots1}
-\xConcept{connect}
-\xConcept{Q\_OBJECT}
-\begin{itemize}
-\item File: \textbf{myclass.h} 
-  \begin{cpp}
-class MyClass : public QObject 
-{
-  Q_OBJECT // marker for moc
-  // ...
-public slots:
-  void setValue(int value); // a custom slot
-};
-  \end{cpp}\medskip
-\item File: \textbf{myclass.cpp}
-  \begin{cpp}
-void MyClass::setValue(int value) {
-  // slot implementation
-}
-  \end{cpp}
-\end{itemize}
-\demo{object-communication/ex-stop-watch}
-\end{slide}
-
 %----------------------------------------------------------------------
 
 \begin{slide}[fragile]{07981}\frametitle{Custom Signals}
