@@ -247,34 +247,6 @@ c++ -o myapp moc_myclass.o myclass.o
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0802}\frametitle{Back to the Original Problem}
-  \xConcept{connect}
-  \begin{block}{We asked some slides ago...}
-    How to react to a button being clicked?
-  \end{block}
-\begin{itemize}
-\item Solution:
-  \begin{itemize}
-  \item \emph{Implement a slot in your widget}
-  \item \emph{Connect the button's clicked signal to the slot}
-  \end{itemize}\medskip
-
-\item Connect statement
-\begin{lstlisting}
-connect(sender, signal, receiver, slot);
-\end{lstlisting}\medskip
-
-\item Example
-\begin{cpp}
-connect(button, SIGNAL(clicked()),
-        this,   SLOT(slotButtonClicked()));
-\end{cpp}
-\end{itemize}
-\end{slide}
-
-
-
-%----------------------------------------------------------------------
 \begin{slide}[fragile]{0803}\frametitle{Variations of Signal/Slot
     Connections}
   \begin{center}
