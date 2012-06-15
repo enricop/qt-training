@@ -12,13 +12,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----------------------------------------------------------------------
-\subsection{Custom Items and Properties}
+\subsection{Exporting Classes to QML}
 
 %----------------------------------------------------------------------
 \begin{slide}{1576}\frametitle{Overview}
 
-Interaction between C++ and QML occurs via objects exposed to the
-QML environment as new types.
+Steps to define a new type in QML:
+
+\begin{itemize}
+\item In C++: Subclass either \iCls{QObject} or \iCls{QQuickItem}
+\item In C++: Register the type with the QML environment
+\item In QML: Import the module containing the new item
+\item In QML: Use the item like any other standard item
+\end{itemize}
 
 \vspace*{0.5em}
 \begin{itemize}
@@ -29,211 +35,203 @@ QML environment as new types.
   \end{itemize}
 \end{itemize}
 
-\vspace*{0.5em}
-To define a new type:
-
-\begin{itemize}
-\item In C++: Subclass either \iCls{QObject} or \iCls{QQuickItem}
-\item In C++: Register the type with the QML environment
-\item In QML: Import the module containing the new item
-\item In QML: Use the item like any other standard item
-\end{itemize}
-
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1575}\frametitle{A Custom Item}
 
-\flushedImage{qml-cpp-integration/images/ellipse1.png}
-In the \textit{ellipse1.qml} file:
-
-\vspace*{0.5em}
-% qml-cpp-integration/ex-simple-item/files/ellipse1.qml
-\inputqml{qml-cpp-integration/colorized/ellipse1}
-
-\vspace*{0.5em}
-\begin{itemize}
-\item A custom ellipse item
-  \begin{itemize}
-  \item instantiated using the \qtt{Ellipse} element
-  \item from the custom \qtt{Shapes} module
-  \end{itemize}
-\item Draws an ellipse with the specified geometry
-\end{itemize}
-
-\end{slide}
+\subsubsection{Exporting Non-GUI Classes}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1574}\frametitle{Declaring the Item}
 
-In the \textit{ellipseitem.h} file:
+\begin{slide}[fragile]{8101}\frametitle{Step 1: Implementing the Class}
 
-\medskip
-\begin{lstlisting}
-#include <QQuickPaintedItem>
+\begin{cpp}
+#include <QObject>
 
-class EllipseItem : public QQuickPaintedItem
+class QTimer;
+
+class Timer : public QObject
 {
     Q_OBJECT
 public:
-    EllipseItem(QQuickItem *parent = 0);
-    void paint(QPainter *painter);
+    Timer(QObject *parent = 0);
+
+private:
+    QTimer* m_timer;
 };
-\end{lstlisting}
-
-\begin{itemize}
-\item \qtt{EllipseItem} is a \iCls{QQuickPaintedItem} subclass, which is a \iCls{QQuickItem} subclass
-\item As with Qt widgets, each item can have a parent
-\item Each custom item needs to paint itself
-\end{itemize}
-
+\end{cpp}
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1573}\frametitle{Implementing an Item}
 
-In the \textit{ellipseitem.cpp} file:
+\begin{slide}[fragile]\frametitle{Implementing the Class}
+\begin{itemize}
+\item \qtt{Timer} is a \iCls{QObject} subclass
+\item As with all \iCls{QObject}s, each item can have a parent
+\item Non-GUI custom items do not need to worry about any painting
+\end{itemize}
+\end{slide}
 
-\vspace*{0.5em}
-\begin{lstlisting}
-#include <QtGui>
-#include "ellipseitem.h"
+%----------------------------------------------------------------------
 
-EllipseItem::EllipseItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+\begin{slide}[fragile]{8102}\frametitle{Step 1: Implementing the Class}
+\begin{cpp}
+#include "timer.h"
+#include <QTimer>
+
+Timer::Timer(QObject *parent)
+    : QObject(parent),
+      m_timer(new QTimer(this))
 {
+    m_timer->setInterval( 1000 );
+    m_timer->start();
 }
-...
-\end{lstlisting}
-
-\begin{itemize}
-\item As usual, call the base class's constructor
-\end{itemize}
-
+\end{cpp}
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1572}\frametitle{Implementing an Item (Continued)}
 
-In the \textit{ellipseitem.cpp} file:
-
-\vspace*{0.5em}
-\begin{lstlisting}
-...
-void EllipseItem::paint(QPainter *painters)
-{
-    const qreal halfPenWidth =
-      qMax(painter->pen().width() / 2.0, 1.0);
-    
-    QRectF rect = boundingRect();
-    rect.adjust(halfPenWidth, halfPenWidth,
-                -halfPenWidth, -halfPenWidth);
-    
-    painter->drawEllipse(rect);
-}
-\end{lstlisting}
+\begin{slide}[fragile]{8103}\frametitle{Step 2: Registering the Class}
 
 \begin{itemize}
-\item A simple \hClsFn{QQuickPaintedItem}{paint} function implementation
-\item Adjust drawing area by half of the pen width on all sides
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1571}\frametitle{Registering the Item}
-
-\begin{lstlisting}
+\item[]
+\begin{cpp}
 #include <QGuiApplication>
 #include <QQuickView>
-#include "ellipseitem.h"
+#include "timer.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-    qmlRegisterType<EllipseItem>("Shapes", 1, 0, "Ellipse");
+    qmlRegisterType<Timer>("CustomComponents", 1, 0, "Timer");
 
     QQuickView view;
-    view.setSource(QUrl("qrc:ellipse1.qml"));
+    view.setSource(QUrl("qrc:/main.qml"));
     view.show();
     return app.exec();
 }
-\end{lstlisting}
+\end{cpp}
 
-\begin{itemize}
-\item Custom item registered as a module and element
-\item Automatically available to the \qtt{ellipse1.qml} file
+\item Timer registered as an element in module "CustomComponents"
+\item Automatically available to the \qtt{main.qml} file
 \end{itemize}
 
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1570}\frametitle{Reviewing the Registration}
 
-\medskip
-\begin{lstlisting}
-qmlRegisterType<EllipseItem>("Shapes", 1, 0, "Ellipse");
-\end{lstlisting}
-
-\medskip
-\medskip
+\begin{slide}[fragile]{1570}  \frametitle{Reviewing the Registration}
 
 \begin{itemize}
-\item  This registers the \qtt{EllipseItem} C++ class
+\item[]
+\begin{cpp}
+qmlRegisterType<Timer>("CustomComponents", 1, 0, "Timer");
+\end{cpp}
+
+\item  This registers the \qtt{Timer} C++ class
 \medskip
-\item Available from the \qtt{Shapes} QML module
+\item Available from the \qtt{CustomComponents} QML module
   \begin{itemize}
   \item version 1.0 (first number is major; second is minor)
   \end{itemize}
-\item Available as the \qtt{Ellipse} element
+\item Available as the \qtt{Timer} element
   \begin{itemize}
-  \item the \qtt{Ellipse} element is an visual item
-  \item a subtype of \qic{class}{Item}
+  \item the \qtt{Timer} element is an non-visual item
+  \item a subclass of \iCls{QObject}
   \end{itemize}
 \end{itemize}
-\demo{qml-cpp-integration/ex-simple-item}
+\end{slide}
 
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{8104}\frametitle{Step 3+4 Importing and Using the Class}
+
+In the \textit{main.qml} file:
+
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{keyword}{import}~QtQuick~\qc{number}{2.0}}\\
+\qtt{\qc{keyword}{import}~CustomComponents~\qc{number}{1.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{500}}\\
+\qtt{~~~~\qc{type}{height}:~\qc{number}{360}}\\
+\vspace*{0.5em}
+\qtt{~~~~Timer~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~timer}\\
+\qtt{~~~~~~~~...}\\
+\vspace*{0.5em}
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+
+\demo{qml-cpp-integration/ex\_simple\_timer}
+\end{slide}
+%----------------------------------------------------------------------
+
+\begin{slide}{8108}\frametitle{Exercise: Review a more involving example}
+
+  \begin{itemize}
+  \item Review the example in \texttt{qml-cpp-integration/ex\_timer\_export}
+  \item Discuss usage of:
+    \begin{itemize}
+    \item properties
+    \item signals
+    \item slots
+    \item registrations
+    \end{itemize}
+  \end{itemize}
+  \demo{qml-cpp-integration/ex\_timer\_export}
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1569}\frametitle{Adding Properties}
+\begin{slide}[fragile]\frametitle{Adding Properties}
 
-\flushedImage{qml-cpp-integration/images/ellipse2.png}
-In the \textit{ellipse2.qml} file:
+In the \textit{main.qml} file:
 
-\medskip
-% qml-cpp-integration/ex-simple-item/files/ellipse2.qml
-\inputqml{qml-cpp-integration/colorized/ellipse2}
+\vspace*{0.5em}
+\begin{qml}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~...}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Timer}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~timer}\\
+\qtt{~~~~~~~~\qc{type}{interval}:~3000}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
 
-\medskip
 \begin{itemize}
-\item A new \qic{type}{color} property
-\item[] \demo{qml-cpp-integration/ex-properties}
+\item A new \qic{type}{interval} property
+
+\item[] \demo{qml-cpp-integration/ex\_timer\_properties}
 \end{itemize}
 
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1568}\frametitle{Declaring a Property}
 
-In the \textit{ellipseitem.h} file:
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Declaring a Property}
+
+In the \textit{timer.h} file:
 
 \vspace*{0.5em}
-\begin{lstlisting}
-class EllipseItem : public QQuickPaintedItem
+\begin{cpp}
+class Timer : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ color WRITE setColor
-               NOTIFY colorChanged)
+    Q_PROPERTY( int interval READ interval 
+                WRITE setInterval NOTIFY intervalChanged )
     ...
-\end{lstlisting}
-
+\end{cpp}
 \begin{itemize}
 \item Use a \iCls{Q\_PROPERTY} macro to define a new property
   \begin{itemize}
-  \item named \qic{type}{color} with \iCls{QColor} type
-  \item with getter and setter, \hClsFn{EllipseItem}{color} and \hClsFn{EllipseItem}{setColor}
-  \item emits the \hClsSig{EllipseItem}{colorChanged} signal when the value changes
+  \item named \qic{type}{interval} with \iCls{int} type
+  \item with getter and setter, \hClsFn{Timer}{interval} and \hClsFn{Timer}{setInterval}
+  \item emits the \hClsSig{Timer}{intervalChanged} signal when the value changes
   \end{itemize}
   \vspace*{0.5em}
 \item The signal is just a notification
@@ -245,213 +243,216 @@ class EllipseItem : public QQuickPaintedItem
 
 \end{slide}
 
+
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1567}\frametitle{Declaring Getter and Setter}
 
-In the \textit{ellipseitem.h} file:
+\begin{slide}[fragile]\frametitle{Declaring Getter, Setter and Signal}
 
-\vspace*{0.5em}
-\begin{lstlisting}
+In the \textit{timer.h} file:
+\vspace*{0.25em}
+\begin{cpp}
 public:
     ...
-    const QColor color() const;
-    void setColor(const QColor &newColor);
+    void setInterval(int msec);
+    int interval();
 
 signals:
-    void colorChanged();
+    void intervalChanged();
+    ...
 
 private:
-    QColor m_color;
+    QTimer *m_timer;
 };
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
 \item Declare the getter and setter
-\item Declare the private variable containing the color
+\item Declare the notifier signal
+\item Contained QTimer object holds actual value
 \end{itemize}
 
 \end{slide}
 
+
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1566}\frametitle{Implementing Getter and Setter}
 
-In the \textit{ellipseitem.cpp} file:
+\begin{slide}[fragile]\frametitle{Implementing Getter and Setter}
 
+In the \textit{timer.cpp} file:
 \vspace*{0.25em}
-\begin{lstlisting}
-const QColor EllipseItem::color() const {
-    return m_color;
+\begin{cpp}
+void Timer::setInterval( int msec )
+{
+    if ( m_timer->interval() == msec )
+        return;
+    m_timer->stop();
+    m_timer->setInterval( msec );
+    m_timer->start();
+    emit intervalChanged();
 }
 
-void EllipseItem::setColor(const QColor &newColor) {
-  // always check if new value differs from current
-  if (m_color != newColor) {
-    m_color = newColor; // set the new value
-    update(); // update painting
-    emit colorChanged(); // notify about changes
-  }
+int Timer::interval()
+{
+    return m_timer->interval();
 }
-\end{lstlisting}
+\end{cpp}
+
+\begin{itemize}
+\item Do not emit notifier signal if value does not actually change
+\item Important to break cyclic dependencies in property bindings
+\end{itemize}
 
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1565}\frametitle{Updated Paint}
-
-In the \textit{ellipseitem.cpp} file:
-
-\vspace*{0.5em}
-\begin{lstlisting}
-void EllipseItem::paint(QPainter *painter) {
-    painter->save(); // save painter state
-    painter->setPen(Qt::NoPen); // we use no pen
-    // setup brush as described by property 'color'
-    painter->setBrush(m_color); 
-    painter->drawEllipse(boundingRect());
-    painter->restore(); // restore painter state
-}
-\end{lstlisting}
-
-\end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}{1564}\frametitle{Summary of Items and Properties}
+
+\begin{slide}\frametitle{Summary of Items and Properties}
 
 \begin{itemize}
 \item Register new QML types using \iCls{qmlRegisterType}
   \begin{itemize}
-  \item new types are subclasses of \iCls{QQuickItem}
+  \item new non-GUI types are subclasses of \iCls{QObject}
   \end{itemize}
 \vspace*{0.5em}
 \item Add QML properties
   \begin{itemize}
   \item define C++ properties with \qtt{NOTIFY} signals
   \item notifications are used to maintain the bindings between items
+  \item \emph{only} emit notifier signals if value actually changes
   \end{itemize}
 \end{itemize}
 
-\end{slide}       
+\end{slide} 
+
+
+
+
 
 %----------------------------------------------------------------------
-\subsection{Signals \& Slots and Methods}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1563}\frametitle{Adding Signals}
+\begin{slide}[fragile]\frametitle{Adding Signals}
 
-\flushedImage{qml-cpp-integration/images/ellipse3a.png}
-In the \textit{ellipse3.qml} file:
+In the \textit{main.qml} file:
 
-\vspace*{0.5em}
-% qml-cpp-integration/ex-simple-item/files/ellipse3.qml
 \begin{qml}
-\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{2.0}}\\
-\qtt{\qc{keyword}{import}~Shapes~\qc{number}{3.0}}\\
 \vspace*{0.5em}
-\qtt{\qc{class}{Item}~\{}\\
-\qtt{~~~~\qc{type}{width}:~\qc{number}{300};~\qc{type}{height}:~\qc{number}{200}}\\
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~...}\\
 \vspace*{0.5em}
-\qtt{~~~~Ellipse~\{}\\
-\qtt{~~~~~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
-\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
-\qtt{~~~~~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
+\qtt{~~~~\qc{class}{Timer}~\{}\\
+\qtt{~~~~~~~~\qc{type}{interval}:~\qc{number}{3000}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{onTimeout}:~\{}\\
+\qtt{~~~~~~~~~~~~console.log(~\qc{string}{"Timer~fired!"}~);}\\
+\qtt{~~~~~~~~\}}\\
 \qtt{~~~~\}}\\
-\qtt{~~~~...}
+\qtt{\}}\\
 \end{qml}
 
-\vspace*{0.5em}
 \begin{itemize}
-\item A new \qic{type}{onReady} signal handler
+\item A new \qic{type}{onTimeout} signal handler
   \begin{itemize}
-  \item changes the \qic{type}{text} property of the \qtt{label} item
+  \item outputs a message to stderr.
   \end{itemize}
 \end{itemize}
 
+\demo{qml-cpp-integration/ex\_timer\_signals}
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1562}\frametitle{Declaring a Signal}
 
-In the \textit{ellipseitem.h} file:
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Declaring a Signal}
+
+In the \textit{timer.h} file:
 
 \vspace*{0.5em}
-\begin{lstlisting}
+\begin{cpp}
 ...
 signals:
-    void colorChanged();
-    void ready();
+    void timeout();
+    void intervalChanged();
 ...
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
-\item Add a \hClsSig{EllipseItem}{ready} signal
+\item Add a \hClsSig{Timer}{timeout} signal
   \begin{itemize}
-  \item this will have a corresponding \qic{type}{onReady} handler in QML
-  \item we will emit this 2 seconds after the item is created
+  \item this will have a corresponding \qic{type}{onTimeout} handler in QML
+  \item we will emit this whenever the contained QTimer object fires
   \end{itemize}
 \end{itemize}
 
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1561}\frametitle{Emitting the Signal}
 
-In the \textit{ellipseitem.cpp} file:
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Emitting the Signal}
+
+In the \textit{timer.cpp} file:
 
 \vspace*{0.5em}
-\begin{lstlisting}
-EllipseItem::EllipseItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+\begin{cpp}
+Timer::Timer(QObject *parent)
+    : QObject(parent),
+      m_timer(new QTimer(this))
 {
-    QTimer::singleShot(2000, this, SIGNAL(ready()));
+    connect(m_timer, SIGNAL(timeout()),
+            this, SIGNAL(timeout()));
 }
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
 \item Change the constructor
-  \begin{itemize}
-  \item start a 2 second single-shot timer
-  \item this emits the \hClsSig{EllipseItem}{ready} signal when it times out
-  \end{itemize}
+\item connect \hClsSig{QTimer}{QTimer::timeout} signal to \hClsSig{Timer}{Timer::timeout} signal
 \end{itemize}
 
 \end{slide}
 
+
+
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1560}\frametitle{Handling the Signal}
 
-\flushedImage{qml-cpp-integration/images/ellipse3b.png}
-In the \textit{ellipse3.qml} file:
+\begin{slide}[fragile]\frametitle{Handling the Signal}
 
-\vspace*{0.5em}
+In the \textit{main.qml} file:
+
 \begin{qml}
-\qtt{~~~~Ellipse~\{}\\
-\qtt{~~~~~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
-\qtt{~~~~~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
-\qtt{~~~~~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
-\qtt{~~~~\}}\\
 \vspace*{0.5em}
-\qtt{~~~~\qc{class}{Text}~\{}\\
-\qtt{~~~~~~~~...}\\
-\qtt{~~~~~~~~\qc{type}{text}:~\qc{string}{"Not~ready"}}\\
-\qtt{~~~~\}}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~...}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Timer}~\{}\\
+\qtt{~~~~~~~~\qc{type}{interval}:~\qc{number}{3000}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{onTimeout}:~\{}\\
+\qtt{~~~~~~~~~~~~console.log(~\qc{string}{"Timer~fired!"}~);}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
 \end{qml}
 
 \begin{itemize}
 \item In C++:
   \begin{itemize}
-  \item the \iClsSig{EllipseItem}{ready} signal is emitted
+  \item the \iClsSig{QTimer}{timeout} signal is emitted
+  \item connection means \iClsSig{Timer}{timeout} is emitted
   \end{itemize}
 \item In QML:
   \begin{itemize}
-  \item the \qic{class}{Ellipse} item's \qic{type}{onReady} handler is called
-  \item sets the text of the \qic{class}{Text} item
+  \item the \qic{class}{Timer} item's \qic{type}{onTimeout} handler is called
+  \item outputs message to stderr
   \end{itemize}
 \end{itemize}
 
 \end{slide}
 
+
 %----------------------------------------------------------------------
-\begin{slide}{1559}\frametitle{Adding Methods to Items}
+
+\begin{slide}\frametitle{Adding Methods to Items}
 
 Two ways to add methods that can be called from QML:
 
@@ -470,161 +471,201 @@ Two ways to add methods that can be called from QML:
 
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1558}\frametitle{Adding Slots}
 
-\flushedImage{qml-cpp-integration/images/ellipse4.png}
-In the \textit{ellipse4.qml} file:
+%----------------------------------------------------------------------
+\begin{slide}[fragile]\frametitle{Adding Slots}
+
+In the \textit{main.qml} file:
 
 \vspace*{0.5em}
-% qml-cpp-integration/ex-slots/files/ellipse4.qml
 \begin{qml}
-\qtt{Ellipse~\{}\\
-\qtt{~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
-\qtt{~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
-\qtt{~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
+\qtt{\qc{class}{Rectangle}~\{}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Timer}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~timer}\\
+\qtt{~~~~~~~~\qc{type}{onTimeout}:~\{}\\
+\qtt{~~~~~~~~~~~~console.log(~\qc{string}{"Timer~fired!"}~);}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
 \vspace*{0.5em}
 \qtt{~~~~\qc{class}{MouseArea}~\{}\\
-\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
-\qtt{~~~~~~~~\qc{type}{onClicked}:~parent.setColor(\qc{string}{"darkgreen"});}\\
-\qtt{~~~~\}}\\
-\qtt{\}}
-\end{qml}
-
 \vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{onClicked}:~\{}\\
+\qtt{~~~~~~~~~~~~\qc{keyword}{if}~(~timer.active~\qc{operator}{==}~\qc{number}{false}~)~\{}\\
+\qtt{~~~~~~~~~~~~~~~~timer.start();}\\
+\qtt{~~~~~~~~~~~~\}~\qc{keyword}{else}~\{}\\
+\qtt{~~~~~~~~~~~~~~~~timer.stop();}\\
+\qtt{~~~~~~~~~~~~\}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Adding Slots}
 \begin{itemize}
-\item \qtt{Ellipse} has a \qtt{setColor()} method
-  \begin{itemize}
-  \item accepts a color
-  \item also accepts strings containing colors
-  \end{itemize}
- \item Normally, could just use properties to change colors...
+\item \qtt{Timer} now has \qtt{start()} and \qtt{stop()} methods
+\item Normally, could just use properties to change state...
+\item For example a \qic{type}{running} property
 \end{itemize}
+
+\demo{qml-cpp-integration/ex\_timer\_slots}
 
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1557}\frametitle{Declaring a Slot}
 
-In the \textit{ellipseitem.h} file:
+\begin{slide}[fragile]\frametitle{Declaring Slots}
+
+In the \textit{timer.h} file:
 
 \vspace*{0.25em}
-\begin{lstlisting}
+\begin{cpp}
 ...
-    const QColor color() const;
-
-signals:
-    void colorChanged();
-    void ready();
-
 public slots:
-    void setColor(const QColor &newColor);
+    void start();
+    void stop();
 ...
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
-\item Moved the \hClsFn{EllipseItem}{setColor} setter function
-  \begin{itemize}
-  \item now in the \iCls{public slots} section of the class
-  \end{itemize}
-\vspace*{0.25em}
-\item Accepts \iCls{QColor} values
-  \begin{itemize}
-  \item the string passed from QML is converted to a color
-  \item for custom types, make sure that type conversion is supported
-  \end{itemize}
+\item Added \hClsFn{Timer}{start} and \hClsFn{Timer}{stop} slots to public slots section
+\item No difference to declaring slots in pure C++ application
 \end{itemize}
 
 \end{slide}
 
+
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1556}\frametitle{Adding Methods}
 
-\flushedImage{qml-cpp-integration/images/ellipse5.png}
-In the \textit{ellipse5.qml} file:
+\begin{slide}[fragile]\frametitle{Implementing Slots}
+
+In the \textit{timer.cpp} file:
+
+\vspace*{0.25em}
+\begin{cpp}
+void Timer::start() {
+    if ( m_timer->isActive() )
+        return;
+    m_timer->start();
+    emit activeChanged();
+}
+
+void Timer::stop() {
+    if ( !m_timer->isActive() )
+        return;
+    m_timer->stop();
+    emit activeChanged();
+}
+\end{cpp}
+
+\begin{itemize}
+\item Remember to emit notifier signal for any changing properties
+\end{itemize}
+
+\end{slide}
+
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Adding Methods}
+
+In the \textit{main.qml} file:
 
 \vspace*{0.5em}
-% qml-cpp-integration/ex-methods/files/ellipse5.qml
 \begin{qml}
-\qtt{Ellipse~\{}\\
-\qtt{~~~~\qc{type}{x}:~\qc{number}{50};~\qc{type}{y}:~\qc{number}{35};~\qc{type}{width}:~\qc{number}{200};~\qc{type}{height}:~\qc{number}{100}}\\
-\qtt{~~~~\qc{type}{color}:~\qc{string}{"blue"}}\\
-\qtt{~~~~\qc{type}{onReady}:~label.text~\qc{operator}{=}~\qc{string}{"Ready"}}\\
 \vspace*{0.5em}
-\qtt{~~~~\qc{class}{MouseArea}~\{}\\
-\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
-\qtt{~~~~~~~~\qc{type}{onClicked}:~parent.color~\qc{operator}{=}~parent.randomColor()}\\
+\qtt{\qc{class}{Rectangle}~\{}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Timer}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~timer}\\
+\qtt{~~~~~~~~\qc{type}{interval}:~timer.randomInterval(~\qc{number}{500},~\qc{number}{1500}~)}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{onTimeout}:~\{}\\
+\qtt{~~~~~~~~~~~~console.log(~\qc{string}{"Timer~fired!"}~);}\\
+\qtt{~~~~~~~~\}}\\
 \qtt{~~~~\}}\\
-\qtt{\}}
+\qtt{\}}\\
 \end{qml}
 
 \vspace*{0.5em}
 \begin{itemize}
-\item \qtt{Ellipse} now has a \qtt{randomColor()} method
+\item \qtt{Timer} now has a \qtt{randomInterval()} method
   \begin{itemize}
-  \item obtain a random color using this method
-  \item set the color using the \qic{type}{color} property
+  \item obtain a random interval using this method
+  \item accepts arguments for min and max intervals
+  \item set the interval using the \qic{type}{interval} property
   \end{itemize}
 \end{itemize}
+\demo{qml-cpp-integration/ex-methods}
 
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1555}\frametitle{Declaring a Method}
 
-In the \textit{ellipseitem.h} file:
+
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Declaring a Method}
+
+In the \textit{timer.h} file:
 
 \vspace*{0.25em}
-\begin{lstlisting}
+\begin{cpp}
 ...
 public:
-    EllipseItem(QQuickItem *parent = 0);
-    void paint(QPainter *painter);
-
-    const QColor color() const;
-    void setColor(const QColor &newColor);
-
-    Q_INVOKABLE QColor randomColor() const;
+    explicit Timer( QObject* parent = 0 );
 ...
-\end{lstlisting}
+    Q_INVOKABLE int randomInterval( int min, int max ) const;
+...
+\end{cpp}
 
 \begin{itemize}
-\item Define the \hClsFn{EllipseItem}{randomColor} function
+\item Define the \hClsFn{Timer}{randomInterval} function
   \begin{itemize}
   \item add the \iCls{Q\_INVOKABLE} macro before the declaration
-  \item returns a \iCls{QColor} value
+  \item returns an \iCls{int} value
   \item \textit{cannot} return a const reference
   \end{itemize}
 \end{itemize}
 
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1554}\frametitle{Implementing a Method}
 
-In the \textit{ellipseitem.cpp} file:
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Implementing a Method}
+
+In the \textit{timer.cpp} file:
 
 \vspace*{0.5em}
-\begin{lstlisting}
-QColor EllipseItem::randomColor() const
+\begin{cpp}
+int Timer::randomInterval( int min, int max ) const
 {
-    return QColor(qrand() & 0xff, qrand() & 0xff, qrand() & 0xff);
+    int range = max - min;
+    int msec = min + qrand() % range;
+    qDebug() << "Random interval =" << msec << "msecs";
+    return msec;
 }
-\end{lstlisting}
+\end{cpp}
 
 \begin{itemize}
-\item Define the new \hClsFn{EllipseItem}{randomColor} function
+\item Define the new \hClsFn{Timer}{randomInterval} function
   \begin{itemize}
   \item the pseudo-random number generator has already been seeded
-  \item simply return a color
+  \item simply return an int
   \item do not use the \iCls{Q\_INVOKABLE} macro in the source file
   \end{itemize}
 \end{itemize}
 
 \end{slide}
 
+
 %----------------------------------------------------------------------
-\begin{slide}{1553}\frametitle{Summary of Signals, Slots and Methods}
+
+\begin{slide}\frametitle{Summary of Signals, Slots and Methods}
 
 \begin{itemize}
 \item Define signals
@@ -635,432 +676,6 @@ QColor EllipseItem::randomColor() const
   \begin{itemize}
   \item reuse slots as QML-callable methods
   \item methods that return values are marked using \iMacro{Q\_INVOKABLE}
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-                             
-
-%----------------------------------------------------------------------
-\subsection{Using Custom Types}
-
-%----------------------------------------------------------------------
-\begin{slide}{1552}\frametitle{Defining Custom Property Types}
-
-\begin{itemize}
-\item Classes can be used as property types
-  \begin{itemize}
-  \item allows rich description of properties
-  \item subclass \iCls{QObject} (as before)
-  \item requires registration of types (as before)
-  \end{itemize}
-
-\vspace*{0.5em}
-\item A simpler way to define custom property types:
-  \begin{itemize}
-  \item use simple enums and flags
-  \item easy to declare and use
-  \end{itemize}
-
-\vspace*{0.5em}
-\item Collections of custom types:
-  \begin{itemize}
-  \item define a new custom item
-  \item use with a \iCls{QQmlListProperty} template type
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1551}\frametitle{Enums as Property Types}
-
-\flushedImage{qml-cpp-integration/images/ellipse6.png}
-% qml-cpp-integration/ex-methods/files/ellipse6.qml
-\inputqml{qml-cpp-integration/colorized/ellipse6}
-
-\begin{itemize}
-\item A new \qic{type}{style} property with a custom value type
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1550}\frametitle{Declaring Enums as Property Types}
-
-In the \textit{ellipseitem.h} file:
-
-\vspace*{0.25em}
-\begin{lstlisting}
-class EllipseItem : public QQuickPaintedItem
-{
-    Q_OBJECT
-    Q_PROPERTY(QColor color READ color WRITE setColor
-               NOTIFY colorChanged)
-    Q_PROPERTY(Style style READ style WRITE setStyle
-               NOTIFY styleChanged)
-    Q_ENUMS(Style)
-
-public:
-    enum Style { Outline, Filled };
-...
-\end{lstlisting}
-
-\begin{itemize}
-\item Declare the \qic{type}{style} property using the \iCls{Q\_PROPERTY}
-      macro
-\item Declare the \hClsEnum{EllipseItem}{Style} enum using the \iCls{Q\_ENUMS}
-      macro
-\item Define the \hClsEnum{EllipseItem}{Style} enum
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1549}\frametitle{Using Enums in Getters and Setters}
-
-In the \textit{ellipseitem.h} file:
-
-\vspace*{0.25em}
-\begin{lstlisting}
-...
-    Style style() const;
-    void setStyle(const Style &newStyle);
-
-signals:
-    void colorChanged();
-    void styleChanged();
-
-private:
-    QColor m_color;
-    Style m_style;
-...
-\end{lstlisting}
-
-\begin{itemize}
-\item Define the usual getter, setter, signal and private member for the
-      \qic{type}{style} property
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1548}\frametitle{Using Enums in Getters and Setters}
-
-In the \textit{ellipseitem.cpp} file:
-
-\vspace*{0.25em}
-\begin{lstlisting}
-EllipseItem::Style EllipseItem::style() const
-{
-    return m_style;
-}
-
-void EllipseItem::setStyle(const Style &newStyle)
-{
-    if (m_style != newStyle) {
-        m_style = newStyle;
-        update();
-        emit styleChanged();
-    }
-}
-\end{lstlisting}
-
-\begin{itemize}
-\item Similar getter and setter as used for the \qic{type}{color} property
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1547}\frametitle{Custom Items as Property Types}
-
-\flushedImage{qml-cpp-integration/images/ellipse7.png}
-% qml-cpp-integration/ex-methods/files/ellipse7.qml
-\inputqml{qml-cpp-integration/colorized/ellipse7}
-
-\begin{itemize}
-\item A new \qic{type}{style} property with a custom item type
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1546}\frametitle{Declaring the Style Item}
-
-In the \textit{style.h} file:
-
-\vspace*{0.5em}
-\begin{lstlisting}
-class Style : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QColor color READ color WRITE setColor
-               NOTIFY colorChanged)
-    Q_PROPERTY(bool filled READ filled WRITE setFilled
-               NOTIFY filledChanged)
-
-public:
-    Style(QObject *parent = 0);
-...
-\end{lstlisting}
-
-\begin{itemize}
-\item \qtt{Style} is a \iCls{QObject} subclass
-\item Defined like the \qtt{EllipseItem} class
-  \begin{itemize}
-  \item implemented in the same way
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1545}\frametitle{Declaring the Style Property}
-
-In the \textit{ellipseitem.h} file:
-
-\vspace*{0.25em}
-\begin{lstlisting}
-class EllipseItem : public QQuickPaintedItem
-{
-    Q_OBJECT
-    Q_PROPERTY(Style *style READ style WRITE setStyle
-               NOTIFY styleChanged)
-public:
-...
-    Style *style() const;
-    void setStyle(Style *newStyle);
-
-signals:
-    void styleChanged();
-...
-\end{lstlisting}
-
-\begin{itemize}
-\item Declare the \qic{type}{style} property
-  \begin{itemize}
-  \item with the \qtt{Style} pointer as its type
-  \item declare the associated getter, setter and signal
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1544}\frametitle{Using the Style Property}
-
-In the \textit{ellipseitem.cpp} file:
-
-\vspace*{0.25em}
-\begin{lstlisting}
-void EllipseItem::paint(QPainter *painter)
-{
-    painter->save();
-    if (!m_style->filled()) {
-        painter->setPen(m_style->color());
-        painter->setBrush(Qt::NoBrush);
-    } else {
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(m_style->color());
-    }
-    painter->drawEllipse(boundingRect());
-    painter->restore();
-}
-\end{lstlisting}
-
-\begin{itemize}
-\item Use the internal \qtt{Style} object to decide what to paint
-  \begin{itemize}
-  \item using the getters to read its \qic{type}{color} and \qic{type}{filled}
-        properties
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1543}\frametitle{Registering the Style Property}
-
-In the \textit{ellipseitem.cpp} file:
-
-\vspace*{0.5em}
-\begin{lstlisting}
-int main(int argc, char *argv[])
-{
-    QGuiApplication app(argc, argv);
-    qmlRegisterType<EllipseItem>("Shapes", 7, 0, "Ellipse");
-    qmlRegisterType<Style>("Shapes", 7, 0, "Style");
-...
-\end{lstlisting}
-
-\vspace*{1.0em}
-\begin{itemize}
-\item Register the \qtt{Style} class
-  \begin{itemize}
-  \item in the same way as the \qtt{EllipseItem} class
-  \item in the same module: \qtt{Shapes} 7.0
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1542}\frametitle{Collections of Custom Types}
-
-\flushedImage{qml-cpp-integration/images/chart1.png}
-% qml-cpp-integration/ex-methods/files/chart1.qml
-\inputqml{qml-cpp-integration/colorized/chart1}
-
-\begin{itemize}
-\item A \qtt{Chart} item
-  \begin{itemize}
-  \item with a \qic{type}{bars} list property
-  \item accepting custom \qtt{Bar} items
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1541}\frametitle{Declaring the List Property}
-
-In the \textit{chartitem.h} file:
-
-\vspace*{0.5em}
-\begin{lstlisting}
-class BarItem;
-
-class ChartItem : public QQuickPaintedItem
-{
-    Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<BarItem> bars READ bars
-               NOTIFY barsChanged)
-public:
-    ChartItem(QQuickItem *parent = 0);
-    void paint(QPainter *painter);
-...
-\end{lstlisting}
-
-\vspace*{0.5em}
-\begin{itemize}
-\item Define the \qic{type}{bars} property
-  \begin{itemize}
-  \item in theory, read-only but with a notification signal
-  \item in reality, writable as well as readable
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1540}\frametitle{Declaring the List Property}
-
-In the \textit{chartitem.h} file:
-
-\vspace*{0.5em}
-\begin{lstlisting}
-...
-    QQmlListProperty<BarItem> bars();
-
-signals:
-    void barsChanged();
-
-private:
-    static void append_bar(QQmlListProperty<BarItem> *list,
-                           BarItem *bar);
-    QList<BarItem*> m_bars;
-};
-\end{lstlisting}
-
-\vspace*{0.5em}
-\begin{itemize}
-\item Define the getter function and notification signal
-\item Define an append function for the list property
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1539}\frametitle{Defining the Getter Function}
-
-In the \textit{chartitem.cpp} file:
-
-\vspace*{0.5em}
-\begin{lstlisting}
-QQmlListProperty<BarItem> ChartItem::bars()
-{
-    return QQmlListProperty<BarItem>(this, 0,
-        &ChartItem::append_bar);
-}
-\end{lstlisting}
-
-\vspace*{0.5em}
-\begin{itemize}
-\item Defines and returns a list of \qtt{BarItem} objects
-  \begin{itemize}
-  \item with an append function
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1538}\frametitle{Defining the Append Function}
-
-\begin{lstlisting}
-void ChartItem::append_bar(QQmlListProperty<BarItem> *list,
-                           BarItem *bar)
-{
-    ChartItem *chart = qobject_cast<ChartItem *>(list->object);
-    if (chart) {
-        bar->setParent(chart);
-        chart->m_bars.append(bar);
-        chart->barsChanged();
-    }
-}
-\end{lstlisting}
-
-\vspace*{0.5em}
-\begin{itemize}
-\item Static function, accepts
-  \begin{itemize}
-  \item the list to operate on
-  \item each \qtt{BarItem} to append
-  \end{itemize}
-\vspace*{0.5em}
-\item When a \qtt{BarItem} is appended
-  \begin{itemize}
-  \item emits the \hClsSig{ChartItem}{barsChanged} signal
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1537}\frametitle{Summary of Custom Property Types}
-
-\begin{itemize}
-\item Define classes as property types:
-  \begin{itemize}
-  \item declare and implement a new \iCls{QObject} subclass
-  \item declare properties to use a pointer to the new type
-  \item register the item with \iCls{qmlRegisterType}
-  \end{itemize}
-\vspace*{1em}
-\item Use enums as simple custom property types:
-  \begin{itemize}
-  \item use \iCls{Q\_ENUMS} to declare a new enum type
-  \item declare properties as usual
-  \end{itemize}
-\vspace*{1em}
-\item Define collections of custom types:
-  \begin{itemize}
-  \item using a custom class that has been declared and registered
-  \item declare properties with \iCls{QQmlListProperty}
-  \item implement a getter and an append function for each property
-  \item read-only properties, but read-write containers
-  \item read-only containers define append functions that simply return
   \end{itemize}
 \end{itemize}
 
