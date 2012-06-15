@@ -63,3 +63,102 @@ SOURCES   = main.cpp
 \end{qmake}
 
 \end{slide}
+
+\subsection{Exporting C++ objects to QML}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1527}\frametitle{Exporting C++ objects to QML}
+\begin{itemize}
+\item C++ objects can be exported to QML
+\begin{cpp}
+class User : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name WRITE setName
+               NOTIFY nameChanged)
+    Q_PROPERTY(int age READ age WRITE setAge NOTIFY ageChanged)
+
+public:
+    User(const QString &name, int age, QObject *parent = 0);
+    ...
+}
+\end{cpp}
+\item The notify signal is needed for correct property bindings!
+\item Q\_PROPERTY must be at top of class
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{1528}\frametitle{Exporting C++ objects to QML}
+\begin{itemize}
+\item \iCls{QQmlContext} exports the instance to QML.\\[4mm]
+
+\begin{cpp}
+void main( int argc, char* argv[] ) {
+    ...
+    User *currentUser = new User("Alice", 29);
+
+    QAbstractItemModel *thingsModel = createModel();
+
+    QQuickView *view = new QQuickView;
+    QQmlContext *context = view->engine()->rootContext();
+
+    context->setContextProperty("_currentUser", currentUser);
+    context->setContextProperty("_favoriteThings", thingsModel);
+
+    ...
+}
+\end{cpp}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{2077}\frametitle{Using the object in QML}
+
+%Text {
+%    text : _currentUser.name
+%    ...
+%}
+%
+%ListView {
+%    model : _favoriteThings
+%    ...
+%}
+\begin{itemize}
+\item Use the instances like any other QML object\\[5mm]
+
+\footnotesize
+\qtt{\qc{class}{Text}~\{}\\
+\qtt{~~~~\qc{type}{text}~:~\_currentUser.name}\\
+\qtt{~~~~...}\\
+\qtt{\}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~\qc{type}{model}~:~\_favoriteThings}\\
+\qtt{~~~~...}\\
+\qtt{\}}\\
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{2150}\frametitle{What is exported?}
+ Accessible from QML:
+    \begin{itemize}
+    \item Properties
+    \item Signals
+    \item Slots
+    \item Methods marked with Q\_INVOKABLE
+    \item Enums registered with Q\_ENUMS
+      \begin{cpp}
+class Circle {
+  Q_ENUMS(Style)
+
+public:
+  enum Style { Outline, Filled };
+  ...
+};
+      \end{cpp}
+    \end{itemize}
+\end{slide}
