@@ -25,6 +25,7 @@ public:
     int minimum() const;
     int maximum() const;
 
+// Offering them as slots make the user able to connect the Qt4 way if he so prefers.
 public slots:
     void setValue(int value);
     void setRange(int min, int max);

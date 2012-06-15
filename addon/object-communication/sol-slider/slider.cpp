@@ -17,8 +17,11 @@ Slider::Slider(Qt::Orientation orient, QWidget *parent)
     m_display = new QLabel;
     m_display->setAlignment(Qt::AlignRight);
 
-    connect(m_slider, SIGNAL(valueChanged(int)), m_display, SLOT(setNum(int)));
-    connect(m_slider, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
+    // setNum is overloaded to both setNum(int) and setNum(double), hence the ugly syntax.
+    connect(m_slider, &QSlider::valueChanged, m_display, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
+
+    // Signal to Signal connection
+    connect(m_slider, &QSlider::valueChanged, this, &Slider::valueChanged);
 
     QBoxLayout *layout = 0;
     if (orient == Qt::Horizontal) {
