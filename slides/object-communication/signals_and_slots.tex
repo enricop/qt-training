@@ -155,7 +155,7 @@ void MyClass::setValue(int value) {
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1031}\frametitle{Inlined code}
+\begin{slide}[fragile]{1031}\frametitle{Internal code}
   \begin{itemize}
 \item Using functors:\\
 \begin{cpp}
@@ -164,47 +164,30 @@ static void printValue(int value) {
 }
 
 connect( slider, &QSignal::valueChanged, &printValue );
-\end{cpp}
+\end{cpp}\medskip
+
+\item[] \advantage No slots syntax, no Q\_OBJECT, no moc
+\item[] \advantage Type safe
+\item[] \advantage Any function, e.g. tr1::bind
 \end{itemize}
 \demo{object-communication/ex-connect-functors}\bigskip\bigskip
+\end{slide}
 
-\begin{itemize}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1031}\frametitle{Internal code}
+  \begin{itemize}
 \item Using C++11 lambda functions:\\
 \begin{cpp}
 connect( slider, &QSlider::valueChanged, 
          [=] (int value) { qDebug("%d", value); } );
-\end{cpp}
+\end{cpp}\medskip
+\item[] \advantage No slots syntax, no Q\_OBJECT, no moc
+\item[] \advantage Type safe
+\item[] \advantage No need for an extra function
   \end{itemize}
 \demo{object-communication/ex-connect-lambda}
 \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}{}\frametitle{}
-  \begin{itemize}
-  \item 
-  \end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}{}\frametitle{}
-  \begin{itemize}
-  \item 
-  \end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}{}\frametitle{}
-  \begin{itemize}
-  \item 
-  \end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}{}\frametitle{}
-  \begin{itemize}
-  \item 
-  \end{itemize}
-\end{slide}
 %----------------------------------------------------------------------
 
 \begin{slide}[fragile]{07981}\frametitle{Custom Signals}
