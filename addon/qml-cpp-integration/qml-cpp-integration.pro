@@ -9,5 +9,12 @@ ex-signals \
 ex-simple-item \
 ex-simpleviewer \
 ex-slots \
-ex-extension-plugin
-
+ex-extension-plugin \
+ex_simple_timer \
+ex_timer_export \
+lab-tcp-connection \
+ex_timer_properties\
+ex_timer_signals \
+sol-tcp-connection \
+ex_timer_custom_types \
+ex_timer_slots \
