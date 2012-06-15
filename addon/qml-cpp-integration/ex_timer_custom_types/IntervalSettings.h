@@ -1,7 +1,7 @@
 #ifndef INTERVALSETTINGS_H
 #define INTERVALSETTINGS_H
 
-#include <QDeclarativeItem>
+#include <QObject>
 
 class IntervalSettings : public QObject
 {

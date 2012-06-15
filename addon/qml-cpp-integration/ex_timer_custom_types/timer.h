@@ -2,7 +2,6 @@
 #define TIMER_H
 
 #include <QObject>
-#include <QtDeclarative>
 
 class IntervalSettings;
 

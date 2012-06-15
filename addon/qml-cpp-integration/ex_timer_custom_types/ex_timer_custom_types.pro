@@ -1,4 +1,4 @@
-QT += declarative
+QT += quick
 
 SOURCES += main.cpp \
     timer.cpp \

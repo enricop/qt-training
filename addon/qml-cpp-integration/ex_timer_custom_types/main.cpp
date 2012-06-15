@@ -1,12 +1,14 @@
 #include "timer.h"
 #include "IntervalSettings.h"
 
-#include <QApplication>
-#include <QDeclarativeView>
+#include <QDateTime>
+#include <QGuiApplication>
+#include <QQuickView>
+#include <qqml.h> // for qmlRegisterType
 
 int main(int argc, char *argv[])
 {
-    QApplication app( argc, argv );
+    QGuiApplication app( argc, argv );
 
     qsrand( QDateTime::currentMSecsSinceEpoch() );
 
@@ -14,7 +16,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Timer>( "CustomComponents", 1, 0, "Timer" );
     qmlRegisterType<IntervalSettings>( "CustomComponents", 1, 0, "IntervalSettings");
 
-    QDeclarativeView viewer;
+    QQuickView viewer;
     viewer.setSource( QUrl( "qrc:/main.qml" ) );
     viewer.show();
 
