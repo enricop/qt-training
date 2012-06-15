@@ -168,7 +168,7 @@ connect( slider, &QSignal::valueChanged, &printValue );
 
 \item[] \advantage No slots syntax, no Q\_OBJECT, no moc
 \item[] \advantage Compile time errors
-\item[] \advantage Any function, e.g. tr1::bind
+\item[] \advantage Any function, e.g.\ the return value of tr1::bind
 \end{itemize}
 \demo{object-communication/ex-connect-non-member}\bigskip\bigskip
 \end{slide}
@@ -293,7 +293,7 @@ connect( \=m\_slider, \=SIGNAL( valueChanged( int \incorrecttext{value} ) )\\
 \multirow{3}{*}{valueChanged(int)}     & \correct & setValue(int) \\
  & \correct & update() \\
  & \incorrect & setRange(int,int) \\ 
- & \incorrect & setValue(float) \\
+ & \correct & setValue(float)$^\dagger$ \\
 \hline                                   
 
 textChanged(QString) & \incorrect & setValue(int) \\
@@ -304,6 +304,7 @@ textChanged(QString) & \incorrect & setValue(int) \\
 
   \end{tabular}
   \end{center}
+{\hfill\tiny$\dagger$ Though not for Qt4 connection types}
 \end{slide}
 
 %----------------------------------------------------------------------
