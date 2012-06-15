@@ -72,7 +72,7 @@ connect( slider, &QSlider::valueChanged,
          spinbox, &QSpinBox::setValue );
 \end{cpp}\bigskip
 
-\item Using functors:\\
+\item Using non-member function:\\
 \begin{cpp}
 static void printValue(int value) {...}
 connect( slider, &QSignal::valueChanged, &printValue );
@@ -157,7 +157,7 @@ void MyClass::setValue(int value) {
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1031}\frametitle{Internal code}
   \begin{itemize}
-\item Using functors:\\
+\item Using non-member functions:\\
 \begin{cpp}
 static void printValue(int value) {
   qDebug( "value = %d", value );
@@ -170,7 +170,7 @@ connect( slider, &QSignal::valueChanged, &printValue );
 \item[] \advantage Type safe
 \item[] \advantage Any function, e.g. tr1::bind
 \end{itemize}
-\demo{object-communication/ex-connect-functors}\bigskip\bigskip
+\demo{object-communication/ex-connect-non-member}\bigskip\bigskip
 \end{slide}
 
 %----------------------------------------------------------------------
