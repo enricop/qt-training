@@ -1,0 +1,248 @@
+\subsection{Plug-ins}\label{QtQuickPlugins}
+
+%----------------------------------------------------------------------
+\begin{slide}{1536}\frametitle{Creating Extension Plugins}
+
+\begin{itemize}
+\item Declarative extensions can be deployed as plugins 
+  \begin{itemize}
+  \item using source and header files for a working custom type
+  \item developed separately then deployed with an application
+  \item write QML-only components then rewrite in C++
+  \item use placeholders for C++ components until they are ready
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by the \qtt{qmlscene} tool
+  \begin{itemize}
+  \item with an appropriate \qtt{qmldir} file
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by C++ applications
+  \begin{itemize}
+  \item some work is required to load and initialize them
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1535}\frametitle{Defining an Extension Plugin}
+
+\begin{lstlisting}
+#include <QQmlExtensionPlugin>
+
+class EllipsePlugin : public QQmlExtensionPlugin
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID
+      "org.qt-project.Qt.QQmlExtensionInterface/1.0")
+
+public:
+    void registerTypes(const char *uri);
+};
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Create a \iCls{QQmlExtensionPlugin} subclass
+  \begin{itemize}
+  \item add type information for Qt's plugin system
+  \item only one function to reimplement
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1534}\frametitle{Implementing an Extension Plugin}
+
+\begin{lstlisting}
+#include "ellipseplugin.h"
+#include "ellipseitem.h"
+
+void EllipsePlugin::registerTypes(const char *uri)
+{
+    qmlRegisterType<EllipseItem>(uri, 9, 0, "Ellipse");
+}
+
+\end{lstlisting}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Register the custom type using the \qtt{uri} supplied
+  \begin{itemize}
+  \item the same custom type we started with
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1533}\frametitle{Building an Extension Plugin}
+
+\begin{qmake}
+TEMPLATE  = lib
+CONFIG   += qt plugin
+QT       += quick
+
+HEADERS  += ellipseitem.h \
+            ellipseplugin.h
+
+SOURCES  += ellipseitem.cpp \
+            ellipseplugin.cpp
+
+DESTDIR   = ../plugins
+\end{qmake}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Ensure that the project is built as a Qt plugin
+\item QtQuick module is added to the Qt configuration
+\item Plugin is written to a \qtt{plugins} directory
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1532}\frametitle{Using an Extension Plugin}
+
+To use the plugin with the \qtt{qmlscene} tool:
+
+\flushedImageDoubleWidth{qml-cpp-integration/images/plugin-location.pdf}
+\begin{itemize}
+\item Write a \qtt{qmldir} file
+  \begin{itemize}
+  \item include a line to describe the plugin
+  \item stored in the \qtt{standalone} directory
+  \end{itemize}
+\vspace*{0.5em}
+\item Write a QML file to show the item
+  \begin{itemize}
+  \item \qtt{ellipse9s.qml}
+  \end{itemize}
+\end{itemize}
+
+\vspace*{1em}
+The \qtt{qmldir} file contains a declaration:
+
+\begin{alltt}
+plugin ellipseplugin ../plugins
+\end{alltt}
+
+\begin{itemize}
+\item \textbf{\qtt{plugin}} followed by
+  \begin{itemize}
+  \item the plugin name: \textbf{\qtt{ellipseplugin}}
+  \item the plugin path relative to the \qtt{qmldir} file: \textbf{\qtt{../plugins}}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1531}\frametitle{Using an Extension Plugin}
+
+In the \qtt{ellipse9s.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-extension-plugin/standalone/ellipse9s.qml
+\inputqml{qml-cpp-integration/colorized/ellipse9s}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Use the custom item directly
+\item No need to import any custom modules
+  \begin{itemize}
+  \item \qtt{qmldir} and \qtt{ellipse9s.qml} are in the same project
+        directory
+  \item \qtt{Ellipse} is automatically imported into the global namespace
+  \end{itemize}
+\end{itemize}
+
+% uri mentioned but not explained
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1530}\frametitle{Loading an Extension Plugin}
+
+To load the plugin in a C++ application:
+
+\begin{itemize}
+\item Locate the plugin
+  \begin{itemize}
+  \item (perhaps scan the files in the \qtt{plugins} directory)
+  \end{itemize}
+\item Load the plugin with \iCls{QPluginLoader}
+\begin{lstlisting}
+QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+\end{lstlisting}
+\vspace*{0.5em}
+\item Cast the plugin object to a \iCls{QQmlExtensionPlugin}
+\begin{lstlisting}
+QQmlExtensionPlugin *plugin =
+  qobject_cast<QQmlExtensionPlugin *>(loader.instance());
+\end{lstlisting}
+\vspace*{0.5em}
+\item Register the extension with a URI
+\begin{lstlisting}
+if (plugin)
+  plugin->registerTypes("Shapes");
+\end{lstlisting}
+  \begin{itemize}
+  \item in this example, \qtt{Shapes} is used as a URI
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1529}\frametitle{Using an Extension Plugin}
+
+In the \qtt{ellipse9s.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-extension-plugin/standalone/ellipse9.qml
+\inputqml{qml-cpp-integration/colorized/ellipse9}
+
+\begin{itemize}
+\item The \qtt{Ellipse} item is part of the \qtt{Shapes} module
+\item A different URI makes a different import necessary; e.g.,
+\begin{lstlisting}
+plugin->registerTypes("com.nokia.qt.examples.Shapes");
+\end{lstlisting}
+\item corresponds to\\
+\begin{qml}
+\qtt{\qc{keyword}{import}~com.nokia.qt.examples.Shapes~\qc{number}{9.0}}\\
+\end{qml}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1528}\frametitle{Summary of Extension Plugins}
+
+\begin{itemize}
+\item Extensions can be compiled as plugins
+  \begin{itemize}
+  \item define and implement a \iCls{QQmlExtensionPlugin} subclass
+  \item define the version of the plugin in the extension
+  \item build a Qt plugin project with the \qtt{quick} option enabled
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by the \qtt{qmlscene} tool
+  \begin{itemize}
+  \item write a \qtt{qmldir} file
+  \item declare the plugin's name and location relative to the file
+  \item no need to import the plugin in QML
+  \end{itemize}
+\vspace*{0.5em}
+\item Plugins can be loaded by C++ applications
+  \begin{itemize}
+  \item use \iCls{QPluginLoader} to load the plugin
+  \item register the custom types with a specific URI
+  \item import the same URI and plugin version number in QML
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
