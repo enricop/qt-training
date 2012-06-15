@@ -15,7 +15,7 @@ SelectColor::SelectColor(QWidget *parent)
     m_label = new QLabel("Not Set");
     m_label->setAutoFillBackground(true);
     QPushButton *button = new QPushButton("Select Color");
-    connect(button, SIGNAL(clicked()), this, SLOT(slotSelectColor()));
+    connect(button, &QPushButton::clicked, this, &SelectColor::showColorSelector);
 
     QVBoxLayout *col = new QVBoxLayout;
     QHBoxLayout *row = new QHBoxLayout;
@@ -27,7 +27,7 @@ SelectColor::SelectColor(QWidget *parent)
     setLayout(col);
 }
 
-void SelectColor::slotSelectColor()
+void SelectColor::showColorSelector()
 {
     QColor color = QColorDialog::getColor(QColor(m_label->text()), this);
 
