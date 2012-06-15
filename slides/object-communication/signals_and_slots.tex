@@ -97,7 +97,7 @@ connect( slider, &QSlider::valueChanged,
          spinbox, &QSpinBox::setValue );
 \end{cpp}\medskip
 \item Primary choice when connecting objects\medskip
-\item[]\advantage Type safe
+\item[]\advantage Compile type errors
 \item[]\advantage No special syntax for slots
 \item[]\advantage \texttt{Q\_OBJECT} not need for slots
 \item[]\disadvantage connecting to overloaded slots is hard
@@ -120,7 +120,7 @@ connect( slider, SIGNAL(valueChanged(int)),
 \item[]\disadvantage need the Q\_OBJECT macro
 \item[]\disadvantage need to have \texttt{moc} run on it\bigskip
 
-\item[]\disadvantage Not type safe
+\item[]\disadvantage Only run time errors
 \item[]\advantage overloaded slot are easy
 \item[]\advantage Existing Qt4 code do not need to be rewritten
 \end{itemize}
@@ -167,7 +167,7 @@ connect( slider, &QSignal::valueChanged, &printValue );
 \end{cpp}\medskip
 
 \item[] \advantage No slots syntax, no Q\_OBJECT, no moc
-\item[] \advantage Type safe
+\item[] \advantage Compile time errors
 \item[] \advantage Any function, e.g. tr1::bind
 \end{itemize}
 \demo{object-communication/ex-connect-non-member}\bigskip\bigskip
