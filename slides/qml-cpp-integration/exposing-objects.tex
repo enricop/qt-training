@@ -681,3 +681,119 @@ int Timer::randomInterval( int min, int max ) const
 
 \end{slide}
 
+%----------------------------------------------------------------------
+
+\subsubsection{Exporting GUI Classes}
+
+%----------------------------------------------------------------------
+\begin{slide}{4323}\frametitle{Exporting a GUI class}
+  \begin{itemize}
+  \item Derive from \iCls{QQuickItem} or one if its subclasses, e.g. \iCls{QQuickPaintedItem}
+  \item In case of \iCls{QQuickPaintedItem} implement \hClsFnPar{QQuickPaintedItem}{paint}{\ldots}
+  \item Similar to non GUI classes:
+    \begin{itemize}
+    \item Export object from C++
+    \item Import and use in QML
+    \item properties, signals/slots, Q\_INVOKABLE 
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1574}\frametitle{Exporting a GUI class cont'd.}
+\flushedImage{qml-cpp-integration/images/ellipse1.png}
+
+\begin{cpp}
+#include <QQuickPaintedItem>
+
+class EllipseItem : public QQuickPaintedItem
+{
+    Q_OBJECT
+public:
+    EllipseItem(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
+};
+\end{cpp}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1573}\frametitle{Exporting a GUI class cont'd.}
+\begin{cpp}
+EllipseItem::EllipseItem(QQuickItem *parent)
+    : QQuickPaintedItem(parent)
+{
+}
+
+void EllipseItem::paint(QPainter *painter)
+{
+    const qreal halfPenWidth =
+      qMax(painter->pen().width() / 2.0, 1.0);
+    
+    QRectF rect = boundingRect();
+    rect.adjust(halfPenWidth, halfPenWidth,
+                -halfPenWidth, -halfPenWidth);
+    
+    painter->drawEllipse(rect);
+}
+\end{cpp}
+\begin{itemize}
+\item A simple \hClsFn{QQuickPaintedItem}{paint} function implementation
+\item Adjust drawing area by half of the pen width on all sides
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1571}\frametitle{Exporting a GUI class cont'd.}
+
+\begin{itemize}
+\item[]
+\begin{cpp}
+#include <QGuiApplication>
+#include <QQuickView>
+#include "ellipseitem.h"
+
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
+    qmlRegisterType<EllipseItem>("Shapes", 1, 0, "Ellipse");
+
+    QQuickView view;
+    view.setSource(QUrl("qrc:ellipse1.qml"));
+    view.show();
+    return app.exec();
+}
+\end{cpp}
+
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1575}\frametitle{Exporting a GUI class cont'd.}
+
+\flushedImage{qml-cpp-integration/images/ellipse1.png}
+In the \textit{ellipse1.qml} file:
+
+\vspace*{0.5em}
+% qml-cpp-integration/ex-simple-item/files/ellipse1.qml
+\inputqml{qml-cpp-integration/colorized/ellipse1}
+
+\demo{qml-cpp-integration/ex-simple-item}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{2151}\frametitle{Exercise: Review a more involving example}
+  \begin{itemize}
+  \item Review the example in \texttt{qml-cpp-integration/ex-methods}
+  \item Discuss usage of:
+    \begin{itemize}
+    \item properties
+    \item signals
+    \item slots
+    \item events
+    \item registrations
+    \end{itemize}
+  \end{itemize}
+  \demo{qml-cpp-integration/ex-methods}
+\end{slide}
+
