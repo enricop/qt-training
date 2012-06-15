@@ -89,7 +89,7 @@ connect( slider, &QSlider::valueChanged,
 \newcommand{\advantage}{\hspace{-5mm}\makebox[6mm]{\correct}}
 \newcommand{\disadvantage}{\hspace{-5mm}\makebox[6mm]{\incorrect}}
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1030}\frametitle{Qt5 components}
+\begin{slide}[fragile]{1030}\frametitle{connect - function pointers}
   \begin{itemize}
 \item Qt 5 components
 \begin{cpp}
@@ -107,7 +107,7 @@ connect( slider, &QSlider::valueChanged,
 
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1033}\frametitle{Qt4 ported code}
+\begin{slide}[fragile]{1033}\frametitle{connect - Qt4 style}
   \begin{itemize}
   \item Qt 4 ported code:\\
 \begin{cpp}
@@ -129,7 +129,7 @@ connect( slider, SIGNAL(valueChanged(int)),
 
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0798}\frametitle{Custom Slots - the Qt4 style}
+\begin{slide}[fragile]{0798}\frametitle{Custom Slots - Qt4 style}
  \label{codeForSlots1}
 \xConcept{connect}
 \xConcept{Q\_OBJECT}
@@ -155,7 +155,7 @@ void MyClass::setValue(int value) {
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1031}\frametitle{Internal code}
+\begin{slide}[fragile]{1031}\frametitle{connect - non-member }
   \begin{itemize}
 \item Using non-member functions:\\
 \begin{cpp}
@@ -174,7 +174,7 @@ connect( slider, &QSignal::valueChanged, &printValue );
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1031}\frametitle{Internal code}
+\begin{slide}[fragile]{1031}\frametitle{connect - lambda functions}
   \begin{itemize}
 \item Using C++11 lambda functions:\\
 \begin{cpp}
