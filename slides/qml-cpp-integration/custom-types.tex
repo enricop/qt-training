@@ -1,0 +1,349 @@
+%----------------------------------------------------------------------
+\subsection{Using Custom Types}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1552}\frametitle{Defining Custom Property Types}
+  \begin{itemize}
+  \item Enums
+  \item Custom types as property values
+  \item[] \vspace{2mm}
+\begin{EXCLUDE}
+Timer {
+    interval {
+        duration: 2
+        unit: IntervalSettings.Seconds
+    }
+}
+\end{EXCLUDE}
+\begin{qml}
+\qtt{\qc{class}{Timer}~\{}\\
+\qtt{~~~~\qc{type}{interval}~\{}\\
+\qtt{~~~~~~~~\qc{type}{duration}:~\qc{number}{2}}\\
+\qtt{~~~~~~~~\qc{type}{unit}:~\qc{class}{IntervalSettings}.Seconds}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+
+\vspace{2mm}
+\flushedImage{qml-cpp-integration/images/chart1.png}
+  \item Collection of custom types\\\vspace{2mm}
+\begin{EXCLUDE}
+Chart {
+  bars: [
+     Bar { color: "#a00000"; value: -20 },
+     Bar { color: "#00a000"; value:  50 },
+     Bar { color: "#0000a0"; value: 100 }
+  ]
+}
+\end{EXCLUDE}
+\begin{qml}
+\qtt{Chart~\{}\\
+\qtt{~~\qc{type}{bars}:~[}\\
+\qtt{~~~~~Bar~\{~\qc{type}{color}:~\qc{string}{"\#a00000"};~\qc{type}{value}:~\qc{operator}{-}\qc{number}{20}~\},}\\
+\qtt{~~~~~Bar~\{~\qc{type}{color}:~\qc{string}{"\#00a000"};~\qc{type}{value}:~~\qc{number}{50}~\},}\\
+\qtt{~~~~~Bar~\{~\qc{type}{color}:~\qc{string}{"\#0000a0"};~\qc{type}{value}:~\qc{number}{100}~\}}\\
+\qtt{~~]}\\
+\qtt{\}}\\
+\end{qml}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]\frametitle{Defining Custom Property Types}
+\begin{itemize}
+\item Custom classes can be used as property types
+  \begin{itemize}
+  \item allows rich description of properties
+  \item subclass \iCls{QObject} or
+ \iCls{QQuickItem}
+ (as before)
+  \item requires registration of types (as before)
+  \end{itemize}
+
+\vspace*{0.5em}
+\item A simpler way to define custom property types:
+  \begin{itemize}
+  \item use simple enums and flags
+  \item easy to declare and use
+  \end{itemize}
+
+\vspace*{0.5em}
+\item Collections of custom types:
+  \begin{itemize}
+  \item define a new custom item
+  \item use with a \iCls{QQmlListProperty} template type
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8615}\frametitle{Using Enums}
+\begin{cpp}
+class IntervalSettings :public QObject
+{
+    Q_OBJECT
+
+    Q_ENUMS( Unit )
+    Q_PROPERTY( Unit unit READ unit ...)
+
+public:
+    enum Unit { Minutes, Seconds, MilliSeconds };
+    ...
+}\end{cpp}
+\vspace{5mm}
+\begin{qml}
+\qtt{\qc{class}{Timer}~\{}\\
+\qtt{~~~~\qc{type}{interval}~\{}\\
+\qtt{~~~~~~~~\qc{type}{duration}:~\qc{number}{2}}\\
+\qtt{~~~~~~~~\qc{type}{unit}:~\qc{class}{IntervalSettings}.Seconds}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8616}\frametitle{Custom classes as Property Types}
+  \begin{itemize}
+    \item Use the sub type as a pointer\vspace{5mm}
+\begin{cpp}
+class Timer : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY( IntervalSettings* interval READ interval 
+                WRITE setInterval NOTIFY intervalChanged)
+
+public:
+    IntervalSettings* interval() const;
+    void setInterval( IntervalSettings* );
+    ...
+
+private:
+    IntervalSettings* m_settings;
+}
+\end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8618}\frametitle{Custom classes as Property Types cont'd.}
+  \begin{itemize}
+  \item Instantiate \texttt{m\_settings} to an instance rather than just a
+    null pointer:\vspace{5mm}
+\begin{cpp}
+Timer::Timer(...)
+    : m_settings(new IntervalSettings)
+{
+  ...
+}
+\end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8619}\frametitle{Custom classes as Property Types cont'd.}
+\begin{itemize}
+\item Instantiating allow you this syntax:\\\vspace{2mm}
+\begin{qml}
+\qtt{\qc{class}{Timer}~\{}\\
+\qtt{~~~~\qc{type}{interval}~\{}\\
+\qtt{~~~~~~~~\qc{type}{duration}:~\qc{number}{2}}\\
+\qtt{~~~~~~~~\qc{type}{unit}:~\qc{class}{IntervalSettings}.Seconds}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\\vspace{5mm}
+\end{qml}
+
+\item Alternatively you would need this syntax:\\\vspace{2mm}
+\begin{EXCLUDE}
+Timer {
+    interval: IntervalSettings {
+        duration: 2
+        unit: IntervalSettings.Seconds
+    }
+}
+\end{EXCLUDE}
+\begin{qml}
+\qtt{\qc{class}{Timer}~\{}\\
+\qtt{~~~~\qc{type}{interval}:~\qc{class}{IntervalSettings}~\{}\\
+\qtt{~~~~~~~~\qc{type}{duration}:~\qc{number}{2}}\\
+\qtt{~~~~~~~~\qc{type}{unit}:~\qc{class}{IntervalSettings}.Seconds}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8617}\frametitle{Custom classes as Property Types cont'd.}
+  \begin{itemize}
+  \item Both classes must be   exported to QML\vspace{5mm}
+\begin{cpp}
+qmlRegisterType<Timer>( "CustomComponents", 1, 0, "Timer" );
+qmlRegisterType<IntervalSettings>( "CustomComponents", 
+                                   1, 0, "IntervalSettings");
+\end{cpp}
+  \end{itemize}\vspace{5mm}
+\demo{qml-cpp-integration/ex\_timer\_custom\_types}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1542}\frametitle{Collections of Custom Types}
+
+\flushedImage{qml-cpp-integration/images/chart1.png}
+% qml-cpp-integration/ex-methods/files/chart1.qml
+\inputqml{qml-cpp-integration/colorized/chart1}
+
+\begin{itemize}
+\item A \qtt{Chart} item
+  \begin{itemize}
+  \item with a \qic{type}{bars} list property
+  \item accepting custom \qtt{Bar} items
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-cpp-integration/ex-custom-collection-types}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1541}\frametitle{Declaring the List Property}
+
+In the \textit{chartitem.h} file:
+
+\vspace*{0.5em}
+\begin{cpp}
+class BarItem;
+
+class ChartItem : public QQuickPaintedItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QQmlListProperty<BarItem> bars READ bars
+               NOTIFY barsChanged)
+public:
+    ChartItem(QQuickItem *parent = 0);
+    void paint(QPainter *painter);
+...
+\end{cpp}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Define the \qic{type}{bars} property
+  \begin{itemize}
+  \item in theory, read-only but with a notification signal
+  \item in reality, writable as well as readable
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1540}\frametitle{Declaring the List Property}
+
+In the \textit{chartitem.h} file:
+
+\vspace*{0.5em}
+\begin{cpp}
+...
+    QQmlListProperty<BarItem> bars();
+
+signals:
+    void barsChanged();
+
+private:
+    static void append_bar(QQmlListProperty<BarItem> *list,
+                           BarItem *bar);
+    QList<BarItem*> m_bars;
+};
+\end{cpp}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Define the getter function and notification signal
+\item Define an append function for the list property
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1539}\frametitle{Defining the Getter Function}
+
+In the \textit{chartitem.cpp} file:
+
+\vspace*{0.5em}
+\begin{cpp}
+QQmlListProperty<BarItem> ChartItem::bars()
+{
+    return QQmlListProperty<BarItem>(this, 0,
+        &ChartItem::append_bar);
+}
+\end{cpp}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Defines and returns a list of \qtt{BarItem} objects
+  \begin{itemize}
+  \item with an append function
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1538}\frametitle{Defining the Append Function}
+
+\begin{cpp}
+void ChartItem::append_bar(QQmlListProperty<BarItem> *list,
+                           BarItem *bar)
+{
+    ChartItem *chart = qobject_cast<ChartItem *>(list->object);
+    if (chart) {
+        bar->setParent(chart);
+        chart->m_bars.append(bar);
+        chart->barsChanged();
+    }
+}
+\end{cpp}
+
+\vspace*{0.5em}
+\begin{itemize}
+\item Static function, accepts
+  \begin{itemize}
+  \item the list to operate on
+  \item each \qtt{BarItem} to append
+  \end{itemize}
+\vspace*{0.5em}
+\item When a \qtt{BarItem} is appended
+  \begin{itemize}
+  \item emits the \hClsSig{ChartItem}{barsChanged} signal
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]\frametitle{Summary of Custom Property Types}
+
+\begin{itemize}
+\item Define classes as property types:
+  \begin{itemize}
+  \item declare and implement a new \iCls{QObject} or \iCls{QQuickItem} subclass
+  \item declare properties to use a pointer to the new type
+  \item register the item with \iCls{qmlRegisterType}
+  \end{itemize}
+\vspace*{1em}
+\item Use enums as simple custom property types:
+  \begin{itemize}
+  \item use \iCls{Q\_ENUMS} to declare a new enum type
+  \item declare properties as usual
+  \end{itemize}
+\vspace*{1em}
+\item Define collections of custom types:
+  \begin{itemize}
+  \item using a custom item that has been declared and registered
+  \item declare properties with \iCls{QQmlListProperty}
+  \item implement a getter and an append function for each property
+  \item read-only properties, but read-write containers
+  \item read-only containers define append functions that simply return
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
