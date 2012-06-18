@@ -18,4 +18,5 @@ ex_timer_signals \
 sol-tcp-connection \
 ex_timer_custom_types \
 ex_timer_slots \
-ex-default-property
+ex-default-property \
+ex-clock
