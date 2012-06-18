@@ -29,14 +29,9 @@
 \usepackage{pdfsync}
 \usepackage{listings}
 %\usepackage{multimedia}
+\usepackage[absolute,overlay]{textpos}
 
-\ifthenelse{\boolean{cc-license}}
-{
-  \usetheme{QtTraining}
-} % else
-{
-  \usetheme{QtNokia}
-}
+\usetheme{QtTraining}
 
 % \definecolor{code_bg}{RGB}{255, 255, 204}
 
@@ -47,43 +42,6 @@
     comment=[l]\#,
  }
 
-\ifthenelse{\boolean{cc-license}}
-{
-  \include{qtcxx}
-
-  \definecolor{devnet_magenta} {RGB}{255, 20,147} % {216,  0,117}
-  \definecolor{devnet_green}   {RGB}{108,226,108} % { 58,216, 58}
-  \definecolor{devnet_gray}    {RGB}{175,175,175} % {145,145,145}
-  \definecolor{devnet_silver}  {RGB}{128,128,128} % { 98, 98, 98}
-  \definecolor{devnet_blue}    {RGB}{  0,102,153} % {  0, 61, 92}
-  \definecolor{devnet_fullblue}{RGB}{  0,  0,255} % {  0,  0,225}
-  \definecolor{devnet_qtgreen} {RGB}{  0,130,  0} % {  0,100,  0}
-                                                  % -30 lum points
-  \lstset{ %
-    language=[Qt]C++,
-    basicstyle=\ttfamily\footnotesize,
-    keywordstyle=\bfseries\color{devnet_blue},
-    keywordstyle=[2]\bfseries\color{devnet_blue},
-    keywordstyle=[3]\bfseries\color{devnet_magenta},
-    stringstyle=\color{devnet_fullblue},
-    commentstyle=\color{devnet_qtgreen},
-    %numbers=left,
-    %numberstyle=\tiny,
-    %stepnumber=1,
-    %numbersep=10pt,
-    showspaces=false,
-    showstringspaces=false,
-    frame=l,
-    framerule=1pt,
-    framesep=4pt,
-    %rulecolor=\color{black!30},
-    rulecolor=\color{devnet_qtgreen},
-    aboveskip=1mm,
-    belowskip=1mm,
-    showlines=false,
-  }
-}
-{
   \lstdefinelanguage[Qt]{C++}[]{C++}%
   { keywordsprefix=Q
   }
@@ -109,7 +67,6 @@
     belowskip=1mm,
     showlines=false,
   }
-}
 
 \lstnewenvironment{cpp}{\lstset{language=[Qt]C++}}{}
 \lstnewenvironment{qmake}{\lstset{language=qmake}}{}
@@ -119,14 +76,14 @@
 
 \newcommand{\inputqml}[1]{%
 \setlength{\lineskip}{0pt}
-\footnotesize
+\scriptsize
 \input{#1}
 \normalsize
 }
 
 \newenvironment{qml}{%
 \setlength{\lineskip}{0pt}
-\footnotesize
+\scriptsize
 }{%
 }
 
@@ -438,7 +395,7 @@
 {
   \begin{frame}<beamer>  
     \frametitle{Module: \secname}
-     \tableofcontents[sectionstyle=hide,subsectionstyle=show/show/hide]
+     \tableofcontents[sectionstyle=hide,subsectionstyle=show/show/hide,subsubsectionstyle=show/show/show]
  \end{frame}
 }
 
@@ -447,7 +404,7 @@
   \begin{frame}<beamer>
     \frametitle{Module: \secname}
     \medskip
-    \tableofcontents[sectionstyle=hide,subsectionstyle=show/shaded/hide]  
+    \tableofcontents[sectionstyle=hide,subsectionstyle=show/shaded/hide,subsubsectionstyle=show/show/shaded]
   \end{frame}
 }
 
@@ -465,14 +422,6 @@
 
 
 \newenvironment{questionize}{\begin{itemize}[<+>]}{\end{itemize}}
-
-\ifthenelse{\boolean{cc-license}}
-{
-  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/background_cc}}
-} % else
-{
-  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{images/background}}
-}
 
 % Highlighting in {alltt}, slides style:
 \newcommand{\highlight}[1]{\textcolor{red}{#1}}
@@ -498,15 +447,5 @@
 \newcommand{\qc}[2]{\textcolor{#1}{#2}}
 \newcommand{\qic}[2]{{\small\texttt{\textcolor{#1}{#2}}}}
 \newcommand{\qtt}[1]{\texttt{#1}}
-
-% cc-license fixed configuration. Automatically applied if in config.tex cc-license is set to true
-
-\ifthenelse{\boolean{cc-license}}
-  {
-  }
-  {
-  % \customer{}
-  % \partner{\includegraphics[height=2cm]{images/qt-logo} \\ http://qt.nokia.com}
-  }
 
 \input{Fonts/setup.tex}

@@ -1,124 +1,143 @@
+\newcommand{\setfont}[2][x]{\ifthenelse{\equal{#1}{x}}{\fontsize{#2}{#2}}{\fontsize{#2}{#1}}\fontseries{c}\selectfont}
 \newcommand{\slideId}{NO ID}
-\mode<presentation>
+
+\newcommand{\leftSideLogo}{}
+\newcommand{\rightSideLogo}{}
+\newcommand{\pageBackground}{}
+\newcommand{\frontPageBackground}{}
+\newcommand{\handoutBackground}{}
+
+\setbeamerfont{title}{family=\slidetitlefont}
+\setbeamerfont{frametitle}{family=\slidetitlefont,size=\large}
+\setbeamerfont{page number in head/foot}{family=\slidefootnotefont}
+\setbeamerfont{block title}{series=\bfseries}
+
+\newcommand{\setKDABOwned}[1]{
+  \ifthenelse{\boolean{#1}}{
+    \definecolor{qtdarkgreen}{RGB}{39,64,100}
+    \definecolor{qtlightgreen}{RGB}{40,165,217}
+    \setbeamercolor{itemize subitem}{fg=structure.fg!70}
+    \renewcommand{\leftSideLogo}{diagrams/kdab-logo}
+    \renewcommand{\rightSideLogo}{diagrams/kdab-text-logo}
+    \renewcommand{\pageBackground}{images/kdab-background.pdf}
+    \renewcommand{\frontPageBackground}{images/KDAB-titlepage-background}
+    \renewcommand{\handoutBackground}{images/kdab-background.pdf}
+    \partner{}
+    \material{}
+  }{
+    % Configurations of bullets.
+
+    % Alternative using images.
+    % \setbeamertemplate{itemize item}{\includegraphics[scale=0.25916]{Theme/mainBullet.png}}
+    % \setbeamertemplate{itemize subitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
+    % \setbeamertemplate{itemize subsubitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
+    \definecolor{qtdarkgreen}{RGB}{95,95,95}
+    \definecolor{qtlightgreen}{RGB}{202,222,180}
+
+    \definecolor{darkbullet}{RGB}{128,156,171}
+    \definecolor{lightbullet}{RGB}{202,222,180}
+    \setbeamercolor{itemize item}{fg=darkbullet}
+    \setbeamercolor{itemize subitem}{fg=lightbullet}
+    \setbeamercolor{itemize subsubitem}{fg=lightbullet}
+
+    \renewcommand{\leftSideLogo}{diagrams/qt-logo}
+    \renewcommand{\rightSideLogo}{diagrams/nokia-logo}
+    \renewcommand{\pageBackground}{Theme/background-noqt}
+    \renewcommand{\frontPageBackground}{Theme/background-noqt}
+    \renewcommand{\handoutBackground}{Theme/background-noqt}
+  }
+  \setbeamercolor{structure}{fg=qtdarkgreen}
+}
 
 
-%\usefonttheme{structurebold}
-\useinnertheme{circles}
-
-\definecolor{qtdarkgreen}{RGB}{2,76,28}
-\definecolor{qtlightgreen}{RGB}{68,165,28}
+% shared colors
 \definecolor{nokiadarkgray}{RGB}{54,53,52}
 \definecolor{qtlightgray}{RGB}{208,208,208}
+\definecolor{footerleftcolor}{RGB}{52,67,72}
+\setbeamercolor{footer left}{fg=footerleftcolor}
 
-
-\usecolortheme[RGB={2,76,28}]{structure} % old svn green
-% \usecolortheme[RGB={68,165,28}]{structure} % devnet green
-% \usecolortheme[RGB={109,196,0}]{structure} % educational green
-
-\setbeamertemplate{blocks}[rounded][shadow=true]
-% \setbeamercolor{block title}{bg=qtlightgreen!30}
-% \setbeamercolor{block body}{bg=qtlightgreen!10}
-% \setbeamercolor{normal text}{fg=nokiadarkgray}
-% \setbeamercolor{blocks}{qtdarkgreen}
-
-
-
-
+% -------------------------------------------------- footer
 \setbeamertemplate{footline} {
-\usebeamerfont{page number in head/foot}
- \usebeamercolor[fg]{page number in head/foot}
-%\makebox[20mm][c]{\raisebox{1mm}{\includegraphics[scale=0.1, keepaspectratio]{images/qt-logo}}}
-\hspace{0mm}
-\makebox[75mm][c]{\raisebox{4mm}{\insertsectionhead \hspace{5mm}
-    \insertsubsectionhead}}
-\hspace{0mm}
-\makebox[10mm][r]{\raisebox{4mm}{
-    \ifthenelse{\boolean{show-page-numbers}}{\insertframenumber/\inserttotalframenumber}{\strut}
-    \ifthenelse{\boolean{show-slide-id}}{~(\slideId)}{\strut}
-  }
-}
-\hspace{0mm}
-\ifthenelse{\boolean{cc-license}}
-  {
-  \makebox[15mm][c]{\raisebox{3mm}{\includegraphics[scale=0.2, keepaspectratio]{images/cc-by-sa}}}
-  } % else 
-  { 
-  \makebox[20mm][c]{\raisebox{1mm}{\includegraphics[scale=0.125, keepaspectratio]{images/nokia-logo}}}
-  }
-}
-%%% Footer
-% \setbeamertemplate{footline}{
-%   \ifthenelse{\equal{\arabic{page}}{1}}{
-%  %%% Footer on First page
-%   \hspace*{5mm}\raisebox{2mm}{\includegraphics[scale=0.04, keepaspectratio]{images/qt-logo}}
-%   \hspace{20mm}
-%   \fontseries{eb}\fontsize{8pt}{10pt} \selectfont
-%   \usebeamercolor[fg]{page number in head/foot}%
-%   \raisebox{4.5mm}{Nokia, Qt Development Frameworks}
-%   \hspace{20mm}
-%   \raisebox{4.5mm}{\includegraphics[scale=0.1, keepaspectratio]{images/nokia-logo}}
-%   }{%
-%   %%% Footer for normal pages
-%   \usebeamerfont{page number in head/foot}%
-%   \setcounter{page}{\theframenumber}% This is needed to make the index match.
-%   \ifthenelse{\boolean{qt-fancy-footer}}{%
-%     %%% Footer for slides
-%     \hspace{5mm}\raisebox{3mm}{\includegraphics[scale=0.025, keepaspectratio]{images/qt-logo.pdf}}
-%     % \fontfamily{cmss}
-%     \fontseries{eb}\fontsize{8pt}{10pt} \selectfont
-%     \hspace{92mm}\raisebox{2mm}{\includegraphics[scale=0.15, keepaspectratio]{images/nokia-logo.pdf}}
-%     \hspace{-\textwidth}
-%     \hspace{25mm}
-%     \usebeamercolor[fg]{page number in head/foot}%
-%     \raisebox{5mm}{\insertsectionhead \hspace{5mm} \insertsubsectionhead}
-%     \raisebox{5mm}{% 
-%         \ifthenelse{\boolean{show-page-numbers}} {\insertframenumber/\inserttotalframenumber}{\strut}
-%         \ifthenelse{\boolean{show-slide-id}}{~(\slideId)}{\strut}}           
-%     \hspace{5mm} %<- this space is important                                                                
-%  }{%
-%     %%% Footer for handout
-%     \color{black}%
-%     \hspace{5mm}\raisebox{2mm}{\ifthenelse{\equal{\customer}{}}{\courseTitle}{\courseTitle\ --\ \customer}}%
-%     \hfill\raisebox{2mm}{--\ \insertframenumber\ --}\hspace{5mm}\strut%
-% }}}
+    \usebeamerfont{page number in head/foot}
 
-% left margin for text on frames
-%\setbeamersize{text margin left=5mm}
+        % logo
+        \begin{textblock*}{\paperwidth}(8pt, 241pt)
+            \includegraphics[scale=0.08, keepaspectratio]{\leftSideLogo}
+        \end{textblock*}
+        % subsection
+        \begin{textblock*}{\paperwidth}(40pt, 249.2pt)
+            {
+                \usebeamercolor[fg]{footer left}
+                \setfont{10}\insertsubsectionhead
+            }
+        \end{textblock*}
+        % page
+        \begin{textblock*}{\paperwidth}(225pt, 252pt)
+            {
+                \usebeamercolor[fg]{footer left}
+                \tiny\insertframenumber/\inserttotalframenumber
+            }
+        \end{textblock*}
+        % section
+        \begin{textblock*}{\paperwidth}(0pt, 260pt)
+            \hspace{\stretch{1}}
+            {
+                \setfont{10}\color{black}{\insertsectionhead}
+            }
+            \hspace*{2pt}
+        \end{textblock*}
+        \begin{textblock*}{\paperwidth}(0pt, 259.5pt)
+            \hspace{\stretch{1}}
+            {
+                \setfont{10}\color{white}{\insertsectionhead}
+            }
+            \hspace*{2.5pt}
+        \end{textblock*}
+  
+}
+
+% ---------------------------------------- Title of pages
+\setbeamertemplate{frametitle} 
+{
+  \vspace{3.75mm}
+    \hfill\insertframetitle\hspace*{-10pt}
+}
+
+%---------------------------------------- Background (frame of slides)
+\mode<beamer>{
+   \setbeamertemplate{background canvas}{%
+     \includegraphics[height=\paperheight]{\frontPageBackground}
+   }
+
+   % simple slide background
+   \setbeamertemplate{background canvas}{%
+     \includegraphics[height=\paperheight]{\pageBackground}
+   }
+}
+
+%\mode<handout>{\usebackgroundtemplate{\includegraphics[width=\paperwidth]{\handoutBackground}}}
+
+% ---------------------------------------- Other settings
 \setlength{\leftmargini}{1em}
 \setlength{\leftmarginii}{1em}
 \setlength{\leftmarginiii}{1em}
 
-\setbeamertemplate{frametitle}
-{
-  \vspace{3mm}
-  \begin{centering}
-    \insertframetitle\par
-  \end{centering}
-}
+\useinnertheme{circles}
 
 % Let items not yet shown be grayed out rather than hidden.
 \setbeamercovered{transparent=15}
 
-% \setbeamertemplate{section in toc}{
-%   \hspace{2em}\color{qtdarkgreen}$\Rightarrow$
-%   \hspace{1em}\color{nokiadarkgray}\inserttocsection\par
-% }
-
-% \setbeamertemplate{subsection in toc}{
-%   \hspace{2em}\color{qtdarkgreen}$\Rightarrow$
-%   \hspace{1em}\color{nokiadarkgray}\inserttocsubsectionnumber~\inserttocsubsection\par
-% }
-
 \setbeamertemplate{sections/subsections in toc}[ball unnumbered]
-% \setbeamertemplate{section in toc}[circle]
-% \setbeamertemplate{subsection in toc}[circle]
 
-
-\setbeamercolor{itemize subitem}{fg=structure.fg!60}
+\setbeamercolor{itemize subitem}{fg=structure.fg!70}
 \setbeamercolor{itemize subsubitem}{fg=structure.fg!30}
-\setbeamercolor{alerted text}{fg=qtlightgreen}
+\definecolor{normaltextcolor}{RGB}{74,74,74}
+\setbeamercolor{normal text}{fg=normaltextcolor}
+\setbeamercolor{alerted text}{fg=qtdarkgreen}
 
 \setbeamertemplate{navigation symbols}{}
 
-\mode
-<all>
+\usecolortheme{structure}  
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\setKDABOwned{false}

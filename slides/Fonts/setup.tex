@@ -1,17 +1,20 @@
 \usepackage{fontspec}
+\usepackage{xunicode}
 
 % set the default roman font
 \setmainfont[ExternalLocation = Fonts/,
+             Scale=0.9,
              UprightFont=*Light,
              BoldFont=*Bold]{NokiaHeadlineME}
 
 % set the default sans font
 \setsansfont[ExternalLocation = Fonts/,
+             Scale=0.9,
              UprightFont=*Light,
              BoldFont=*Bold]{NokiaHeadlineME}
 
 % set the default mono font
-\setmonofont{Liberation Mono}
+\setmonofont[Scale=0.8]{Liberation Mono}
 
 % define new font families for main body, footnote, title
 \newfontfamily\slidebodyfont[ExternalLocation = Fonts/,
@@ -19,14 +22,10 @@
              BoldFont=*Bold]{NokiaHeadlineME}
 
 \newfontfamily\slidefootnotefont[ExternalLocation = Fonts/,
-             UprightFont=*Light,
-             BoldFont=*Bold]{NokiaPureText}
+             UprightFont=*Ultralight,
+             BoldFont=*Regular]{NokiaPureHeadline}
 
 \newfontfamily\slidetitlefont[ExternalLocation = Fonts/,
-             UprightFont=*Light,
-             BoldFont=*Bold]{NokiaPureText}
+             UprightFont=*Ultralight,
+             BoldFont=*Regular]{NokiaPureHeadline}
 
-\setbeamerfont{title}{family=\slidetitlefont}
-\setbeamerfont{frametitle}{family=\slidetitlefont}
-\setbeamerfont{page number in head/foot}{family=\slidefootnotefont}
-\setbeamerfont{block title}{series=\bfseries}
