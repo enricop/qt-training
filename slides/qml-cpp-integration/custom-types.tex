@@ -347,3 +347,36 @@ void ChartItem::append_bar(QQmlListProperty<BarItem> *list,
 \end{itemize}
 
 \end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]\frametitle{Default Property}
+
+\begin{itemize}
+\item One property can be marked as the default
+\item[]
+\begin{cpp}
+class ChartItem : public QQuickPaintedItem
+{
+    Q_OBJECT
+    Q_PROPERTY(QQmlListProperty<BarItem> bars READ bars
+               NOTIFY barsChanged)
+    Q_CLASSINFO("DefaultProperty", "bars")
+...
+\end{cpp}
+
+\vspace*{1em}
+\item Allows child-item like syntax for assignment
+\item[]
+\begin{qml}
+\qtt{Chart~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{120};~\qc{type}{height}:~\qc{number}{120}}\\
+\qtt{~~~~Bar~\{~\qc{type}{color}:~\qc{string}{"\#a00000"};~\qc{type}{value}:~\qc{operator}{-}\qc{number}{20}~\}}\\
+\qtt{~~~~Bar~\{~\qc{type}{color}:~\qc{string}{"\#00a000"};~\qc{type}{value}:~~\qc{number}{50}~\}}\\
+\qtt{~~~~Bar~\{~\qc{type}{color}:~\qc{string}{"\#0000a0"};~\qc{type}{value}:~\qc{number}{100}~\}}\\
+\qtt{\}}\\
+\end{qml}
+\end{itemize}
+
+\end{slide}
+
+
