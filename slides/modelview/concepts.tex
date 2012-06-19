@@ -324,24 +324,19 @@ QString text = model->data(index, Qt::DisplayRole).toString()
 \begin{itemize}
 \item If model is your data
   \begin{itemize}
-  \item \iCls{QStandardItemModel} or Item Widgets
+  \item \iCls{QStandardItemModel}
   \end{itemize}
 \item Otherwise
   \begin{itemize}
   \item Adapt own data by subclassing a model
   \end{itemize}
 \end{itemize}
-\textbf{Delegate} - \iCls{QAbstractItemDelegate}
+\textbf{Delegate} - \iCls{QtQuick Component}
 \begin{itemize}
-\item Standard Delegate sufficient
-\item Custom Delgate
+\item Encapsulation of QtQuick elements
+\item Even complex element trees possible
   \begin{itemize}
   \item To control display/edit of data
   \end{itemize}
-\end{itemize}
-\textbf{Views} - \iCls{QAbstractItemView}
-\begin{itemize}
-\item Almost always be used as-is
-\item Exceptional to add new view
 \end{itemize}
 \end{slide}
