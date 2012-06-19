@@ -6,7 +6,7 @@ Rectangle {
 
     Image {
         x: 150; y: 150
-        source: "../images/rocket.svg"
+        source: "../images/rocket.png"
         scale: 2.0
         transformOrigin: Item.Top
     }

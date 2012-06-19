@@ -6,7 +6,7 @@ Rectangle {
 
     Image {
         x: 50; y: 35
-        source: "../images/rocket.svg"
+        source: "../images/rocket.png"
         rotation: 45.0
     }
 }
