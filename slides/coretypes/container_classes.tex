@@ -125,16 +125,16 @@ public:
         \item[] \begin{cpp}
 bool Contact::operator<(const Contact& c);
 bool operator<(const Contact& c1, const Contact& c2);
-      \end{cpp}    
+      \end{cpp}
+      \doc{qmap.html}{QMap}
+    \end{itemize} \medskip
 
-      \item \doc{qmap.html}{QMap}
-    \end{itemize} 
   \item Type \texttt{K} as key for \iCls{QHash} or \iCls{QSet}:
   \begin{itemize}
   \item \texttt{bool K::operator==( const K\& )} or\\
     \texttt{bool operator==( const K\&, const K\& )}
-  \item \texttt{uint qHash( const K\& )}
-  \item \doc{qmap.html}{QHash}
+  \item \texttt{uint qHash( const K\& )}\\
+  \doc{qhash.html}{QHash}
   \end{itemize}
 \end{itemize}
 \end{slide}
@@ -251,6 +251,7 @@ while (i.hasNext()) {
 \begin{slide}[fragile]{0297}\frametitle{\iConcept{STL-style} Iterators}
 \xExample{Iterators!STL style}
 \flushedImage{coretypes/images/stliterators1}
+\vspace*{-4mm}
 \begin{itemize}
   \item Iterator points at item
   \item Example \xConcept{Iterators}{QList} iterator
@@ -334,6 +335,11 @@ foreach (const QString& str, list) {
 \item \iCls[\textbf]{qCount}(begin, end, value, n) occurrences of value in range
 \item and more ...
 \end{itemize}
+\doc{qtalgorithms.html\#details}{QtAlgorithms}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0301}\frametitle{Algorithms}
 Counting 1's in list          
 \begin{cpp}
 QList<int> list;
@@ -348,7 +354,6 @@ qDebug() << count;      // 2  (means 2 times 1)
   	\item \doc{threads.html\#qtconcurrent-intro}{\iCls{QtConcurrent}}
   \end{itemize}
 \end{itemize}    
-  \doc{qtalgorithms.html\#details}{QtAlgorithms}
 \end{slide}
 
 %----------------------------------------------------------------------
