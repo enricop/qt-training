@@ -228,3 +228,47 @@ Define a gradient using the \qic{type}{gradient} property:
 \demo{qml-composing-uis/ex-elements/image-gradients.qml}
 
 \end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{4050}\frametitle{Border Images}
+
+\flushedImageDoubleWidth{qml-composing-uis/images/image-border.png}
+
+\begin{itemize}
+\item Create border using part of an image:
+  \begin{itemize}
+  \item corners (region 1, 3, 7, 9) are not scale
+  \item horizontal borders (2 and 8) are scaled according to \qic{type}{horizontalTileMode}
+  \item vertical borders (4 and 6) are scaled according to \qic{type}{verticalTileMode}
+  \item middle region (5) is scaled according to both mode
+  \end{itemize}
+\item There are 3 different scale modes
+  \begin{itemize}
+  \item \qic{type}{Stretch}: scale the image to fit to the available area.
+  \item \qic{type}{Repeat}: tile the image until there is no more space.
+  \item \qic{type}{Round}: like \qic{type}{Repeat}, but scales the images down\\
+    to ensure that the last image is not cropped
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{4051}\frametitle{Border Images}
+
+\centeredImageFullWidth{qml-composing-uis/images/image-border-example.png}
+
+\begin{qml}
+\qtt{\qc{class}{BorderImage}~\{}\\
+\qtt{~~~~\qc{type}{source}:~\qc{string}{"content/colors.png"}}\\
+\qtt{~~~~\qc{type}{border}~\{~\qc{type}{left}:~\qc{number}{30};~\qc{type}{top}:~\qc{number}{30};~\qc{type}{right}:~\qc{number}{30};~\qc{type}{bottom}:~\qc{number}{30};~\}}\\
+\qtt{~~~~\qc{type}{horizontalMode}:~\qc{class}{BorderImage}.\qc{type}{Stretch}}\\
+\qtt{~~~~\qc{type}{verticalMode}:~\qc{class}{BorderImage}.\qc{type}{Repeat}}\\
+\qtt{~~~~...}\\
+\qtt{\}}
+\end{qml}
+
+\qtdemo{examples/declarative/imageelements/borderimage}
+
+\end{slide}
