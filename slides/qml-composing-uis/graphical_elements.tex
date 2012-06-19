@@ -17,32 +17,17 @@
 
 \begin{slide}{1693}\frametitle{Colors}
 
-The colors of elements can be specified in many ways:
-
+Specifying colors
 \begin{itemize}
-\item As a named color in a string (using SVG names):
-  \begin{itemize}
-  \item \qic{string}{"red"}, \qic{string}{"green"}, \qic{string}{"blue"}, ...
-  \end{itemize}
-  \vspace*{0.5em}
-\item With color components in a string:
-  \begin{itemize}
-  \item red, green and blue: \qtt{\#<rr><gg><bb>}
-  \item \qic{string}{"\#ff0000"}, \qic{string}{"\#008000"}, \qic{string}{"\#0000ff"}, ...
-%  \item alpha precedes the other components:
-%  \item \qic{string}{"\#7f008000"} (alpha value of 127)
-  \end{itemize}
-  \vspace*{0.5em}
-\item Using a built-in function (red, green, blue, alpha):
-  \begin{itemize}
-  \item \qtt{\qc{class}{Qt}.rgba(\qc{number}{0},\qc{number}{0.5},\qc{number}{0},\qc{number}{1})}
-  \end{itemize}
-  \vspace*{0.5em}
-\item With an opacity:
-  \begin{itemize}
-  \item using the \qic{type}{opacity} property
-  \item values from \qic{number}{0.0} (transparent) to \qic{number}{1.0} (opaque)
-  \end{itemize}
+\item Named colors (using SVG names): \qic{string}{"red"}, \qic{string}{"green"}, \qic{string}{"blue"}, ...
+\item HTML style color components: \qic{string}{"\#ff0000"}, \qic{string}{"\#008000"}, \qic{string}{"\#0000ff"}, ...
+\item Built-in function: \qtt{\qc{class}{Qt}.rgba(\qc{number}{0},\qc{number}{0.5},\qc{number}{0},\qc{number}{1})}
+\end{itemize}
+\vspace*{0.5em}
+Changing items opacity:
+\begin{itemize}
+\item using the \qic{type}{opacity} property
+\item values from \qic{number}{0.0} (transparent) to \qic{number}{1.0} (opaque)
 \end{itemize}
 
 \doc{qml-color.html}{QML Basic Type: color}
@@ -56,9 +41,6 @@ The colors of elements can be specified in many ways:
 % declarative-uis/composing-uis/colors.qml
 \inputqml{qml-composing-uis/colorized/colors}
 
-\begin{itemize}
-\item Three different ways to specify colors
-\end{itemize}
 \demo{qml-composing-uis/ex-elements/colors.qml}
 
 \end{slide}
@@ -96,9 +78,6 @@ The colors of elements can be specified in many ways:
 \flushedImageDoubleWidth{qml-composing-uis/images/image-location.pdf}
 \begin{itemize}
 \item \qic{type}{source} contains a relative path
-  \begin{itemize}
-  \item \qic{string}{"../"} refers to the parent directory
-  \end{itemize}
 \item \qic{type}{width} and \qic{type}{height} are obtained from\\
 the image file
 \end{itemize}
@@ -173,10 +152,10 @@ Define a gradient using the \qic{type}{gradient} property:
 
 \begin{itemize}
 \item With a \qic{class}{Gradient} element as the value
-\item Containing two or more \qic{class}{GradientStop} elements, each with
+\item Containing \qic{class}{GradientStop} elements, each with
   \begin{itemize}
-  \item a position: a number between 0 (start point) and 1 (end point)
-  \item a color
+  \item a \qic{type}{position}: a number between 0 (start point) and 1 (end point)
+  \item a \qic{type}{color}
   \end{itemize}
 \item The start and end points
   \begin{itemize}
@@ -187,7 +166,6 @@ Define a gradient using the \qic{type}{gradient} property:
   \begin{itemize}
   \item rendering is CPU intensive
   \item gradients may not be animated as you expect
-  \item use images of gradients instead
   \end{itemize}
 \item Gradients override \qic{type}{color} definitions
 \end{itemize}
@@ -204,9 +182,7 @@ Define a gradient using the \qic{type}{gradient} property:
 \inputqml{qml-composing-uis/colorized/gradients}
 
 \begin{itemize}
-\item A gradient with two gradient stops
 \item Note the definition of an element as a property value
-\item It is often faster to use images instead
 \end{itemize}                                
 
 \demo{qml-composing-uis/ex-elements/gradients.qml}
@@ -222,7 +198,7 @@ Define a gradient using the \qic{type}{gradient} property:
 \inputqml{qml-composing-uis/colorized/image-gradients}
 
 \begin{itemize}
-\item Use two-predefined images of gradients
+\item It is often faster to use images instead of real gradients
 \item Artists can create the desired gradients
 \end{itemize}
 \demo{qml-composing-uis/ex-elements/image-gradients.qml}
