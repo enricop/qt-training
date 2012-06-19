@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Rectangle {
-    width: 250; height: 250; color: "white"
+    width: 450; height: 350; color: "white"
 
     ListModel {
         id: nameModel
@@ -37,10 +37,10 @@ Rectangle {
         delegate: nameDelegate
         path: Path {
             startX: 50; startY: 50
-            PathLine { x: 200; y: 50 }
-            PathLine { x: 200; y: 200 }
-            PathLine { x: 50; y: 200 }
-            PathLine { x: 50; y: 50 }
+            PathLine { x: 150; y: 150 }
+            PathLine { x: 250; y: 250 }
+            PathLine { x: 350; y: 150 }
+            PathLine { x: 450; y: 50 }
         }
     }
 }
