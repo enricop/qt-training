@@ -43,7 +43,7 @@ Rectangle {
 
     Image {
         id: roadrunner
-        source: "qrc:/Roadrunner.gif"
+        source: "Roadrunner.gif"
     }
 
     Text {

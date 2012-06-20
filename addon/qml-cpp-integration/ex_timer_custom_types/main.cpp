@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<IntervalSettings>( "CustomComponents", 1, 0, "IntervalSettings");
 
     QQuickView viewer;
-    viewer.setSource( QUrl( "qrc:/main.qml" ) );
+    viewer.setSource( QUrl( "qrc:///main.qml" ) );
     viewer.show();
 
     return app.exec();

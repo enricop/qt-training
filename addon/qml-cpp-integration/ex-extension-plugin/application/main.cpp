@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     }
 
     QQuickView view;
-    view.setSource(QUrl("qrc:files/ellipse9.qml"));
+    view.setSource(QUrl("qrc:///files/ellipse9.qml"));
     view.show();
     return app.exec();
 }

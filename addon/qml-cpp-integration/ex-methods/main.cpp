@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<EllipseItem>("Shapes", 5, 0, "Ellipse");
 
     QQuickView view;
-    view.setSource(QUrl("qrc:ellipse5.qml"));
+    view.setSource(QUrl("qrc:///ellipse5.qml"));
     view.show();
     return app.exec();
 }

@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Style>("Shapes", 7, 0, "Style");
 
     QQuickView view;
-    view.setSource(QUrl("qrc:ellipse7.qml"));
+    view.setSource(QUrl("qrc:///ellipse7.qml"));
     view.show();
     return app.exec();
 }

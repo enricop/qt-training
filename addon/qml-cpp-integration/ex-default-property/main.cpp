@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<BarItem>("Shapes", 8, 0, "Bar");
 
     QQuickView view;
-    view.setSource(QUrl("qrc:chart1.qml"));
+    view.setSource(QUrl("qrc:///chart1.qml"));
     view.show();
     return app.exec();
 }
