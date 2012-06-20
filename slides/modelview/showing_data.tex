@@ -66,30 +66,6 @@ item->appendRow(new QStandardItem("C (0,0)"));
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1581}\frametitle{Selections - \iCls{QItemSelectionModel}}
-  \begin{itemize}
-   \item Keeps track of selected items in view
-    \item Not a \iCls{QAbstractItemModel}, just \iCls{QObject}
- \item \texttt{QItemSelectionModel API}
-    \begin{itemize}
-    \item \texttt{currentIndex()}
-    \item \textit{signal} \texttt{currentChanged(current, previous)}
-    \item \texttt{QItemSelection selection()}
-      \begin{itemize}
-      \item List of selection ranges
-      \end{itemize}
-    \item \texttt{select( ... )}
-    \item \textit{signal} \texttt{selectionChanged(selected, deselected)}
-  \end{itemize}
-  \begin{cpp}
-// selecting a range
-selection = new QItemSelection(topLeft, bottomRight);
-view->selectionModel()->select(selection);    
-  \end{cpp}
-  \end{itemize}
-\end{slide}
-
-% ----------------------------------------------------------------------
 \begin{slide}{1580}\frametitle{Meet the City Engine}
   \flushedImage{modelview/images/citymodelcsv}
   \begin{itemize}
