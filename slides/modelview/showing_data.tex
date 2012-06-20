@@ -37,50 +37,30 @@ item->appendRow(new QStandardItem("C (0,0)"));
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1583}\frametitle{Sharing Models and Selection}
-  \flushedImage{modelview/images/simpleviews}
-  \begin{cpp}
-// create a model
-model = ... // with some items
-
-// and several views
-list = ...; table = ...; tree = ...;
-
-// You can share model with views
-list->setModel(model);      
-table->setModel(model);      
-tree->setModel(model);      
-
-// Even can share selection
-list->setSelectionModel(tree->selectionModel());
-table->setSelectionModel(tree->selectionModel());
-   \end{cpp}
-\end{slide}
-
-
-% ----------------------------------------------------------------------
 \begin{slide}[fragile]{1582}\frametitle{Finishing Touch}
   \begin{itemize}
-  \item Customizing view headers
-\begin{cpp}
-// set horizontal headers
-model->setHorizontalHeaderItem(0, new QStandardItem("Column 1");
-model->setHorizontalHeaderItem(1, new QStandardItem("Column 2");
-// hide vertical headers on table
-table->verticalHeader().hide();
-\end{cpp}
-\item Customizing Items
-\begin{cpp}
-item->setEditable(false); // disable edit
-item->setCheckable(true); // checkbox on item
-\end{cpp}
-\item Customize selection
-\begin{cpp}
-// allow only to select single rows on table
-table->setSelectionBehavior(QAbstractItemView::SelectRows);
-table->setSelectionMode(QAbstractItemView::SingleSelection);
-\end{cpp}
-\item[] \demo{modelview/ex-showdata}
+  \item Customizing header, footer and highlight
+  \item[]
+\begin{qml}
+\qtt{ListView~\{}\\
+\qtt{~~~~\qc{type}{header}:~\qc{class}{Component}~\{}\\
+\qtt{~~~~~~~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{height}:~\qc{number}{10};~\qc{type}{color}:~\qc{string}{"pink"}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{footer}:~\qc{class}{Component}~\{}\\
+\qtt{~~~~~~~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{height}:~\qc{number}{10};~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{~~~~\qc{type}{highlight}:~\qc{class}{Component}~\{}\\
+\qtt{~~~~~~~~\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~~~~~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{color}:~\qc{string}{"lightgray"}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}
+\item[] \demo{qml-presenting-data/ex-model-views/ex-view-current-item.qml}
 \end{itemize}
 \end{slide}
 
