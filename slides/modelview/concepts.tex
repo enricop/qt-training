@@ -267,6 +267,44 @@ QString text = model->data(index, Qt::DisplayRole).toString()
   \end{itemize}
 \end{slide}
 
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{}\frametitle{Exporting models to QML}
+  \begin{itemize}
+    \item Export model instance
+    \begin{itemize}
+        \item Create model instance in C++
+        \item Set as a context property on the view's engine
+        \item[]
+        \begin{cpp}
+CustomModel *model = new CustomModel;        
+QQuickView view;
+view.engine()->rootContext("_model", model);
+        \end{cpp}
+        \item Use in QML by id
+        \item[]
+        \begin{qml}
+\qtt{\qc{class}{ListView}~\{~\qc{type}{model}:~\_model~\}}\\
+        \end{qml}
+    \end{itemize}
+    \vspace*{1.0em}
+    \item Export model type
+    \begin{itemize}
+        \item Register custom model class with QML type system
+        \item[]
+        \begin{cpp}
+qmlRegisterType<CustomModel>("Models", 1, 0, "CustomModel");        
+        \end{cpp}
+        \item Use in QML like any other QML element
+        \item[]
+        \begin{qml}
+\qtt{\qc{keyword}{import}~\qc{class}{Models}~\qc{number}{1.0}}\\
+\qtt{\qc{class}{ListView}~\{}\\
+\qtt{~~~~\qc{type}{model}:~\qc{class}{CustomModel}~\{\}}\\
+\qtt{\}}\\
+        \end{qml}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
 
 % ----------------------------------------------------------------------
 \begin{slide}{1594}\frametitle{Recap of Model/View Concept}
