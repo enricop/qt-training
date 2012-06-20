@@ -17,7 +17,7 @@
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1584}\frametitle{\iCls{QStandardItemModel} -
     Convenient Model}
-\flushedImage{modelview/images/standarditemmodel}
+\flushedImage{qml-presenting-data/images/standarditemmodel.png}
   \begin{itemize}
   \item \iCls{QStandardItemModel}
     \begin{itemize}
@@ -31,18 +31,7 @@ model->appendRow(item);
 model->setItem(0, 1, new QStandardItem("B (0,1)"));
 item->appendRow(new QStandardItem("C (0,0)"));
 \end{cpp}
-\item \textit{"C (0,0)" - Not visible. (table view is only 2-dimensional)}
-\item[]
-\item React on click
-  \begin{itemize}
-  \begin{cpp}
-connect(m_view, SIGNAL(clicked(QModelIndex)) ...
-  \end{cpp}
- \item In slot ...
-  \begin{cpp}
-QStandardItem *item = model->itemFromIndex(index);    
-  \end{cpp}
- \end{itemize}
+\item \textit{"B (0,1)" and "C (0,0)" - Not visible. (list view is only 1-dimensional)}
 \end{itemize}
 \doc{qstandarditemmodel.html}{QStandardItemModel}
 \end{slide}
