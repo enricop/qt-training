@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
         type = RunType().getRunType();
 
     if ( type == RunType::Client )
-        view.setSource(QUrl("qrc:Client.qml"));
+        view.setSource(QUrl("qrc:///Client.qml"));
     else
-        view.setSource(QUrl("qrc:Server.qml"));
+        view.setSource(QUrl("qrc:///Server.qml"));
 
     view.show();
     return app.exec();
