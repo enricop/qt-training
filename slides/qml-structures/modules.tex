@@ -55,15 +55,8 @@ Modules hold collections of elements:
 
 \vspace*{0.5em}
 \begin{itemize}
-\item Recall this example from earlier
 \item \qtt{LineEdit.qml} is in the same directory
-  \begin{itemize}
-  \item item within the file automatically available as \qtt{LineEdit}
-  \end{itemize}
-\item We would like to make different versions of this item
-  \begin{itemize}
-  \item to do this, we need to learn about collections of items
-  \end{itemize}
+\item We would like to make different versions of this item so we need collections of items
 \end{itemize}
 
 \demo{qml-modules-components/ex-modules-components/lineedit/use-lineedit.qml}
@@ -77,13 +70,9 @@ Modules hold collections of elements:
 \inputqml{qml-structures/colorized/use-collection-of-items}
 
 \begin{itemize}
-\item Importing \qic{string}{"items"}
-  \begin{itemize}
-  \item imports all files in \texttt{items} directory
-  \item including file \texttt{items/CheckBox.qml}
-  \item the item within is available as \qtt{CheckBox}
-  \end{itemize}
-\item Useful for splitting up an application
+\item Importing \qic{string}{"items"} directory
+\item Includes all the files (e.g. \texttt{items/CheckBox.qml})
+\item Useful to organize your application
 \item Provides the mechanism for versioning of modules
 \end{itemize}
 
@@ -101,7 +90,7 @@ Modules hold collections of elements:
 \item Create a directory called \qtt{LineEdit}\\
       containing
   \begin{itemize}
-  \item \qtt{1.0.qml}~\textendash~implementation of the custom item
+  \item \qtt{LineEdit-1.0.qml}~\textendash~implementation of the custom item
   \item \qtt{qmldir}~\textendash~version information for the module
   \end{itemize}
 
@@ -143,7 +132,7 @@ LineEdit 1.0 LineEdit-1.0.qml
 \begin{slide}{1612}\frametitle{Running the Example}
 
 \begin{itemize}
-\item Locate the \qtt{declarative-uis/modules-components} directory
+\item Locate \qtt{qml-modules-components/ex-modules-components}
 \item Launch the example:\\
 \consolecode{\footnotesize qmlscene -I versioned versioned/use-lineedit-version.qml}
 \end{itemize}
@@ -164,11 +153,7 @@ LineEdit 1.0 LineEdit-1.0.qml
 
 \begin{itemize}
 \item Imagine that we release version 1.1 of \qtt{LineEdit}
-\item The example imports version 1.0
-  \begin{itemize}
-  \item only the features from that version are required
-  \item we need to ensure backward compatibility
-  \end{itemize}
+\item We need to ensure backward compatibility
 \item \qtt{LineEdit} needs to include support for multiple versions
 \item Version handling is done in the \qtt{qmldir} file
 
