@@ -141,17 +141,16 @@ QVariant MyModel::data( index, role ) const {
 
 
 % ----------------------------------------------------------------------
-\begin{slide}{1587}\frametitle{Lab: City Table Model}
+\begin{slide}{1587}\frametitle{Lab: City List Model}
   \begin{itemize}
-  \item Please implement a City Table Model
+  \item Please implement a City List Model
   \item Given:
     \begin{itemize}
-    \item The data  in \texttt{CityEngine}
-    \item A main test function
+    \item Start with solution of \texttt{modelview/lab-cities-standarditem}
     \end{itemize}
   \item Your Task:
     \begin{itemize}
-    \item Adapt the data to a table model
+    \item Rebase \iCls{CityModel} to \iCls{QAbstractListModel}
     \end{itemize}
   \item \textbf{Optional}
     \begin{itemize}
@@ -159,7 +158,7 @@ QVariant MyModel::data( index, role ) const {
     \item Enable adding/removing cities
    \end{itemize}
  \end{itemize}
-\lab{modelview/lab-citymodel}
+\lab{modelview/sol-cities-custom}
  
 \end{slide}
 
