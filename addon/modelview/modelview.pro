@@ -25,7 +25,13 @@ SUBDIRS= \
   lab-object-browser-step1 \
   lab-object-browser-step2 \
   lab-treecityengine \
+  lab-cities-filter \
+  lab-cities-standarditem \
   sol-citymodel \
   sol-object-browser-step1 \
   sol-object-browser-step2 \
   sol-treecityengine \
+  sol-cities-custom \
+  sol-cities-filter \
+  sol-cities-standarditem
+
