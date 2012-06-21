@@ -21,11 +21,11 @@
     \item Maps indexes to new indexes
     \end{itemize}
 \begin{cpp}
-view = new QListView(parent);
+view = new QQuickView(parent);
 // insert proxy model between model and view
 proxy = new QSortFilterProxyModel(parent);
 proxy->setSourceModel(model);
-view->setModel(proxy);
+view->engine()->rootContext()->setContextProperty("_proxy", proxy);
 \end{cpp}
   \end{itemize}
 \textit{Note:} Need to load all data to sort or filter
@@ -42,17 +42,18 @@ proxy->setFilterKeyColumn(1);
 \item \textbf{Sorting with Proxy Model}
 \begin{cpp}
 // sort column 0 ascending
-view->setSortingEnabled(true);
 proxy->sort(0, Qt::AscendingOrder);
 \end{cpp}
   \end{itemize}
 \medskip
 \begin{itemize}
-\item \textbf{Filter via \iCls{QLineEdit} signal}
-\begin{cpp}
-connect(m_edit, SIGNAL(textChanged(QString)), 
-    proxy, SLOT(setFilterWildcard(QString)));      
-\end{cpp}
+\item \textbf{Filter via \iCls{TextInputs} signal}
+\item[]
+\begin{qml}
+\qtt{TextInput~\{}\\
+\qtt{~~~~\qc{type}{onTextChanged}:~\_proxy.setFilterWildcard(text)}\\
+\qtt{\}}\\
+\end{qml}
 \end{itemize}
 \demo{modelview/ex-sortfiltertableview}
 \end{slide}
