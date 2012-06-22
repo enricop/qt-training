@@ -1,0 +1,10 @@
+tampere.jpg (C) 2007-2012 Kevin Ottens <ervin@ipsquad.net>.
+
+The author hereby permits its use as input data in the
+QML Graphics Effects Labs or any other lab of the
+Nokia Qt Development Frameworks training material, including
+all necessary storage and distribution in the handout of such
+trainings.
+
+No other use is permitted.
+

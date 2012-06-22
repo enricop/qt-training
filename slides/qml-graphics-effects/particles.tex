@@ -1,0 +1,141 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2012, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Particles}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1810}\frametitle{Particle System}
+
+\begin{itemize}
+\item A \qic{class}{ParticleSystem} requires
+  \begin{itemize}
+  \item at least a particles source
+  \item the description of how particles look
+  \end{itemize}
+\vspace*{0.5em}
+\item Particles sources are \qic{class}{Emitter} instances
+  \begin{itemize}
+  \item They emit the logical particles
+  \item Provide initial attributes: \qic{type}{emitRate}, \qic{type}{lifeSpan}, \qic{type}{size}, \qic{type}{speed}, ...
+  \item The flow can be controlled using \qic{type}{enabled}, \qic{type}{pulse()} and \qic{type}{burst()}
+  \end{itemize}
+\vspace*{0.5em}
+\item Particle appearance is controlled by a \qic{class}{ParticlePainter} instance
+  \begin{itemize}
+  \item \qic{class}{ImageParticle} uses an image as \qic{type}{source}, it can be rotated, colorized, etc.
+  \item \qic{class}{ItemParticle} uses an \qic{class}{Item} \qic{type}{delegate} to render particles
+  \item \qic{class}{CustomParticle} uses shaders to render particles
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1811}\frametitle{Christmas Lights}
+\inputqml{qml-graphics-effects/colorized/christmas-lights}
+
+\demo{qml-graphics-effects/ex-particles/christmas-lights.qml}
+
+\vspace*{-20em}\hfill\image{qml-graphics-effects/images/christmas-lights.png}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1812}\frametitle{Physics: Speed \& Acceleration}
+
+\begin{itemize}
+\item Both initial \qic{type}{speed} and \qic{type}{acceleration} are specified using a \qic{class}{Direction}
+\vspace*{0.5em}
+\item A \qic{class}{Direction} is a vector space of possible directions for a particle
+  \begin{itemize}
+  \item Value intervals are specified using \qic{type}{*Variation} properties
+  \item Each particle gets a random vector of the vector space
+  \end{itemize}
+\vspace*{0.5em}
+\item \qic{class}{Direction} is never used, it has subclasses
+  \begin{itemize}
+  \item \qic{class}{AngleDirection} for directions varying in \qic{type}{angle}
+  \item \qic{class}{PointDirection} for directions varying in \qic{type}{x} and \qic{type}{y} components
+  \item \qic{class}{TargetDirection} for directions toward a \qic{type}{targetItem}
+  \item \qic{class}{CumulativeDirection} acts as a direction that sums the directions within it
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1813}\frametitle{Explosion}
+\inputqml{qml-graphics-effects/colorized/explosion}
+
+\demo{qml-graphics-effects/ex-particles/explosion.qml}
+
+\vspace*{-20em}\hfill\image{qml-graphics-effects/images/explosion.png}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1814}\frametitle{Physics: Force fields}
+
+\begin{itemize}
+\item \qic{class}{Affector} instances can impact any attribute of the particles
+  \begin{itemize}
+  \item Behavior provided by \qic{type}{onAffectParticles}
+  \item Gives access to all the \qic{type}{particles}
+  \item \qic{type}{dt} is the time since last call (used to normalize to real time)
+  \item Not recommended in high-volume particle systems (JS code being slower)
+  \end{itemize}
+\vspace*{0.5em}
+\item Most common cases are covered with \qic{class}{Affector} subclasses
+  \begin{itemize}
+  \item \qic{class}{Attractor} attracts toward a point (magnetism, close object gravity)\linebreak\demo{qml-graphics-effects/ex-particles/explosion-implosion.qml}
+  \item \qic{class}{Gravity} accelerates to a given vector (constant gravitational pull)
+  \item \qic{class}{Friction} slows down proportionally to particles speed
+  \item \qic{class}{Turbulence} provides fluid like forces based on a \qic{type}{noiseSource} image map
+  \item \qic{class}{Wander} provides random particle perturbations
+  \item ...
+  \end{itemize}
+\vspace*{0.5em}
+\item The subclasses are C++ based and so much faster
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1815}\frametitle{Fountain}
+\inputqml{qml-graphics-effects/colorized/fountain}
+
+\demo{qml-graphics-effects/ex-particles/fountain.qml}
+
+\vspace*{-10em}\hfill\image{qml-graphics-effects/images/fountain.png}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1816}\frametitle{Lab: Screen Saver}
+\centeredImage{qml-graphics-effects/images/makeitsnow.png}
+
+Starting from the partial solution:
+
+\begin{itemize}
+\item Get the snow flakes to slowly fall
+\item Make sure they're not all going exactly in the same direction/speed
+\item Optionally: Get the snow flakes to rotate as they fall
+\end{itemize}
+
+\lab{qml-graphics-effects/lab-makeitsnow/makeitsnow.qml}
+\end{slide}
+

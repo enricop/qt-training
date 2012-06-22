@@ -1,0 +1,64 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2012, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Canvas}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1800}\frametitle{Canvas}
+
+\begin{itemize}
+\item \qic{class}{Canvas} is used to insert an element in which to paint
+\item \qic{type}{onPaint} handler will contain the painting code
+\item API somewhat similar to the old \qic{class}{QPainter} API
+\item API compatible with the HTML5 Canvas API
+  \begin{itemize}
+  \item Need to request a \qic{class}{Context2D} instance first
+  \end{itemize}
+\item \qic{type}{requestPaint()} method to schedule repainting
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1801}\frametitle{Path Rendering}
+\flushedImage{qml-graphics-effects/images/path-painting.png}
+
+\inputqml{qml-graphics-effects/colorized/path-painting}
+
+\demo{qml-graphics-effects/ex-canvas/path-painting.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1802}\frametitle{Scribble Area}
+\inputqml{qml-graphics-effects/colorized/scribble-area}
+
+\demo{qml-graphics-effects/ex-canvas/scribble-area.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1803}\frametitle{Lab: Screen Saver}
+\centeredImage{qml-graphics-effects/images/screensaver.png}
+
+Starting from the partial solution:
+
+\begin{itemize}
+\item Get the lines to be rendered
+\item Have the points forming the lines animated
+\end{itemize}
+
+\lab{qml-graphics-effects/lab-screensaver/screensaver.qml}
+\end{slide}
+

@@ -1,0 +1,33 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2012, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{2.0}}\\
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{600};~\qc{type}{height}:~\qc{number}{600};~\qc{type}{color}:~\qc{string}{"azure"}}\\
+\qtt{~~~~\qc{class}{Canvas}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{onPaint}:~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{var} context = getContext(\qc{string}{"2d"})}\\
+\qtt{~~~~~~~~~~~~context.clearRect(\qc{number}{0}, \qc{number}{0}, width, height)}\\
+\qtt{~~~~~~~~~~~~context.fillRule = \qc{class}{Qt.OddEvenFill}}\\
+\qtt{~~~~~~~~~~~~context.fillStyle = \qc{string}{"forestgreen"}}\\
+\qtt{~~~~~~~~~~~~context.beginPath()}\\
+\qtt{~~~~~~~~~~~~context.moveTo(\qc{number}{60}, \qc{number}{60})}\\
+\qtt{~~~~~~~~~~~~context.bezierCurveTo(\qc{number}{540}, \qc{number}{60}, \qc{number}{60}, \qc{number}{540}, \qc{number}{540}, \qc{number}{540})}\\
+\qtt{~~~~~~~~~~~~context.bezierCurveTo(\qc{number}{540}, \qc{number}{60}, \qc{number}{60}, \qc{number}{540}, \qc{number}{60}, \qc{number}{60})}\\
+\qtt{~~~~~~~~~~~~context.closePath()}\\
+\qtt{~~~~~~~~~~~~context.rect(\qc{number}{120}, \qc{number}{120}, \qc{number}{360}, \qc{number}{360})}\\
+\qtt{~~~~~~~~~~~~context.fill()}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

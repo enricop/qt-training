@@ -1,0 +1,165 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2012, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Shaders}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1820}\frametitle{Shaders}
+
+\begin{itemize}
+\item A shader is a program used to calculate rendering effects on the GPU
+\vspace*{1em}
+\item Two types of shader are available in Qt Quick
+  \begin{itemize}
+  \vspace*{0.5em}
+  \item Fragment shaders
+    \begin{itemize}
+    \item Operate on each pixel
+    \item Cannot be complex as it has no knowledge of the scene geometry
+    \item Used for color manipulation, bump mapping, shadows, etc.
+    \end{itemize}
+  \vspace*{0.5em}
+  \item Vertex shaders
+    \begin{itemize}
+    \item Operate on each vertex
+    \item Can change position, color and texture coordinate
+    \item Cannot create new vertices
+    \end{itemize}
+  \end{itemize}
+\vspace*{1em}
+\item Their execution is heavily parallelized in the GPU pipeline
+\item Extremely efficient
+\item Written using OpenGL Shading Language (GLSL)
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1821}\frametitle{Fragment Shaders}
+
+\begin{itemize}
+\item \qic{class}{ShaderEffect} is a rectangle displaying the result of a shader program
+\item The \qic{type}{fragmentShader} property is a string with the fragment shader code
+\item Often such shaders use textures as inputs
+\vspace*{1em}
+\item \qic{class}{ShaderEffectSource} allows to render an item as a texture
+\item \qic{type}{sourceItem} holds the \qic{class}{Item} to be rendered
+\vspace*{1em}
+\item Note that \qic{class}{ShaderEffectSource} is an invisible element aimed at consumption in \qic{class}{ShaderEffect} instances
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1822}\frametitle{Saturation Filter}
+\inputqml{qml-graphics-effects/colorized/saturation-filter}
+
+\demo{qml-graphics-effects/ex-shaders/saturation-filter.qml}
+
+\vspace*{-20em}\hfill\image{qml-graphics-effects/images/saturation-filter.png}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1823}\frametitle{Vertex Shaders}
+
+\begin{itemize}
+\item Works similarly to fragment shaders
+\item Use the \qic{type}{vertexShader} property for the vertex shader code
+\item Pay attention to the \qic{type}{mesh} property
+  \begin{itemize}
+  \item Specifies the number of vertices of the \qic{class}{ShaderEffect} element
+  \item It must be fine enough to resolve the transformation
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1824}\frametitle{Flag}
+\inputqml{qml-graphics-effects/colorized/flag}
+
+\demo{qml-graphics-effects/ex-shaders/flag.qml}
+
+\vspace*{-20em}\hfill\image{qml-graphics-effects/images/flag.png}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1825}\frametitle{Chaining Shaders}
+
+\begin{itemize}
+\item \qic{class}{ShaderEffectSource} can have any \qic{class}{Item} as \qic{type}{sourceItem}
+\item Even a \qic{class}{ShaderEffect}!
+\item Allows to create complex effects by chaining shader programs
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1826}\frametitle{Drop Shadow}
+\centeredImage{qml-graphics-effects/images/drop-shadow.png}
+
+\vspace*{2em}
+A drop shadow is a combination of:
+
+\begin{itemize}
+\item A blur operation
+\item A darkening of the result of the blur
+\item A composition of the original on top of the created shadow with an offset
+\end{itemize}
+
+\demo{qml-graphics-effects/ex-shaders/drop-shadow.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1827}\frametitle{QtGraphicalEffects}
+
+\begin{itemize}
+\item New module providing reusable elements with premade shaders
+\item Fairly extensive list of effects
+  \begin{itemize}
+  \item Colorize
+  \item Gradients
+  \item Blurs
+  \item Gamma and levels adjustments
+  \item Drop shadows
+  \item Glows
+  \item ...
+  \end{itemize}
+\end{itemize}
+
+\demo{qml-graphics-effects/ex-shaders/drop-shadow2.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1828}\frametitle{Lab: Dissolve Effect}
+\centeredImage{qml-graphics-effects/images/dissolve.png}
+
+Starting from the partial solution:
+
+\begin{itemize}
+\item Create an alpha gradient effect
+\item Animate it so the item fades out from top to bottom and back in again
+\end{itemize}
+
+\lab{qml-graphics-effects/lab-dissolve/dissolve.qml}
+\end{slide}
+

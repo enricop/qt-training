@@ -1,0 +1,34 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2012, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{2.0}}\\
+\vspace*{0.5em}
+\qtt{\qc{class}{Rectangle}~\{}\\
+\qtt{~~~~\qc{type}{width}:~\qc{number}{600};~\qc{type}{height}:~\qc{number}{600}}\\
+\qtt{~~~~\qc{type}{color}:~\qc{string}{"white"}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{MouseArea}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{onPressed}:~canvas.requestPaint()}\\
+\qtt{~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{Canvas}~\{}\\
+\qtt{~~~~~~~~\qc{type}{id}:~canvas}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{onPaint}:~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{var} context = getContext(\qc{string}{"2d"})}\\
+\qtt{~~~~~~~~~~~~...}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\

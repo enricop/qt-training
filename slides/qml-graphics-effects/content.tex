@@ -1,0 +1,60 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2012, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Graphics Effects}
+
+%----------------------------------------------------------------------
+\begin{slide}{1790}\frametitle{Objectives}
+
+\vspace*{1em}
+\begin{itemize}
+\item Knowledge on how to create items with your own painting code
+\item Use canvas with user interaction of animations
+\item Create a complete particle system
+  \begin{itemize}
+  \item Specify the particles
+  \item Provide speed, acceleration or other physics traits
+  \end{itemize}
+\item Use shaders to modify items rendering
+  \begin{itemize}
+  \item Fragment shaders for pixel manipulation
+  \item Vertex shaders for shape manipulation
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1791}\frametitle{Why use canvas, particles and shaders?}
+\flushedImage{qml-graphics-effects/images/effects-showcase.png}
+
+\begin{itemize}
+\item Custom painting of components
+\item Graphs and plots
+\end{itemize}
+\vspace*{0.5em}
+\begin{itemize}
+\item Complex visual effects
+\item Simulate some physics during animations
+\item Benefit as much as possible from the GPU
+\end{itemize}
+
+\demo{qml-graphics-effects/ex-canvas/piechart.qml}
+
+\demo{qml-graphics-effects/ex-flickr/flickr.qml}
+\end{slide}
+
+\input{qml-graphics-effects/canvas}
+\input{qml-graphics-effects/particles}
+\input{qml-graphics-effects/shaders}
+

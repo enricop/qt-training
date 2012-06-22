@@ -1,0 +1,35 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2012, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick}~\qc{number}{2.0}}\\
+\qtt{\qc{keyword}{import}~\qc{class}{QtQuick.Particles}~\qc{number}{2.0}}\\
+\qtt{\qc{class}{Rectangle}~\{ ...}\\
+\qtt{~~~~\qc{class}{Timer}~\{~...;~\qc{type}{onTriggered}:~emitter.pulse(\qc{number}{50})~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~\qc{class}{ParticleSystem}~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{class}{Emitter}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{id}:~emitter}\\
+\qtt{~~~~~~~~~~~~\qc{type}{anchors.centerIn}:~parent}\\
+\qtt{~~~~~~~~~~~~\qc{type}{enabled}:~\qc{number}{false}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{emitRate}:~\qc{number}{700};~\qc{type}{lifeSpan}:~\qc{number}{500};~\qc{type}{size}:~\qc{number}{16}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{speed}:~\qc{class}{AngleDirection}\{\qc{type}{magnitude}:~\qc{number}{500};~\qc{type}{angleVariation}:~\qc{number}{360}\}}\\
+\qtt{~~~~~~~~\}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{class}{ImageParticle}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{source}:~\qc{string}{"../images/particle.png"}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{sizeTable}:~\qc{string}{"../images/sizeTable.png"}}\\
+\qtt{~~~~~~~~~~~~\qc{type}{blueVariation}:~\qc{number}{100}}\\
+\qtt{~~~~~~~~\}}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
