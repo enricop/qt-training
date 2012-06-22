@@ -7,9 +7,8 @@
  *
  *************************************************************************/
 
-#include <QtGui>
 #include <QtSql>
-
+#include <QtWidgets>
 
 void reportError( const QString& msg, const QSqlError& err )
 {

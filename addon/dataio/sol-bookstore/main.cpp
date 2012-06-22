@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QApplication>
 #include "bookstore.h"
 
 int main( int argc, char** argv ) {

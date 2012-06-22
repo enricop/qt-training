@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QtCore>
 
 #include "keyengine.h"
 #include "keysxmlreader.h"
@@ -61,7 +61,7 @@ void readKeys(KeyEngine *engine)
 
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
     KeyEngine *engine = new KeyEngine(QCoreApplication::instance());
 

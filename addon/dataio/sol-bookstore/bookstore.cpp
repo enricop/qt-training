@@ -7,8 +7,8 @@
  *
  *************************************************************************/
 
-#include <QtGui>
 #include <QtSql>
+#include <QtWidgets>
 #include "bookstore.h"
 #include "bookmodel.h"
 

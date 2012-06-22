@@ -7,8 +7,8 @@
  *
  *************************************************************************/
 
-#include <QtGui>
 #include <QtSql>
+#include <QtWidgets>
 #include "../mysql_connect.h"
 
 void reportError( const QString& msg, const QSqlError& err )
