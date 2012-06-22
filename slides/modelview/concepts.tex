@@ -328,7 +328,7 @@ QString text = model->data(index, Qt::DisplayRole).toString()
           \item \iClsEnum{Qt}{DisplayRole} in C++ is \qc{type}{display} in QML
           \item \iClsEnum{Qt}{DecorationRole} in C++ is \qc{type}{decoration} in QML
       \end{itemize}
-      \item Set additional mappings with \iClsFn{QAbstractItemModel}{setRoleNames}
+      \item Add additional mappings by reimplementing \iClsFn{QAbstractItemModel}{roleNames}
   \end{itemize}
 \end{slide}
 

@@ -11,6 +11,8 @@ class CityModel : public QStandardItemModel
 public:
     explicit CityModel(QObject *parent = 0);
 
+    QHash<int, QByteArray> roleNames() const;
+
 private:
     void setupModel();
 };

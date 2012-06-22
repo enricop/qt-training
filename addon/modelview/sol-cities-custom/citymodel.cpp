@@ -11,15 +11,6 @@ enum ItemRoles {
 
 CityModel::CityModel(QObject *parent) : QAbstractListModel(parent)
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames[CityRole] = "city";
-    roleNames[CountryRole] = "country";
-    roleNames[FlagRole] = "flag";
-    roleNames[PopulationRole] = "population";
-    roleNames[AreaRole] = "area";
-
-    setRoleNames(roleNames);
-
     const QStringList countries = m_engine.countries();
     Q_FOREACH (const QString &country, countries) {
         m_citiesSortedByCountry << m_engine.citiesByCountry(country);
@@ -28,6 +19,8 @@ CityModel::CityModel(QObject *parent) : QAbstractListModel(parent)
 
 int CityModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
+
     return m_citiesSortedByCountry.count();
 }
 
@@ -56,4 +49,17 @@ QVariant CityModel::data(const QModelIndex &index, int role) const
     default:
         return QVariant();
     }
+}
+
+QHash<int, QByteArray> CityModel::roleNames() const
+{
+    QHash<int, QByteArray> mapping = QAbstractListModel::roleNames();
+
+    mapping[CityRole] = "city";
+    mapping[CountryRole] = "country";
+    mapping[FlagRole] = "flag";
+    mapping[PopulationRole] = "population";
+    mapping[AreaRole] = "area";
+
+    return mapping;
 }

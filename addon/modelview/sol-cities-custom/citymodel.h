@@ -15,6 +15,8 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
+    QHash<int, QByteArray> roleNames() const;
+
 private:
     CityEngine m_engine;
     QStringList m_citiesSortedByCountry;

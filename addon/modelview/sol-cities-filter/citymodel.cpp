@@ -29,14 +29,18 @@ void CityModel::setupModel()
         }
     }
 
-    QHash<int, QByteArray> roleNames;
-    roleNames[CityRole] = "city";
-    roleNames[CountryRole] = "country";
-    roleNames[FlagRole] = "flag";
-    roleNames[PopulationRole] = "population";
-    roleNames[AreaRole] = "area";
-
-    setRoleNames(roleNames);
-
     setSortRole(CountryRole);
+}
+
+QHash<int, QByteArray> CityModel::roleNames() const
+{
+    QHash<int, QByteArray> mapping = QStandardItemModel::roleNames();
+
+    mapping[CityRole] = "city";
+    mapping[CountryRole] = "country";
+    mapping[FlagRole] = "flag";
+    mapping[PopulationRole] = "population";
+    mapping[AreaRole] = "area";
+
+    return mapping;
 }
