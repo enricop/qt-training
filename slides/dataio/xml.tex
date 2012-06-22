@@ -22,7 +22,7 @@
   \begin{itemize}
   \item Serial stream parser API
   \item User defines callbacks
-  \item Callbacks called when XML events occurs
+  \item Callbacks called when XML events occur
   \item Suited when data is processed in one-pass
   \end{itemize}
 \item\textbf{ DOM (level 1 and 2)}
@@ -36,10 +36,9 @@
   \item User pulls token on own convenience
   \item Easy to build recursive descent parsers
   \item Extremly fast and memory conservative
-  \item Preferred XML reader/writer if not DOM is required
+  \item Preferred XML reader/writer if no DOM is required
   \end{itemize}
-\item For  SAX and DOM APIs, add \verb!QT += xml!
-\item XML Stream APIs reside in QtCore module
+\item For SAX and DOM APIs, add \verb!QT += xml!. XML Stream APIs are in QtCore
 \end{itemize}
 \end{slide}
 
