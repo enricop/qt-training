@@ -12,44 +12,6 @@
 \setbeamerfont{page number in head/foot}{family=\slidefootnotefont}
 \setbeamerfont{block title}{series=\bfseries}
 
-\newcommand{\setKDABOwned}[1]{
-  \ifthenelse{\boolean{#1}}{
-    \definecolor{qtdarkgreen}{RGB}{39,64,100}
-    \definecolor{qtlightgreen}{RGB}{40,165,217}
-    \setbeamercolor{itemize subitem}{fg=structure.fg!70}
-    \renewcommand{\leftSideLogo}{diagrams/kdab-logo}
-    \renewcommand{\rightSideLogo}{diagrams/kdab-text-logo}
-    \renewcommand{\pageBackground}{images/kdab-background.pdf}
-    \renewcommand{\frontPageBackground}{images/KDAB-titlepage-background}
-    \renewcommand{\handoutBackground}{images/kdab-background.pdf}
-    \partner{}
-    \material{}
-  }{
-    % Configurations of bullets.
-
-    % Alternative using images.
-    % \setbeamertemplate{itemize item}{\includegraphics[scale=0.25916]{Theme/mainBullet.png}}
-    % \setbeamertemplate{itemize subitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
-    % \setbeamertemplate{itemize subsubitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
-    \definecolor{qtdarkgreen}{RGB}{95,95,95}
-    \definecolor{qtlightgreen}{RGB}{202,222,180}
-
-    \definecolor{darkbullet}{RGB}{128,156,171}
-    \definecolor{lightbullet}{RGB}{202,222,180}
-    \setbeamercolor{itemize item}{fg=darkbullet}
-    \setbeamercolor{itemize subitem}{fg=lightbullet}
-    \setbeamercolor{itemize subsubitem}{fg=lightbullet}
-
-    \renewcommand{\leftSideLogo}{diagrams/qt-logo}
-    \renewcommand{\rightSideLogo}{diagrams/nokia-logo}
-    \renewcommand{\pageBackground}{Theme/background-noqt}
-    \renewcommand{\frontPageBackground}{Theme/background-noqt}
-    \renewcommand{\handoutBackground}{Theme/background-noqt}
-  }
-  \setbeamercolor{structure}{fg=qtdarkgreen}
-}
-
-
 % shared colors
 \definecolor{nokiadarkgray}{RGB}{54,53,52}
 \definecolor{qtlightgray}{RGB}{208,208,208}
@@ -139,5 +101,26 @@
 
 \usecolortheme{structure}  
 \setbeamertemplate{blocks}[rounded][shadow=true]
+% Configurations of bullets.
 
-\setKDABOwned{false}
+% Alternative using images.
+% \setbeamertemplate{itemize item}{\includegraphics[scale=0.25916]{Theme/mainBullet.png}}
+% \setbeamertemplate{itemize subitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
+% \setbeamertemplate{itemize subsubitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
+\definecolor{qtdarkgreen}{RGB}{95,95,95}
+\definecolor{qtlightgreen}{RGB}{202,222,180}
+
+\definecolor{darkbullet}{RGB}{128,156,171}
+\definecolor{lightbullet}{RGB}{202,222,180}
+\setbeamercolor{itemize item}{fg=darkbullet}
+\setbeamercolor{itemize subitem}{fg=lightbullet}
+\setbeamercolor{itemize subsubitem}{fg=lightbullet}
+
+\renewcommand{\leftSideLogo}{diagrams/qt-logo}
+\renewcommand{\rightSideLogo}{diagrams/nokia-logo}
+\renewcommand{\pageBackground}{Theme/background-noqt}
+\renewcommand{\frontPageBackground}{Theme/background-noqt}
+\renewcommand{\handoutBackground}{Theme/background-noqt}
+
+\setbeamercolor{structure}{fg=qtdarkgreen}
+
