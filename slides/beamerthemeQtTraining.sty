@@ -37,7 +37,7 @@
         \begin{textblock*}{\paperwidth}(225pt, 252pt)
             {
                 \usebeamercolor[fg]{footer left}
-                \tiny\insertframenumber/\inserttotalframenumber
+                \ifthenelse{\equal{\thepage}{1}}{}{\tiny\insertframenumber/\inserttotalframenumber}
             }
         \end{textblock*}
         % section
