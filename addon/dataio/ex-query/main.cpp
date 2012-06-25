@@ -27,7 +27,7 @@ int main( int argc, char** argv )
 
   // Connect to the database
   QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE" );
-  db.setDatabaseName("bookstore.db");
+  db.setDatabaseName("../bookstore.db");
   if ( !db.open() ) {
     reportError( "Error When opening database", db.lastError() );
   }
