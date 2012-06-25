@@ -7,8 +7,50 @@
  *
  *************************************************************************/
 
+#include <QtGui>
+#include <QtQuick>
 #include <QtSql>
-#include <QtWidgets>
+#include <QStandardItemModel>
+
+class BookModel : public QStandardItemModel
+{
+public:
+    enum Roles {
+        TitleRole = Qt::UserRole + 1,
+        AuthorRole,
+        PriceRole,
+        NotesRole
+    };
+
+    BookModel() : QStandardItemModel()
+    {
+        setSortRole(AuthorRole);
+    }
+
+    QHash<int, QByteArray> roleNames() const
+    {
+        QHash<int, QByteArray> mapping = QStandardItemModel::roleNames();
+
+        mapping[TitleRole] = "title";
+        mapping[AuthorRole] = "author";
+        mapping[PriceRole] = "price";
+        mapping[NotesRole] = "notes";
+
+        return mapping;
+    }
+
+    void addBook(const QString &title, const QString &author, const QString &price, const QString &notes)
+    {
+        QStandardItem *item = new QStandardItem;
+        item->setData(title, TitleRole);
+        item->setData(author, AuthorRole);
+        item->setData(price, PriceRole);
+        item->setData(notes, NotesRole);
+
+        appendRow(item);
+    }
+};
+
 
 void reportError( const QString& msg, const QSqlError& err )
 {
@@ -23,7 +65,7 @@ void reportError( const QString& msg, const QSqlError& err )
 
 int main( int argc, char** argv )
 {
-  QApplication app(argc, argv);
+  QGuiApplication app(argc, argv);
 
   // Connect to the database
   QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE" );
@@ -32,10 +74,8 @@ int main( int argc, char** argv )
     reportError( "Error When opening database", db.lastError() );
   }
   
-  // Setup the listview.
-  QTreeWidget* lv = new QTreeWidget;
-  lv->setHeaderLabels( QStringList() << "Name" << "Price" << "Notes");
-  lv->setRootIsDecorated( true );
+  // Setup the data model
+  BookModel model;
 
   // Query the database
   QSqlQuery authorQuery("SELECT id, firstname, surname FROM author");
@@ -43,9 +83,7 @@ int main( int argc, char** argv )
     reportError("Eror when running Query", authorQuery.lastError());
 
   while ( authorQuery.next() ) {
-    QString name = authorQuery.value(1).toString() + " " + authorQuery.value(2).toString();
-    QTreeWidgetItem* authorItem = new QTreeWidgetItem( lv );
-    authorItem->setText( 0, name );
+    const QString author = authorQuery.value(1).toString() + " " + authorQuery.value(2).toString();
 
     // Query all the books of the author.
     QSqlQuery bookQuery( "SELECT title, price, notes FROM book WHERE authorid = " + authorQuery.value(0).toString());
@@ -54,14 +92,15 @@ int main( int argc, char** argv )
       reportError("Eror when running Query",bookQuery.lastError());
 
     while ( bookQuery.next() ) {
-        QTreeWidgetItem* book = new QTreeWidgetItem( authorItem );
-        book->setText( 0, bookQuery.value(0).toString() );
-        book->setText( 1, bookQuery.value(1).toString() );
-        book->setText( 2, bookQuery.value(2).toString() );
+        model.addBook(bookQuery.value(0).toString(), author, bookQuery.value(1).toString(), bookQuery.value(2).toString() );
     }
   }
 
-  lv->show();
+  QQuickView view;
+  view.engine()->rootContext()->setContextProperty("_model", &model);
+  view.setSource(QUrl("main.qml"));
+  view.show();
+
 
   return app.exec();
 }

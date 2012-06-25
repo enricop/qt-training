@@ -1,3 +1,6 @@
 TEMPLATE=app
 SOURCES = main.cpp 
-QT += sql widgets
+QT += sql quick widgets
+
+OTHER_FILES += \
+    main.qml
