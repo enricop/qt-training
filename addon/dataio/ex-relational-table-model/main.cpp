@@ -7,9 +7,10 @@
  *
  *************************************************************************/
 
+#include <QtQuick>
 #include <QtSql>
-#include <QtWidgets>
-#include "../mysql_connect.h"
+
+#include "../tabletolistmodel.h"
 
 void reportError( const QString& msg, const QSqlError& err )
 {
@@ -22,13 +23,11 @@ void reportError( const QString& msg, const QSqlError& err )
 }
 
 int main( int argc, char** argv ) {
-    QApplication app( argc, argv );
+    QGuiApplication app( argc, argv );
 
     // Connect to the database
-    QSqlDatabase db = QSqlDatabase::addDatabase( "QMYSQL" );
-    db.setDatabaseName(s_databaseName);
-    db.setUserName(s_user);
-    db.setPassword(s_password);
+    QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE" );
+    db.setDatabaseName("../bookstore.db");
     if ( !db.open() )
         reportError( "Error When opening database", db.lastError() );
 
@@ -37,9 +36,19 @@ int main( int argc, char** argv ) {
     model->setRelation( 3, QSqlRelation( "author", "id", "surname" ) );
     model->select();
 
-    QTableView* view = new QTableView;
-    view->setModel( model );
-    view->show();
+    TableToListModel proxy;
+    proxy.setTableModel(model);
+
+    proxy.addColumnMapping(1, "title");
+    proxy.addColumnMapping(2, "price");
+    proxy.addColumnMapping(3, "lastName");
+
+    QQuickView view;
+
+    view.engine()->rootContext()->setContextProperty("_model", &proxy);
+    view.setSource(QUrl("main.qml"));
+
+    view.show();
 
     return app.exec();
 }
