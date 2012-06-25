@@ -7,9 +7,10 @@
  *
  *************************************************************************/
 
+#include <QtQuick>
 #include <QtSql>
-#include <QtWidgets>
-#include "../mysql_connect.h"
+
+#include "../tabletolistmodel.h"
 
 void reportError( const QString& msg, const QSqlError& err )
 {
@@ -24,28 +25,32 @@ void reportError( const QString& msg, const QSqlError& err )
 
 
 int main( int argc, char** argv ) {
-    QApplication app( argc, argv );
+    QGuiApplication app( argc, argv );
 
     // Connect to the database
-    QSqlDatabase db = QSqlDatabase::addDatabase( "QMYSQL" );
-    db.setDatabaseName(s_databaseName);
-    db.setUserName(s_user);
-    db.setPassword(s_password);
+    QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE" );
+    db.setDatabaseName("../bookstore.db");
     if ( !db.open() )
         reportError( "Error When opening database", db.lastError() );
 
     QSqlQueryModel* model = new QSqlQueryModel;
     model->setQuery( "SELECT a.firstname, a.surname, b.title, b.price, b.notes FROM author a, book b WHERE a.id = b.authorid" );
 
-    model->setHeaderData( 0, Qt::Horizontal, "First Name" );
-    model->setHeaderData( 1, Qt::Horizontal, "Sur Name" );
-    model->setHeaderData( 2, Qt::Horizontal, "Title" );
-    model->setHeaderData( 3, Qt::Horizontal, "Price" );
-    model->setHeaderData( 4, Qt::Horizontal, "Notes" );
+    TableToListModel proxy;
+    proxy.setTableModel(model);
 
-    QTableView* view = new QTableView;
-    view->setModel( model );
-    view->show();
+    proxy.addColumnMapping(0, "firstName");
+    proxy.addColumnMapping(1, "lastName");
+    proxy.addColumnMapping(2, "title");
+    proxy.addColumnMapping(3, "price");
+    proxy.addColumnMapping(4, "notes");
+
+    QQuickView view;
+
+    view.engine()->rootContext()->setContextProperty("_model", &proxy);
+    view.setSource(QUrl("main.qml"));
+
+    view.show();
 
     return app.exec();
 }
