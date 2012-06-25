@@ -4,24 +4,24 @@ Rectangle {
     width: 400; height: 200
 
     Image {
-        source: "../images/background.png"
+        source: "../images/bluebackground.png"
     }
 
-    Rectangle {
+    BorderImage {
+        source: "../images/bluebutton.png"
+        border { left: 13; top: 13; right: 13; bottom: 13 }
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: 15
         width: 350; height: 75
-        color: Qt.rgba(1.0,0.25,0.25,0.5)
-        radius: 10
     }
 
-    Rectangle {
+    BorderImage {
+        source: "../images/bluebutton.png"
+        border { left: 13; top: 13; right: 13; bottom: 13 }
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 15
         width: 350; height: 75
-        color: Qt.rgba(0.5,0.5,0.5,0.5)
-        radius: 10
     }
 }
