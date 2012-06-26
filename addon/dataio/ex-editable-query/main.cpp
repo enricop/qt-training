@@ -8,8 +8,9 @@
  *************************************************************************/
 
 #include <QtSql>
-#include <QtWidgets>
-#include "../mysql_connect.h"
+#include <QtQuick>
+
+#include "../tabletolistmodel.h"
 
 void reportError( const QString& msg, const QSqlError& err )
 {
@@ -75,21 +76,31 @@ public:
 };
 
 int main( int argc, char** argv ) {
-    QApplication app( argc, argv );
+    QGuiApplication app( argc, argv );
 
     // Connect to the database
-    QSqlDatabase db = QSqlDatabase::addDatabase( "QMYSQL" );
-    db.setDatabaseName(s_databaseName);
-    db.setUserName(s_user);
-    db.setPassword(s_password);
+    QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE" );
+    db.setDatabaseName("../bookstore.db");
     if ( !db.open() )
         reportError( "Error When opening database", db.lastError() );
 
     EditableQueryModel* model = new EditableQueryModel;
-    QTableView* view = new QTableView;
-    view->setModel( model );
-    view->setColumnHidden( 5, true ); // We do not want to see the id column
-    view->show();
+
+    TableToListModel proxy;
+    proxy.setTableModel(model);
+
+    proxy.addColumnMapping(0, "firstName");
+    proxy.addColumnMapping(1, "lastName");
+    proxy.addColumnMapping(2, "title");
+    proxy.addColumnMapping(3, "price");
+    proxy.addColumnMapping(4, "notes");
+
+    QQuickView view;
+
+    view.engine()->rootContext()->setContextProperty("_model", &proxy);
+    view.setSource(QUrl("main.qml"));
+
+    view.show();
 
     return app.exec();
 }
