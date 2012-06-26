@@ -31,7 +31,7 @@
       \item Based on interface classes
       \item Needs listener registration
       \item Many interface classes
-      \end{itemize}  
+      \end{itemize}
     \end{itemize}
   \item Qt uses
     \begin{itemize}
@@ -62,7 +62,7 @@
   \begin{itemize}
   \item Qt 4 style:\\
 \begin{cpp}
-connect( slider, SIGNAL(valueChanged(int)), 
+connect( slider, SIGNAL(valueChanged(int)),
          spinbox, SLOT(setValue(int)));
 \end{cpp}\bigskip
 
@@ -80,7 +80,7 @@ connect( slider, &QSignal::valueChanged, &printValue );
 
 \item Using C++11 lambda functions:\\
 \begin{cpp}
-connect( slider, &QSlider::valueChanged, 
+connect( slider, &QSlider::valueChanged,
          [=] (int value) {...} );
 \end{cpp}
   \end{itemize}
@@ -111,10 +111,10 @@ connect( slider, &QSlider::valueChanged,
   \begin{itemize}
   \item Qt 4 ported code:\\
 \begin{cpp}
-connect( slider, SIGNAL(valueChanged(int)), 
+connect( slider, SIGNAL(valueChanged(int)),
          spinbox, SLOT(setValue(int)));
 \end{cpp}\medskip
-\hspace{-3mm}Receiving object: 
+\hspace{-3mm}Receiving object:
 \item[]\disadvantage need to declare the slot in a \textit{slots}
   section
 \item[]\disadvantage need the Q\_OBJECT macro
@@ -134,9 +134,9 @@ connect( slider, SIGNAL(valueChanged(int)),
 \xConcept{connect}
 \xConcept{Q\_OBJECT}
 \begin{itemize}
-\item File: \textbf{myclass.h} 
+\item File: \textbf{myclass.h}
   \begin{cpp}
-class MyClass : public QObject 
+class MyClass : public QObject
 {
   Q_OBJECT // marker for moc
   // ...
@@ -178,7 +178,7 @@ connect( slider, &QSignal::valueChanged, &printValue );
   \begin{itemize}
 \item Using C++11 lambda functions:\\
 \begin{cpp}
-connect( slider, &QSlider::valueChanged, 
+connect( slider, &QSlider::valueChanged,
          [=] (int value) { qDebug("%d", value); } );
 \end{cpp}\medskip
 \item[] \advantage No slots syntax, no Q\_OBJECT, no moc
@@ -194,11 +194,11 @@ connect( slider, &QSlider::valueChanged,
 \label{codeForSignals1}
 \xConcept{Q\_OBJECT}
 \begin{itemize}
-\item File: \textbf{myclass.h} 
+\item File: \textbf{myclass.h}
   \begin{cpp}
-class MyClass : public QObject 
+class MyClass : public QObject
 {
-  Q_OBJECT // marker for moc                       
+  Q_OBJECT // marker for moc
   // ...
 signals:
   void valueChanged(int value); // a custom signal
@@ -281,7 +281,7 @@ connect( \=m\_slider, \=SIGNAL( valueChanged( int \incorrecttext{value} ) )\\
     Can ignore arguments, but not create values from nothing
   \end{block}
   \begin{center}
-    
+
  \begin{tabular}{r|c|l}
 \textbf{Signal}                &    & \textbf{Slot} \\
 \hline
@@ -292,9 +292,9 @@ connect( \=m\_slider, \=SIGNAL( valueChanged( int \incorrecttext{value} ) )\\
 
 \multirow{3}{*}{valueChanged(int)}     & \correct & setValue(int) \\
  & \correct & update() \\
- & \incorrect & setRange(int,int) \\ 
+ & \incorrect & setRange(int,int) \\
  & \correct & setValue(float)$^\dagger$ \\
-\hline                                   
+\hline
 
 textChanged(QString) & \incorrect & setValue(int) \\
 \hline
@@ -328,7 +328,7 @@ textChanged(QString) & \incorrect & setValue(int) \\
   \begin{itemize}
   \item In \iCls{QColorDialog}, honor the user clicking
     ``cancel'', and provide it with the current color to start from.
-  \item Set the selected color as the label's background 
+  \item Set the selected color as the label's background
     \begin{itemize}
     \item Hint: see \iCls{QPalette}
     \item Hint: see \iClsFn{QWidget}{setAutoFillBackground}
@@ -368,5 +368,5 @@ textChanged(QString) & \incorrect & setValue(int) \\
   \end{itemize}
   \vfill
   \lab{object-communication/lab-slider}
-  
+
 \end{slide}
