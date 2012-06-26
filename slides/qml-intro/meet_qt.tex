@@ -56,7 +56,7 @@
 \vspace*{1.5em}
 \begin{itemize}
 \item Platform must support OpenGL ES2
-\item Needs at least QtBase, QtJsBackend and QtDeclarative module
+\item Needs at least QtCore, QtGui, QtV8 and QtDeclarative modules
 \item Other module can be used to add new features:
 \begin{itemize}
 \item QtGraphicalEffects: add effects like blur, drop shadow...
@@ -71,19 +71,12 @@
 %----------------------------------------------------------------------
 \begin{slide}{2002}\frametitle{Qt modules}
 \vspace*{1.5em}
-The Qt framework is split in modules:
+The Qt framework is split into modules:
 \begin{itemize}
-\item Each module has is own repository
-\item QtBase is the only mandatory module for all Qt application
-\item QtTools is a special module containing Qt applications
-\item examples: QtDeclarative, QtWebKit, QtMultimedia...
-\end{itemize}\medskip
-Modules are themselves split into one or more libraries
-\begin{itemize}
-\item libraries are linked to your applications
-\item they group a set of common features (xml, dbus, network...)
-\item QtCore (part of QtBase) is mandatory for all Qt applications
-\item examples: QtNetwork, QtGui, QtDeclrative
+\item Examples: QtCore, QtGui, QtWidgets, QtWebKit, QtMultimedia...
+\item Modules contain libraries, plugins and documentation.
+\item Libraries are linked to your applications
+\item Libraries group a set of common features (xml, dbus, network...)
+\item QtCore is mandatory for all Qt applications
 \end{itemize}
-
 \end{slide}
