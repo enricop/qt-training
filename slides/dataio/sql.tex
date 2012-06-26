@@ -313,13 +313,6 @@ model->setRelation(2, QSqlRelation("city", "id", "name"));
 model->setRelation(3, QSqlRelation("country", "id", "name"));    
   \end{cpp}
 \medskip
-\item \textbf{\iCls{QSqlRelationalDelegate}}
-  \begin{itemize}
-  \item Provides combobox for foreign key fields
-    \begin{cpp}
-view->setItemDelegate(new QSqlRelationalDelegate(view));
-    \end{cpp}
-  \end{itemize}
 
 \item \demo{dataio/ex-relational-table-model}
 \end{itemize}
