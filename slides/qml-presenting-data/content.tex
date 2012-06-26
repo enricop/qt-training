@@ -45,6 +45,24 @@ Can manipulate and present data:
 
 \end{slide}
 
+\begin{slide}{12801}\frametitle{Why use model/view separation?}
+\label{presenting-data-showcase}
+\flushedImage{qml-presenting-data/images/rssnews.png}
+
+\begin{itemize}
+\item Easily change the UI later
+\item Add an alternative UI
+\item Separation of concerns
+\item Leads to easier maintenance
+\item Easily change the data source\linebreak(XML? JSON? Other?)
+\item Allows the use of 'dummy' data during development
+\item Many Qt APIs to consume the common data structures
+\end{itemize}
+
+\vspace*{2em}
+\qtdemo{examples/qtdeclarative/demos/rssnews/rssnews.qml}
+\end{slide}
+
 \input{qml-presenting-data/arranging_items.tex}
 \input{qml-presenting-data/data_models.tex}
 \input{qml-presenting-data/views.tex}
