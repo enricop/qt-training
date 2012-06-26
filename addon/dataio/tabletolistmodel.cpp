@@ -54,3 +54,15 @@ QVariant TableToListModel::data(const QModelIndex &proxyIndex, int role) const
 
     return QVariant();
 }
+
+QVariant TableToListModel::data(int row, const QByteArray &qmlProperty) const
+{
+    QModelIndex index = m_sourceModel->index(row, m_propertyToColumn[qmlProperty]);
+    return m_sourceModel->data(index, Qt::DisplayRole);
+}
+
+void TableToListModel::setData(int row, const QByteArray &qmlProperty, const QVariant &value)
+{
+    QModelIndex index = m_sourceModel->index(row, m_propertyToColumn[qmlProperty]);
+    m_sourceModel->setData(index, value);
+}

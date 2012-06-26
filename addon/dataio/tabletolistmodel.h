@@ -21,6 +21,9 @@ public:
 
     QVariant data(const QModelIndex &proxyIndex, int role) const;
 
+    Q_INVOKABLE QVariant data(int row, const QByteArray &qmlProperty) const;
+    Q_INVOKABLE void setData(int row, const QByteArray &qmlProperty, const QVariant &value);
+
 private:
     QAbstractTableModel *m_sourceModel;
 
