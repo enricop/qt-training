@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Timer>("CustomComponents", 1, 0, "Timer");
 
     QQuickView view;
-    view.setSource(QUrl("qrc:/main.qml"));
+    view.setSource(QUrl("qrc:///main.qml"));
     view.show();
     return app.exec();
 }
@@ -758,7 +758,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<EllipseItem>("Shapes", 1, 0, "Ellipse");
 
     QQuickView view;
-    view.setSource(QUrl("qrc:ellipse1.qml"));
+    view.setSource(QUrl("qrc:///ellipse1.qml"));
     view.show();
     return app.exec();
 }
