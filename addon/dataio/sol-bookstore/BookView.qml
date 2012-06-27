@@ -62,7 +62,7 @@ Item {
                 anchors.left: parent.left
 
                 Text {
-                    text: "Add Author"
+                    text: "Add Book"
                     anchors.centerIn: parent
                 }
 
@@ -83,7 +83,7 @@ Item {
                 anchors.right: parent.right
 
                 Text {
-                    text: "Remove Author"
+                    text: "Remove Book"
                     anchors.centerIn: parent
                 }
 
