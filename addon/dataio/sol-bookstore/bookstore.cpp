@@ -7,16 +7,18 @@
  *
  *************************************************************************/
 
-#include <QtSql>
-#include <QtWidgets>
 #include "bookstore.h"
 #include "bookmodel.h"
+#include "../tabletolistmodel.h"
 
-BookStore::BookStore()
+#include <QtQuick>
+#include <QtSql>
+
+BookStore::BookStore( QObject *parent ) : QObject( parent )
 {
     // Connect to the database
-    QSqlDatabase db = QSqlDatabase::addDatabase( "QMYSQL3" );
-    db.setDatabaseName("bookstore");
+    QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE" );
+    db.setDatabaseName( "../bookstore.db" );
     if ( !db.open() )
         reportError( "Error When opening database", db.lastError() );
 
@@ -24,35 +26,19 @@ BookStore::BookStore()
     m_authorsModel = new QSqlTableModel( this );
     m_authorsModel->setTable( "author" );
     m_authorsModel->select();
-    m_authorsModel->setHeaderData( 1, Qt::Horizontal, "First Name" );
-    m_authorsModel->setHeaderData( 2, Qt::Horizontal, "Sur Name" );
 
     m_bookModel = new BookModel( this );
 
-    // The GUI
-    QSplitter* splitter = new QSplitter( Qt::Vertical, this );
-    m_authorView = new QTableView( splitter );
-    m_authorView->setModel( m_authorsModel );
-    m_authorView->setColumnHidden( 0, true ); // Don't show ID column
-    m_authorView->verticalHeader()->hide();
+    m_authorsModelProxy = new TableToListModel( this );
+    m_authorsModelProxy->setTableModel( m_authorsModel );
+    m_authorsModelProxy->addColumnMapping(1, "firstName");
+    m_authorsModelProxy->addColumnMapping(2, "lastName");
 
-    m_bookView = new QTableView( splitter );
-    m_bookView->setModel( m_bookModel );
-    m_bookView->verticalHeader()->hide();
-
-    connect( m_authorView->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( authorChanged( const QModelIndex& ) ) );
-
-    m_authorView->installEventFilter( this );
-    m_bookView->installEventFilter( this );
-
-    // The Layout
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget( splitter );
-    setLayout( layout );
-
-    // Select the first item in the author model.
-    m_authorView->selectionModel()->setCurrentIndex( m_authorsModel->index( 0, 1, QModelIndex() ), QItemSelectionModel::Select );
+    m_bookModelProxy = new TableToListModel( this );
+    m_bookModelProxy->setTableModel( m_bookModel );
+    m_bookModelProxy->addColumnMapping(1, "title");
+    m_bookModelProxy->addColumnMapping(2, "price");
+    m_bookModelProxy->addColumnMapping(3, "notes");
 }
 
 void BookStore::reportError( const QString& msg, const QSqlError& err )
@@ -65,13 +51,43 @@ void BookStore::reportError( const QString& msg, const QSqlError& err )
     qApp->exit(-1);
 }
 
-void BookStore::authorChanged( const QModelIndex& index )
+QObject *BookStore::authorsModel() const
 {
-    int authorId = m_authorsModel->data( m_authorsModel->index( index.row(), 0, QModelIndex() ) ).toInt();
-    m_bookModel->showAuthor( authorId );
-    m_bookView->setColumnHidden( 0, true ); // Don't show the ID column
+    return m_authorsModelProxy;
 }
 
+QObject *BookStore::bookModel() const
+{
+    return m_bookModelProxy;
+}
+
+void BookStore::authorChanged( int row )
+{
+    int authorId = m_authorsModel->data( m_authorsModel->index( row, 0, QModelIndex() ) ).toInt();
+    m_bookModel->showAuthor( authorId );
+}
+
+void BookStore::addAuthor()
+{
+    m_authorsModel->insertRow( m_authorsModel->rowCount(), QModelIndex() );
+}
+
+void BookStore::removeAuthor( int row )
+{
+    m_authorsModel->removeRow( row, QModelIndex() );
+}
+
+void BookStore::addBook()
+{
+    m_bookModel->insertRow( m_bookModel->rowCount(), QModelIndex() );
+}
+
+void BookStore::removeBook( int row )
+{
+    m_bookModel->removeRow( row, QModelIndex() );
+}
+
+#if 0
 bool BookStore::eventFilter( QObject* watched, QEvent* event )
 {
     if ( event->type() == QEvent::ContextMenu ) {
@@ -114,3 +130,4 @@ bool BookStore::eventFilter( QObject* watched, QEvent* event )
     }
     return false;
 }
+#endif

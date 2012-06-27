@@ -10,32 +10,41 @@
 #ifndef BOOKSTORE_H
 #define BOOKSTORE_H
 
-#include <QWidget>
-class QTableView;
+#include <QObject>
+
 class BookModel;
+class TableToListModel;
 class QModelIndex;
 class QSqlTableModel;
 class QSqlError;
 
-class BookStore :public QWidget
+class BookStore :public QObject
 {
     Q_OBJECT
+    Q_PROPERTY( QObject* authorsModel READ authorsModel CONSTANT )
+    Q_PROPERTY( QObject* bookModel READ bookModel CONSTANT )
+
 public:
-    BookStore();
+    explicit BookStore( QObject *parent = 0 );
     static void reportError( const QString& msg, const QSqlError& err );
 
-protected:
-    virtual bool eventFilter( QObject* watched, QEvent* event );
+    QObject *authorsModel() const;
+    QObject *bookModel() const;
 
-protected slots:
-    void authorChanged( const QModelIndex& );
+    Q_INVOKABLE void authorChanged( int row );
 
+    Q_INVOKABLE void addAuthor();
+    Q_INVOKABLE void removeAuthor( int row );
+
+    Q_INVOKABLE void addBook();
+    Q_INVOKABLE void removeBook( int row );
 
 private:
     QSqlTableModel* m_authorsModel;
     BookModel* m_bookModel;
-    QTableView* m_authorView;
-    QTableView* m_bookView;
+
+    TableToListModel *m_authorsModelProxy;
+    TableToListModel *m_bookModelProxy;
 };
 
 #endif /* BOOKSTORE_H */

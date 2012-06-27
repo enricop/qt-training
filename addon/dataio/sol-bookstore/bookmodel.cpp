@@ -15,9 +15,6 @@
 BookModel::BookModel( QObject* parent )
     : QSqlQueryModel( parent )
 {
-    setHeaderData( 1, Qt::Horizontal, "Title" );
-    setHeaderData( 2, Qt::Horizontal, "Price" );
-    setHeaderData( 3, Qt::Horizontal, "Notes" );
 }
 
 void BookModel::showAuthor( int authorId )

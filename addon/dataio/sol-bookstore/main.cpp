@@ -7,13 +7,18 @@
  *
  *************************************************************************/
 
-#include <QApplication>
+#include <QGuiApplication>
+#include <QtQuick>
 #include "bookstore.h"
 
 int main( int argc, char** argv ) {
-    QApplication app( argc, argv );
+    QGuiApplication app( argc, argv );
     BookStore* bookStore = new BookStore;
-    bookStore->show();
+
+    QQuickView view;
+    view.engine()->rootContext()->setContextProperty( "_bookStore", bookStore );
+    view.setSource(QUrl("main.qml"));
+    view.show();
 
     return app.exec();
 }
