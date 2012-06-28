@@ -92,7 +92,8 @@ Another way to use states:
 \qtt{~~~~~~\qc{class}{State}~\{}\\
 \qtt{~~~~~~~~\qc{type}{name}:~\qc{string}{"with~text"}}\\
 \qtt{~~~~~~~~\qc{type}{when}:~text\_field.text~\qc{operator}{!=}~""}\\
-\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~clear\_button;~\qc{type}{opacity}:~\qc{number}{1.0}~\}}\\
+\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{target}:~clear\_button;~\qc{type}{opacity}:~\qc{number}{1.0}~\}}\\
 \qtt{~~~~~~\},}
 \end{qml}
 \flushedImage{qml-states-transitions/images/state-conditions-without-text.pdf}
@@ -100,11 +101,12 @@ Another way to use states:
 \qtt{~~~~~~\qc{class}{State}~\{}\\
 \qtt{~~~~~~~~\qc{type}{name}:~\qc{string}{"without~text"}}\\
 \qtt{~~~~~~~~\qc{type}{when}:~text\_field.text~\qc{operator}{==}~""}\\
-\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~clear\_button;~\qc{type}{opacity}:~\qc{number}{0.25}~\}}\\
-\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{~\qc{type}{target}:~text\_field;~\qc{type}{focus}:~\qc{number}{true}~\}}\\
+\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{target}:~clear\_button;~\qc{type}{opacity}:~\qc{number}{0.25}~\}}\\
+\qtt{~~~~~~~~\qc{class}{PropertyChanges}~\{}\\
+\qtt{~~~~~~~~~~~~\qc{type}{target}:~text\_field;~\qc{type}{focus}:~\qc{number}{true}~\}}\\
 \qtt{~~~~~~\}}\\
 \qtt{~~~~]}\\
-\qtt{\}}
 \end{qml}
 
 \vspace*{0.25em}
@@ -126,7 +128,8 @@ Another way to use states:
 \qtt{~~~~~~\qc{class}{State}~\{}\\
 \qtt{~~~~~~~~\qc{type}{name}:~\qc{string}{"with~text"}}\\
 \qtt{~~~~~~~~\qc{type}{when}:~text\_field.text~\qc{operator}{!=}~""}\\
-\qtt{~~~~~~~~\qc{lightgray}{PropertyChanges~\{~target:~clear\_button;~opacity:~1.0~\}}}\\
+\qtt{~~~~~~~~\qc{lightgray}{PropertyChanges~\{}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{target:~clear\_button;~opacity:~1.0~\}}}}\\
 \qtt{~~~~~~\},}
 \end{qml}
 \flushedImage{qml-states-transitions/images/state-conditions-without-text.pdf}
@@ -134,10 +137,11 @@ Another way to use states:
 \qtt{~~~~~~\qc{class}{State}~\{}\\
 \qtt{~~~~~~~~\qc{type}{name}:~\qc{string}{"without~text"}}\\
 \qtt{~~~~~~~~\qc{type}{when}:~text\_field.text~\qc{operator}{==}~""}\\
-\qtt{~~~~~~~~\qc{lightgray}{PropertyChanges~\{~target:~clear\_button;~opacity:~0.25~\}}}\\
-\qtt{~~~~~~~~\qc{lightgray}{PropertyChanges~\{~target:~text\_field;~focus:~true~\}}}\\
+\qtt{~~~~~~~~\qc{lightgray}{PropertyChanges~\{}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{target:~clear\_button;~opacity:~0.25~\}}}}\\
+\qtt{~~~~~~~~\qc{lightgray}{PropertyChanges~\{}\\
+\qtt{~~~~~~~~~~~~\qc{lightgray}{target:~text\_field;~focus:~true~\}}}}\\
 \qtt{~~~~~~\}}\\
-\qtt{~~~~\qc{lightgray}{]}}
 \end{qml}
 
 \begin{itemize}
