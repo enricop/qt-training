@@ -1,0 +1,118 @@
+\label{XQuery-advanced}
+
+\subsubsection{Advanced XQuery}
+
+%----------------------------------------------------------------------
+\begin{slide}{0737}
+\frametitle{\iConcept{XQuery} in Qt}
+\begin{itemize}
+\item \iCls{QXmlQuery} is used to run \iConcept{XQuery} queries in Qt
+\item In Qt XQuery can be used for reading only, instead of always read and write to an new \iConcept{XML} file.
+\item Queries can be applied to other, non \iConcept{XML} data with \iCls{QAbstactXmlNodeModel}.
+\item The nodes are \iConcept{XML} nodes or they can be represented by \iCls{QXmlNodeModelIndex} when using the \iCls{QAbstractXmlNodeModel} as the query source.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0738}
+\frametitle{Atomic Values}
+\begin{itemize}
+\item Atomic values are represented by \iCls{QVariant}.
+\item In some cases, the mapping is not obvious:
+
+\begin{itemize}
+\item \textbf{xs:hexBinary, xs:base64Binary} - \iClsEnum{QVariant}{ByteArray}
+\item \textbf{xs:untypedAtomic, xs:ENTITY} - \iClsEnum{QVariant}{String}
+\item \textbf{xs:QName} - \iCls{QXmlName}
+\item \textbf{xs:time} - not supported, use  xs:dateTime, that maps to \iClsEnum{QVariant}{DateTime}
+\end{itemize}
+
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0739}
+\frametitle{Custom Data}\label{custom-data}
+\begin{itemize}
+\item \iCls{QAbstractXmlNodeModel} is an interface to non-XML data which
+  allows \iCls{QXmlQuery} to work on the data as if it was XML.
+\item \iCls{QAbstractXmlNodeModel} is a pure virtual class that you need to
+  subclass for implementing your own model.
+\item \iCls{QSimpleXmlNodeModel} subclasses \iCls{QAbstractXmlNodeModel}
+  and is much easier to implement for most use cases.
+\item \pleaseNote \iCls{QAbstractXmlNodeModel} is \textbf{similar} to
+  \iCls{QAbstractItemModel} in functionality, but \textbf{does not} inherit
+  it nor does it have anything else to do with it!
+\end{itemize}
+\vspace{-3mm}
+\oooCenteredImage{QAbstractXmlNodeModel}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0740}\frametitle{Classes involved}
+\begin{itemize}
+\item A number of classes are involved when implementing subclasses of
+  \iCls{QAbstractXmlNodeModel} or \iCls{QSimpleXmlNodeModel}:
+
+  \item \iCls[\textbf]{QXmlName} Represent a name of a node.
+  \item \iCls[\textbf]{QXmlNamePool} A pool of all the node names that exist (a simple optimization for \iCls{QXmlName})
+  \item \iCls[\textbf]{QXmlNodeModelIndex} A lightweight token representing
+    a node.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0741}\frametitle{QXmlNodeModelIndex}
+\begin{itemize}
+  \item  Notice that there is no \strikethrough{\texttt{QXmlNode}} class that exists
+    explicitly, that's why we need \iCls{QXmlNodeModelIndex} to store \emph{state}.
+  \item You do not create instances of
+    \iCls{QXmlNodeModelIndex}, instead instances are created by \iClsFn{QAbstractXmlNodeModel}{createIndex}
+\item \hClsFn{QAbstractXmlNodeModel}{createIndex} takes data items as argument
+  that you can use to represent the node.
+\item The data is represented as \texttt{qint64} and/or \texttt{void*}
+\item If all this seems familiar, then it is likely because it is very
+  similar to \iCls{QModelIndex} used in model/view.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0742}\frametitle{\iCls{QAbstractXmlNodeModel} methods}
+\begin{itemize}
+\item To implement your own model, there are a number of virtual methods you
+  have to override.
+\item \textbf{Information retrieval} (all methods take a \iCls{QXmlNodeModelIndex}
+  as an argument)
+  \begin{itemize}
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{name} Returns the name for
+    the node the index represent. (e.g. ``directory'')
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{kind} Returns the type of
+    the node (e.g. Element)
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{attributes} Returns a list
+    of attributes for the element node.
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{typedValue} Returns the
+    value of the node (e.g. the value of an attribute)
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{documentUri} Returns a URL
+    representing the document.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0743}\frametitle{\iCls{QAbstractXmlNodeModel} methods}
+\begin{itemize}
+\item \textbf{Bookkeeping}
+  \begin{itemize}
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{root} Returns a
+    \iCls{QXmlNodeModelIndex} for the tree that we are implementing.
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{compareOrder} Compares the
+    order of two \iCls{QXmlNodeModelIndex}s to tell which one comes first in
+    the document.
+  \item \hClsFn[\textbf]{QAbstractXmlNodeModel}{nextFromSimpleAxis} Given
+    a \iCls{QXmlNodeModelIndex} and a direction (Parent, FirstChild,
+    PreviousSibling, NextSibling), returns a \iCls{QXmlNodeModelIndex} for
+    the node in that directiom.
+  \end{itemize}
+\item See \qtexample{xmlpatterns/filetree}.
+\end{itemize}
+\end{slide}

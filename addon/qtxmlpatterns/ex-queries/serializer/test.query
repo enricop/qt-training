@@ -1,0 +1,2 @@
+(: Select the first paragraph from the body :)
+doc('index.html')/html/body/p[1]

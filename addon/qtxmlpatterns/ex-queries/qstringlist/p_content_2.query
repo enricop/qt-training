@@ -1,0 +1,2 @@
+(: Select all the text from the first paragraph of body, including the text from inside child nodes :)
+doc('index.html')/html/body/p[1]//string()

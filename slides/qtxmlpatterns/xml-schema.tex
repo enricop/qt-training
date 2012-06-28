@@ -1,0 +1,191 @@
+\label{XMLSchema}
+\subsection{XML Schema}
+
+%----------------------------------------------------------------------
+\begin{slide}{46608}
+\frametitle{Overview}
+
+\begin{itemize}
+\item \iConcept{XML Schema} is a W3C standard.
+  \begin{itemize}
+  \item http://www.w3.org/XML/Schema
+  \item Qt supports XML Schema 1.0.
+  \end{itemize}
+\item Schemas specify the structure and contents of XML documents.
+  \begin{itemize}
+  \item \iCls{QXmlSchema} represents a schema.
+  \end{itemize}
+\item Documents are \textit{validated} against schemas.
+  \begin{itemize}
+  \item \iCls{QXmlSchemaValidator} is used to validate documents.
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46609}
+\frametitle{Loading a Schema}
+
+Schemas are represented by Uniform Resource Identifiers (URIs).
+
+\begin{itemize}
+\item Can use the URI to locate the schema.
+  \begin{itemize}
+  \item \iClsFnPar{QXmlSchema}{load}{QUrl(...)}
+  \item Uses the URI as a URL.
+  \item The schema will be fetched over the network.
+  \end{itemize}
+\item Can be loaded from a \iCls{QIODevice} or \iCls{QByteArray}:
+  \begin{itemize}
+  \item \iClsFnPar{QXmlSchema}{load}{device, QUrl(...)}
+  \item \iClsFnPar{QXmlSchema}{load}{bytes, QUrl(...)}
+  \item The URI passed as a \iCls{QUrl} is optional.
+  \end{itemize}
+\item Optional URIs are used to resolve relative URIs in the schema.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46610}
+\frametitle{Loading a Schema from a URL}
+
+\begin{itemize}
+\item Loading a schema from a remote location:
+\end{itemize}
+
+\begin{lstlisting}
+    QUrl url("http://www.schema-example.org/myschema.xsd");
+
+    QXmlSchema schema;
+    if (schema.load(url))
+        qDebug() << "schema is valid";
+    else
+        qDebug() << "schema is invalid";
+\end{lstlisting}
+
+\begin{itemize}
+\item You must verify that the schema is valid.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46611}
+\frametitle{Loading a Schema from a File}
+
+\begin{itemize}
+\item Sometimes better to cache schemas locally.
+\end{itemize}
+
+\begin{lstlisting}
+    QFile file("test.xml");
+    file.open(QIODevice::ReadOnly);
+
+    QXmlSchemaValidator validator(schema);
+    if (validator.validate(&file, QUrl::fromLocalFile(file.fileName())))
+        qDebug() << "instance document is valid";
+    else
+        qDebug() << "instance document is invalid";
+\end{lstlisting}
+
+\begin{itemize}
+\item Passing a valid URI helps to resolve references in the schema.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{46612}
+\frametitle{Validating a Document}
+
+Documents are also represented using URIs:
+
+\begin{itemize}
+\item Can use the URI  to locate the document.
+  \begin{itemize}
+  \item \iClsFnPar{QXmlSchemaValidator}{validate}{QUrl(...)}
+  \item Uses the URI as a URL.
+  \item The document will be fetched over the network.
+  \end{itemize}
+\item Can be read and validated from a \iCls{QIODevice} or \iCls{QByteArray}:
+  \begin{itemize}
+  \item \iClsFnPar{QXmlSchemaValidator}{validate}{device, QUrl(...)}
+  \item \iClsFnPar{QXmlSchemaValidator}{validate}{bytes, QUrl(...)}
+  \item The URI passed as a \iCls{QUrl} is optional.
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46613}
+\frametitle{Validating a Document from a URL}
+
+\begin{itemize}
+\item Validating a document from a remote location:
+\end{itemize}
+
+\begin{lstlisting}
+    const QUrl url("http://www.schema-example.org/test.xml");
+
+    QXmlSchemaValidator validator(schema);
+    if (validator.validate(url))
+        qDebug() << "instance document is valid";
+    else
+        qDebug() << "instance document is invalid";
+\end{lstlisting}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46614}
+\frametitle{Validating a Document from a Byte Array}
+
+\begin{itemize}
+\item Documents are sometimes stored in byte arrays.
+\end{itemize}
+
+\begin{lstlisting}
+    QByteArray data("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                    "<test></test>");
+
+    QBuffer buffer(&data);
+    buffer.open(QIODevice::ReadOnly);
+
+    QXmlSchemaValidator validator(schema);
+    if (validator.validate(&buffer))
+        qDebug() << "instance document is valid";
+    else
+        qDebug() << "instance document is invalid";
+\end{lstlisting}
+
+\begin{itemize}
+\item Can supply a URI to the validator to resolve references.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{46615}
+\frametitle{Handling Network Operations}
+
+\begin{itemize}
+\item Network operations use a default \iCls{QNetworkAccessManager}.
+\item Change the access manager to control network access:
+\begin{itemize}
+\item \iClsFn{QXmlSchema}{setNetworkAccessManager}
+\item \iClsFn{QXmlSchemaValidator}{setNetworkAccessManager}
+\end{itemize}
+\item Resolution of URIs can be changed:
+\begin{itemize}
+\item \iCls{QXmlSchema}{setUriResolver}
+\item \iCls{QXmlSchemaValidator}{setUriResolver}
+\item Need to write a custom \iCls{QAbstractUriResolver} class.
+\end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------

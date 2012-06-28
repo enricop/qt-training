@@ -1,0 +1,507 @@
+\label{xpath}
+\subsubsection{XPath}
+
+%----------------------------------------------------------------------
+\begin{slide}{8001}
+\frametitle{What is XPath?}
+\begin{itemize}
+\item Syntax for defining parts of an XML document
+\item Uses path expressions to navigate
+\item Provides a library of standard functions
+\item Major element in \iConcept{XQuery} and \iConcept{XSLT}
+\item W3C recommendation
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{8002}
+\frametitle{XPath Path Expressions and Functions}
+\begin{itemize}
+\item Path expressions select nodes or node-sets
+\item Path expressions look similar to file system paths
+\item Includes over 100 built-in functions for
+\begin{itemize}
+ \item strings
+ \item numeric values
+ \item date and time comparison
+ \item node manipulation
+ \item and much more...
+\end{itemize}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{8003}
+\frametitle{Why Learn XPath?}
+\begin{itemize}
+\item XPath is used in XQuery and XLST
+\item XQuery is built on XPath expressions
+\item XQuery and XPath share the same data model, functions and operators
+\item Without XPath you will not be able to create XSLT documents
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8004}
+\frametitle{XPath Terminology}
+\begin{itemize}
+\lstset{basicstyle=\fontsize{8}{9}\selectfont}
+\item[] 
+\begin{xml}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE bookstore>
+<?MyBookStoreApp master-price-list?>
+<bookstore xmlns="http://www.kdab.com/namespaces/bookstore">
+    <!-- Books go here -->
+    <book>
+        <title lang="en">Harry Potter</title>
+        <author>J K. Rowling</author>
+        <price>29.99</price>
+    </book>
+</bookstore>
+\end{xml}
+\vspace{4pt}
+ \item Element
+ \item Attribute
+ \item Text
+ \item Namespace
+ \item Processing-instruction
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{8005}
+\frametitle{XPath Terminology Cont'd.}
+\begin{itemize}
+
+\item Comment
+\item Document node
+\item Atomic values
+\begin{itemize}
+ \item \emph{Atomic values} are nodes with no children or parent.
+ \item Example of \emph{atomic values:} ``J K. Rowling'', ``en''
+\end{itemize}
+
+\item Atomic values and nodes referred to as \emph{items}.
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8006}
+\frametitle{Relationships Between Nodes}
+\begin{itemize}
+\item[]
+\begin{xml}
+<bookstore>
+  <book>
+    <title>Harry Potter</title>
+    <author>J K. Rowling</author>
+    <year>2005</year>
+    <price>29.99</price>
+  </book>
+</bookstore>
+\end{xml}
+\vspace{8pt}
+\item Parent
+\item Child
+\item Siblings
+\item Ancestor
+\item Descendants
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8007}
+\frametitle{Example: XPath Syntax}
+\begin{itemize}
+\lstset{basicstyle=\fontsize{8}{9}\selectfont}
+\item[]
+\begin{xml}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bookstore>
+    <book>
+        <title lang="eng">Harry Potter</title>
+        <price>29.99</price>
+    </book>
+    <book>
+        <title lang="eng">Learning XML</title>
+        <price>39.95</price>
+    </book>
+</bookstore>
+\end{xml}
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Expression} & \textbf{Result} \\ \hline
+bookstore           & The child nodes of the bookstore element \\ \hline
+/bookstore          & The root element bookstore \\ \hline
+bookstore/book      & Books that are children of bookstore \\ \hline
+//book              & Book elements from anywhere\\ \hline
+bookstore//book     & Book descendants of the bookstore \\ \hline
+//@lang             & All lang attributes \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8008}
+\frametitle{XPath Syntax}
+\begin{itemize}
+\item Uses path expressions to select nodes or node-sets
+\item Node selected by following a path (sequence of steps)
+\item The most useful path expressions are:
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Expression}  & \textbf{Description} \\ \hline
+nodename    & Selects all child nodes of the named node \\ \hline
+/           & Selects from the root node \\ \hline
+//          & Selects nodes that match the selection \\
+            & anywhere in the document \\ \hline
+.           & Selects the current node \\ \hline
+..          & Selects the parent of the current node \\ \hline
+@           & Selects attributes \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8009}
+\frametitle{Predicates}
+\begin{itemize}
+\item Used to find a specific node
+\item Used to find a node containing a specific value
+\item Loosely analogous to WHERE clause in SQL
+\item Appear within square brackets e.g.:
+\vspace{8pt}
+\begin{xml}
+ book[value<30.0]
+\end{xml}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8010}
+\frametitle{Example: Predicates}
+\begin{itemize}
+\item Some expressions using predicates and their results:
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Expression}                 & \textbf{Result} \\ \hline
+/bookstore/book[1]                  & First book child of bookstore \\ \hline
+/bookstore/book[last()]             & Last book child of bookstore \\ \hline
+/bookstore/book[last()-1]           & Penultimate book child of bookstore \\ \hline
+/bookstore/book[position()<3]       & First two book children of bookstore \\ \hline
+//title[@lang]                      & Titles with a lang attribute \\ \hline
+//title[@lang='eng']                & Titles with a lang attribute of `eng' \\ \hline
+/bookstore/book[price>35.00]        & Books costing > 35.00 \\ \hline
+/bookstore/book[price>35.00]/title  & Titles of books costing > 35.00 \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+\item Note the 1-based indexing
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8019}
+\frametitle{XPath Functions}
+\begin{itemize}
+\item Used to manipulate node-sets, perform actions or type conversions
+\item Important functions include:
+\begin{itemize}
+ \item doc(fileName)
+ \item[]
+ \lstset{basicstyle=\fontsize{8}{9}\selectfont}
+ \begin{xml}
+  doc('bookstore.xml')/bookstore/book
+ \end{xml}
+ \item number(arg)
+ \item[]
+ \lstset{basicstyle=\fontsize{8}{9}\selectfont}
+ \begin{xml}
+  number('100')
+ \end{xml}
+ \item concat(arg1, arg2, ...)
+ \item[]
+ \lstset{basicstyle=\fontsize{8}{9}\selectfont}
+ \begin{xml}
+  concat('Hello ', 'World!')
+ \end{xml}
+\end{itemize}
+\item Function reference: \url{http://www.w3.org/TR/xpath/#corelib}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8011}
+\frametitle{Unknown Nodes}
+\begin{itemize}
+\item Wildcards can be used to select unknown nodes
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Wildcard}   & \textbf{Description} \\ \hline
+*                   & Matches any element node \\ \hline
+@*                  & Matches any attribute node \\ \hline
+node()              & Matches any node of any kind \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+
+\item Some examples:
+
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Expression}     & \textbf{Result} \\ \hline
+/bookstore/*            & All the child nodes of the bookstore element \\ \hline
+//*                     & All elements in the document \\ \hline
+//title[@*]             & All title elements which have any attribute \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8012}
+\frametitle{Multiple Paths}
+\begin{itemize}
+\item Use the | operator to select multiple expressions:
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Expression}             & \textbf{Result} \\ \hline
+//book/title | //book/price     & All the title AND \\
+                                & price elements of all books \\ \hline
+//title | //price               & All the title AND \\
+                                & price elements in the document \\ \hline
+/bookstore/book/title | //price & All titles of the books of the bookstore AND \\
+                                & all price elements in the document  \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8013}
+\frametitle{Example: Location Path Expressions}
+\begin{itemize}
+\item Syntax for a location step is:
+\vspace{4pt}
+\begin{cpp}
+ axisname::nodetest[predicate]
+\end{cpp}
+
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Example}        & \textbf{Result} \\ \hline
+child::book             & All book nodes that are children of the current node \\ \hline
+attribute::lang         & lang attribute of the current node \\ \hline
+child::*                & All element children of the current node \\ \hline
+attribute::*            & All attributes of the current node \\ \hline
+child::text()           & All text node children of the current node \\ \hline
+child::node()           & All children of the current node \\ \hline
+descendant::book        & All book descendants of the current node \\ \hline
+ancestor::book          & All book ancestors of the current node \\ \hline
+ancestor-or-self::book  & All book ancestors of the current node \\
+                        & and the current node if it is a book \\ \hline
+child::*/child::price   & All price grandchildren of the current node \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8014}
+\frametitle{XPath Axes}
+\begin{itemize}
+\item An axis defines a node-set relative to the current node:
+\setfont[12]{8}
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Axis Name}  & \textbf{Result} \\ \hline
+ancestor            & All ancestors of the current node \\ \hline
+ancestor-or-self    & All ancestors of the current node and the current node itself \\ \hline
+attribute           & All attributes of the current node \\ \hline
+child               & All children of the current node \\ \hline
+descendant          & All descendants of the current node \\ \hline
+descendant-or-self  & All descendants of the current node and the current node itself \\ \hline
+following           & Everything after the closing tag of the current node \\ \hline
+following-sibling   & All siblings after the current node \\ \hline
+namespace           & All namespace nodes of the current node \\ \hline
+parent              & The parent of the current node \\ \hline
+preceding           & Everything before the start tag of the current node \\ \hline
+preceding-sibling   & All siblings before the current node \\ \hline
+self                & The current node \\ \hline
+\end{tabular}
+\end{center}
+\setfont{10}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8015}
+\frametitle{XPath Examples}
+\begin{itemize}
+\lstset{basicstyle=\fontsize{8}{9}\selectfont}
+\item[]
+\begin{xml}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bookstore>
+    <book category="Cooking">
+        <title lang="en">Everyday Italian</title>
+        <author>Giada De Laurentiis</author>
+        <year>2005</year>
+        <price>30.00</price>
+    </book>
+    ...
+    <book category="Web">
+        <title lang="en">Learning XML</title>
+        <author>Erik T. Ray</author>
+        <year>2003</year>
+        <price>39.95</price>
+    </book>
+</bookstore>
+\end{xml}
+\vspace{8pt}
+\item Select all titles:
+\begin{verbatim}
+ /bookstore/book/title
+ //title
+\end{verbatim}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8016}
+\frametitle{XPath Examples Cont'd.}
+\begin{itemize}
+\lstset{basicstyle=\fontsize{8}{9}\selectfont}
+\item[]
+\begin{xml}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bookstore>
+    <book category="Cooking">
+        <title lang="en">Everyday Italian</title>
+        <author>Giada De Laurentiis</author>
+        <year>2005</year>
+        <price>30.00</price>
+    </book>
+    ...
+    <book category="Web">
+        <title lang="en">Learning XML</title>
+        <author>Erik T. Ray</author>
+        <year>2003</year>
+        <price>39.95</price>
+    </book>
+</bookstore>
+\end{xml}
+\vspace{8pt}
+\item Select the title of the first book:
+\begin{verbatim}
+ /bookstore/book[1]/title
+\end{verbatim}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8017}
+\frametitle{XPath Examples Cont'd.}
+\begin{itemize}
+\lstset{basicstyle=\fontsize{8}{9}\selectfont}
+\item[]
+\begin{xml}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bookstore>
+    <book category="Cooking">
+        <title lang="en">Everyday Italian</title>
+        <author>Giada De Laurentiis</author>
+        <year>2005</year>
+        <price>30.00</price>
+    </book>
+    ...
+    <book category="Web">
+        <title lang="en">Learning XML</title>
+        <author>Erik T. Ray</author>
+        <year>2003</year>
+        <price>39.95</price>
+    </book>
+</bookstore>
+\end{xml}
+\vspace{8pt}
+\item Select the book titles where category = 'Web'
+\begin{verbatim}
+ /bookstore/book[@category='Web']/title
+\end{verbatim}
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{8018}
+\frametitle{XPath Examples Cont'd.}
+\begin{itemize}
+\lstset{basicstyle=\fontsize{8}{9}\selectfont}
+\item[]
+\begin{xml}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<bookstore>
+    <book category="Cooking">
+        <title lang="en">Everyday Italian</title>
+        <author>Giada De Laurentiis</author>
+        <year>2005</year>
+        <price>30.00</price>
+    </book>
+    ...
+    <book category="Web">
+        <title lang="en">Learning XML</title>
+        <author>Erik T. Ray</author>
+        <year>2003</year>
+        <price>39.95</price>
+    </book>
+</bookstore>
+\end{xml}
+\vspace{8pt}
+\item Select title nodes with price > 35 and price < 40
+\begin{verbatim}
+ /bookstore/book[price>35 and price<40]/title
+\end{verbatim}
+\end{itemize}
+\end{slide}

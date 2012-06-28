@@ -1,0 +1,2 @@
+(: Select all <p> nodes from the document. :)
+doc('index.html')//p

@@ -1,0 +1,10 @@
+(: FLOWR example to select all albums for which the arist name ends with 'Lennon',
+and create a new XML with the album title and release year :)
+ let $doc := doc('collection.xml')
+ for $a in $doc//album,
+     $s in $doc//artists/artist
+ where ends-with($s, 'Lennon')
+     and $a/artistRef = $s/@id
+ order by $a/year
+ return
+  <album name='{$a/title}' year='{$a/year}'/>

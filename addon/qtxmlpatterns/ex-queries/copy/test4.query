@@ -1,0 +1,3 @@
+(: Copy the xml:id from the other.html :)
+<html xmlns="http://www.w3.org/1999/xhtml/" 
+   xml:id='{doc("other.html")/html/attribute(xml:id)}' />

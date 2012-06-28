@@ -1,0 +1,2 @@
+(: Select those <span> nodes that have a <p> as a parent node :)
+doc('index.html')//p/span

@@ -1,0 +1,16 @@
+(: Create a node with a class attribute, where the attribute value is a variable expression :)
+declare variable $myClass := "example";
+<MyNode class="{$myClass}"/>,
+(: Create a node :)
+ <MyOtherNode />,
+(: Create an element with subelement, comment, PI, another subelement and a text :)
+ element TopElement
+ {
+     element SubElement
+     {
+         comment {"My comment"},
+         processing-instruction target {"data"},
+         element ThirdElement { text {"bla"} },
+         text {"some text"}
+     }
+ } 

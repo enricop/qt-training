@@ -1,0 +1,21 @@
+<collection>
+<album>
+ <year>1971</year>
+ <title>Imagine</title>
+ <artistRef>1</artistRef>
+</album>
+<album>
+ <year>1988</year>
+ <title>Somewhere In Time</title>
+ <artistRef>2</artistRef>
+</album>
+<album>
+ <year>1975</year>
+ <title>Rock'n'Roll</title>
+ <artistRef>1</artistRef>
+</album>
+<artists>
+  <artist id ="1">John Lennon</artist>
+  <artist id ="2">Iron Maiden</artist>
+</artists>  
+</collection>

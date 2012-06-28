@@ -1,0 +1,2 @@
+(: Create a node, an integer and a string :)
+<myNode />,1,'a string'

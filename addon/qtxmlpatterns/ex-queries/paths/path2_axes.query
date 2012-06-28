@@ -1,0 +1,4 @@
+(: Select those <span> nodes that have a <p> as a parent node.
+This example is using the full notation with axes and node tests. :)
+doc('index.html')//p/descendant-or-self::element(p)/
+child::element(span)

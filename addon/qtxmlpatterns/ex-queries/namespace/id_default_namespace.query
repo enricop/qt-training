@@ -1,0 +1,4 @@
+(: Select all linearGradient nodes where the "id" attribute is equal to "linearGradient2975".
+ Declare the default namespace, so the nodes can be found. :)
+declare default element namespace "http://www.w3.org/2000/svg";
+doc('image.svg')//linearGradient[@id="linearGradient2975"]

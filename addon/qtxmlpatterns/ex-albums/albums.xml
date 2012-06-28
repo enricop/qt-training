@@ -1,0 +1,23 @@
+<albums>
+  <album>
+    <year>1971</year>
+    <title>Imagine</title>
+    <artistRef>1</artistRef>
+  </album>
+  <album>
+    <year>1986</year>
+    <title>Walls Of Jericho</title>
+    <artistRef>2</artistRef>
+  </album>
+  <album>
+    <year>1987</year>
+    <title>Keeper Of The Seven Keys</title>
+    <artistRef>2</artistRef>
+  </album>
+  <album>
+    <year>2006</year>
+    <title>Rabbit Don't Come Easy</title>
+    <artistRef>2</artistRef>
+  </album>
+</albums>
+

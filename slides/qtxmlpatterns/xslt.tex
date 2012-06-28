@@ -1,0 +1,21 @@
+\label{xslt}
+\subsubsection{XSLT}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{45743}\frametitle{XSLT}\label{xslt-qt}
+\iCls{QXmlQuery} can also be used to execute XSLT stylesheets.
+\begin{itemize}
+\item Pass \iCls{QXmlQuery}{XSLT20} to the \iCls{QXmlQuery} constructor.
+\item Select the input document with the \hClsFn{QXmlQuery}{setFocus} function.
+\item Set the query using \hClsFn{QXmlQuery}{setQuery}.
+\item Evaluate it with \hClsFn{QXmlQuery}{evaluateTo}.
+\end{itemize}
+\small
+\begin{verbatim}
+QXmlQuery query(QXmlQuery::XSLT20);
+query.setFocus(QUrl("myInput.xml"));
+query.setQuery(QUrl("myStylesheet.xsl"));
+query.evaluateTo(out);
+\end{verbatim}
+\normalsize
+\end{slide}
