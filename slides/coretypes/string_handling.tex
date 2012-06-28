@@ -34,6 +34,7 @@ QString n = QString::number(1234);
 QString text = QString::fromLatin1("Hello Qt");
 QString text = QString::fromUtf8(inputText);
 QString text = QString::fromLocal8Bit(cmdLineInput);
+QString text = QStringLiteral("Literal string"); (Assumed to be UTF-8)
   \end{cpp}
 \item From char pointer with translations:
   \begin{cpp}
