@@ -178,6 +178,24 @@ int height = rectangle->property("height").value<int>();
 \end{slide}
 
 % ----------------------------------------------------------------------
+\subsubsection{Properties}
+\begin{slide}[fragile]{1021}
+\frametitle{Getting to the root}
+\begin{itemize}
+\item Generic property access:\\
+  \begin{cpp}
+QQuickRectangle* rectangle
+  = root->findChild<QQuickRectangle*>("myRect");
+  \end{cpp}\medskip
+
+\item The root object is the top level element in the QML document
+  \begin{cpp}
+QQuickItem *root = view.rootItem()->childItems().first();
+  \end{cpp}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
 \begin{slide}[fragile]{1422}
 \frametitle{Providing properties from QObject}
 \begin{cpp}
