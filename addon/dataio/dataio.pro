@@ -7,6 +7,7 @@ SUBDIRS= \
   ex-query-model \
   ex-relational-table-model \
   ex-xmlstreamwriter \
+  lab-bookstore \
   lab-xmlkeys \
   sol-bookstore \
   sol-xmlkeys \
