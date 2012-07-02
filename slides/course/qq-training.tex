@@ -10,6 +10,7 @@
 
 \input{frontpage}
 
+\setcounter{tocdepth}{2} % Do not show subsubsection in TOC
 \begin{frame}
   \frametitle{Introduction to the Qt Quick layer}
   \tableofcontents[part=1]
@@ -39,6 +40,8 @@
   \frametitle{Qt Quick Advanced}
   \tableofcontents[part=6]
 \end{frame}
+
+\setcounter{tocdepth}{3} % Show subsubsection in the overview slides 
 
 \part{Introduction to the Qt Quick layer}
 \input{qml-intro/content}
