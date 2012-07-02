@@ -64,19 +64,19 @@
 \begin{cpp}
 connect( slider, SIGNAL(valueChanged(int)),
          spinbox, SLOT(setValue(int)));
-\end{cpp}\bigskip
+\end{cpp}\medskip
 
 \item Using function pointers:\\
 \begin{cpp}
 connect( slider, &QSlider::valueChanged,
          spinbox, &QSpinBox::setValue );
-\end{cpp}\bigskip
+\end{cpp}\medskip
 
 \item Using non-member function:\\
 \begin{cpp}
 static void printValue(int value) {...}
 connect( slider, &QSignal::valueChanged, &printValue );
-\end{cpp}\bigskip
+\end{cpp}\medskip
 
 \item Using C++11 lambda functions:\\
 \begin{cpp}
