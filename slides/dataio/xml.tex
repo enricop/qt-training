@@ -23,7 +23,7 @@
   \item Serial stream parser API
   \item User defines callbacks
   \item Callbacks called when XML events occur
-  \item Suited when data is processed in one-pass
+  \item Outdated by the stream reader
   \end{itemize}
 \item\textbf{ DOM (level 1 and 2)}
   \begin{itemize}
@@ -36,96 +36,10 @@
   \item User pulls token on own convenience
   \item Easy to build recursive descent parsers
   \item Extremly fast and memory conservative
-  \item Preferred XML reader/writer if no DOM is required
   \end{itemize}
 \item For SAX and DOM APIs, add \verb!QT += xml!. XML Stream APIs are in QtCore
 \end{itemize}
 \end{slide}
-
-%----------------------------------------------------------------------
-\subsubsection{SAX}
-\begin{slide}[fragile]{1724}\frametitle{Using \iConcept{SAX}}
-  \begin{itemize}
-  \item Simple usage of SAX with a custom xml handler
-  \item Preparing the reader
- \begin{cpp}
-// Own implementation of QXmlDefaultHandler
-CustomXmlHandler handler;
-// Standard xml parser
-QXmlSimpleReader reader;
-// register handler with the reader
-reader.setContentHandler(&handler);
-reader.setErrorHandler(&handler);
-\end{cpp}
-\item Feeding xml file to reader
-\begin{cpp}
-QFile xmlFile ...;
-QXmlInputSource source(&xmlFile);
-// parse reports xml tokens via callbacks to your handler
-reader.parse(source);
-  \end{cpp}
-  \end{itemize}
-
-\end{slide}
-%----------------------------------------------------------------------
-\begin{slide}{0011}\frametitle{SAX Handlers}
-\begin{itemize}
-  \item Several abstract handler classes that define SAX events:
-    \begin{itemize}
-    \item \textbf{\iCls{QXmlContentHandler}}
-      \begin{itemize}
-      \item for content-related events
-      \end{itemize}
-    \item \textbf{\iCls{QXmlErrorHandler}}
-      \begin{itemize}
-      \item for errors, fatal errors, and warnings
-      \end{itemize}
-
-    \item \textbf{\iCls{QXmlEntityResolver}}
-      \begin{itemize}
-      \item for external entities that need resolution
-      \end{itemize}
-    \item \textbf{\iCls{QXmlDTDHandler}}
-      \begin{itemize}
-      \item for DTD-related events
-      \end{itemize}
-    \item \textbf{\iCls{QXmlDeclHandler}}
-      \begin{itemize}
-      \item for rarely used DTD-related events
-      \end{itemize}
-    \item  \textbf{\iCls{QXmlLexicalHandler}}
-      \begin{itemize}
-      \item for events related to the lexical structure. (start/end of DTD, comments,...)
-      \end{itemize}
-    \end{itemize}
-  \item \textbf{\iCls{QXmlDefaultHandler}} - easiest to subclass 
-    \begin{itemize}
-    \item provides empty implementation for all callbacks
-    \end{itemize}
-
-  \end{itemize}
-\end{slide}
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1723}\frametitle{Using QXmlDefaultHandler}
-  \begin{itemize}
-  \item Register it for each role it has
-  \item Out custom handler
-    \begin{cpp}
-class CustomXmlHandler : public QXmlDefaultHandler { ... }
-    \end{cpp}
-  \item Registration for xml event roles
-    \begin{cpp}
-CustomXmlHandler handler;
-QXmlSimpleReader reader;
-// register handler for the roles
-reader.setContentHandler( &handler );
-reader.setErrorHandler( &handler );
-    \end{cpp}
-  \item See \qtdemo{examples/xml/saxbookmarks}
-  \item or \doc{xml-saxbookmarks.html}{Sax Bookmarks}
-  \end{itemize}
-\end{slide}
-
 
 %----------------------------------------------------------------------
 \subsubsection{DOM}
