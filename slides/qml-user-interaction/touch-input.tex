@@ -1,0 +1,81 @@
+\subsection{Touch Input}
+%----------------------------------------------------------------------
+\begin{slide}{1034}\frametitle{Touch Events}
+
+\begin{itemize}
+\item Single-touch (MouseArea)
+\item Multi-touch (MultiPointTouchArea)
+\item Gestures
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1035}\frametitle{Multi-Touch Events}
+
+\begin{EXCLUDE}
+MultiPointTouchArea {
+  anchors.fill: parent
+  touchPoints: [
+      TouchPoint { id: point1 },
+      TouchPoint { id: point2 },
+      TouchPoint { id: point3 }
+  ]
+}
+\end{EXCLUDE}
+
+\begin{itemize}
+\item[]
+\begin{qml}
+\qtt{MultiPointTouchArea~\{}\\
+\qtt{~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~\qc{type}{touchPoints}:~[}\\
+\qtt{~~~~~~TouchPoint~\{~\qc{type}{id}:~point1~\},}\\
+\qtt{~~~~~~TouchPoint~\{~\qc{type}{id}:~point2~\},}\\
+\qtt{~~~~~~TouchPoint~\{~\qc{type}{id}:~point3~\}}\\
+\qtt{~~]}\\
+\qtt{\}}\\
+\end{qml}\bigskip
+\item[] TouchPoint properties:
+  \begin{itemize}
+  \item int x
+  \item int y
+  \item bool pressed
+  \item int pointId
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1036}\frametitle{MultiPointTouchArea signals}
+
+\begin{itemize}
+\item \textbf{onPressed(list$<$TouchPoint$>$ touchPoints)}\\
+  \textbf{onReleased( \ldots )}\\
+  touchPoints is list of \textit{changed} points.\medskip
+
+\item \textbf{onUpdated( \ldots )}\\
+  Called when points is updated (moved)\\
+  touchPoints is list of \textit{changed} points.\medskip
+
+\item \textbf{onTouchUpdated( \ldots )}\\
+  Called on \textit{any} change\\
+  touchPoints is list of \textit{all} points.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1037}\frametitle{MultiPointTouchArea signals}
+
+\begin{itemize}
+\item \textbf{onGestureStarted(GestureEvent gesture)}\\
+  Cancel the gesture using \texttt{gesture.cancel()}\medskip
+
+\item \textbf{onCanceled(list$<$TouchPoint$>$ touchPoints)}\\
+  Called when another element takes over touch handling.\\
+  Useful for undoing what was done on onPressed.
+\end{itemize}
+
+\demo{qml-user-interaction/ex-multi-touch/main.qml}
+\end{slide}
