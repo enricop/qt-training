@@ -6,6 +6,11 @@
 \item Single-touch (MouseArea)
 \item Multi-touch (MultiPointTouchArea)
 \item Gestures
+  \begin{itemize}
+  \item Tap and Hold
+  \item Swipe
+  \item Pinch
+  \end{itemize}
 \end{itemize}
 
 \end{slide}
@@ -79,3 +84,102 @@ MultiPointTouchArea {
 
 \demo{qml-user-interaction/ex-multi-touch/main.qml}
 \end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{1038}\frametitle{Gestures}
+
+\begin{itemize}
+  \item Tap and Hold (MouseArea signal onPressAndHold)
+  \item Swipe (ListView)
+  \item Pinch (PinchArea)
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1039}\frametitle{Swipe Gestures}
+
+\begin{itemize}
+\item Build in to ListView\medskip
+
+\item \textbf{snapMode: ListView.SnapOneItem}\\
+    The view settles no more than one item away from the first visible item at the time the mouse button is released.\medskip
+
+\item \textbf{orientation: ListView.Horizontal}
+\end{itemize}
+\qtdemo{qtdeclarative/examples/quick/touchinteraction/flickable/corkboards.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1040}\frametitle{Pinch Gesture}
+
+Automatic pinch setup using the target property:\\
+\begin{EXCLUDE}
+Image {
+    id: image
+    source: "qt-logo.jpg"
+
+    PinchArea {
+        anchors.fill: parent
+        pinch.target: parent
+
+        pinch.minimumScale: 0.5
+        pinch.maximumScale: 2.0
+
+        pinch.minimumRotation: -3600
+        pinch.maximumRotation: 3600
+
+        pinch.dragAxis: Pinch.XAxis
+    }
+}
+\end{EXCLUDE}
+\bigskip
+\begin{qml}
+\qtt{\qc{class}{Image}~\{}\\
+\qtt{~~~~\qc{type}{id}:~image}\\
+\qtt{~~~~\qc{type}{source}:~\qc{string}{"qt-logo.jpg"}}\\
+\vspace*{0.5em}
+\qtt{~~~~PinchArea~\{}\\
+\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
+\qtt{~~~~~~~~\qc{type}{pinch.target}:~parent}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{pinch.minimumScale}:~\qc{number}{0.5}}\\
+\qtt{~~~~~~~~\qc{type}{pinch.maximumScale}:~\qc{number}{2.0}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{pinch.minimumRotation}:~\qc{operator}{-}\qc{number}{3600}}\\
+\qtt{~~~~~~~~\qc{type}{pinch.maximumRotation}:~\qc{number}{3600}}\\
+\vspace*{0.5em}
+\qtt{~~~~~~~~\qc{type}{pinch.dragAxis}:~Pinch.XAxis}\\
+\qtt{~~~~\}}\\
+\qtt{\}}\\
+\end{qml}\bigskip
+\demo{qml-user-interaction/ex-pinch}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1041}\frametitle{Pinch Gestures}
+
+\begin{itemize}
+\item Signals for manual pinch handling
+  \begin{itemize}
+  \item onPinchStarted(PinchEvent pinch)
+  \item onPinchUpdated(PinchEvent pinch)
+  \item onPinchFinished()
+  \end{itemize}\medskip
+
+\item PinchEvent properties:
+  \begin{itemize}
+  \item point1, point2, center
+  \item rotation
+  \item scale
+  \item accepted\\
+    set to false in the onPinchStarted handler\\
+    if the gesture should not be handled
+
+  \end{itemize}
+
+\end{itemize}
+
+\end{slide}
+
