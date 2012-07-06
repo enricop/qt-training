@@ -114,6 +114,9 @@ input.
 \begin{slide}{1379}\frametitle{Key Navigation}
 
 \flushedImage{qml-user-interaction/images/key-navigation-red.png}
+\vspace{20mm}
+\flushedImage{qml-user-interaction/images/key-navigation-green.png}
+\vspace{-20mm}
 % declarative-uis/user-interaction/key-navigation.qml
 \inputqml{qml-user-interaction/colorized/key-navigation}
 
@@ -121,40 +124,6 @@ input.
 \item Using cursor keys with non-text items
 \item Non-text items can have focus, too
 \end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-
-\begin{slide}{1378}\frametitle{Key Navigation}
-
-\flushedImage{qml-user-interaction/images/key-navigation-red.png}
-% declarative-uis/user-interaction/key-navigation.qml
-\begin{qml}
-\qtt{\qc{class}{Rectangle}~\{~\qc{type}{id}:~left\_rect}\\
-\qtt{~~~~~~~~~~~~\qc{lightgray}{x:~25;~y:~25;~width:~150;~height:~150}}\\
-\qtt{~~~~~~~~~~~~\qc{lightgray}{color:~focus~?~"red"~:~"darkred"}}\\
-\qtt{~~~~~~~~~~~~\qc{type}{KeyNavigation.right}:~right\_rect}\\
-\qtt{~~~~~~~~~~~~\qc{type}{focus}:~\qc{number}{true}~\}}\\
-\end{qml}
-\flushedImage{qml-user-interaction/images/key-navigation-green.png}
-\vspace*{0.5em}
-\begin{qml}
-\qtt{\qc{class}{Rectangle}~\{~\qc{type}{id}:~right\_rect}\\
-\qtt{~~~~~~~~~~~~\qc{lightgray}{x:~225;~y:~25;~width:~150;~height:~150}}\\
-\qtt{~~~~~~~~~~~~\qc{type}{color}:~focus~?~\qc{string}{"\#00ff00"}~:~\qc{string}{"green"}}\\
-\qtt{~~~~~~~~~~~~\qc{type}{KeyNavigation.left}:~left\_rect~\}}
-\end{qml}
-
-\vspace*{1em}
-\begin{itemize}
-\item \qtt{left\_rect} has the focus initially
-\item Define relationships between \qtt{left\_rect} and \qtt{right\_rect}
-  \begin{itemize}
-  \item using \qic{type}{id} and \qic{type}{KeyNavigation}
-  \end{itemize}
-\end{itemize}       
-
 \demo{qml-user-interaction/ex-key-input/key-navigation.qml}
 
 \end{slide}
