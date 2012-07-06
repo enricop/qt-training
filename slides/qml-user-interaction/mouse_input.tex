@@ -48,56 +48,6 @@ Mouse areas define parts of the screen where cursor input occurs
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1371}\frametitle{Placing the Mouse Area}
-
-\begin{qml}
-\qtt{\qc{class}{Text}~\{}\\
-\qtt{~~\qc{lightgray}{...}}\\
-\qtt{~~~~\qc{class}{MouseArea}~\{}\\
-\qtt{~~~~~~~~\qc{type}{anchors.fill}:~parent}\\
-\qtt{\qc{lightgray}{~~~~~~~~onPressed:~parent.color~=~"green"}}\\
-\qtt{\qc{lightgray}{~~~~~~~~onReleased:~parent.color~=~"black"}}\\
-\qtt{~~~~\}}\\
-\qtt{\}}
-\end{qml}
-
-\begin{itemize}
-\item Define a \qic{class}{Text} element
-\item Define a \qic{class}{MouseArea} child element
-\item Use an anchor to apply the area to the entire parent
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-
-\begin{slide}{1370}\frametitle{Mouse Area Signals}
-
-\begin{qml}
-\qtt{\qc{lightgray}{Text~\{}}\\
-\qtt{~~\qc{lightgray}{...}}\\
-\qtt{\qc{lightgray}{~~~~MouseArea~\{}}\\
-\qtt{\qc{lightgray}{~~~~~~~~anchors.fill:~parent}}\\
-\qtt{~~~~~~~~\qc{type}{onPressed}:~parent.color~\qc{operator}{=}~\qc{string}{"green"}}\\
-\qtt{~~~~~~~~\qc{type}{onReleased}:~parent.color~\qc{operator}{=}~\qc{string}{"black"}}\\
-\qtt{~~~~\}}\\
-\qtt{\}}
-\end{qml}
-
-\begin{itemize}
-\item Define responses to signals with \qic{type}{onPressed} and \qic{type}{onReleased}
-  \begin{itemize}
-  \item by default, only left clicks are handled
-  \item set the \qic{type}{acceptedButtons} property to change this
-  \end{itemize}
-\item These change the color of the parent \qic{class}{Text} element
-\item Can do something similar with properties...
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-
 \begin{slide}{1369}\frametitle{Mouse Hover and Properties}
 
 \flushedImage{qml-user-interaction/images/hover-property.png}
