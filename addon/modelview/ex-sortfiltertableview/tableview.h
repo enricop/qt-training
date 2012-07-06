@@ -10,7 +10,7 @@
 #ifndef TableView_H
 #define TableView_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 class TableView : public QWidget
 {

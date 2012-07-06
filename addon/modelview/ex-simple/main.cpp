@@ -7,7 +7,11 @@
  *
  *************************************************************************/
 
-#include <QtGui>
+#include <QFileSystemModel>
+#include <QListView>
+#include <QTreeView>
+#include <QSplitter>
+#include <QApplication>
 
 int main( int argc, char** argv ) {
     QApplication app( argc, argv );

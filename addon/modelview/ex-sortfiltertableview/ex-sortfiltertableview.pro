@@ -1,4 +1,3 @@
-
 HEADERS += \
     tableview.h \
     ../cityengine/cityengine.h
@@ -14,3 +13,5 @@ RESOURCES += \
 INCLUDEPATH += \
     ../cityengine
 
+
+QT += widgets
