@@ -37,35 +37,6 @@ item->appendRow(new QStandardItem("C (0,0)"));
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1582}\frametitle{Finishing Touch}
-  \begin{itemize}
-  \item Customizing header, footer and highlight
-  \item[]
-\begin{qml}
-\qtt{ListView~\{}\\
-\qtt{~~~~\qc{type}{header}:~\qc{class}{Component}~\{}\\
-\qtt{~~~~~~~~\qc{class}{Rectangle}~\{}\\
-\qtt{~~~~~~~~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{height}:~\qc{number}{10};~\qc{type}{color}:~\qc{string}{"pink"}}\\
-\qtt{~~~~~~~~\}}\\
-\qtt{~~~~\}}\\
-\qtt{~~~~\qc{type}{footer}:~\qc{class}{Component}~\{}\\
-\qtt{~~~~~~~~\qc{class}{Rectangle}~\{}\\
-\qtt{~~~~~~~~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{height}:~\qc{number}{10};~\qc{type}{color}:~\qc{string}{"lightblue"}}\\
-\qtt{~~~~~~~~\}}\\
-\qtt{~~~~\}}\\
-\qtt{~~~~\qc{type}{highlight}:~\qc{class}{Component}~\{}\\
-\qtt{~~~~~~~~\qc{class}{Rectangle}~\{}\\
-\qtt{~~~~~~~~~~~~~\qc{type}{width}:~parent.width;~\qc{type}{color}:~\qc{string}{"lightgray"}}\\
-\qtt{~~~~~~~~\}}\\
-\qtt{~~~~\}}\\
-\qtt{\}}\\
-\end{qml}
-\item[] \demo{qml-presenting-data/ex-model-views/ex-view-current-item.qml}
-\end{itemize}
-\end{slide}
-
-
-% ----------------------------------------------------------------------
 \begin{slide}{1580}\frametitle{Meet the City Engine}
   \flushedImage{modelview/images/citymodelcsv}
   \begin{itemize}
