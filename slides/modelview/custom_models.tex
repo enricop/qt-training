@@ -119,28 +119,6 @@ bool MyModel::removeRows(int row, int count, parent) {
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1588}\frametitle{A Table Model}
-  \begin{itemize}
-  \item 2-dimensional model (rows x columns)
-  \item \texttt{int columnCount(parent)}
-   \begin{itemize}
-   \item Enabling columns
-   \end{itemize}
-    \begin{cpp}
-int MyModel::columnCount ( parent ) const {
-  // return number of columns for parent
-}
-
-QVariant MyModel::data( index, role ) const {
- // adapt to react on requested column from index
-}
-    \end{cpp}
-  \end{itemize}
-\demo{modelview/ex-tablemodel}  
-\end{slide}
-
-
-% ----------------------------------------------------------------------
 \begin{slide}{1587}\frametitle{Lab: City List Model}
   \begin{itemize}
   \item Please implement a City List Model
