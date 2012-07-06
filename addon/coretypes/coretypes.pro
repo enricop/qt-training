@@ -1,5 +1,7 @@
 TEMPLATE=subdirs
 SUBDIRS= \
-  ex-properties \
-  ex-containers \
-  ex-qtextstream \
+         ex-containers\
+         ex_custom_types\
+         ex-properties\
+         ex-simplelayout\
+         lab-simple-qt-app
