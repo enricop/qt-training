@@ -67,29 +67,6 @@ input.
 \inputqml{qml-user-interaction/colorized/textinputs}
 
 % Tab handling                                   
-
-\end{slide}
-
-%----------------------------------------------------------------------
-
-\begin{slide}{1381}\frametitle{Getting the Focus}
-
-% declarative-uis/user-interaction/textinputs.qml
-\begin{qml}
-\qtt{~~~~\qc{class}{TextInput}~\{}\\
-\qtt{~~~~~~~~\qc{type}{anchors.left}:~parent.left;~\qc{lightgray}{y:~16}}\\
-\qtt{~~~~~~~~\qc{type}{anchors.right}:~parent.right}\\
-\qtt{~~~~~~~~\qc{lightgray}{text:~"Field~1";~font.pixelSize:~32}}\\
-\qtt{~~~~~~~~\qc{lightgray}{color:~focus~?~"black"~:~"gray"}}\\
-\qtt{~~~~~~~~\qc{type}{focus}:~\qc{number}{true}}\\
-\qtt{~~~~\}}
-\end{qml}
-
-\begin{itemize}
-\item Set the \qic{type}{focus} property
-\item Use anchors to ensure there is something to click on
-\end{itemize}
-
 \demo{qml-user-interaction/ex-key-input/textinputs.qml}
 
 \end{slide}
