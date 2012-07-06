@@ -217,6 +217,32 @@ QString text = model->data(index, Qt::DisplayRole).toString()
 \end{slide}
 
 % ----------------------------------------------------------------------
+\begin{slide}[fragile]{}\frametitle{Mapping Item Roles from/to QML}
+  \begin{itemize}
+      \item Item Roles in C++
+      \item[]
+      \begin{cpp}
+// Asking for display text
+QString text = model->data(index, Qt::DisplayRole).toString()
+      \end{cpp}
+      \vspace*{1.0em}
+      \item Item properties in QML
+      \item[]
+      \begin{qml}
+\qtt{\qc{type}{onCurrentIndexChanged}:~\{}\\
+\qtt{~~~~var text = model.get(index).display}\\
+\qtt{\}}\\
+      \end{qml}
+      \item Default mappings
+      \begin{itemize}
+          \item \iClsEnum{Qt}{DisplayRole} in C++ is \qc{type}{display} in QML
+          \item \iClsEnum{Qt}{DecorationRole} in C++ is \qc{type}{decoration} in QML
+      \end{itemize}
+      \item Add additional mappings by reimplementing \iClsFn{QAbstractItemModel}{roleNames}
+  \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
 \begin{slide}[fragile]{}\frametitle{Exporting models to QML}
   \begin{itemize}
     \item Export model instance
@@ -252,32 +278,6 @@ qmlRegisterType<CustomModel>("Models", 1, 0, "CustomModel");
 \qtt{\}}\\
         \end{qml}
     \end{itemize}
-  \end{itemize}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{}\frametitle{Mapping Item Roles from/to QML}
-  \begin{itemize}
-      \item Item Roles in C++
-      \item[]
-      \begin{cpp}
-// Asking for display text
-QString text = model->data(index, Qt::DisplayRole).toString()
-      \end{cpp}
-      \vspace*{1.0em}
-      \item Item properties in QML
-      \item[]
-      \begin{qml}
-\qtt{\qc{type}{onCurrentIndexChanged}:~\{}\\
-\qtt{~~~~var text = model.get(index).display}\\
-\qtt{\}}\\
-      \end{qml}
-      \item Default mappings
-      \begin{itemize}
-          \item \iClsEnum{Qt}{DisplayRole} in C++ is \qc{type}{display} in QML
-          \item \iClsEnum{Qt}{DecorationRole} in C++ is \qc{type}{decoration} in QML
-      \end{itemize}
-      \item Add additional mappings by reimplementing \iClsFn{QAbstractItemModel}{roleNames}
   \end{itemize}
 \end{slide}
 
