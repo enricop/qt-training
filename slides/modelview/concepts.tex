@@ -329,27 +329,3 @@ qmlRegisterType<CustomModel>("Models", 1, 0, "CustomModel");
   \end{column}
 \end{columns}
 \end{slide}
-
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1019}\frametitle{Things you may want to customize}
-\textbf{Models} - \iCls{QAbstractItemModel}
-\begin{itemize}
-\item If model is your data
-  \begin{itemize}
-  \item \iCls{QStandardItemModel}
-  \end{itemize}
-\item Otherwise
-  \begin{itemize}
-  \item Adapt own data by subclassing a model
-  \end{itemize}
-\end{itemize}
-\textbf{Delegate} - \iCls{QtQuick Component}
-\begin{itemize}
-\item Encapsulation of QtQuick elements
-\item Even complex element trees possible
-  \begin{itemize}
-  \item To control display/edit of data
-  \end{itemize}
-\end{itemize}
-\end{slide}
