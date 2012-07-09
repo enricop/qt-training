@@ -41,3 +41,31 @@ Qt facilities for accessing structure data
 \input{qtxmlpatterns/xmlpatterns}
 \input{qtxmlpatterns/xml-schema}
 \input{dataio/sql}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{}\frametitle{Summary}
+\begin{itemize}
+\item Data processing in C++
+    \begin{itemize}
+    \item XML: SAX, DOM, stream reader/writer, XPath, XQuery
+    \item SQL: QSqlDatabase, QSqlQuery
+    \end{itemize}
+    
+\medskip
+
+\item Data visualization in QML
+    \begin{itemize}
+    \item XML: QML XmlListModel, using XQuery features for selection of data subset
+    \item SQL: exported QSqlQueryModel, using SQL query features for selection of data subset
+    \end{itemize}
+    
+\medskip
+
+\item Combined approaches  
+    \begin{itemize}
+    \item Export custom model which uses C++ processing API internally
+    \item QSqlTableModel and export custom model mapping table into a list
+    \end{itemize}
+\end{itemize}
+\end{slide}
