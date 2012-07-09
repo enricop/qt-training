@@ -150,7 +150,26 @@ A drop shadow is a combination of:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1828}\frametitle{Lab: Dissolve Effect}
+\begin{slide}{1828}\frametitle{Shaders and Particles}
+
+\begin{itemize}
+\item Everything about the particle systems is still valid
+\item Allows for less CPU intensive particle rendering
+
+\vspace*{1em}
+
+\item Use \qic{class}{CustomParticle} instead of \qic{class}{ImageParticle}
+\item Use the \qic{type}{vertexShader} and \qic{type}{fragmentShader} properties
+\end{itemize}
+
+\vspace*{2em}
+
+\demo{qml-graphics-effects/ex-shaders/fountain-shaders.qml}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{1829}\frametitle{Lab: Dissolve Effect}
 \centeredImage{qml-graphics-effects/images/dissolve.png}
 
 Starting from the partial solution:
