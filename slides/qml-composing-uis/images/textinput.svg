@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   width="400"
+   height="400"
+   id="svg2">
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4" />
+  <g
+     transform="scale(1.4111111,1.4111111)"
+     id="layer1"
+     style="stroke:none">
+    <rect
+       width="283.46457"
+       height="283.46457"
+       x="0"
+       y="0"
+       id="rect2385"
+       style="fill:#add8e6;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+  </g>
+  <text
+     x="60"
+     y="123.86567"
+     id="text2383"
+     xml:space="preserve"
+     style="font-size:44.45798111px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#008000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"><tspan
+       x="60"
+       y="123.86567"
+       id="tspan2987"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;font-family:Lato;-inkscape-font-specification:Lato">Editable text...</tspan></text>
+  <rect
+     width="1"
+     height="38"
+     x="334"
+     y="89"
+     id="rect3824"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+</svg>

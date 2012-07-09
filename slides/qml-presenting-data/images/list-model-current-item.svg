@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
-   width="286.20093"
-   height="220"
+   width="150"
+   height="200"
    id="svg2">
   <metadata
      id="metadata7">
@@ -32,100 +32,71 @@
   </defs>
   <rect
      width="150"
-     height="10"
-     x="0"
-     y="204.36601"
-     id="rect4653"
-     style="fill:#b1dae7;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-  <rect
-     width="150"
-     height="10"
-     x="0"
-     y="4"
-     id="rect4651"
-     style="fill:#ffc0cb;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-  <rect
-     width="150"
      height="40"
      x="0"
-     y="123.83006"
+     y="70"
      id="rect4560"
      style="fill:#d3d3d3;fill-opacity:1;fill-rule:evenodd;stroke:none" />
   <text
      x="5"
-     y="38.000004"
+     y="24.000004"
      id="text4491"
      xml:space="preserve"
      style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:lato;-inkscape-font-specification:lato"><tspan
        x="5"
-       y="38.000004"
+       y="24.000004"
        id="tspan4493"
        style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato">Alice</tspan></text>
   <text
      x="5"
-     y="76.75"
+     y="62.75"
      id="text4495"
      xml:space="preserve"
      style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:lato;-inkscape-font-specification:lato"><tspan
        x="5"
-       y="76.75"
+       y="62.75"
        id="tspan4497"
        style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato">Bob</tspan></text>
   <text
      x="5"
-     y="114.86743"
+     y="100.86743"
      id="text4499"
      xml:space="preserve"
      style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:lato;-inkscape-font-specification:lato"><tspan
        x="5"
-       y="114.86743"
+       y="100.86743"
        id="tspan4501"
        style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato">Jane</tspan></text>
   <text
      x="5"
-     y="154.02861"
+     y="140.02861"
      id="text4503"
      xml:space="preserve"
      style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:lato;-inkscape-font-specification:lato"><tspan
        x="5"
-       y="154.02861"
+       y="140.02861"
        id="tspan4505"
        style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato">Victor</tspan></text>
   <text
      x="5"
-     y="193"
+     y="179"
      id="text4507"
      xml:space="preserve"
      style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:lato;-inkscape-font-specification:lato"><tspan
        x="5"
-       y="193"
+       y="179"
        id="tspan4509"
        style="font-size:31.62809753px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato">Wendy</tspan></text>
   <text
-     x="165"
-     y="19"
-     id="text3251"
+     x="34.958397"
+     y="198.98891"
+     id="text4562"
      xml:space="preserve"
-     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#292929;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Light"><tspan
-       x="165"
-       y="19"
-       id="tspan3253">header</tspan></text>
-  <text
-     x="165"
-     y="216"
-     id="text2581"
-     xml:space="preserve"
-     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#292929;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Light"><tspan
-       x="165"
-       y="216"
-       id="tspan2583">footer</tspan></text>
-  <text
-     x="165"
-     y="154"
-     id="text2589"
-     xml:space="preserve"
-     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#292929;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Light"><tspan
-       x="165"
-       y="154"
-       id="tspan2591">highlight</tspan></text>
+     style="font-size:14.11090946px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:lato;-inkscape-font-specification:lato"><tspan
+       x="34.958397"
+       y="198.98891"
+       id="tspan4564"
+       style="font-size:14.11090946px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato">Jane <tspan
+   id="tspan4566"
+   style="font-size:14.11090946px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Light">is current</tspan></tspan></text>
 </svg>
