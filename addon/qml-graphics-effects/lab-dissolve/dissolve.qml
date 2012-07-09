@@ -8,4 +8,7 @@ Rectangle {
         anchors.centerIn: parent
         source: "../images/tampere.jpg"
     }
+
+    // Hint: For help you can look at the commented shader
+    // code in shader-extract-hint.qml
 }
