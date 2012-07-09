@@ -30,7 +30,6 @@
   \item \qtt{\qc{class}{ListView}.StrictlyEnforceRange}\\
         keeps the highlight stationary, moves the items around it
   \end{itemize}
-\item Drag and drop may be enabled
 \end{itemize}
 
 \end{slide}
@@ -123,37 +122,5 @@
     \end{itemize}
   \end{itemize}
 \end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-
-\begin{slide}{1465}\frametitle{Drag and Drop in Views}
-
-\begin{qml}
-\qtt{\qc{class}{DropArea}~\{}\\
-\qtt{~~~~\qc{type}{anchors.fill}:~{parent}}\\
-\qtt{~~~~\qc{type}{onEntered}:~\{}\\
-\qtt{~~~~~~~~visualModel.items.move(...)}\\
-\qtt{~~~~\}}\\
-\qtt{\}}
-\end{qml}
-
-\begin{itemize}
-\item DropArea element is activated during dragging
-\item VisualDataModel element can move items in the View.
-\item The Drag attached property allows control of Drags
-  \begin{itemize}
-    \item Drag.active is set to true to start a drag
-    \item Drag.target is the recipient of drag events
-    \item Drag events are only sent when Drag.active is true
-  \end{itemize}
-\end{itemize}
-
-\begin{qml}
-\qtt{\qc{class}{Rectangle}~\{}\\
-\qtt{~~~~\qc{type}{Drag.active}:~{mouseArea.held}}\\
-\qtt{\}}
-\end{qml}
-
 
 \end{slide}
