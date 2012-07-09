@@ -1,4 +1,4 @@
-QT += quick widgets
+QT += quick
 
 SOURCES += main.cpp \
            citymodel.cpp \
