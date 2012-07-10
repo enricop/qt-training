@@ -4,4 +4,5 @@ coretypes\
 dataio\
 modelview\
 object-communication\
-qml-cpp-integration
+qml-cpp-integration \
+qtxmlpatterns
