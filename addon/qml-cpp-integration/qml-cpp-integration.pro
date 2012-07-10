@@ -7,6 +7,7 @@ ex-methods \
 ex-properties \
 ex-signals \
 ex-simple-item \
+ex-simple-item-scenegraph \
 ex-simpleviewer \
 ex-slots \
 ex-extension-plugin \

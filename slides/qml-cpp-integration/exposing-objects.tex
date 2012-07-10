@@ -206,7 +206,7 @@ In the \textit{timer.h} file:
 class Timer : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( int interval READ interval 
+    Q_PROPERTY( int interval READ interval
                 WRITE setInterval NOTIFY intervalChanged )
     ...
 \end{cpp}
@@ -307,7 +307,7 @@ int Timer::interval()
   \end{itemize}
 \end{itemize}
 
-\end{slide} 
+\end{slide}
 
 
 
@@ -667,24 +667,24 @@ int Timer::randomInterval( int min, int max ) const
 
 %----------------------------------------------------------------------
 
-\subsubsection{Exporting GUI Classes}
+\subsubsection{Exporting QPainter based GUI Classes}
 
 %----------------------------------------------------------------------
-\begin{slide}{4323}\frametitle{Exporting a GUI class}
+\begin{slide}{4323}\frametitle{Exporting a QPainter based GUI class}
   \begin{itemize}
-  \item Derive from \iCls{QQuickItem} or one if its subclasses, e.g. \iCls{QQuickPaintedItem}
-  \item In case of \iCls{QQuickPaintedItem} implement \hClsFnPar{QQuickPaintedItem}{paint}{\ldots}
+  \item Derive from \iCls{QQuickPaintedItem}
+  \item Implement \hClsFnPar{QQuickPaintedItem}{paint}{\ldots}
   \item Similar to non GUI classes:
     \begin{itemize}
     \item Export object from C++
     \item Import and use in QML
-    \item properties, signals/slots, Q\_INVOKABLE 
+    \item properties, signals/slots, Q\_INVOKABLE
     \end{itemize}
   \end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1574}\frametitle{Exporting a GUI class cont'd.}
+\begin{slide}[fragile]{1574}\frametitle{Exporting a QPainter based GUI class cont'd.}
 \flushedImage{qml-cpp-integration/images/ellipse1.png}
 
 \begin{cpp}
@@ -701,7 +701,7 @@ public:
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1573}\frametitle{Exporting a GUI class cont'd.}
+\begin{slide}[fragile]{1573}\frametitle{Exporting a QPainter based GUI class cont'd.}
 \begin{cpp}
 EllipseItem::EllipseItem(QQuickItem *parent)
     : QQuickPaintedItem(parent)
@@ -712,18 +712,18 @@ void EllipseItem::paint(QPainter *painter)
 {
     const qreal halfPenWidth =
       qMax(painter->pen().width() / 2.0, 1.0);
-    
+
     QRectF rect = boundingRect();
     rect.adjust(halfPenWidth, halfPenWidth,
                 -halfPenWidth, -halfPenWidth);
-    
+
     painter->drawEllipse(rect);
 }
 \end{cpp}
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1571}\frametitle{Exporting a GUI class cont'd.}
+\begin{slide}[fragile]{1571}\frametitle{Exporting a QPainter based GUI class cont'd.}
 
 \begin{itemize}
 \item[]
@@ -749,7 +749,7 @@ int main(int argc, char *argv[])
 
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1575}\frametitle{Exporting a GUI class cont'd.}
+\begin{slide}[fragile]{1575}\frametitle{Exporting a QPainter based GUI class cont'd.}
 
 \flushedImage{qml-cpp-integration/images/ellipse1.png}
 In the \textit{ellipse1.qml} file:
@@ -759,6 +759,95 @@ In the \textit{ellipse1.qml} file:
 \inputqml{qml-cpp-integration/colorized/ellipse1}
 
 \demo{qml-cpp-integration/ex-simple-item}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\subsubsection{Exporting Scene Graph based GUI Classes}
+
+%----------------------------------------------------------------------
+\begin{slide}{1576}\frametitle{Exporting a Scene Graph based GUI class}
+  \begin{itemize}
+  \item Derive from \iCls{QQuickItem}
+  \item Implement \hClsFnPar{QQuickItem}{updatePaintNode}{\ldots}
+  \item Create and initialize a \iCls{QSGNode} subclass (e.g. \iCls{QSGGeometryNode})
+    \begin{itemize}
+    \item \iCls{QSGGeometry} to specify the mesh
+    \item \iCls{QSGMaterial} to specify the texture
+    \end{itemize}
+  \item Similar to other classes:
+    \begin{itemize}
+    \item Export object from C++
+    \item Import and use in QML
+    \item properties, signals/slots, Q\_INVOKABLE
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1577}\frametitle{Exporting a Scene Graph based GUI class cont'd.}
+\flushedImage{qml-cpp-integration/images/triangletest.png}
+
+\begin{cpp}
+#include <QQuickItem>
+#include <QSGGeometry>
+#include <QSGFlatColorMaterial>
+
+class TriangleItem : public QQuickItem
+{
+    Q_OBJECT
+public:
+    TriangleItem(QQuickItem *parent = 0);
+
+protected:
+    QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *data);
+
+private:
+    QSGGeometry m_geometry;
+    QSGFlatColorMaterial m_material;
+};
+\end{cpp}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1578}\frametitle{Exporting a Scene Graph based GUI class cont'd.}
+\begin{cpp}
+#include <QSGGeometryNode>
+
+TriangleItem::TriangleItem(QQuickItem *parent)
+    : QQuickItem(parent),
+      m_geometry(QSGGeometry::defaultAttributes_Point2D(), 3)
+{
+    setFlag(ItemHasContents);
+    m_material.setColor(Qt::red);
+}
+\end{cpp}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1579}\frametitle{Exporting a Scene Graph based GUI class cont'd.}
+\begin{cpp}
+QSGNode *TriangleItem::updatePaintNode(QSGNode *n, UpdatePaintNodeData *)
+{
+    QSGGeometryNode *node = static_cast<QSGGeometryNode *>(n);
+    if (!node) node = new QSGGeometryNode();
+
+    QSGGeometry::Point2D *v = m_geometry.vertexDataAsPoint2D();
+    const QRectF rect = boundingRect();
+    v[0].x = rect.left();
+    v[0].y = rect.bottom();
+    v[1].x = rect.left() + rect.width()/2;
+    v[1].y = rect.top();
+    v[2].x = rect.right();
+    v[2].y = rect.bottom();
+    node->setGeometry(&m_geometry);
+    node->setMaterial(&m_material);
+    return node;
+}
+\end{cpp}
+
+\demo{qml-cpp-integration/ex-simple-item-scenegraph}
 \end{slide}
 
 %----------------------------------------------------------------------
