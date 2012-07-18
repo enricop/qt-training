@@ -15,22 +15,29 @@ apt-get install texlive-science texlive-pictures
 apt-get install texlive-latex-extra texlive-formats-extra
 apt-get install latex-beamer pdfjam transfig graphicsmagick
 
-Compile your own course works using 'tm_builder.py'
-===================================================
 
-The 'tm_builder.py' script is specifically designed for the needs
-of trainers. It builds your selection of modules and places these together
-with associated example programs into a single output directory.
+Available Material
+==================
 
-The 'tm_builder.py' is run from the command line passing a course description
-file written in Python. You find both the 'tm_builder.py' and an example
-course description ('example_course.py') in the 'scripts' subfolder with
-further information how to create your own course files.
+- Qt5: master branch
+- Qt4: qt4-material branch
 
-The standard course works reside in the 'course' subfolder.
-Enter the directory and enter the following commands to build a course:
+Compile your own course
+=======================
 
-../scripts/tm_builder.py qtquick.py
+The pre-defined courses are available under slides/courses. They are simple tex-files
+which include other tex-files. 
+
+To compile your PDF please use 'xelatex' or 'lulatex' from your preferred latex-distro.
+
+$ cd slides
+$ xelatex course/qq-training.tex
+
+builds the QtQuick training course as qq-training.pdf. For a successfull training you
+need also to add the addons to your training package. The addon folder contains the examples
+labs and solutions used during the training. 
+
+Please make yourself comfortable with the PDF and addon material before giving a training. Just knowing Qt will not be enough.
 
 ====================
 Contributing Changes
@@ -40,7 +47,7 @@ Once you have up a working Latex setup check out the "Contributors Guide".
 You can build it from the 'slides' subfolder:
 
 cd slides
-pdflatex contributors-guide/contributors-guide.tex
+xelatex contributors-guide/contributors-guide.tex
 
 ==========
 Disclaimer
