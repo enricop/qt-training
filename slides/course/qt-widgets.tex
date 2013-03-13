@@ -1,0 +1,79 @@
+ % this is the driver for presentations
+\documentclass[t]{beamer}
+\input{config}
+\input{base}
+
+% General course title
+\title{Qt Core and Widgets}
+
+\begin{document}
+
+\input{frontpage}
+
+\setcounter{tocdepth}{2} % Do not show subsubsection in TOC
+\begin{frame}
+  \frametitle{Qt Fundamentals}
+  \tableofcontents[part=1]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Core Types and Applications}
+  \tableofcontents[part=2]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Widgets and Dialogs}
+  \tableofcontents[part=3]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Models and Views}
+  \tableofcontents[part=4]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Painting and GraphicsView}
+  \tableofcontents[part=5]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Other Topics}
+  \tableofcontents[part=6]
+\end{frame}
+
+
+
+
+\setcounter{tocdepth}{3} % Show subsubsection in the overview slides 
+
+\part{Qt Fundamentals}
+\input{fundamentals/content}
+\input{object-communication/content}
+
+\part{Core Types and Applications}
+\input{coretypes/content}
+\input{appcreation/content}
+
+
+
+\part{Widgets and Dialogs}
+\input{widgets/content}
+\input{dialogs/content}
+
+
+\part{Models and Views}
+\input{modelview/content}
+\input{modelview2/content}
+
+\part{Painting and GraphicsView}
+\input{painting/content}
+\input{graphicsview/content}
+\input{graphicsview2/content}
+
+\part{Other Topics}
+\input{dataio/content}
+
+
+
+
+\end{document}
