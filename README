@@ -49,8 +49,3 @@ You can build it from the 'slides' subfolder:
 cd slides
 xelatex contributors-guide/contributors-guide.tex
 
-==========
-Disclaimer
-==========
-
-The Nokia, Qt and their respective logos are trademarks of Nokia Corporation in Finland and/or other countries worldwide. All other products named are trademarks of their respective owners.
