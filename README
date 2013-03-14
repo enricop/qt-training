@@ -49,3 +49,9 @@ You can build it from the 'slides' subfolder:
 cd slides
 xelatex contributors-guide/contributors-guide.tex
 
+============
+Legal Notice
+============
+
+See disclaimer.tex for legal notice.
+

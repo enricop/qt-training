@@ -21,8 +21,8 @@
   \begin{itemize}
   \item [] \begin{cpp}
 // main.cpp
-
-#include <QtGui>
+#include <QApplication>
+#include <QPushButton>
 
 int main(int argc, char *argv[])
 {
@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
  \end{itemize}
 \begin{qmake}
 # File: helloworld.pro
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 SOURCES  = main.cpp
 HEADERS +=          # No headers used
 \end{qmake}
