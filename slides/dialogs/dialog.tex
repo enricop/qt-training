@@ -29,9 +29,6 @@
   \item Operates independently in application
    \item Example: Find/Search dialog
    \end{itemize}
-  \end{itemize}
-\vfill
- \begin{itemize}
   \item Modal dialog example
  \item[] 
     \begin{cpp}
@@ -76,9 +73,6 @@ void EditorWindow::find() {
   \item Inherit from \iCls{QDialog}
   \item Create and layout widgets
   \item Use \iCls{QDialogButtonBox} for dialog buttons
-    \begin{itemize}
-    \item Connect buttons to \texttt{accept()}/\texttt{reject()}
-    \end{itemize}
   \item Override \texttt{accept()}/\texttt{reject()}
   \item[]
   \begin{cpp}
@@ -109,9 +103,7 @@ void MyDialog::accept() { // customize close behaviour
     \item Or \texttt{setAttribute(Qt::WA\_DeleteOnClose)}
     \item Or override \texttt{closeEvent()}
    \end{itemize}
- \end{itemize}
  \flushedImage{dialogs/images/extension-1}
- \begin{itemize}
  \item Dialogs with extensions:
     \begin{itemize}
     \item \texttt{QWidget::show()/hide()} used on extension
@@ -139,7 +131,6 @@ connect(m_more, SIGNAL(toggled(bool)),
 \begin{slide}[fragile]{1712}
   \frametitle{Asking for Files - \iCls{QFileDialog}}
   \begin{itemize}
-  \item Allow users to select files or directories
   \item Asking for a file name
   \item[]
     \begin{cpp}
@@ -187,11 +178,6 @@ if(ret == QMessageBox::Ok) {
   // do something useful
 }
     \end{cpp}
-  \item Very flexible in appearance
-    \begin{itemize}
-    \item \doc{qmessagebox.html}{QMessageBox Class Reference}
-    \end{itemize}
-
   \item Other convenience methods
     \begin{itemize}
     \item \texttt{QMessageBox::information(...)}
@@ -224,8 +210,7 @@ dialog.setValue(count); // ensure set to maximum
     \end{itemize}
   \item When operation progresses, check for cancel
     \begin{itemize}
-    \item \iClsFn{QProgressDialog}{wasCanceled}
-    \item Or connect to \iClsFn{QProgressDialog}{canceled}
+    \item Connect to \iClsFn{QProgressDialog}{canceled}
     \end{itemize}
   \item To stay reactive call \iClsFn{QApplication}{processEvents}
   \item For modeless operation: \doc{qprogressdialog.html}{QProgressDialog}
@@ -272,9 +257,9 @@ m_error->showMessage(message, type);
     \begin{itemize}
     \item \texttt{QFontDialog::getFont(...)}
     \end{itemize}
-    \vfill
-  \flushedImage{dialogs/images/standarddialogs-example}
+    
   \item \qtdemo{examples/dialogs/standarddialogs}
+  \flushedImage{dialogs/images/standarddialogs-example}
   \end{itemize}
 \end{slide}
 
@@ -304,9 +289,6 @@ m_error->showMessage(message, type);
 
 \item Each page is a \iCls{QWizardPage}
 \item \iClsFn{QWizard}{addPage}
-  \begin{itemize}
-  \item Adds page to wizard
-  \end{itemize}
 \end{itemize}
 \end{slide}
 

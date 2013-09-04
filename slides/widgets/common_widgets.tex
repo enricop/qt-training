@@ -33,7 +33,6 @@ line = new QLineEdit(parent);
 line->setText("Edit me");
 line->setEchoMode(QLineEdit::Password);
 connect(line, SIGNAL(textChanged(QString)) ...
-connect(line, SIGNAL(editingFinished()) ...
       \end{cpp}
     \item \texttt{setInputMask( mask )} -
       \doc{qlineedit.html\#inputMask-prop}{Input Mask}
@@ -77,6 +76,7 @@ connect(button, SIGNAL(clicked()) ...
      \begin{cpp}
 radio = new QRadioButton("Option 1", parent);
      \end{cpp}
+   \item Radio buttons are \texttt{autoExclusive} by default
    \end{itemize}
   \item \textbf{\iCls{QCheckBox}}
     \begin{itemize}
@@ -84,6 +84,13 @@ radio = new QRadioButton("Option 1", parent);
 check = new QCheckBox("Choice 1", parent);
      \end{cpp}
   \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1325-continued}
+  \frametitle{Button Widgets (continued)}
+ \begin{itemize}
   \item \textbf{\iCls{QButtonGroup}} - non-visual button manager
     \begin{itemize}
    \item[]
@@ -123,6 +130,13 @@ progress->setValue(42);
 progress->setFormat("%v (%p%)");
     \end{cpp}
    \end{itemize}
+ \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1324-continued}
+  \frametitle{Value Widgets (continued)}
+ \begin{itemize}
  \item \textbf{\iCls{QSpinBox}}
    \begin{itemize}
     \item[]
@@ -134,9 +148,18 @@ spin->setSuffix(" USD");
 connect(spin, SIGNAL(valueChanged(int)) ...
       \end{cpp}
   \end{itemize}
- \end{itemize}
+ \item \textbf{\iCls{QDoubleSpinBox}}
+   \begin{itemize}
+    \item[]
+      \begin{cpp}
+dspin = new QDoubleSpinBox(parent);
+dspin->setRange(0.0, 1.0);
+dspin->setValue(0.5);
+dspin->setSuffix(" Kg");
+connect(spin, SIGNAL(valueChanged(double)) ...
+      \end{cpp}
+  \end{itemize} \end{itemize}
 \end{slide}
-
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1323}
@@ -210,7 +233,7 @@ connect(list, SIGNAL(itemActivated(QListWidgetItem*)) ...
     \item \texttt{QListWidgetItem::setData(Qt::UserRole, data)}
 
    \end{itemize}
-   \medskip
+   \smallskip
  \item \textit{Other Item Widgets}: \iCls{QTableWidget}, \iCls{QTreeWidget}
  \end{itemize}
 
@@ -241,8 +264,7 @@ connect(list, SIGNAL(itemActivated(QListWidgetItem*)) ...
      \end{itemize}
    \item \textbf{\iCls{QStackedWidget}}
      \begin{itemize}
-     \item Stack of widgets
-     \item Only one widget visible at a time
+     \item Stack of widgets, only one visible at a time
      \end{itemize}
  \end{itemize}
  \doc{gallery.html}{Widget Classes}

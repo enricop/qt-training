@@ -43,14 +43,13 @@
 #include <QtGui>
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
-  QGraphicsView view;
-  QGraphicsScene *scene = new QGraphicsScene(&view);
-  view.setScene(scene);
-  QGraphicsRectItem *rect = 
-      new QGraphicsRectItem(-10, -10, 120, 50);
-  scene->addItem(rect);
-  QGraphicsTextItem *text = scene->addText("Hello World!");
-  view.show();
+  QGraphicsScene scene;
+  QGraphicsView *view = new QGraphicsView(&scene, &app);
+  view->setScene(scene);
+  QGraphicsRectItem *rect = new QGraphicsRectItem(-10, -10, 120, 50);
+  scene.addItem(rect);
+  QGraphicsTextItem *text = scene.addText("Hello World!");
+  view->show();
   return app.exec();
 }
 \end{cpp}

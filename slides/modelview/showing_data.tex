@@ -17,7 +17,7 @@
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1584}\frametitle{\iCls{QStandardItemModel} -
     Convenient Model}
-\flushedImage{qml-presenting-data/images/standarditemmodel.png}
+\flushedImage{modelview/images/standarditemmodel.png}
   \begin{itemize}
   \item \iCls{QStandardItemModel}
     \begin{itemize}
@@ -31,11 +31,73 @@ model->appendRow(item);
 model->setItem(0, 1, new QStandardItem("B (0,1)"));
 item->appendRow(new QStandardItem("C (0,0)"));
 \end{cpp}
-\item \textit{"B (0,1)" and "C (0,0)" - Not visible. (list view is only 1-dimensional)}
+\item \textit{"B (0,1)" and "C (0,0)" - Not visible. (table view is only 2-dimensional)}
 \end{itemize}
 \doc{qstandarditemmodel.html}{QStandardItemModel}
 \demo{modelview/ex-QStandardItemModel}
 \end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{}\frametitle{Sharing Models and Selection}
+  \flushedImage{modelview/images/simpleviews}
+  \begin{cpp}// create a model
+model = ... // with some items
+// and several views
+list = ...; table = ...; tree = ...;
+// You can share model with views
+list->setModel(model);
+table->setModel(model);
+tree->setModel(model);
+// Even can share selection
+list->setSelectionModel(tree->selectionModel());
+table->setSelectionModel(tree->selectionModel());
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{}\frametitle{Finishing Touch}
+\begin{itemize}
+  \item Customizing view headers
+  \begin{cpp}// set horizontal headers
+model->setHorizontalHeaderItem(0, new QStandardItem("Column 1");
+model->setHorizontalHeaderItem(1, new QStandardItem("Column 2");
+// hide vertical headers on table
+table->verticalHeader().hide();
+\end{cpp}
+
+  \item Customizing items
+  \begin{cpp}item->setEditable(false); // disable edit
+item->setCheckable(true); // checkbox on item
+\end{cpp}
+
+  \item Customizing selection
+  \begin{cpp}// allow only to select single rows on table
+table->setSelectionBehavior(QAbstractItemView::SelectRows);
+table->setSelectionMode(QAbstractItemView::SingleSelection);
+\end{cpp}
+
+  \item \demo{modelview/ex-showdata}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{}\frametitle{Selections - \iCls{QItemSelectionModel}}
+\begin{itemize}
+  \item Keeps track of selected items in a views
+  \item Not a \iCls{QAbstractItemModel}, just \iCls{QObject}
+  \item \iCls{QItemSelectionModel} API
+  \begin{itemize}
+    \item \iClsFn{QItemSelectionModel}{currentIndex}
+    \item \textit{signal} \iClsFnPar{QItemSelectionModel}{currentChanged}{current, previous}
+    \item \iCls{QItemSelection} \iClsFn{QItemSelectionModel}{selection}
+      \begin{itemize}
+        \item List of selection ranges
+      \end{itemize}
+      \item \textit{signal} \iClsFnPar{QItemSelectionModel}{selectionChanged}{selected, deselected}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
 \begin{slide}{1580}\frametitle{Meet the City Engine}
@@ -80,16 +142,16 @@ public CityEngine : public QObject {
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}{1578}\frametitle{Lab: Standard Item Model for CityEngine}
+\begin{slide}{1578}\frametitle{Lab: Tree Model for CityEngine}
   \begin{itemize}
-    \item Implement \texttt{setupModel()} in \texttt{citymodel.cpp}
+    \item Implement \texttt{createTreeModel()} in \texttt{mainwindow.cpp}
     \item Display cities grouped by countries
     \item[]
-\centeredImage{modelview/images/sol-cities-standarditem}
+\centeredImage{modelview/images/sol-treecityengine}
 
 
  \end{itemize}
-  \lab{modelview/lab-cities-standarditem}
+  \lab{modelview/lab-treecityengine}
 \end{slide}
 
 

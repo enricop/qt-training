@@ -47,13 +47,12 @@ proxy->sort(0, Qt::AscendingOrder);
   \end{itemize}
 \medskip
 \begin{itemize}
-\item \textbf{Filter via \iCls{TextInputs} signal}
+\item \textbf{Filter via \iCls{QLineEdit} signal}
 \item[]
-\begin{qml}
-\qtt{TextInput~\{}\\
-\qtt{~~~~\qc{type}{onTextChanged}:~\_proxy.setFilterWildcard(text)}\\
-\qtt{\}}\\
-\end{qml}
+\begin{cpp}
+connect(m_edit, SIGNAL(textChanged(QString)),
+proxy, SLOT(setFilterWildcard(QString)));
+\end{cpp}
 \end{itemize}
 \demo{modelview/ex-sortfiltertableview}
 \end{slide}

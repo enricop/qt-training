@@ -38,9 +38,38 @@
 %----------------------------------------------------------------------
 \begin{slide}{1016}\frametitle{Model/View-Components}\label{model_view_concepts}
 \xConcept{Model/View!Concept}
-% \oooFlushedImage{model-view-overview}
-\centeredImageDoubleWidth{modelview/images/modelview-overview}\\
-\medskip
+\flushedImageDoubleWidth{modelview/images/modelview-overview}
+  \begin{itemize}
+  \item Model/View Components
+    \begin{itemize}
+    \item View
+      \begin{itemize}
+        \item Displays data structure
+      \end{itemize}
+    \item Delegate
+      \begin{itemize}
+        \item Renders single data
+        \item Supports editing data
+      \end{itemize}
+      \item Model
+      \begin{itemize}
+        \item Unified adapter to data
+      \end{itemize}
+    \end{itemize}
+  \item Model/View Infrastructure
+    \begin{itemize}
+    \item \textit{Item}
+      \begin{itemize}
+        \item Imaginary unit of data in model
+      \end{itemize}
+    \item Index
+      \begin{itemize}
+        \item Used to locate item in model
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+  
+\smallskip
 \demo{modelview/ex-simple}
   
 \end{slide}
@@ -55,23 +84,23 @@
 %----------------------------------------------------------------------
 \begin{slide}{1600}\frametitle{Display the Structure - View Classes}
 \begin{itemize}
- \item \textbf{QtQuick ItemView}
+ \item \iCls{QAbstractItemView}
    \begin{itemize}
-   \item Abstract base class for scrollable views
+   \item Abstract base class for all views
    \end{itemize}
-\item \textbf{QtQuick ListView}
+\item \iCls{QListView}
   \begin{itemize}
-  \item Items of data in a list
+  \item List or icon view
   \end{itemize}
-\item \textbf{QtQuick GridView}
+\item \iCls{QTreeView}
   \begin{itemize}
-  \item Items of data in a grid
+  \item Items of data in hierarchical list
   \end{itemize}
-\item \textbf{QtQuick PathView}
+\item \iCls{QTableView}
   \begin{itemize}
-  \item Items of data along a specified path
+  \item Item based row/column view
   \end{itemize}
-  \centeredImage{qml-presenting-data/images/standard-quick-views}
+  \centeredImage{modelview/images/standard-views}
 \end{itemize}
 \end{slide}
 
@@ -103,8 +132,18 @@
 \begin{slide}{1598}
   \frametitle{Data - Model - View Relationships}
   \begin{itemize}
- \item \textbf{Standard Item Model}
-\flushedImage{modelview/images/datamodelview2}
+  \item \textbf{Item Widgets}
+  \flushedImage{modelview/images/datamodelview1}
+    \begin{itemize}
+    \item All combined
+    \item Model is your data
+    \end{itemize}
+ \end{itemize}
+
+  
+  \begin{itemize}
+  \item \textbf{Standard Item Model}
+  \flushedImage{modelview/images/datamodelview2}
     \begin{itemize}
     \item Data+Model combined
     \item View is separated
@@ -217,71 +256,6 @@ QString text = model->data(index, Qt::DisplayRole).toString()
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{}\frametitle{Mapping Item Roles from/to QML}
-  \begin{itemize}
-      \item Item Roles in C++
-      \item[]
-      \begin{cpp}
-// Asking for display text
-QString text = model->data(index, Qt::DisplayRole).toString()
-      \end{cpp}
-      \vspace*{1.0em}
-      \item Item properties in QML
-      \item[]
-      \begin{qml}
-\qtt{\qc{type}{onCurrentIndexChanged}:~\{}\\
-\qtt{~~~~var text = model.get(index).display}\\
-\qtt{\}}\\
-      \end{qml}
-      \item Default mappings
-      \begin{itemize}
-          \item \iClsEnum{Qt}{DisplayRole} in C++ is \qc{type}{display} in QML
-          \item \iClsEnum{Qt}{DecorationRole} in C++ is \qc{type}{decoration} in QML
-      \end{itemize}
-      \item Add additional mappings by reimplementing \iClsFn{QAbstractItemModel}{roleNames}
-  \end{itemize}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{}\frametitle{Exporting models to QML}
-  \begin{itemize}
-    \item Export model instance
-    \begin{itemize}
-        \item Create model instance in C++
-        \item Set as a context property on the view's engine
-        \item[]
-        \begin{cpp}
-CustomModel *model = new CustomModel;        
-QQuickView view;
-view.engine()->rootContext("_model", model);
-        \end{cpp}
-        \item Use in QML by id
-        \item[]
-        \begin{qml}
-\qtt{\qc{class}{ListView}~\{~\qc{type}{model}:~\_model~\}}\\
-        \end{qml}
-    \end{itemize}
-    \vspace*{1.0em}
-    \item Export model type
-    \begin{itemize}
-        \item Register custom model class with QML type system
-        \item[]
-        \begin{cpp}
-qmlRegisterType<CustomModel>("Models", 1, 0, "CustomModel");        
-        \end{cpp}
-        \item Use in QML like any other QML element
-        \item[]
-        \begin{qml}
-\qtt{\qc{keyword}{import}~\qc{class}{Models}~\qc{number}{1.0}}\\
-\qtt{\qc{class}{ListView}~\{}\\
-\qtt{~~~~\qc{type}{model}:~\qc{class}{CustomModel}~\{\}}\\
-\qtt{\}}\\
-        \end{qml}
-    \end{itemize}
-  \end{itemize}
-\end{slide}
-
-% ----------------------------------------------------------------------
 \begin{slide}{1594}\frametitle{Recap of Model/View Concept}
 \begin{columns}
   \begin{column}{50mm}
@@ -299,9 +273,9 @@ qmlRegisterType<CustomModel>("Models", 1, 0, "CustomModel");
       \end{itemize}
     \item \textbf{Views}
       \begin{itemize}
-      \item \iCls{ListView}
-      \item \iCls{GridView}
-      \item \iCls{PathView}
+      \item \iCls{QListView}
+      \item \iCls{QTableView}
+      \item \iCls{QTreeView}
       \end{itemize}
     \end{itemize}
   \end{column}

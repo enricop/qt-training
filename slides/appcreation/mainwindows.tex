@@ -148,7 +148,6 @@ void MainWindow::setupMenuBar() {
     \item Contains set of controls
     \item Can be horizontal or vertical
     \end{itemize}
-    \vspace{2mm}
   \item \texttt{QMainWindow::addToolbar( toolbar )}
    \begin{itemize}
    \item Adds toolbar to main window
@@ -160,12 +159,19 @@ void MainWindow::setupMenuBar() {
   \item \texttt{QToolBar::addAction( action )}
     \begin{itemize}
     \item Adds action to toolbar
-      \end{itemize}
-    \item \texttt{QToolBar::addWidget(widget)}
-      \begin{itemize}
-      \item Adds widget to toolbar
-      \end{itemize}
-    \item[] \begin{cpp}
+    \end{itemize}
+  \item \texttt{QToolBar::addWidget(widget)}
+    \begin{itemize}
+    \item Adds widget to toolbar
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{1764continued}
+  \frametitle{Creating Toolbars (continued)}
+  \begin{cpp}
 void MainWindow::setupToolBar() {
   QToolBar* bar = addToolBar(tr("File"));
   bar->addAction(action);
@@ -173,7 +179,6 @@ void MainWindow::setupToolBar() {
   bar->addWidget(new QLineEdit(tr("Find ...")));
   ...
   \end{cpp}
-  \end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------

@@ -117,6 +117,25 @@ bool MyModel::removeRows(int row, int count, parent) {
 \demo{modelview/ex-stringlistmodel-4}
 \end{slide}
 
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{}\frametitle{A table Model}
+\begin{itemize}
+  \item 2-dimensional model (rows x columns)
+  \item \texttt{int columnCount(parent)}
+  \begin{itemize}
+    \item Enabling columns
+    \begin{cpp}
+int MyModel::columnCount ( parent ) const {
+    // return number of columns for parent
+}
+QVariant MyModel::data( index, role ) const {
+    // adapt to react on requested column from index
+}    
+    \end{cpp}
+  \end{itemize}
+  \demo{modelview/ex-tablemodel}
+\end{itemize}
+\end{slide}
 
 % ----------------------------------------------------------------------
 \begin{slide}{1587}\frametitle{Lab: City List Model}
@@ -128,7 +147,7 @@ bool MyModel::removeRows(int row, int count, parent) {
     \end{itemize}
   \item Your Task:
     \begin{itemize}
-    \item Rebase \iCls{CityModel} to \iCls{QAbstractListModel}
+    \item Adapt the data to a table model
     \end{itemize}
   \item \textbf{Optional}
     \begin{itemize}
@@ -136,7 +155,7 @@ bool MyModel::removeRows(int row, int count, parent) {
     \item Enable adding/removing cities
    \end{itemize}
  \end{itemize}
-\lab{modelview/lab-cities-standarditem}
+\lab{modelview/lab-citymodel}
  
 \end{slide}
 

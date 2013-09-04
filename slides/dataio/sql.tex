@@ -163,7 +163,6 @@ query.numRowsAffected(); // e.g. update statement
 QSqlQuery query;
 query.prepare("INSERT INTO person (id, forename, surname) "
               "VALUES (:id, :forename, :surname)");
-// for each data you want to insert
     query.bindValue(":id", 1001);
     query.bindValue(":forename", "Bart");
     query.bindValue(":surname", "Simpson");
@@ -174,7 +173,6 @@ query.prepare("INSERT INTO person (id, forename, surname) "
 QSqlQuery query;
 query.prepare("INSERT INTO person (id, forename, surname) "
               "VALUES (?, ?, ?)");
-// for each data you want to insert
     query.bindValue(0, 1001);
     query.bindValue(1, "Bart");
     query.bindValue(2, "Simpson");

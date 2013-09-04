@@ -14,7 +14,8 @@
 % ----------------------------------------------------------------------
 \subsection{Drag and Drop}
 % ----------------------------------------------------------------------
-\begin{slide}{1988}
+\begin{slide}{1988}
+
 
 \frametitle{Drag and Drop}
 \begin{itemize}
@@ -29,9 +30,11 @@
     \end{itemize}
 \end{itemize}
 
-\end{slide}
+\end{slide}
+
 % ----------------------------------------------------------------------
-\begin{slide}{1987}
+\begin{slide}{1987}
+
 \frametitle{Start Drag}
 Starting an item drag is similar to dragging from a QWidget.
  \begin{itemize}
@@ -42,25 +45,31 @@ Starting an item drag is similar to dragging from a QWidget.
      \end{itemize}
  \item In \texttt{mouseMoveEvent()}, decide if drag started? if so:
     \begin{itemize}
-    \item Create a \iCls{QDrag} instance
-    \item Attach a \iCls{QMimeData} to it
+    \item Create a \iCls{QDrag} instance
+
+    \item Attach a \iCls{QMimeData} to it
+
         \begin{itemize}
         \item See section on Drag and Drop for \texttt{QMimeData info}
         \end{itemize}
-    \item Call \iClsFn{QDrag}{exec}
+    \item Call \iClsFn{QDrag}{exec}
+
         \begin{itemize}
         \item Function returns when user drops
         \item Does not block event loop
         \end{itemize}
     \end{itemize}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 % ----------------------------------------------------------------------
 
-\begin{slide}{1986}
+\begin{slide}{1986}
+
 \frametitle{Drop on a scene}
 \begin{itemize}
-\item Override \iClsFn{QGraphicsScene}{dropEvent}
+\item Override \iClsFn{QGraphicsScene}{dropEvent}
+
     \begin{itemize}
     \item To accept drop:
         \begin{itemize}
@@ -68,14 +77,18 @@ Starting an item drag is similar to dragging from a QWidget.
         \item \texttt{setDropAction(Qt::DropAction); accept();}
         \end{itemize}
     \end{itemize}
-\item Override \iClsFn{QGraphicsScene}{dragMoveEvent}
+\item Override \iClsFn{QGraphicsScene}{dragMoveEvent}
+
 \item Optional overrides:
     \begin{itemize}
     \item \texttt{dragEnterEvent()}, \texttt{dragLeaveEvent()}
     \end{itemize}
 \end{itemize}
-\end{slide}
-\begin{slide}[fragile]{1985}
+\end{slide}
+
+\begin{slide}[fragile]{1985}
+
+
 \frametitle{startDrag example}
 \begin{cpp}
 void startDrag( Qt::DropActions supportedActions ) {
@@ -96,9 +109,12 @@ void startDrag( Qt::DropActions supportedActions ) {
         }
 \end{cpp}
 \demo{graphicsview/ex-dragdrop}
-\end{slide}
+\end{slide}
+
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1984}
+\begin{slide}[fragile]{1984}
+
+
 \frametitle{dropEvent() on a scene}
 \begin{cpp}
 void DiagramScene::dropEvent( QGraphicsSceneDragDropEvent* event ) {
@@ -115,16 +131,18 @@ void DiagramScene::dropEvent( QGraphicsSceneDragDropEvent* event ) {
              event->acceptProposedAction();
          }
     } else
-        /* Call baseclass to allow per-item dropEvent */
-
+        // Call baseclass to allow per-item dropEvent
         QGraphicsScene::dropEvent( event );
 }
 \end{cpp}
 \demo{graphicsview/ex-dragdrop}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1983}
+\begin{slide}[fragile]{1983}
+
+
 \frametitle{Drop on an item}
 \begin{itemize}
 \item To drop into an item:
@@ -150,5 +168,6 @@ void DiagramScene::dragEnterEvent(QGraphicsSceneDragDropEvent* e){
 \end{cpp}
 \demo{graphicsview/ex-dragdrop}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 

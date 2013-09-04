@@ -37,12 +37,9 @@ int value = settings.value("group/value").toInt();
    \begin{itemize}
    \item \lstinline{settings.value("group/value", 68).toInt()}
  \end{itemize}
-   \item If value not found and default not specified
-     \begin{itemize}
-     \item Invalid \texttt{QVariant()} returned
-     \end{itemize}
+   \item Returns invalid \texttt{QVariant()} if value not found and no default
 
-    \end{itemize}
+   \end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------

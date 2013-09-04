@@ -135,7 +135,7 @@ layout->addWidget(one);
 window->setLayout(layout);
   \end{cpp}               
   \end{itemize}
-  \qtexample{layouts/basiclayouts} ( \textit{See create[H,V]BoxLayout()} )
+  \qtexample{layouts/basiclayouts}
 \end{slide}
 
 %----------------------------------------------------------------------
@@ -179,7 +179,6 @@ window->setLayout(layout)
   \end{itemize}
 \item Respects style guide of individual platforms.
 \item[] \begin{cpp}
-QWidget* window = new QWidget();
 QPushButton* one = new QPushButton("One");
 ...
 QFormLayout* layout = new QFormLayout();
@@ -187,7 +186,7 @@ layout->addRow("One", one);
 ...
 window->setLayout(layout)
 \end{cpp}                  
-  \item[] \demo{widgets/ex-layouts} ( \textit{See createFormLayout()} )
+  \item[] \demo{widgets/ex-layouts}
   \item Form layout with cleanlooks and mac style
   \item[] \begin{tabular}{ c c }
 \image{widgets/images/formlayout-win} & \image{widgets/images/formlayout-mac}
@@ -343,11 +342,8 @@ widget->setSizePolicy(policy);
   \label{stretching}  
   \begin{itemize}
   \item Develop the following layouts
-  \item Adjust the layouts as shown below.
-  \item Optionally:
-    \begin{itemize}
-    \item Make buttons resize vertically when making the window higher.
-    \end{itemize}
+  \item Adjust the layouts as shown below
+  \item Optional: Make buttons resize vertically
   \end{itemize}
   \centeredImage{widgets/images/layoutbuttons} 
   \lab{widgets/lab-layoutbuttons}

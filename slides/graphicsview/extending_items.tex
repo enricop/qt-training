@@ -14,9 +14,11 @@
 % ----------------------------------------------------------------------
 \subsection{Creating Custom Items}
 % ----------------------------------------------------------------------
-\begin{slide}{1749}
+\begin{slide}{1749}
+
 \frametitle{Extending QGraphicsItem}
-\iCls{QGraphicsItem} pure virtual methods (required overrides):
+\iCls{QGraphicsItem} pure virtual methods (required overrides):
+
 \begin{itemize}
 \item \texttt{void }\hClsFn{QGraphicsItem}{paint}
     \begin{itemize}
@@ -25,7 +27,8 @@
 \item \iCls{QRectF} \hClsFn{QGraphicsItem}{boundingRect}
     \begin{itemize}
     \item Returns outer bounds of item as a rectangle 
-    \item Called by \iCls{QGraphicsView} to determine what regions need to be redrawn
+    \item Called by \iCls{QGraphicsView} to determine what regions need to be redrawn
+
     \end{itemize}
       
 \item \iCls{QPainterPath} \hClsFn{QGraphicsItem}{shape} - shape of item
@@ -34,24 +37,30 @@
     \item Defaults to \hClsFn{QGraphicsItem}{boundingRect} if not implemented
     \end{itemize}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
 
-\begin{slide}{1748}
+\begin{slide}{1748}
+
 \frametitle{Boundaries}
 \centeredImageFullWidth{graphicsview/images/boundaries}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
 
-\begin{slide}{1747}
+\begin{slide}{1747}
+
 \frametitle{Painting Items}
 \begin{itemize}
 \item Item is in complete control of drawing itself
-\item Use standard \iCls{QPainter} drawing methods
+\item Use standard \iCls{QPainter} drawing methods
+
     \begin{itemize}
-    \item \iCls{QPen}, \iCls{QBrush}, pixmaps, gradients, text, etc. 
+    \item \iCls{QPen}, \iCls{QBrush}, pixmaps, gradients, text, etc. 
+
     \end{itemize}
 \item No background to draw
 
@@ -61,12 +70,15 @@
     \end{itemize}
 \end{itemize}
 
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
 
 
-\begin{slide}[fragile]{1746}
+\begin{slide}[fragile]{1746}
+
+
 \frametitle{Custom Item example}
 \begin{cpp}
 
@@ -140,7 +152,8 @@ void PendulumItem::paint( QPainter* painter,
 \begin{itemize}
 \item Easier approach to making a Pendulum:
     \begin{itemize}
-    \item Extend \iCls{QGraphicsItemGroup}
+    \item Extend \iCls{QGraphicsItemGroup}
+
     \item Use other concrete items as elements, add as children
     \item No need to override \texttt{paint()} or \texttt{shape()}
     \end{itemize} 
@@ -160,17 +173,20 @@ PendulumItem::PendulumItem(QGraphicsItem* parent)
 }
 \end{cpp}
 \demo{graphicsview/ex-pendulum}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
 
-\begin{slide}{1741}
+\begin{slide}{1741}
+
 \frametitle{Event Handling}
 \begin{itemize}
 \item \texttt{QGraphicsItem::sceneEvent(QEvent*)}
     \begin{itemize}
     \item Receives all events for an item
-    \item Similar to \iClsFn{QWidget}{event}
+    \item Similar to \iClsFn{QWidget}{event}
+
     \end{itemize} 
 \item Specific typed event handlers:
     \begin{itemize}
@@ -184,14 +200,18 @@ PendulumItem::PendulumItem(QGraphicsItem* parent)
     \item \texttt{hoverEnterEvent(QGraphicsSceneHoverEvent*)}
     \end{itemize}
 
-\begin{block}{When overriding mouse event handlers:}
-   Make sure to call base-class versions, too. Without this, the item select, focus, move behavior will not work as expected.
-\end{block}
+\item When overriding mouse event handlers:
+  \begin{itemize}
+     \item Make sure to call base-class versions, too. Without this, the item select, focus, move behavior will not work as expected.
+   \end{itemize}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1740}
+\begin{slide}[fragile]{1740}
+
+
 \frametitle{Event Handler examples}
 \begin{cpp}
 void MyView::wheelEvent(QWheelEvent *event) {
@@ -214,10 +234,12 @@ void MyView::keyPressEvent(QKeyEvent *event) {
 }
 \end{cpp}
 
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}{1739}
+\begin{slide}{1739}
+
 \frametitle{Collision Detection}
 \begin{itemize}
 \item Determines when items' shapes intersect
@@ -228,12 +250,14 @@ void MyView::keyPressEvent(QKeyEvent *event) {
     \end{itemize}
 \item \texttt{shape()}
     \begin{itemize}
-    \item Returns \iCls{QPainterPath} used for collision detection
+    \item Returns \iCls{QPainterPath} used for collision detection
+
     \item Must be overridden properly
     \end{itemize}
 \item \texttt{items()}
     \begin{itemize}
-    \item Overloaded forms take \iCls{QRectF}, \iCls{QPolygonF}, \iCls{QPainterPath}
+    \item Overloaded forms take \iCls{QRectF}, \iCls{QPolygonF}, \iCls{QPainterPath}
+
     \item Return items found in rect/polygon/shape
     \end{itemize}
 \end{itemize}

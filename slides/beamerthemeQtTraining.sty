@@ -22,39 +22,42 @@
 \setbeamertemplate{footline} {
     \usebeamerfont{page number in head/foot}
 
-        % logo
-        \begin{textblock*}{\paperwidth}(8pt, 241pt)
-            \includegraphics[scale=0.08, keepaspectratio]{\leftSideLogo}
+        % digia logo
+        \begin{textblock*}{\paperwidth}(6pt, 252pt)
+            \includegraphics[scale=0.2, keepaspectratio]{\leftSideLogo}
         \end{textblock*}
         % subsection
-        \begin{textblock*}{\paperwidth}(40pt, 249.2pt)
-            {
-                \usebeamercolor[fg]{footer left}
-                \setfont{10}\insertsubsectionhead
-            }
-        \end{textblock*}
+        % ...removed...
         % page
-        \begin{textblock*}{\paperwidth}(225pt, 252pt)
-            {
-                \usebeamercolor[fg]{footer left}
-                \ifthenelse{\equal{\thepage}{1}}{}{\tiny\insertframenumber/\inserttotalframenumber}
-            }
-        \end{textblock*}
-        % section
-        \begin{textblock*}{\paperwidth}(0pt, 260.0pt)
+        \begin{textblock*}{\paperwidth}(0pt, 242pt)
             \hspace{\stretch{1}}
             {
-                \setfont{10}\color{black}{\insertsectionhead}
+                \color{nokiadarkgray}
+                \ifthenelse{\equal{\thepage}{1}}{}{\tiny\insertframenumber/\inserttotalframenumber}
             }
-            \hspace*{2pt}
+            \hspace{1ex}
         \end{textblock*}
-        \begin{textblock*}{\paperwidth}(0pt, 259.625pt)
+        % section
+        \begin{textblock*}{\paperwidth}(0pt, 258pt)
             \hspace{\stretch{1}}
             {
               \ifthenelse{\equal{\thepage}{1}}{}{
-              \setfont{10}\color{white}{\insertsectionhead}
+              \setfont{8}\color{white}{\insertsectionhead}
             }}
-            \hspace*{2.375pt}
+            \hspace{\stretch{1}}
+        \end{textblock*}
+        % copyright
+        \begin{textblock*}{\paperwidth}(0pt, 268pt)
+            \hspace{\stretch{1}}
+            {
+              \ifthenelse{\equal{\thepage}{1}}{}{
+              \setfont{4}\color{white}{\copyright \the\year\ Digia}
+            }}
+            \hspace{\stretch{1}}
+        \end{textblock*}
+        % partner logo
+        \begin{textblock*}{\paperwidth}(338pt, 255pt)
+            \includegraphics[scale=0.2, keepaspectratio]{\rightSideLogo}
         \end{textblock*}
   
 }
@@ -63,7 +66,7 @@
 \setbeamertemplate{frametitle} 
 {
   \vspace{3.75mm}
-    \hfill\insertframetitle\hspace*{-10pt}
+    \insertframetitle
 }
 
 %---------------------------------------- Background (frame of slides)
@@ -95,7 +98,7 @@
 \setbeamercolor{itemize subitem}{fg=structure.fg!70}
 \setbeamercolor{itemize subsubitem}{fg=structure.fg!30}
 \definecolor{normaltextcolor}{RGB}{74,74,74}
-\setbeamercolor{normal text}{fg=normaltextcolor}
+\setbeamercolor{normal text}{fg=nokiadarkgray}
 \setbeamercolor{alerted text}{fg=qtdarkgreen}
 
 \setbeamertemplate{navigation symbols}{}
@@ -108,20 +111,21 @@
 % \setbeamertemplate{itemize item}{\includegraphics[scale=0.25916]{Theme/mainBullet.png}}
 % \setbeamertemplate{itemize subitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
 % \setbeamertemplate{itemize subsubitem}{\includegraphics[scale=0.25916]{Theme/secundaryBullet.png}}
-\definecolor{qtdarkgreen}{RGB}{95,95,95}
+\definecolor{qtdarkgreen}{RGB}{50,137,48}
 \definecolor{qtlightgreen}{RGB}{202,222,180}
+\definecolor{midnightblue}{RGB}{0,103,149}
 
-\definecolor{darkbullet}{RGB}{128,156,171}
+\definecolor{darkbullet}{RGB}{50,137,48}
 \definecolor{lightbullet}{RGB}{202,222,180}
 \setbeamercolor{itemize item}{fg=darkbullet}
-\setbeamercolor{itemize subitem}{fg=lightbullet}
+\setbeamercolor{itemize subitem}{fg=darkbullet}
 \setbeamercolor{itemize subsubitem}{fg=lightbullet}
 
-\renewcommand{\leftSideLogo}{diagrams/qt-logo}
-\renewcommand{\rightSideLogo}{diagrams/nokia-logo}
+\renewcommand{\leftSideLogo}{diagrams/digia-logo}
+\renewcommand{\rightSideLogo}{images/partner-logo}
 \renewcommand{\pageBackground}{Theme/background-noqt}
 \renewcommand{\frontPageBackground}{Theme/background-noqt}
 \renewcommand{\handoutBackground}{Theme/background-noqt}
 
-\setbeamercolor{structure}{fg=qtdarkgreen}
+\setbeamercolor{structure}{fg=nokiadarkgray}
 

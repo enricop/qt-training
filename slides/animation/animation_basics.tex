@@ -305,15 +305,15 @@ Animations can be placed in groups.
 \begin{itemize}
 \item Sequential groups run multiple animations one after the other.
 \end{itemize}
-\vfill
+\smallskip
 \centeredImage{animation/diagrams/animation-sequential.pdf}
-\vfill
+\smallskip
 \begin{itemize}
 \item Parallel groups run multiple animations at the same time.
 \end{itemize}
-\vfill
+\smallskip
 \centeredImage{animation/diagrams/animation-parallel.pdf}
-\vfill
+\smallskip
 \begin{itemize}
 \item Groups help you to organize animations.
 \end{itemize}
@@ -332,9 +332,9 @@ QPropertyAnimation *anim1 =
 QPropertyAnimation *anim2 =
         new QPropertyAnimation(label2, "pos");
 \end{lstlisting}
-\vfill
+\smallskip
 \centeredImage{animation/diagrams/animation-sequential.pdf}
-\vfill
+\smallskip
 \begin{lstlisting}
 QSequentialAnimationGroup group;
 group.addAnimation(anim1);
@@ -342,7 +342,7 @@ group.addAnimation(anim2);
 group.start();
 \end{lstlisting}
 \normalsize
-\vfill
+\medskip
 \demo{animation/ex-sequential}
 \end{slide}
 
