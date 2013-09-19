@@ -33,6 +33,8 @@
  \qthome{services-partners}{Service \& Partners}
 \end{slide}
 
+%----------------------------------------------------------------------
+
 \begin{slide}{1223}
   \frametitle{Qt is used everywhere}
   %%% Remove this by fixing the page margins and using a centering image command.
@@ -41,15 +43,10 @@
   %%%
 \end{slide}
 
-\begin{slide}
-  \frametitle{The Qt virtuous cycle}
-  \centeredImageFullHeight{fundamentals/images/qt_cycle} \\
-  \medskip
-  \qthome{products/licensing}{Qt Business Model}
-\end{slide}
+%----------------------------------------------------------------------
 
 \begin{slide}{1222}
-  \frametitle{Why Qt}
+  \frametitle{Why Qt?}
   \begin{itemize}
   \item Write code once to target multiple platforms
   \item Produce compact, high-performance applications
@@ -63,35 +60,67 @@
   \end{itemize}
   \vspace{1cm}
   \begin{block}{} {
-      \textit{Over 15 years of customer success and community growth}
+      \textit{Over 16 years of customer success and community growth}
     }
   \end{block}
 \end{slide}
 
+%----------------------------------------------------------------------
+
 \begin{slide}{1221}
   \frametitle{Qt Architecture}
+  \vspace*{10mm}
   \centeredImageFullWidth{fundamentals/images/qt_architecture.pdf}
 \end{slide}
 
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{The Widget World}
+\centeredImageFullWidth{qml-intro/images/ui-widget.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{The Graphics View World}
+\centeredImageFullWidth{qml-intro/images/ui-graphicsview.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{The Open GL world}
+\centeredImageFullWidth{qml-intro/images/ui-opengl.jpg}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}{2001}\frametitle{The Qt Quick World}
+\vspace*{10mm}
+\centeredImageFullWidth{qml-intro/images/ui-quick.png}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
 \begin{slide}{1607}
-  \frametitle{Qt Demo}
-  \flushedImage{fundamentals/images/qtdemo}
+  \frametitle{Qt Demos}
   \begin{itemize}
-  \item Let's have a look at the QtDemo Application
+  \item Let's have a look some demo Qt Applications
    \begin{itemize}
-    \item \demo{\$QTDIR/bin/qtdemo}
+    \item \demo{\$QTDIR/examples}
     \end{itemize}
-  \item Comes with every Qt 4 installation
-  \item \textit{No longer included with Qt 5}
+  \item Come with every Qt installation
  \end{itemize}
 \medskip
 \begin{tabular}{l|l}
     \textbf{Technology} & \textbf{Demo} \\ \hline
-    Painting & \textit{Demonstrations/Path Stroking} \\\hline
-    Widgets & \textit{Demonstrations/Books} \\\hline
-    Widgets & \textit{Demonstrations/TextEdit} \\\hline
-    Graphics View &\textit{Demonstrations/40.000 Chips} \\\hline
-    OpenGL & \textit{Demonstrations/Boxes} \\\hline
-    WebKit & \textit{Demonstrations/Browser} \\\hline
+    Painting & \textit{examples/widgets/painting/composition} \\\hline
+    Widgets & \textit{examples/widgets/itemviews/spreadsheet} \\\hline
+    Graphics View & \textit{examples/widgets/graphicsview/collidingmice} \\\hline
+    OpenGL & \textit{examples/widgets/graphicsview/boxes} \\\hline
+    WebKit & \textit{examples/webkitqml/flickrview} \\\hline
+    Qt Quick & \textit{examples/declarative/photoviewer} \\\hline
   \end{tabular}
 \end{slide}

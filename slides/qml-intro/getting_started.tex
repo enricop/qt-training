@@ -60,16 +60,15 @@ Let's start with an example...
 % Launching an example - the QML viewer, some simple markup
 \vspace*{1em}
 \begin{itemize}
+\item \texttt{qmlscene} is a utility to load and display QML documents
+  \begin{itemize}
+  \item Will create a view window that can be resized
+  \item Meant to be a testing tool, rather then an application launcher
+  \end{itemize}
+
 \item Locate the example: \texttt{rectangle.qml}
 \item Launch the QML runtime:\\
 \consolecode{qmlscene~rectangle.qml}
-
-% qml(viewer) shows the top level element at the correct size initially, but
-% it will be resized with the window.
-%
-% Default values for x and y.
-
-%%% Explain QML viewer                  
 
 \demo{qml-intro/ex-concepts/rectangle.qml}
 
@@ -77,6 +76,36 @@ Let's start with an example...
 
 \end{slide}
 
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]{2021}\frametitle{Viewing an Example from C++}
+
+\begin{itemize}
+  \item \texttt{main.cpp}
+  \begin{cpp}
+#include <QtGui/QGuiApplication>
+#include <QtQuick/QQuickView>
+
+int main(int argc, char *argv[])
+{
+  QGuiApplication app(argc, argv);
+  QQuickView *view = new QQuickView;
+  view->setSource(QUrl("rectangle.qml"));
+  view->show();
+  return app.exec();
+}
+  \end{cpp}
+  
+  \item \texttt{rectangle.pro}
+  \begin{qmake}
+TARGET = rectangle
+QT += qml quick
+SOURCES += main.cpp\
+  \end{qmake}
+
+\end{itemize}
+
+\end{slide}
 %----------------------------------------------------------------------
 
 \begin{slide}{2015}\frametitle{Elements}

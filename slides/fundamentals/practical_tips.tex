@@ -28,7 +28,7 @@
   \item \iConcept{Operator overloading}
   \item \iConcept{Templates}
     \begin{itemize}
-    \item For the container classes only
+    \item Limited to the container and concurrent classes
     \end{itemize}
   \item No ...
     \begin{itemize}
@@ -63,19 +63,12 @@
   \xConcept{Answers!Searching for}
   \xConcept{Source code}
   \begin{itemize}
-  \item Documentation in Qt Assistant (or QtCreator)
+  \item Documentation in Qt Assistant or QtCreator
   \item Qt's examples:  \texttt{\$QTDIR/examples}
     \item Qt Project: \texttt{http://qt-project.org}
  \item Qt Centre Forum: \textit{\texttt{http://www.qtcentre.org/}}
-  \item KDE project source code
-    \begin{itemize}
-    \item \texttt{http://lxr.kde.org/} \textit{(cross-referenced)}.
-    \end{itemize}
   \item Mailing lists see \texttt{http://lists.qt-project.org}
-  \item IRC: 
-    \begin{itemize}
-    \item On \textit{irc.freenode.org} channel: \texttt{\#qt}
-    \end{itemize}
+  \item IRC: \textit{irc.freenode.org} channel: \texttt{\#qt}
   \end{itemize}
    \begin{block}{Use the source!}
     \textit{Qt's source code is easy to read, and can answer
@@ -89,25 +82,27 @@
   \begin{itemize}
   \item Qt Modules
     \begin{itemize}
-    \item  QtCore, QtGui, QtXml, QtSql, QtNetwork, QtTest ...
-    \item[] \doc{modules.html}{Qt Modules}
+    \item  QtCore, QtGui, QtWidgets, QtQuick, QtXml, QtNetwork, QtTest ...
     \end{itemize}
+  \item Modules contain libraries, plugins, and documentation
   \item Enable Qt Module in qmake \texttt{.pro} file: 
     \begin{itemize}
-    \item  \verb!QT += network!
+    \item  \verb!QT += widgets!
     \end{itemize}
   \item Default: qmake projects use QtCore and QtGui
     \begin{itemize}
-    \item Any Qt class has a header file.
+    \item Widget projects require QtWidgets module
+    \item Qt Quick projects require QtQuick module
+    \end{itemize}
+  \item Every Qt class has a header file.
   \begin{cpp}
 #include <QLabel>
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
   \end{cpp}
-    \item Any Qt Module has a header file.
+    \item Every Qt Module has a header file.
   \begin{cpp}
-#include <QtGui>
+#include <QtWidgets>
   \end{cpp}
-    \end{itemize} 
   \end{itemize}
 \end{slide}
 
@@ -119,10 +114,10 @@
   \begin{cpp}
 #include <QtGui>
   \end{cpp}
-\item Precompiled header and the compiler
+\item Convenient for short examples  
+\item Useful if precompiled headers are supported
   \begin{itemize}
-  \item If \textbf{not} supported may add extra compile time
-  \item If supported may speed up compilation
+  \item If \textbf{not} supported may slow down compile time
   \item Supported on: Windows, Mac OS X, Unix \\
     \doc{qmake-precompiledheaders.html}{qmake precompiled headers}
   \end{itemize}
@@ -135,7 +130,7 @@
    \item Reduce compilation time
      \begin{itemize}
      \item Use class includes (\#include <QLabel>)
-     \item Forward declarations (\texttt{class QLabel;})
+     \item Use forward declarations (\texttt{class QLabel;})
      \end{itemize}
    \end{itemize}
    \vspace{3mm}

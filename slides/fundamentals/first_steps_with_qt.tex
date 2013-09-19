@@ -21,13 +21,13 @@
   \begin{itemize}
   \begin{cpp}
 #include <QApplication>
-#include <QPushButton>
+#include <QLabel>
 
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-  QPushButton button("Hello world");
-  button.show();
+  QLabel label("Hello world");
+  label.show();
   return app.exec();
 }
   \end{cpp}
@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
  \end{itemize}
 \begin{qmake}
 # File: helloworld.pro
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+TARGET = helloworld
+QT += widgets
 SOURCES  = main.cpp
 HEADERS +=          # No headers used
 \end{qmake}
