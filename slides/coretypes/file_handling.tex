@@ -1,0 +1,150 @@
+\subsection{File Handling}
+
+%----------------------------------------------------------------------
+
+\begin{slide}\frametitle{QIODevice}
+  Base class for all I/O devices in Qt
+  \begin{itemize}
+    \item Files, buffers, sockets, network replies, etc.
+    \item Devices may be random access or sequential
+    \item \iCls{open}(), \iCls{close}(), \iCls{read}() \iCls{readLine}(), \iCls{write}(), ...
+    \item emits \iCls{readyRead}() when new data is available for reading
+  \end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}\frametitle{Working With Files}
+  Use Qt I/O classes for portable cross-platform file access
+  \begin{itemize}
+    \item \iCls{QFile}
+    \begin{itemize}
+      \item Interface for reading from and writing to files
+      \item Inherits \iCls{QIODevice}
+    \end{itemize}
+    \item \iCls{QTextStream}
+    \begin{itemize}
+      \item Interface for reading and writing text
+    \end{itemize}
+    \item \iCls{QDataStream}
+    \begin{itemize}
+      \item Serialization of binary data
+    \end{itemize}  \end{itemize}
+  Additional
+  \begin{itemize}
+    \item \iCls{QFileInfo} - System-independent file information
+    \item \iCls{QDir} - Access to directory structures and their contents
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Reading/Writing a File}
+  \begin{itemize}
+    \item Writing with text stream
+    \begin{cpp}
+QFile file("myfile.txt");
+if (file.open(QIODevice::WriteOnly)) {
+  QTextStream stream(&file);
+  stream << "HelloWorld " << 4711;
+  file.close();
+}
+    \end{cpp}
+    \item Reading with text stream
+    \begin{cpp}
+{
+  QString text; int value;
+  QFile file("myfile.txt");
+  if (file.open(QIODevice::ReadOnly)) {
+    QTextStream stream(&file);
+    stream >> text >> value;
+  }
+} // file closed automatically
+    \end{cpp}  
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}\frametitle{Text and Encodings}
+  \begin{itemize}
+  \item Using QTextStream
+    \begin{itemize}
+    \item Be aware of encoding
+    \item Need to call \iClsFnPar{QTextStream}{setCodec}{codec}
+    \end{itemize}
+  \item Alternative ways of reading a file
+    \begin{itemize}
+    \item \iClsFn{QFile}{readAll} \textit{returns \iCls{QByteArray}}
+    \item \iClsFnPar{QFile}{readLine}{maxlen} \textit{returns \iCls{QByteArray}}
+     \item \iClsFn{QTextStream}{readAll} \textit{returns \iCls{QString}}
+    \item \iClsFnPar{QTextStream}{readLine}{maxlen} \textit{returns \iCls{QString}}   
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]\frametitle{Reading/Writing data - QDataStream}
+  \begin{itemize}
+  \item Class \iCls{QDataStream}
+    \begin{itemize}
+    \item Alternative to \iCls{QTextStream}
+    \item Adds extra information about the data
+    \item Portable between hardware architectures and operating systems
+    \item Not human readable
+    \end{itemize}
+  \item \iCls{QDataStream} can serialize many Qt classes
+    \begin{itemize}
+    \item Not the case with \iCls{QTextStream}
+    \end{itemize}
+  \begin{cpp}
+QFile file("file.dat");
+if (file.open(QIODevice::WriteOnly)) {
+  QDataStream out(&file);
+  out << "Blue"; // string
+  out << QColor(Qt::blue); // as color
+}
+  \end{cpp}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}\frametitle{File Convenient Methods}
+  \begin{itemize}
+  \item Media methods: \hClsFnPar{}{load}{fileName}, \hClsFnPar{}{save}{fileName}
+    \begin{itemize}
+    \item for \iCls{QPixmap}, \iCls{QImage}, \iCls{QIcon}
+    \end{itemize}
+  \item \iCls{QFileDialog}
+    \begin{itemize}
+    \item \iClsFn{QFileDialog}{getExistingDirectory}
+    \item \iClsFn{QFileDialog}{getOpenFileName}
+    \item \iClsFn{QFileDialog}{getSaveFileName}
+    \end{itemize}
+  \item \iClsFnPar{QDesktopServices}{storageLocation}{type}
+    \begin{itemize}
+    \item Returns the default system directory where files of \textit{type} belong
+    \end{itemize}
+  \item File Operations
+    \begin{itemize}
+    \item \iClsFnPar{QFile}{exists}{fileName}
+    \item \iClsFnPar{QFile}{copy}{oldName, newName}
+    \item \iClsFnPar{QFile}{remove}{fileName}
+    \end{itemize}
+  \item Directory Information
+    \begin{itemize}
+    \item \iClsFn{QDir}{home}
+    \item \iClsFn{QDir}{drives}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+%----------------------------------------------------------------------
+% Local Variables: 
+% mode: latex 
+% TeX-master: "course"
+% End: 
