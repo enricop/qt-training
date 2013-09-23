@@ -11,7 +11,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Variants}
+\subsection{Variants}
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0238}\frametitle{QVariant}
@@ -22,6 +22,7 @@
     \item Supports implicit sharing (fast copying)
     \item Supports user types
   \end{itemize}\medskip
+\item A generic data object
 \item Use cases:
 \begin{cpp}
 QVariant property(const char* name) const;
@@ -43,7 +44,8 @@ class QAbstractItemModel {
   \item For \texttt{QtCore} types  
   \item[] \begin{cpp}
 QVariant variant(42);
-int value = variant.toInt(); // read back
+int value = variant.toInt(); // read back as integer
+QString text = variant.toString(); // read back as string
 qDebug() << variant.typeName(); // int
 \end{cpp}\vspace*{3mm}
 \item For non-core and custom types:
@@ -75,7 +77,7 @@ class Contact
 Q_DECLARE_METATYPE(Contact);
 \end{cpp}\medskip
 \item Type must support default construction, copy and assignment.\medskip
-\item Q\_DECLARE\_METATYPE shoud after class definition in header file.
+\item Q\_DECLARE\_METATYPE should be after class definition in header file.
 
 \medskip
 \doc{qmetatype.html\#Q_DECLARE_METATYPE}{Q\_DECLARE\_METATYPE}
@@ -112,6 +114,20 @@ int main(int argc, char* argv[])
 \end{slide}
 
 % ----------------------------------------------------------------------
+\begin{slide}{1253}
+\frametitle{qRegisterMetaType}
+\begin{itemize}
+  \item Q\_DECLARE\_METATYPE makes the type known to \iCls{QVariant} and template based functions
+  \item If instances of the type need to be marshalled or serialized they must be registered
+  \item \iCls{qRegisterMetaType} will register the type
+  \begin{itemize}
+    \item Instances can now be created dynamically at runtime
+    \item Type can now be used with the property system and \textit{queued} connections
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
 \begin{slide}[fragile]{1253}
 \frametitle{qRegisterMetaType}
 \begin{itemize}
@@ -137,153 +153,4 @@ int main(int argc, char* argv[])
 \doc{qmetatype.html\#qRegisterMetaType-2}{qRegisterMetaType}
 \doc{qmetatype.html\#construct}{construct}
 \end{itemize}
-\end{slide}
-
-
-% ----------------------------------------------------------------------
-\subsubsection{Properties}
-\begin{slide}[fragile]{1021}
-\frametitle{Properties}
-\begin{itemize}
-\item Qt Quick example\\[2mm]
-\begin{EXCLUDE}
-Rectangle {
-    objectName: "myRect"
-    height: 100
-    ...
-}
-\end{EXCLUDE}
-\begin{qml}
-\qtt{\qc{class}{Rectangle}~\{}\\
-\qtt{~~~~\qc{type}{objectName}:~\qc{string}{"myRect"}}\\
-\qtt{~~~~\qc{type}{height}:~\qc{number}{100}}\\
-\qtt{~~~~...}\\
-\qtt{\}}\\
-\end{qml}\medskip
-
-\item Direct access (Broken, due to private headers)
-  \begin{cpp}
-QQuickRectangle* rectangle
-  = root->findChild<QQuickRectangle*>("myRect");
-int height = rectangle->height();
-  \end{cpp}\medskip
-
-\item Generic property access:\\
-\begin{cpp}
-QObject* rectangle = root->findChild<QObject*>("myRect");
-int height = rectangle->property("height").value<int>();
-\end{cpp}
-\end{itemize}
-\hfill\tiny\textcolor{red}{Using findChild is almost always a bad idea!}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{1021}
-\frametitle{Getting to the root}
-\begin{itemize}
-\item The root object is the top level element in the QML document
-\begin{cpp}
-QQuickItem *root = view.rootItem()->childItems().first();
-
-// From previous slide:
-QObject* rectangle = root->findChild<QObject*>("myRect");
-int height = rectangle->property("height").value<int>();
-\end{cpp}
-\end{itemize}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{1422}
-\frametitle{Providing properties from QObject}
-\begin{cpp}
-class Customer : public QObject
-{
-    Q_OBJECT
-
-    Q_PROPERTY(QString id READ getId WRITE setId NOTIFY idChanged);
-
-  public:
-     QString getId() const;
-     void setId(const QString& id);
-  
-  signals:
-     void idChanged();
-
-  ...
-};
-\end{cpp}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{1022}
-\frametitle{Enum properties}
-\begin{cpp}
-class Customer : public QObject
-{
-    Q_OBJECT
-
-    Q_PROPERTY(CustomerType type READ getType WRITE setType 
-               NOTIFY typeChanged);
-
-  public:
-    enum CustomerType {
-      Corporate, Individual, Educational, Government
-    };
-
-    Q_ENUMS(CustomerType);
-    
-  ...
-};
-\end{cpp}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{2084}
-\frametitle{Properties}
-\begin{itemize}
-  \item Q\_Property is a macro:
-\begin{cpp}
-  Q_PROPERTY( type name READ getFunction [WRITE setFunction]
-  [RESET resetFunction] [NOTIFY notifySignal] [DESIGNABLE bool]
-  [SCRIPTABLE bool] [STORED bool] )
-\end{cpp}
-  \medskip
-  \item Property access methods:
-\begin{cpp}
-  QVariant property(const char* name) const;
-  void setProperty(const char* name, const QVariant &value);
-\end{cpp}
-  \medskip
-  \item If name is not declared as a \texttt{Q\_PROPERTY}
-  \begin{itemize}
-    \item -> \textbf{dynamic property}
-    \item Not accessible from Qt Quick.
-  \end{itemize}
-  \medskip
-  \item Note:
-  \begin{itemize}
-    \item Q\_OBJECT macro required for properties to work
-    \item \texttt{QMetaObject} knows nothing about dynamic properties
-  \end{itemize}
-\end{itemize}
-\end{slide}
-
-% ----------------------------------------------------------------------
-\begin{slide}[fragile]{1423}
-\frametitle{Using Properties}
-\begin{itemize}
-\item \iCls{QMetaObject} support property introspection\smallskip
-  \begin{cpp}
-  const QMetaObject *metaObject = object->metaObject();
-  const QString className = metaObject->className();
-  const int propertyCount = metaObject->propertyCount();
-  for ( int i=0; i<propertyCount; ++i ) {
-    const QMetaProperty metaProperty = metaObject->property(i);
-    const QString typeName = metaProperty.typeName()
-    const QString propertyName = metaProperty.name();
-    const QVariant value = object->property(metaProperty.name());
-  }
-  \end{cpp}
-\end{itemize}
-\demo{coretypes/ex-properties}
 \end{slide}

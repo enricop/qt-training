@@ -13,7 +13,6 @@
 
 \subsection{Qt's Object Model}
 
-\subsubsection{QObject}
 % ----------------------------------------------------------------------
 \begin{slide}{1244}
   \frametitle{Qt's C++ Object Model - \iCls{QObject}}
@@ -48,10 +47,15 @@
     \item Parent owns children
     \end{itemize}\medskip
 
-  \item Widget Centric
+  \item Construction/Destruction
     \begin{itemize}
-    \item Used intensively with QtWidget
-    \item Less so when using Qt/C++ from QML
+    \item Trees can be constructed in any order
+    \item Trees can be destroyed in any order
+      \begin{itemize}
+      \item If object has a parent: object is first removed from the parent
+      \item If object has children: deletes each child first
+      \item No object is deleted twice
+      \end{itemize}
     \end{itemize}
  \end{itemize}
  \medskip
@@ -74,8 +78,8 @@ QTimer* timer = new QTimer(this);
 
     \item \textbf{On Stack} - \texttt{QObject} without parent:
     \begin{itemize}
-    \item \texttt{QFile}, \texttt{QApplication}
-    \item Top level \texttt{QWidget}s: \texttt{QMainWindow}
+    \item \texttt{QFile}, usually local to a function
+    \item \texttt{QApplication} (local to \iCls{main())}
     \end{itemize}
     \medskip
 
@@ -89,7 +93,7 @@ QTimer* timer = new QTimer(this);
 \end{slide}
 
 % ----------------------------------------------------------------------
-\subsubsection{QWidget}
+
 \begin{slide}{1243}
   \frametitle{Qt's Widget Model - \texttt{QWidget}}
  \flushedImage{ooo/qobject-inherited}
@@ -105,7 +109,9 @@ QTimer* timer = new QTimer(this);
   \item Paints itself on screen
     \begin{itemize}
     \item Using styles
+    \item Or custom painting routines
     \end{itemize}
+  \item Traditional user interface object
 \end{itemize}
 \end{slide}
 

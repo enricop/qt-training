@@ -1,0 +1,127 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Properties}
+
+\begin{slide}[fragile]{1021}
+\frametitle{Properties}
+\begin{itemize}
+\item Qt Quick example\\[2mm]
+
+\inputqml{qml-intro/colorized/rectangle}
+
+\item Generic property access:\\
+\begin{cpp}
+QObject* root = view->rootObject();
+if (root != NULL) {
+    QString color = root->property("color").toString();
+}
+\end{cpp}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{2084}
+\frametitle{Properties}
+\begin{itemize}
+  \item Q\_PROPERTY is a macro:
+\begin{cpp}
+  Q_PROPERTY( type name READ getFunction [WRITE setFunction]
+  [RESET resetFunction] [NOTIFY notifySignal] [DESIGNABLE bool]
+  [SCRIPTABLE bool] [STORED bool] )
+\end{cpp}
+  \medskip
+  \item Property access methods:
+\begin{cpp}
+  QVariant property(const char* name) const;
+  void setProperty(const char* name, const QVariant &value);
+\end{cpp}
+  \medskip
+  \item If name is not declared as a \texttt{Q\_PROPERTY}
+  \begin{itemize}
+    \item Stored as a \textbf{dynamic property}
+    \item Not accessible from Qt Quick
+  \end{itemize}
+  \medskip
+  \item Note:
+  \begin{itemize}
+    \item Q\_OBJECT macro is required for properties to work
+    \item \texttt{QMetaObject} knows nothing about dynamic properties
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1422}
+\frametitle{Providing Properties from QObject}
+\begin{cpp}
+class Customer : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QString id READ getId WRITE setId NOTIFY idChanged);
+
+  public:
+     QString getId() const;
+     void setId(const QString& id);
+  
+  signals:
+     void idChanged();
+
+  ...
+};
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1022}
+\frametitle{Enum properties}
+\begin{cpp}
+class Customer : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(CustomerType type READ getType WRITE setType 
+               NOTIFY typeChanged);
+
+  public:
+    enum CustomerType {
+      Corporate, Individual, Educational, Government
+    };
+
+    Q_ENUMS(CustomerType);
+    
+  ...
+};
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]{1423}
+\frametitle{Using Properties}
+\begin{itemize}
+\item \iCls{QMetaObject} support property introspection\smallskip
+  \begin{cpp}
+  const QMetaObject *metaObject = object->metaObject();
+  const QString className = metaObject->className();
+  const int propertyCount = metaObject->propertyCount();
+  for ( int i=0; i<propertyCount; ++i ) {
+    const QMetaProperty metaProperty = metaObject->property(i);
+    const QString typeName = metaProperty.typeName()
+    const QString propertyName = metaProperty.name();
+    const QVariant value = object->property(metaProperty.name());
+  }
+  \end{cpp}
+\end{itemize}
+\demo{coretypes/ex-properties}
+\end{slide}
