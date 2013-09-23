@@ -1,6 +1,6 @@
-
+QT += core gui widgets
 TEMPLATE = app
-TARGET = 
+TARGET = ex-properties
 DEPENDPATH += .
 INCLUDEPATH += .
 

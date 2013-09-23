@@ -1,6 +1,6 @@
 /*************************************************************************
  *
- * Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (c) 2012, Digia Plc.
  * All rights reserved.
  *
  * See the LICENSE.txt file shipped along with this file for the license.
@@ -8,6 +8,7 @@
  *************************************************************************/
 
 #include <QtGui>
+#include <QtWidgets/QApplication>
 
 /** A function which converts any QObject with
     properties into a QString, using metaproperties.
@@ -33,7 +34,7 @@ QString objToString(const QObject* obj) {
 }
 int main (int argc, char* argv[]) {
     QApplication app(argc, argv);
-    app.setOrganizationName("nokia");
+    app.setOrganizationName("digia");
     app.setApplicationName("testproperties");
     app.setOrganizationDomain("com");
     qDebug() << objToString(&app);
