@@ -24,7 +24,7 @@
     \item Callbacks
       \begin{itemize}
       \item Based on function pointers
-      \item Not type-safe
+      \item Traditionally not type-safe
      \end{itemize}
     \item Observer Pattern (Listener)
       \begin{itemize}
@@ -60,19 +60,19 @@
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1032}\frametitle{Connection variants}
   \begin{itemize}
-  \item Qt 4 style:\\
+  \item Using macros (traditional method):\\
 \begin{cpp}
 connect( slider, SIGNAL(valueChanged(int)),
          spinbox, SLOT(setValue(int)));
 \end{cpp}\medskip
 
-\item Using function pointers:\\
+\item Using member functions:\\
 \begin{cpp}
 connect( slider, &QSlider::valueChanged,
          spinbox, &QSpinBox::setValue );
 \end{cpp}\medskip
 
-\item Using non-member function:\\
+\item Using non-member functions:\\
 \begin{cpp}
 static void printValue(int value) {...}
 connect( slider, &QSignal::valueChanged, &printValue );
@@ -89,27 +89,28 @@ connect( slider, &QSlider::valueChanged,
 \newcommand{\advantage}{\hspace{-5mm}\makebox[6mm]{\correct}}
 \newcommand{\disadvantage}{\hspace{-5mm}\makebox[6mm]{\incorrect}}
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1030}\frametitle{connect - function pointers}
+\begin{slide}[fragile]{1030}\frametitle{connect - member functions}
   \begin{itemize}
-\item Qt 5 components
+\item Primary choice when connecting objects\medskip
 \begin{cpp}
 connect( slider, &QSlider::valueChanged,
          spinbox, &QSpinBox::setValue );
 \end{cpp}\medskip
-\item Primary choice when connecting objects\medskip
+\item[]\advantage Cleaner syntax
 \item[]\advantage Compile time errors
-\item[]\advantage No special syntax for slots
-\item[]\advantage \texttt{Q\_OBJECT} not need for slots
-\item[]\disadvantage connecting to overloaded slots is hard
+\item[]\advantage No special declaration for slots
+\item[]\advantage \texttt{Q\_OBJECT} not needed for slots
+\item[]\disadvantage creates dependencies (tight coupling)
+\item[]\disadvantage connecting to overloaded functions is hard
   \end{itemize}
-\demo{object-communication/ex-connect-function-pointers}
+\demo{object-communication/ex-connect-member-functions}
 \end{slide}
 
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1033}\frametitle{connect - Qt4 style}
+\begin{slide}[fragile]{1033}\frametitle{connect - signal/slot macros}
   \begin{itemize}
-  \item Qt 4 ported code:\\
+  \item Traditional Qt connection syntax:\\
 \begin{cpp}
 connect( slider, SIGNAL(valueChanged(int)),
          spinbox, SLOT(setValue(int)));
@@ -118,18 +119,18 @@ connect( slider, SIGNAL(valueChanged(int)),
 \item[]\disadvantage need to declare the slot in a \textit{slots}
   section
 \item[]\disadvantage need the Q\_OBJECT macro
-\item[]\disadvantage need to have \texttt{moc} run on it\bigskip
-
-\item[]\disadvantage Only run time errors
+\item[]\disadvantage need to run \texttt{moc} on it
+\item[]\disadvantage only run time errors
 \item[]\advantage overloaded slot are easy
-\item[]\advantage Existing Qt4 code do not need to be rewritten
+\item[]\advantage loose coupling of components
+\item[]\advantage Existing Qt 4 source code need not be rewritten
 \end{itemize}
-\demo{object-communication/ex-connect}\bigskip\bigskip
+\demo{object-communication/ex-connect}
 \end{slide}
 
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0798}\frametitle{Custom Slots - Qt4 style}
+\begin{slide}[fragile]{0798}\frametitle{Custom Slots - Traditional style}
  \label{codeForSlots1}
 \xConcept{connect}
 \xConcept{Q\_OBJECT}
@@ -155,7 +156,7 @@ void MyClass::setValue(int value) {
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1031}\frametitle{connect - non-member }
+\begin{slide}[fragile]{1031}\frametitle{connect - non-member functions}
   \begin{itemize}
 \item Using non-member functions:\\
 \begin{cpp}
@@ -168,7 +169,8 @@ connect( slider, &QSignal::valueChanged, &printValue );
 
 \item[] \advantage No slots syntax, no Q\_OBJECT, no moc
 \item[] \advantage Compile time errors
-\item[] \advantage Any function, e.g.\ the return value of std::bind
+\item[] \advantage Any global function
+\item[]\disadvantage connecting to overloaded functions is hard
 \end{itemize}
 \demo{object-communication/ex-connect-non-member}\bigskip\bigskip
 \end{slide}
@@ -184,6 +186,7 @@ connect( slider, &QSlider::valueChanged,
 \item[] \advantage No slots syntax, no Q\_OBJECT, no moc
 \item[] \advantage Compile time errors
 \item[] \advantage No need for an extra function
+\item[]\disadvantage Not supported on all compilers
   \end{itemize}
 \demo{object-communication/ex-connect-lambda}
 \end{slide}
@@ -206,7 +209,7 @@ signals:
   \end{cpp}
 \item File: \textbf{myclass.cpp}
   \begin{cpp}
-// No implementation for a signal
+// No implementation for a signal!
 
   \end{cpp}
 \item Sending a signal
@@ -225,11 +228,13 @@ emit valueChanged(value);
 
 \begin{slide}[fragile]{0799}\frametitle{\texttt{Q\_OBJECT} - flag for MOC}
 \begin{itemize}
+\item \textbf{M}eta \textbf{O}bject \textbf{C}ompiler (MOC)
 \item \textbf{\texttt{Q\_OBJECT}}
   \begin{itemize}
   \item Enhances QObject with meta-object information
+  \item Required for properties
   \item Required for signals
-  \item Required for slots when using the Qt4 way
+  \item Required for slots when using the traditional method
   \end{itemize}\medskip
 
   \item \textbf{moc} creates meta-object information
@@ -241,7 +246,7 @@ c++ -o myapp moc_myclass.o myclass.o
     \end{shell}
  \end{itemize}\medskip
 
- \item \textbf{qmake} takes care of mocing files for you
+ \item \textbf{qmake} takes care of \textit{moc}ing files for you
 \end{itemize}
 
 \end{slide}
@@ -300,7 +305,7 @@ textChanged(QString) & \incorrect & setValue(int) \\
 
   \end{tabular}
   \end{center}
-{\hfill\tiny$\dagger$ Though not for Qt4 connection types}
+{\hfill\tiny$\dagger$ Though not for traditional connection types}
 \end{slide}
 
 %----------------------------------------------------------------------
@@ -312,8 +317,8 @@ textChanged(QString) & \incorrect & setValue(int) \\
 \begin{itemize}
 \item \textbf{Create an application as shown here}
   \begin{itemize}
-  \item Clicking on ``Select Color'' \\
-    updates label with color's name.
+  \item Clicking on ``Select Color'' updates \\
+  the label with color's name.
   \end{itemize}
 \item \textbf{Hints}
   \begin{itemize}

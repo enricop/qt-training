@@ -3,7 +3,7 @@ SUBDIRS= \
 ex-allevents\
 ex-closeevent\
 ex-connect\
-ex-connect-function-pointers\
+ex-connect-member-functions\
 ex-connect-lambda\
 ex-connect-non-member\
 ex-qml-event-backtrace\
