@@ -86,7 +86,7 @@
 \item Specialized event handlers for \iCls{QWidget} and \iCls{QQuickItem}:
   \begin{itemize}
   \item \hClsFn{QWidget}{mousePressEvent} for mouse clicks
-  \item \hClsFn{QQuickItem}{touchEvent} for key presses
+  \item \hClsFn{QQuickItem}{keyPressEvent} for key presses
  \end{itemize}\bigskip
 \item Accepting an Event
   \begin{itemize}
@@ -135,6 +135,7 @@ void MyWidget::closeEvent(QCloseEvent *event) {
   \item Posting events using\\
     \iClsFnPar{QCoreApplication}{postEvent}{QObject* receiver,\\
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~QEvent* event}
+  \item Multi-threaded communication covered under advanced topics
   \end{itemize}
 \end{slide}
 

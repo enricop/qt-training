@@ -25,7 +25,7 @@
 QString str("abc");
 str = "def";
   \end{cpp}
- \item From a number using a static function:
+ \item Create a numerical string using a static function:
  \begin{cpp}
 QString n = QString::number(1234);
   \end{cpp}
@@ -46,7 +46,7 @@ QString text = tr("Hello Qt");
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0206}\frametitle{Text Processing with \iCls{QString}}
   \begin{itemize}
-    \item \texttt{operator+} and \texttt{operator+=}    
+    \item Concatenation: \texttt{operator+} and \texttt{operator+=}    
  \begin{cpp}    
 QString str = str1 + str2;
 fileName += ".txt";
@@ -72,8 +72,8 @@ QString t = s.leftJustified(8, '.'); // t == "apple..."
   \item Numbers:
  \begin{cpp}
 QString text = ...; 
-int value = text.toInt();
-float value = text.toFloat();
+int value = text.toInt(bool *ok);
+float value = text.toDouble(bool *ok);
   \end{cpp}
  \item Strings:
  \begin{cpp}
@@ -103,9 +103,9 @@ QString str = QString::fromLatin1("delta: %1").arg(d,0,'E',3);
 // str == "delta: 1.234E+01"               
 \end{cpp}\medskip
 
-\item Safer: \hClsFnPar{QString}{arg}{QString,...,QString} (``multi-arg()'').
+\item Convenience: \hClsFnPar{QString}{arg}{QString,...,QString} (``multi-arg'').
   \begin{itemize}
-  \item But: only works with \iCls{QString} arguments.
+  \item Only works with \iCls{QString} arguments.
   \end{itemize}
 \end{itemize}
 \end{slide}
@@ -165,9 +165,12 @@ QRegExp rx("^\\d\\d?$");    // match integers 0 to 99
 rx.indexIn("123");          // returns -1 (no match)
 rx.indexIn("-6");           // returns -1 (no match)
 rx.indexIn("6");            // returns 0 (matched as position 0)
-    \end{cpp}                      
+    \end{cpp}
   \end{itemize}                 
-  \doc{qregexp.html}{QRegExp}
+  \doc{qregexp.html}{QRegExp}\medskip\medskip
+  \begin{itemize}
+  \item \textit{There is also a new alternative class, \iCls{QRegularExpression}}
+  \end{itemize}                 
 \end{slide}
 
 

@@ -20,7 +20,7 @@
   \begin{itemize}
   \item \lstinline!QList<QString>! - \textit{Sequence Container}
     \begin{itemize}
-    \item Other: QLinkedList, QStack , QQueue ...
+    \item Other: QLinkedList, QStack , QQueue
     \end{itemize}
   \item \lstinline!QMap<int, QString>! - \textit{Associative Container}
     \begin{itemize}
@@ -304,51 +304,24 @@ foreach (const QString& str, list) {
 %----------------------------------------------------------------------
 \begin{slide}{0300}\frametitle{\iConcept{Algorithms}}
 \begin{itemize}
-  \item STL-style iterators are compatible with the STL algorithms
+  \item Qt's STL-style iterators are compatible with the STL algorithms
   \begin{itemize}
     \item Defined in the STL $<$algorithm$>$ header
   \end{itemize}
-  \item Qt has own algorithms
+  \item Qt has a small set of its own algorithms
   \begin{itemize}
     \item Defined in $<$QtAlgorithms$>$ header
+    \item \emph{They have been deprecated and their use discouraged}
   \end{itemize}
-  \item \emph{If STL is available on all your supported platforms you can
-      choose to use the STL algorithms}
-  \begin{itemize}
-    \item The collection is much larger than the one in Qt.
-  \end{itemize}
+  \item STL algorithms include:
+    \begin{itemize}
+    \item \iCls[\textbf]{copy}: Copy a range of elements
+    \item \iCls[\textbf]{count}: Count the number of instances in a range
+    \item \iCls[\textbf]{equal}: Test whether two ranges have the same elements
+    \item \iCls[\textbf]{sort}: Sort the elements in a range
+    \item and many many more...
+    \end{itemize}
 \end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{0301}\frametitle{Algorithms}
-\begin{itemize}
-\item \iCls[\textbf]{qSort}(begin, end) sort items in range
-\item \iCls[\textbf]{qFind}(begin, end, value) find value
-\item \iCls[\textbf]{qEqual}(begin1, end1, begin2) checks two ranges
-\item \iCls[\textbf]{qCopy}(begin1, end1, begin2) from one range to another
-\item \iCls[\textbf]{qCount}(begin, end, value, n) occurrences of value in range
-\item and more ...
-\end{itemize}
-\doc{qtalgorithms.html\#details}{QtAlgorithms}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{0301}\frametitle{Algorithms}
-Counting 1's in list          
-\begin{cpp}
-QList<int> list;
-list << 1 << 2 << 3 << 1;
-int count = 0;
-qCount(list, 1, count); // count the 1's
-qDebug() << count;      // 2  (means 2 times 1)
-\end{cpp}
-\begin{itemize}
-  \item For parallel (ie. multi-threaded) algorithms
-  \begin{itemize}  
-  	\item \doc{threads.html\#qtconcurrent-intro}{\iCls{QtConcurrent}}
-  \end{itemize}
-\end{itemize}    
 \end{slide}
 
 %----------------------------------------------------------------------
@@ -360,20 +333,22 @@ qDebug() << count;      // 2  (means 2 times 1)
 QList<QString> list;
 list << "one" << "two" << "three";
 QVector<QString> vector(3);
-qCopy(list.begin(), list.end(), vector.begin());
+std::copy(list.begin(), list.end(), vector.begin());
 // vector: [ "one", "two", "three" ]
   \end{cpp}      
   \item Case insensitive sort example
   \item[] \begin{cpp}
-bool lessThan(const QString& s1, const QString& s2) {
+bool compare(const QString& s1, const QString& s2) {
     return s1.toLower() < s2.toLower();
 }
-// ...
-QList<QString> list;
+
 list << "AlPha" << "beTA" << "gamma" << "DELTA";
-qSort(list.begin(), list.end(), lessThan);
+std::sort(list.begin(), list.end());
+// list: [ "AlPha", "DELTA", "beTA", "gamma" ]
+std::sort(list.begin(), list.end(), compare);
 // list: [ "AlPha", "beTA", "DELTA", "gamma" ]
 \end{cpp}
+
   
 \end{itemize}
 \end{slide}
@@ -383,7 +358,7 @@ qSort(list.begin(), list.end(), lessThan);
 \xConcept{Reference counting} 
 \begin{block}{Implicit Sharing}
 If an object is copied, then its data is copied \textit{only when} the data of one of
-the objects is changed
+the objects is changed ("copy on write")
 \end{block}
 \begin{itemize}
   \item Shared class has a pointer to shared data block
