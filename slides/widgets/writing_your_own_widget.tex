@@ -24,11 +24,12 @@ public:
   explicit CustomWidget(QWidget* parent=0);
 }
 \end{cpp}           
-  \item If you need custom Signal Slots
+  \item If you need custom signals, slots, or properties
   \begin{itemize}
     \item add Q\_OBJECT
   \end{itemize} 
-  \item Use layouts to arrange widgets inside, or paint the widget yourself.
+  \item Use child widget members (composition)
+  \item ...or paint the widget yourself (from scratch)
 \end{itemize}
 \end{slide}
 %----------------------------------------------------------------------
@@ -67,8 +68,8 @@ public:
 \begin{itemize}
 \item \textbf{Decide on composite or draw approach?}
   \begin{itemize}
-  \item \textit{If composite}: Use layouts to arrange other widgets
-  \item \textit{If draw}: implement paint event
+  \item \textit{If composite}: Use layouts to arrange child widgets
+  \item \textit{If draw}: implement the paint event
   \end{itemize}
 
 \item \textbf{Reimplement \iClsFn{QWidget}{paintEvent} for drawing}
@@ -152,31 +153,31 @@ public:
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}{0864}\frametitle{Lab: Compass Widget}
-  \label{writing_your_own_widget_exercize}
-  \begin{itemize}
-  \item Implement a ``compass widget'' and let user ...
-    \begin{itemize}
-    \item Select a direction
-      \begin{itemize}
-      \item north, west, south, east
-      \item and optionally none
-      \end{itemize}
-    \end{itemize}
-    \item Provide API to ...
-      \begin{itemize}
-      \item change direction programmatically
-      \item get informed when direction changes
-      \end{itemize}
-    \item Optional      
-    \begin{itemize}
-      \item Add direction None
-      \item Select direction with the keyboard
-    \end{itemize}
-  \end{itemize}
-  \flushedImage{widgets/images/compass}   
-  \lab{widgets/lab-compasswidget}
-\end{slide}
+%\begin{slide}{0864}\frametitle{Lab: Compass Widget}
+%  \label{writing_your_own_widget_exercize}
+%  \begin{itemize}
+%  \item Implement a ``compass widget'' and let user ...
+%    \begin{itemize}
+%    \item Select a direction
+%      \begin{itemize}
+%      \item north, west, south, east
+%      \item and optionally none
+%      \end{itemize}
+%    \end{itemize}
+%    \item Provide API to ...
+%      \begin{itemize}
+%      \item change direction programmatically
+%      \item get informed when direction changes
+%      \end{itemize}
+%    \item Optional      
+%    \begin{itemize}
+%      \item Add direction None
+%      \item Select direction with the keyboard
+%    \end{itemize}
+%  \end{itemize}
+%  \flushedImage{widgets/images/compass}   
+%  \lab{widgets/lab-compasswidget}
+%\end{slide}
 
 % Local Variables: 
 % mode: latex 

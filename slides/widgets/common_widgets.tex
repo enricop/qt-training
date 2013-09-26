@@ -91,7 +91,16 @@ check = new QCheckBox("Choice 1", parent);
 \begin{slide}[fragile]{1325-continued}
   \frametitle{Button Widgets (continued)}
  \begin{itemize}
-  \item \textbf{\iCls{QButtonGroup}} - non-visual button manager
+  \item \textbf{\iCls{QToolButton}}
+    \begin{itemize}
+    \item[]
+    \begin{cpp}
+button = new QToolButton(parent);
+button->setDefaultAction(action);
+button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+     \end{cpp}
+   \end{itemize}
+  \item \textbf{\iCls{QButtonGroup}} - non-visual/non-widget button manager
     \begin{itemize}
    \item[]
      \begin{cpp}
@@ -253,10 +262,6 @@ connect(list, SIGNAL(itemActivated(QListWidgetItem*)) ...
    \item \textbf{\iCls{QCalendarWidget}}
      \begin{itemize}
      \item Monthly calendar widget
-     \end{itemize}
-   \item  \textbf{\iCls{QToolButton}}
-     \begin{itemize}
-     \item Quick-access button to commands
      \end{itemize}
    \item \textbf{\iCls{QSplitter}}
      \begin{itemize}

@@ -56,7 +56,7 @@ cb->move(10, 10);
     \end{itemize}
   \end{itemize}
   \vfill
-  \textit{Thinking about layout is not really a disadvantage!}
+  \textit{Thinking about layout is not a disadvantage!}
 \end{slide}
 %----------------------------------------------------------------------
 \begin{slide}{0567}\frametitle{Managed Widgets and Sizes}
@@ -120,7 +120,7 @@ cb->move(10, 10);
   \begin{itemize}
   \item Lines up widgets horizontally or vertically
   \item Divides space into boxes
-  \item Each managed widgets fills in one box
+  \item Each managed widget fills in one box
   \end{itemize}
   \centeredImage{widgets/images/hboxlayout}
   \flushedImage{widgets/images/vboxlayout}
@@ -135,7 +135,7 @@ layout->addWidget(one);
 window->setLayout(layout);
   \end{cpp}               
   \end{itemize}
-  \qtexample{layouts/basiclayouts}
+  \qtdemo{layouts/basiclayouts}
 \end{slide}
 
 %----------------------------------------------------------------------
@@ -153,8 +153,6 @@ layout->addWidget(one, 0, 0); // row:0, col:0
 layout->addWidget(two, 0, 1); // row:0, col:1
 // row:1, col:0, rowSpan:1, colSpan:2
 layout->addWidget(three, 1, 0, 1, 2); 
-\end{cpp}
-\begin{cpp} 
 window->setLayout(layout)
 \end{cpp}                  
   \item Additional
@@ -180,7 +178,6 @@ window->setLayout(layout)
 \item Respects style guide of individual platforms.
 \item[] \begin{cpp}
 QPushButton* one = new QPushButton("One");
-...
 QFormLayout* layout = new QFormLayout();
 layout->addRow("One", one); 
 ...
