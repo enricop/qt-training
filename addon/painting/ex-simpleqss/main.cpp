@@ -30,9 +30,8 @@ protected slots:
     void changeStyle(int which)
     {
         switch (which) {
-        case 0: qApp->setStyle(new QWindowsStyle);   break;
-        case 1: qApp->setStyle(new QMotifStyle);     break;
-        case 2: qApp->setStyle(new QPlastiqueStyle); break;
+        case 0: qApp->setStyle("windows");   break;
+        case 1: qApp->setStyle("fusion");    break;
         }
     }
 };
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
     Form widget;
     widget.show();
 
-    qApp->setStyle(new QWindowsStyle);
+    qApp->setStyle("windows");
     return app.exec();
 }
 

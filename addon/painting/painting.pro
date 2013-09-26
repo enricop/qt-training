@@ -9,5 +9,7 @@ SUBDIRS= \
   ex-rectoutline \
   ex-simpleqss \
   ex-transform \
+  lab-compass \
+  sol-compass \
   lab-piechart \
   sol-piechart \
