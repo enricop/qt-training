@@ -14,6 +14,22 @@
 \subsection{Painting Operations}
 
 %----------------------------------------------------------------------
+\begin{slide}\frametitle{Painter State}
+\begin{itemize}
+\item The painter has a state
+  \begin{itemize}
+  \item Context such as pen, brush, and font
+  \item Settings such as render hints
+  \item Coordinate transforms
+  \item Clipping
+  \end{itemize}
+\item \iClsFn{QPainter}{save} - Pushes the current state onto a stack
+\item \iClsFn{QPainter}{restore} - Pops the state back
+\end{itemize}
+\end{slide}                             
+
+
+%----------------------------------------------------------------------
 \begin{slide}{1521}\frametitle{Drawing Figures}
 \flushedImage{painting/images/figures}
 \begin{itemize}
@@ -22,7 +38,7 @@
   \item pen width: 2
   \item pen color: red
   \item font size: 10
-  \item brush color: yello
+  \item brush color: yellow
   \item brush style: solid
   \end{itemize}
 
@@ -55,7 +71,34 @@ int pixelsHeight = fm.height();
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}{1519}\frametitle{Transformation}
+\begin{slide}[fragile]{1517}\frametitle{Painter Path - QPainterPath}
+  \begin{itemize}
+  \item Container for painting operations
+  \item Enables reuse of shapes
+\flushedImageDoubleWidth{painting/images/qpainterpath-construction}
+  \item[] \begin{cpp}
+QPainterPath path;
+path.addRect(20, 20, 60, 60);
+path.moveTo(0, 0);
+path.cubicTo(99, 0,  50, 50,  99, 99);
+path.cubicTo(0, 99,  50, 50,  0, 0);      
+painter.drawPath(path);
+    \end{cpp}
+  \item Path information
+    \begin{itemize}
+    \item \hClsFn{QPainterPath}{controlPointRect} - rect containing all points
+    \item \hClsFn{QPainterPath}{contains} - test if given shape is inside path
+    \item \hClsFn{QPainterPath}{intersects} - test given shape intersects path
+    \end{itemize}
+
+  \item[] \qtdemo{examples/painting/painterpaths}
+
+  \end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1519}\frametitle{Simple Transformations}
 \flushedImage{painting/images/transform}
   \begin{itemize}
   \item Manipulating the coordinate system
@@ -94,30 +137,58 @@ painter.drawRect(r);
 
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1517}\frametitle{Painter Path - QPainterPath}
+\begin{slide}[fragile]\frametitle{Two-Dimensional Transforms}
+\begin{itemize}
+\item More complex transforms can be created using \iCls{QTransform}
   \begin{itemize}
-  \item Container for painting operations
-  \item Enables reuse of shapes
-\flushedImageDoubleWidth{painting/images/qpainterpath-construction}
-  \item[] \begin{cpp}
-QPainterPath path;
-path.addRect(20, 20, 60, 60);
-path.moveTo(0, 0);
-path.cubicTo(99, 0,  50, 50,  99, 99);
-path.cubicTo(0, 99,  50, 50,  0, 0);      
-painter.drawPath(path);
-    \end{cpp}
-  \item Path information
-    \begin{itemize}
-    \item \hClsFn{QPainterPath}{controlPointRect} - rect containing all points
-    \item \hClsFn{QPainterPath}{contains} - test if given shape is inside path
-    \item \hClsFn{QPainterPath}{intersects} - test given shape intersects path
-    \end{itemize}
-
-  \item[] \qtdemo{examples/painting/painterpaths}
-
+  \item \iClsFn{QPainter}{transform} - getter
+  \item \iClsFn{QPainter}{setTransform} - setter
   \end{itemize}
+\item Transforms can be composed
+\begin{cpp}
+void drawRotatedText( QPainter *painter, float degrees,
+int x, int y, const QString& text)
+{
+    // Precondition: painter->begin() has been called.
+    QTransform oldTransform = painter->transform();
+    QTransform transform = oldTransform;
+    transform.translate( x, y );
+    transform.rotate( degrees );
+    painter->setTransform( transform );
+    painter->drawText( 0, 0, text );
+    painter->setTransform( oldTransform );
+}
+\end{cpp}
+\end{itemize}
+\end{slide}
 
+%----------------------------------------------------------------------
+\begin{slide}[fragile]\frametitle{Transformation Matrix}
+\begin{itemize}
+\item \iCls{QTransform} is a 3x3 matrix describing the transformation
+\image{painting/images/qtransform-representation}
+\item Not necessary to know transformation matrices
+\item \iCls{translate()}, \iCls{rotate()}, \iCls{scale()}, \iCls{shear()} are conveniences
+\item Perspective projections are also possible using \iCls{rotate()}
+  \begin{itemize}
+  \item The second parameter specifies the axis of rotation
+  \item \iClsFnPar{QTransform}{rotate}{double angle, Qt::Axis axis}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}\frametitle{Window and Viewport Transformations}
+\begin{itemize}
+\item The viewport represents the physical coordinates of a rectangle
+\item A "window" describes this rectangle in logical coordinates.
+\item Together they allow you to set custom coordinate systems
+  \begin{itemize}
+  \item \hClsFnPar{QPainter}{setWindow}{-100, -100, 200, 200}
+  \item \hClsFnPar{QPainter}{setViewport}{cx-radius, cy-radius, radius*2, radius*2}
+  \end{itemize}
+\image{painting/images/analogclockwindow-viewport}
+\end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------
@@ -142,6 +213,20 @@ painter.drawPath(path);
   \end{itemize}  
 \end{slide}
 
+%----------------------------------------------------------------------
+\begin{slide}{1515}\frametitle{Lab: Compass Widget}
+\flushedImage{painting/images/compass}
+\begin{itemize}
+\item Implement a compass widget with dial and needle
+\item Start with the stubbed version in the lab
+\item Connect the compass widget to the \iCls{QSpinBox}
+\item See the lab directions for details
+\item \textit{Optional: Set the direction using mouse clicks on the compass}
+\item[] \lab{painting/lab-compass}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
 \begin{slide}{1515}\frametitle{Lab: Pie Chart Widget}
     \flushedImage{painting/images/piechart}
   \begin{itemize}

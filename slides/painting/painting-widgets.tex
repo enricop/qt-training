@@ -49,7 +49,7 @@ void CustomWidget::paintEvent(QPaintEvent *) {
  \item Schedule painting
     \begin{itemize}
     \item \texttt{update()}: schedules paint event
-    \item \texttt{repaint()}: repaints directly
+    \item \texttt{repaint()}: repaints directly \textit{(not recommended)}
     \end{itemize}
   \item Qt handles double-buffering
   \item To enable filling background:
@@ -64,27 +64,44 @@ void CustomWidget::paintEvent(QPaintEvent *) {
   \begin{itemize}
   \item Controlled by QPainter
   \item Origin: Top-Left
- \item Rendering
+  \item Rendering
     \begin{itemize}
     \item Logical - mathematical
     \item Aliased - right and below
     \item Anti-aliased - smoothing
-   \end{itemize}
-\end{itemize}
- \begin{center}
-   \begin{tabular}{c c c}
-     \image{painting/images/coordinatesystem-line} &
-     \image{painting/images/coordinatesystem-line-raster} &
-     \image{painting/images/coordinatesystem-line-antialias}
-   \end{tabular}
-   \begin{itemize}
-   \item Rendering quality switch
-     \begin{itemize}
-     \item \iClsFn{QPainter}{setRenderHint}
-     \end{itemize}
-   \end{itemize}
+    \end{itemize}
+  \item []
+    \begin{tabular}{c c c}
+    \image{painting/images/coordinatesystem-line} &
+    \image{painting/images/coordinatesystem-line-raster} &
+    \image{painting/images/coordinatesystem-line-antialias}
+    \end{tabular}
+  \item Rendering quality switch
+    \begin{itemize}
+    \item \iClsFn{QPainter}{setRenderHint}
+    \end{itemize}
+  \end{itemize}
 
- \end{center}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}\frametitle{Logical Coordinates vs Raster Reality }
+\begin{itemize}
+\item Coordinates are logical, but the display is raster
+\item The coordinates do not take pixels into account
+\item Painting must round up to the nearest pixel
+\item Anti-aliasing can help hide this correction
+  \begin{itemize}
+  \item Not always the best results for horizontal or vertical lines
+  \end{itemize}
+
+\item []
+  \begin{tabular}{c c c}
+  \image{painting/images/coordinatesystem-rect-logical} &
+  \image{painting/images/coordinatesystem-rect-raster} &
+  \image{painting/images/coordinatesystem-rect-antialias}
+  \end{tabular}
+\end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------
@@ -102,7 +119,7 @@ void CustomWidget::paintEvent(QPaintEvent *) {
 \flushedImage{painting/images/qrect-coordinates.png}
 \item \texttt{QRect(point, size)}
   \begin{itemize}
-  \item adjust, move
+  \item adjust, movecorrects for this by drawing 
   \item translate, scale, center
   \end{itemize}
 \item[] \begin{cpp}

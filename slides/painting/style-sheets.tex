@@ -18,7 +18,7 @@
 \begin{itemize}
 \item Mechanism to customize appearance of widgets
   \begin{itemize}
-  \item Additional to subclassing \texttt{QStyle}
+  \item Alternative to subclassing \texttt{QStyle}
   \end{itemize}
 \item Inspired by HTML CSS
 \item Textual specifications of styles
@@ -34,6 +34,10 @@
     \item On a specific widget (incl. child widgets)
     \end{itemize}
  \end{itemize}
+\item Meant for restyling a few widgets
+  \begin{itemize}
+  \item ...not for theming the entire application
+  \end{itemize}
 \item[] \demo{painting/ex-simpleqss}
 \end{itemize}
 \end{slide}
@@ -108,10 +112,6 @@ QPushButton {
   \begin{itemize}
   \item All instances of QPushButton which are child of QDialog
   \end{itemize}
-\item\texttt{QDialog > QPushButton \{ \}} // Direct Child Selector
-  \begin{itemize}
-  \item All instances of QPushButton which are direct child of QDialog
-  \end{itemize}
 \item QPushButton[enabled="true"] // Property Selector
   \begin{itemize}
   \item All instances of class which match property
@@ -138,10 +138,7 @@ QPushButton {
 \item \demo{painting/ex-qssselector}
 \item Selecting Subcontrols
   \begin{itemize}
-  \item Access subcontrols of complex widgets
-    \begin{itemize}
-    \item as QComboBox, QSpinBox, ...
-    \end{itemize}
+  \item Access subcontrols of complex widgets such as QComboBox, QSpinBox, etc.
   \item \texttt{QComboBox::drop-down \{ image: url(dropdown.png) \}}
  \end{itemize}
   \item Subcontrols positioned relative to other elements
@@ -188,20 +185,11 @@ QPushButton { color: red }
   \end{cpp}
 \item Selectors with pseudo-states are more specific
   \end{itemize}
-\item Calculating selector's specificity
- \begin{itemize}
-  \item \textbf{a} Count number of ID attributes in selector
-  \item \textbf{b} Count number of property specifications
-  \item \textbf{c} Count number of class names
-  \item Concatenate numbers \textbf{a}-\textbf{b}-\textbf{c}. Highest score wins.
-  \item If rules scores equal, use last declared rule
+\item Follows the CSS2 rules for specificity
+  \begin{itemize}
+  \item [] \externalLink{http://www.w3.org/TR/REC-CSS2/cascade.html}
   \end{itemize}
-\item[]
-  \begin{cpp}
-QPushButton {}     /* a=0 b=0 c=1 -> specificity =   1 */    
-QPushButton#ok {}  /* a=1 b=0 c=1 -> specificity =   101 */    
-  \end{cpp}
-
+  
 \item[] \demo{painting/ex-qssconflict}
 \end{itemize}
 \end{slide}

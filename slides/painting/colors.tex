@@ -89,6 +89,28 @@ QRectF outline = rect.adjusted(-hpw, -hpw, hpw, hpw);
 \end{slide}
 
 %----------------------------------------------------------------------
+\begin{slide}\frametitle{Coordinates and Pen Widths}
+\begin{itemize}
+\item Logical coordinates must map to a display of square pixels
+  \begin{itemize}
+  \item Half the pen width will be rendered on either side
+  \item ... and rounded to the nearest pixel
+  \end{itemize}
+\item []
+  \begin{tabular}{c c c}
+  \image{painting/images/qrect-diagram-zero}
+  \end{tabular}
+\item Rectangles rendered with pens of width one, two, and three
+\item []
+  \begin{tabular}{c c c}
+  \image{painting/images/qrectf-diagram-one}
+  \image{painting/images/qrectf-diagram-two}
+  \image{painting/images/qrectf-diagram-three}
+  \end{tabular}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
 \begin{slide}[fragile]{1007}\frametitle{Filling shapes with QBrush}
 \begin{itemize}
   \item \iCls{QBrush} defines fill pattern of shapes
@@ -207,4 +229,27 @@ widget->setPalette(pal);
     \item Sets application wide default palette
   \end{itemize} 
 \end{itemize}
-\end{slide}  
+\end{slide} 
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0934}\frametitle{Color Roles}
+\begin{itemize}
+\item Foreground and background roles
+  \begin{itemize}
+  \item Window, WindowText
+  \item Base, AlternateBase, Text
+  \item Button, ButtonText
+  \item Highlight, HighlightedText
+  \item ToolTipBase, ToolTipText
+  \end{itemize}
+\item 3D bevel roles
+  \begin{itemize}
+  \item Light, Midlight, Mid, Dark, Shadow
+  \end{itemize}
+\item Special roles
+  \begin{itemize}
+  \item Link, LinkVisited, BrightText
+  \end{itemize}
+\end{itemize}
+\end{slide} 
+
