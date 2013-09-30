@@ -22,7 +22,7 @@
   \begin{itemize}
   \item Remains in foreground, until closed
  \item Blocks input to remaining application
- \item Example: Configuration dialog
+ \item Example: File save dialog
    \end{itemize}
   \item Modeless dialog
   \begin{itemize}
@@ -40,6 +40,26 @@ if(dialog.exec() == Dialog::Accepted) {
     \end{cpp}
   \end{itemize}
 \end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}\frametitle{Dialog Results}
+  \begin{itemize}
+  \item Dialogs are typically accepted by pressing \textit{Enter} or clicking \textit{OK}
+  \item Dialogs are typically rejected by pressing \textit{Escape} or clicking \textit{Cancel}
+  \item \iClsFn{QDialog}{exec} returns a result code
+    \begin{itemize}
+    \item \iCls{QDialog::Accepted}
+    \item \iCls{QDialog::Rejected}
+    \end{itemize}
+  \item Dialogs also emit a result signal
+    \begin{itemize}
+    \item \iCls{accepted()}
+    \item \iCls{rejected()}
+    \item \iCls{QDialogButtonBox} has the same signals
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1716}
@@ -193,7 +213,7 @@ if(ret == QMessageBox::Ok) {
 \begin{slide}[fragile]{0179}
 \frametitle{Feedback on progress - \iCls{QProgressDialog}}
 \begin{itemize}
-  \item Provides feedback on the progress of a slow operation
+  \item Provides feedback on the progress of a lengthy operation
    \begin{cpp}
 QProgressDialog dialog("Copy", "Abort", 0, count, this);
 dialog.setWindowModality(Qt::WindowModal);
@@ -204,7 +224,6 @@ for (int i = 0; i < count; i++) {
 }
 dialog.setValue(count); // ensure set to maximum      
     \end{cpp}
-  \item Initialize with \hClsFnPar{QProgressDialog}{setValue}{0}
     \begin{itemize}
     \item Otherwise estimation of duration will not work
     \end{itemize}
@@ -212,17 +231,17 @@ dialog.setValue(count); // ensure set to maximum
     \begin{itemize}
     \item Connect to \iClsFn{QProgressDialog}{canceled}
     \end{itemize}
-  \item To stay reactive call \iClsFn{QApplication}{processEvents}
-  \item For modeless operation: \doc{qprogressdialog.html}{QProgressDialog}
+  \item Modal dialogs should call \iClsFn{QApplication}{processEvents} to stay responsive
+  \item For modeless dialogs: \doc{qprogressdialog.html}{QProgressDialog}
   \end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0180}\frametitle{Providing error messages - \iCls{QErrorMessage}}\label{qerrormessage}
   \begin{itemize}
+  \flushedImage{dialogs/images/qerrormessage}
   \item Similar to QMessageBox with checkbox
   \item Asks if message shall be displayed again
-  \flushedImage{dialogs/images/qerrormessage}
  \item[]
     \begin{cpp}
 m_error = new QErrorMessage(this);
@@ -235,6 +254,7 @@ m_error->showMessage(message, type);
     \item Shows \iCls{qDebug}(), \iCls{qWarning}() and
     \iCls{qFatal}() messages in QErrorMessage box
     \end{itemize}
+\item Note that state is not saved between sessions
 \end{itemize}
 \end{slide}
 

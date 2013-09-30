@@ -85,17 +85,9 @@
     \begin{itemize}
     \item to \texttt{ui\_myform.h}
     \end{itemize}
+  \item Class created in in the \iCls{Ui} namespace
   \end{itemize}
- \item[] \begin{cpp}
-// ui_mainwindow.h
-class Ui_MainWindow {
-public:
-  QLineEdit *fileName;
-  ... // simplified code
-  void setupUi(QWidget *) { /* setup widgets */ }
-};        
-  \end{cpp}
-\item Form \texttt{ui} file in project (\texttt{.pro})
+\item List form \texttt{ui} in project file (\texttt{.pro})
   \begin{itemize}
   \item \texttt{FORMS += mainwindow.ui}
   \end{itemize}
@@ -170,15 +162,15 @@ public:
 \begin{slide}[fragile]{1698}\frametitle{Code Integration - Header File}
    \begin{cpp}
 // orderform.h
-class Ui_OrderForm;
+class Ui::OrderForm;
 
 class OrderForm : public QDialog {
 private:
-   Ui_OrderForm *ui;    // pointer to UI object
+   Ui::OrderForm *ui;    // pointer to UI object
 };
 \end{cpp}
   \begin{itemize}
-  \item "Your Widget" derives from appropriate base class
+  \item Host widget derives from appropriate base class
   \item \textbf{\texttt{*ui}} member encapsulate UI class
     \begin{itemize}
     \item Makes header independent of designer generated code 
@@ -195,7 +187,7 @@ private:
 #include "ui_orderform.h"
 
 OrderForm::OrderForm(QWidget *parent)
-: QDialog(parent), ui(new Ui_OrderForm) {
+: QDialog(parent), ui(new Ui::OrderForm) {
   ui->setupUi(this);
 }
 
@@ -214,7 +206,7 @@ OrderForm::~OrderForm() {
     \begin{itemize}
     \item \texttt{ui->fileName->setText("image.png")}
       \begin{itemize}
-      \item \textit{Name based on widgets object name}
+      \item \textit{Name based on widget's objectName property}
       \end{itemize}
     \end{itemize}
   \item You can set up signals \& slots traditionally...
@@ -312,8 +304,18 @@ ui_okButton = qFindChild<QPushButton*>(this, "okButton");
 \centeredImageDoubleWidth{dialogs/images/designer-orderform-screenshot}
 
 \lab{dialogs/lab-orderform}
+\end{slide}
 
-
+% ----------------------------------------------------------------------
+\begin{slide}\frametitle{Lab: Upgrade editor to use a Designer UI file}
+\begin{itemize}
+\item Starting with your previous editor, rework it to use Designer UI files
+  \begin{itemize}
+  \item Menus and toolbars should be created in Designer
+  \item Resources should be managed by Designer
+  \end{itemize}
+\item Optional: Implement a Find Dialog for the editor
+\end{itemize} 
 \end{slide}
 
 %%% See ticket #320. Please add once you have a valid handout.
