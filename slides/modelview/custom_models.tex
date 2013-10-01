@@ -29,6 +29,7 @@
   \item \iCls[\textbf]{QAbstractItemModel}
     \begin{itemize}
     \item Generic model class
+    \item Suitable for tree models
     \end{itemize}
   \item \iCls[\textbf]{QStringListModel}
     \begin{itemize}
@@ -68,7 +69,7 @@ QVariant MyModel::headerData(int section,
                              Qt::Orientation orientation, 
                              int role) const
 {
-  // return column or row header based on orientation
+    // return column or row header based on orientation
 }
    \end{cpp}
 \demo{modelview/ex-stringlistmodel-2}
@@ -81,16 +82,16 @@ QVariant MyModel::headerData(int section,
 // should contain Qt::ItemIsEditable
 Qt::ItemFlags MyModel::flags(const QModelIndex &index) const 
 {
- return QAbstractListModel::flags() | Qt::ItemIsEditable;
+    return QAbstractListModel::flags() | Qt::ItemIsEditable;
 }
 
-// set role data for item at index to value
+// set data for item at index to value
 bool MyModel::setData( const QModelIndex & index, 
-                const QVariant & value, 
-                int role = Qt::EditRole)
+                       const QVariant & value, 
+                       int role = Qt::EditRole)
 {
-  ... = value; // set data to your backend
-  emit dataChanged(topLeft, bottomRight); // if successful
+    ... = value; // set data to your backend
+    emit dataChanged(topLeft, bottomRight); // if successful
 }
 \end{cpp}
 \demo{modelview/ex-stringlistmodel-3}
@@ -104,6 +105,7 @@ bool MyModel::setData( const QModelIndex & index,
 bool MyModel::insertRows(int row, int count, parent) {      
    beginInsertRows(parent, first, last);
    // insert data into your backend
+   // ...
    endInsertRows();
 }
 
@@ -111,6 +113,7 @@ bool MyModel::insertRows(int row, int count, parent) {
 bool MyModel::removeRows(int row, int count, parent) {
    beginRemoveRows(parent, first, last);
    // remove data from your backend
+   // ...
    endRemoveRows();
 }      
     \end{cpp}
@@ -137,6 +140,26 @@ QVariant MyModel::data( index, role ) const {
 \end{itemize}
 \end{slide}
 
+ 
+% ----------------------------------------------------------------------
+\begin{slide}{1587}\frametitle{Lab: Color Model}
+  \flushedImage{modelview/images/colormodel}
+  \begin{itemize}
+  \item Implement a model of colors
+    \begin{itemize}
+    \item Provide the model with a list of color values
+    \item Model should support display and decoration roles
+    \item Model should support editing of colors
+    \end{itemize}
+  \item View widget is provided, but it lacks a working model
+  \item ColorModel class has been provided, but it is stubbed out
+  \item Optional - Enable adding and removing colors
+  \medskip
+  \item \textit{Hint: \iClsFn{QColor}{colorNames} returns a list of standard color names}
+  \end{itemize}
+  \lab{modelview/lab-colormodel}
+\end{slide}
+
 % ----------------------------------------------------------------------
 \begin{slide}{1587}\frametitle{Lab: City List Model}
   \begin{itemize}
@@ -156,8 +179,8 @@ QVariant MyModel::data( index, role ) const {
    \end{itemize}
  \end{itemize}
 \lab{modelview/lab-citymodel}
- 
 \end{slide}
+
 
 
 

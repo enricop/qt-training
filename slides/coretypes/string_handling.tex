@@ -151,6 +151,28 @@ WARNING:
 \end{slide}
 
 %----------------------------------------------------------------------
+\begin{slide}[fragile]\frametitle{Null Strings}
+\begin{itemize}
+\item \iCls{QString()} constructs a null string
+\item Null strings are empty and invalid
+  \begin{itemize}
+  \item \iCls{QString()} is empty and invalid
+  \item \iCls{QString("")} is empty but is still a valid string
+  \end{itemize}
+\item Common idiom to use the default constructor in comparisons
+\begin{cpp}
+if (filename != QString()) {
+   // ... load file
+}
+\end{cpp}
+\item Several other Qt classes have similar default constructors
+  \begin{itemize}
+  \item \iCls{QByteArray}, \iCls{QVariant}, \iCls{QModelIndex}
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
 \begin{slide}[fragile]{0211}\frametitle{Working with \iConcept{Regular Expressions}}\label{qregexp}
 \begin{itemize}
   \item \iCls{QRegExp} supports

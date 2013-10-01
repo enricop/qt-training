@@ -21,14 +21,24 @@
     \item Maps indexes to new indexes
     \end{itemize}
 \begin{cpp}
-view = new QQuickView(parent);
 // insert proxy model between model and view
 proxy = new QSortFilterProxyModel(parent);
 proxy->setSourceModel(model);
-view->engine()->rootContext()->setContextProperty("_proxy", proxy);
+\end{cpp}
+\medskip
+\begin{cpp}
+// set the proxy as the model for a view widget
+view = new QQuickView(parent);
+view->setModel(proxy);
+\end{cpp}
+\medskip
+\begin{cpp}
+// set the proxy as a context property
+view = new QListView(parent);
+view->engine()->rootContext()->setContextProperty("_model", proxy);
 \end{cpp}
   \end{itemize}
-\textit{Note:} Need to load all data to sort or filter
+\textit{Note:} Need to load all the data to sort or filter
 \end{slide}
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1585}\frametitle{Sorting/Filtering - \iCls{QSortFilterProxyModel}}
@@ -51,7 +61,7 @@ proxy->sort(0, Qt::AscendingOrder);
 \item[]
 \begin{cpp}
 connect(m_edit, SIGNAL(textChanged(QString)),
-proxy, SLOT(setFilterWildcard(QString)));
+        proxy, SLOT(setFilterWildcard(QString)));
 \end{cpp}
 \end{itemize}
 \demo{modelview/ex-sortfiltertableview}

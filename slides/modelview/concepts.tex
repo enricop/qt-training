@@ -17,7 +17,7 @@
 % ----------------------------------------------------------------------
 \begin{slide}{1602}\frametitle{Why Model/View?}
   \begin{itemize}
-  \item \textbf{Isolated domain-logic}
+  \item \textbf{Isolate domain-logic}
     \begin{itemize}
     \item From input and presentation
     \end{itemize}
@@ -60,7 +60,7 @@
     \begin{itemize}
     \item \textit{Item}
       \begin{itemize}
-        \item Imaginary unit of data in model
+        \item Unit of data in model
       \end{itemize}
     \item Index
       \begin{itemize}
@@ -90,19 +90,31 @@
    \end{itemize}
 \item \iCls{QListView}
   \begin{itemize}
-  \item List or icon view
-  \end{itemize}
-\item \iCls{QTreeView}
-  \begin{itemize}
-  \item Items of data in hierarchical list
+  \item List or icon view mode
   \end{itemize}
 \item \iCls{QTableView}
   \begin{itemize}
   \item Item based row/column view
   \end{itemize}
+\item \iCls{QTreeView}
+  \begin{itemize}
+  \item Items of data in hierarchical list
+  \end{itemize}
   \centeredImage{modelview/images/standard-views}
 \end{itemize}
 \end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{1601}\frametitle{Combined Model/View - Item View Widgets}
+\begin{itemize}
+\item Combine the view and model into a convenience widget
+\item \iCls{QListWidget}
+\item \iCls{QTableWidget}
+\item \iCls{QTreeWidget}
+\end{itemize}
+\centeredImage{modelview/images/item-views}
+\end{slide}
+
 
 %----------------------------------------------------------------------
 \begin{slide}{1599}\frametitle{Adapts the Data - Model Classes}
@@ -256,6 +268,34 @@ QString text = model->data(index, Qt::DisplayRole).toString()
 \end{slide}
 
 % ----------------------------------------------------------------------
+\begin{slide}\frametitle{Common Item Roles}
+  \begin{itemize}
+  \item General Purpose Roles
+    \begin{itemize}
+    \item \iCls{Qt::DisplayRole} - The item text
+    \item \iCls{Qt::DecorationRole} - Icon or image to decorate the item
+    \item \iCls{Qt::EditRole} - Item data suitable for editing
+    \item \iCls{Qt::ToolTipRole} - Popup tooltip for the item
+    \end{itemize}
+  \item Appearance Roles
+    \begin{itemize}
+    \item \iCls{Qt::TextAlignmentRole} - Alignment of the item
+    \item \iCls{Qt::FontRole} - Font to be used
+    \item \iCls{Qt::BackgroundRole} - Background color
+    \item \iCls{Qt::ForegroundRole} - Foreground/text color
+    \end{itemize}
+  \item Other Roles
+    \begin{itemize}
+    \item \iCls{Qt::CheckStateRole} - Whether item is checked
+    \item \iCls{Qt::UserRole} - Enumeration value for custom roles
+      \begin{itemize}
+      \item \textit{Standard widget views will not recognize custom roles}
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
 \begin{slide}{1594}\frametitle{Recap of Model/View Concept}
 \begin{columns}
   \begin{column}{50mm}
@@ -276,6 +316,10 @@ QString text = model->data(index, Qt::DisplayRole).toString()
       \item \iCls{QListView}
       \item \iCls{QTableView}
       \item \iCls{QTreeView}
+      \end{itemize}
+    \item \textbf{Convenience Widgets}
+      \begin{itemize}
+      \item View and Model Combined
       \end{itemize}
     \end{itemize}
   \end{column}

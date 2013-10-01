@@ -15,8 +15,7 @@
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1584}\frametitle{\iCls{QStandardItemModel} -
-    Convenient Model}
+\begin{slide}[fragile]{1584}\frametitle{Convenience Model - \iCls{QStandardItemModel}}
 \flushedImage{modelview/images/standarditemmodel.png}
   \begin{itemize}
   \item \iCls{QStandardItemModel}
@@ -31,11 +30,23 @@ model->appendRow(item);
 model->setItem(0, 1, new QStandardItem("B (0,1)"));
 item->appendRow(new QStandardItem("C (0,0)"));
 \end{cpp}
-\item \textit{"B (0,1)" and "C (0,0)" - Not visible. (table view is only 2-dimensional)}
+\item \textit{"C (0,0)" - Not visible because table view is only 2-dimensional}
 \end{itemize}
 \doc{qstandarditemmodel.html}{QStandardItemModel}
 \demo{modelview/ex-QStandardItemModel}
 \end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}\frametitle{Other Ready-Made Models}
+\begin{itemize}
+\item \iCls{QStringListModel} - Provides a model of a \iCls{QStringList}
+\item \iCls{QFileSystemModel} - Provides a model of a local filesystem
+\item \iCls{QSqlQueryModel} - Provides a model of a SQL result set
+\item \iCls{QSqlTableModel} - Provides a model of a single SQL table
+\end{itemize}
+\end{slide}
+
+
 
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{}\frametitle{Sharing Models and Selection}
@@ -103,26 +114,27 @@ table->setSelectionMode(QAbstractItemView::SingleSelection);
 \begin{slide}{1580}\frametitle{Meet the City Engine}
   \flushedImage{modelview/images/citymodelcsv}
   \begin{itemize}
-  \item Our Demo Model
+  \item Sample Model Data
     \begin{itemize}
     \item 62 most populous cities of the world
     \item Data in CSV file
    \end{itemize}
- \item Data Columns
+ \item Data columns
     \begin{itemize}
     \item \textit{City | Country | Population | Area | Flag}
    \end{itemize}
- \item Implemented as data backend
+ \medskip
+ \item Provided in \texttt{CityEngine} class
    \begin{itemize}
    \item Internal implementation is hidden
-   \item Code in \texttt{CityEngine} class
-  \end{itemize}
+   \item Code located in \href{run:modelview/cityengine}{\beamerbutton{modelview/cityengine}}
+   \end{itemize}
  \end{itemize}
 \end{slide}
 
-\begin{slide}[fragile]{1579}\frametitle{Our Backend CityEngine API}
+\begin{slide}[fragile]{1579}\frametitle{The Backend CityEngine API}
  \begin{cpp}
-public CityEngine : public QObject {
+class CityEngine : public QObject {
   // returns all city names
   QStringList cities() const;
   // returns country by given city name 
@@ -144,8 +156,11 @@ public CityEngine : public QObject {
 % ----------------------------------------------------------------------
 \begin{slide}{1578}\frametitle{Lab: Tree Model for CityEngine}
   \begin{itemize}
-    \item Implement \texttt{createTreeModel()} in \texttt{mainwindow.cpp}
-    \item Display cities grouped by countries
+    \item Using \iCls{QStandardItemModel}:
+    \begin{itemize}
+      \item Implement \texttt{setupTreeModel()} in \texttt{mainwindow.cpp}
+      \item Display cities grouped by countries
+    \end{itemize}
     \item[]
 \centeredImage{modelview/images/sol-treecityengine}
 
