@@ -14,6 +14,31 @@
 \subsection{Drag and Drop}
 
 %----------------------------------------------------------------------
+\begin{slide}\frametitle{Drag and Drop in a Nutshell}
+  \begin{itemize}
+  \item At the lower level, drag and drop is fairly complicated
+    \begin{itemize}
+    \item Start the drag
+      \begin{itemize}
+      \item Detect that a drag has been started
+      \item Create MIME data
+      \item Propose drop actions (copy, link, move, etc)
+      \end{itemize}
+    \item Detect a drop attempt
+      \begin{itemize}
+      \item Decide whether drop can be accepted
+      \end{itemize}
+    \item Accept the drop
+      \begin{itemize}
+      \item Transfer the data depending on the drop actions
+      \end{itemize}
+    \end{itemize}
+  \medskip
+  \item The model/view classes simplify much of this
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
 \begin{slide}[fragile]{1309}
   \frametitle{Drag and Drop for Views}
   \begin{itemize}
@@ -36,10 +61,7 @@ Qt::DropActions MyModel::supportedDropActions() const
   \end{cpp}
 \item Model needs to support actions
   \begin{itemize}
-  \item For example \texttt{Qt::MoveAction}
-    \begin{itemize}
-    \item implement \texttt{MyModel::removeRows( ... )}
-    \end{itemize}
+  \item For example \texttt{Qt::MoveAction} needs implementation of \texttt{removeRows()}
   \end{itemize}
 
   \end{itemize}

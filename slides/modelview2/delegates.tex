@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
 % All rights reserved.
@@ -22,7 +22,7 @@
     \item Control appearance of items in views
     \item Provide edit and display mechanisms
    \end{itemize}
-  \item \iCls{QItemDelegate}, \iCls{QStyledItemDelegate}
+  \item \iCls{QItemDelegate}, \iCls{QStyledItemDelegate} (preferred)
     \begin{itemize}
     \item Default delegates
     \item Suitable in most cases
@@ -104,7 +104,7 @@ QSize BarGraphDelegate::sizeHint(option, index) const {
  \vskip 2em
 
  \begin{cpp}
-class CountryDelegate : public QItemDelegate
+class CountryDelegate : public QStyledItemDelegate
 {
 public:
   // returns editor for editing data
@@ -213,7 +213,7 @@ void CountryDelegate::updateEditorGeometry( ... ) const {
   \frametitle{Type Based Delegates}
 \flushedImage{modelview2/images/coloreditor}
 \begin{itemize}
-\item Our color editor widget
+\item A color editor widget
 \begin{cpp}
 class ColorListEditor : public QComboBox {
  ...
