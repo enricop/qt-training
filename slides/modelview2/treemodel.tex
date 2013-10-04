@@ -11,124 +11,111 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Custom Tree Model}
+\subsection{Custom Tree Models}
 
 %----------------------------------------------------------------------
-\begin{slide}{1306}
-  \frametitle{A Custom Tree Model in 5 Steps}
-  \begin{enumerate}
-  \item Read-Only Model
-  \item Editable Model
-  \item Insert-Remove Model
-  \item Lazy Model
-  \item Drag and Drop Model
-  \end{enumerate}
+\begin{slide}{1305}\frametitle{Creating a Custom Tree Model}
+  \begin{itemize}
+  \item Tree models must also implement:
+    \begin{itemize}
+    \item \iClsFnPar{QAbstractItemModel}{index}{row, column, parent}
+       \begin{itemize}
+       \item Return an index for the given row, column, and parent
+       \end{itemize}
+    \item \iClsFnPar{QAbstractItemModel}{parent}{index}
+       \begin{itemize}
+       \item Return an index to the parent of the given index
+       \end{itemize}
+    \end{itemize}
+  \image{modelview2/images/itemviews-editabletreemodel-items}
+  \end{itemize}
+  \demo{modelview2/ex-widgetmodel}
 \end{slide}
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1305}
-  \frametitle{A (Simple) Node Structure}
-  \begin{cpp}
-class Node {
-public:
-  Node(const QString& aText="No Data", Node *aParent=0);
-  ~Node();
-  QVariant data() const;
-public:
-  QString text;
-  Node *parent;
-  QList<Node*> children;
-};
-  \end{cpp}
-  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{node.h})}
 
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{1305}\frametitle{Tree Model Data}
+  \begin{itemize}
+  \item Inefficient to repeatedly traverse a tree structure
+  \item Solution is to store an internal handle to the item
+    \begin{itemize}
+    \item Direct access to the data
+    \item \iClsFn{QModelIndex}{internalPointer}
+    \item \iClsFn{QModelIndex}{internalId}
+    \end{itemize}
+  \item \iCls{QModelIndex} does not have a constructor
+    \begin{itemize}
+    \item Must be created with \iClsFn{QAbstractItemModel}{createIndex}
+      \begin{itemize}
+      \item Takes a row, column, and internal pointer or ID
+      \end{itemize}
+      \begin{cpp}
+if (item->isValid()) {
+    return createIndex(row, column, item);
+}
+      \end{cpp}
+    \end{itemize}
+  \end{itemize}
 \end{slide}
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1304}
-  \frametitle{Read-Only Model}
+  \frametitle{\textbf{\texttt{QAbstractItemModel::index()}}}
   \begin{cpp}
-class ReadOnlyModel : public QAbstractItemModel {
-public:
-  ...
-  QModelIndex index( row, column, parent ) const;
-  QModelIndex parent child ) const;
+QModelIndex TreeModel::index(int row, int column,
+                             const QModelIndex &parent) const
+{
+    if (!hasIndex(row, column, parent)) return QModelIndex();
 
-  int rowCount( parent ) const;
-  int columnCount( parent ) const;
-  QVariant data( index, role) const;
+    TreeItem *parentItem;
+    if (!parent.isValid())
+        parentItem = rootItem;
+    else
+        parentItem = static_cast<TreeItem*>(parent.internalPointer());
 
-protected: // important helper methods
-  QModelIndex indexForNode(Node *node) const;
-  Node* nodeForIndex(const QModelIndex &index) const;
-  int rowForNode(Node *node) const;
-};    
+    TreeItem *childItem = parentItem->child(row);
+    if (childItem)
+        return createIndex(row, column, childItem);
+    else
+        return QModelIndex();
+}
   \end{cpp}
-  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{readonlymodel.h})}
+  \qtdemo{widgets/itemviews/simpletreemodel}
 \end{slide}
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1303}
-  \frametitle{Editable Model}
+  \frametitle{\textbf{\texttt{QAbstractItemModel::parent()}}}
   \begin{cpp}
-class EditableModel : public ReadOnlyModel {
-public:
-  ...
-  bool setData( index, value, role );
-  Qt::ItemFlags flags( index ) const;
-};
+QModelIndex TreeModel::parent(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return QModelIndex();
+
+    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *parentItem = childItem->parent();
+
+    if (parentItem == rootItem) return QModelIndex();
+
+    return createIndex(parentItem->row(), 0, parentItem);
+}
   \end{cpp}
-  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{editablemodel.h})}
+  \qtdemo{widgets/itemviews/simpletreemodel}
 \end{slide}
-
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1302}
-  \frametitle{Insert Remove Model}
+\begin{slide}[fragile]{1302}\frametitle{Using the Internal Pointer}
   \begin{cpp}
-class InsertRemoveModel : public EditableModel {
-public:
-    ...
-    void insertNode(Node *parentNode, int pos, Node *node);
-    void removeNode(Node *node);
-    void removeAllNodes();
-}; 
-  \end{cpp}
-  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{insertremovemodel.h})}
-\end{slide}
+QVariant TreeModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid()) return QVariant();
+    if (role != Qt::DisplayRole) return QVariant();
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1301}
-  \frametitle{Lazy Model}
-  \begin{cpp}
-class LazyModel : public ReadOnlyModel {
-public:
-  ...
-  bool hasChildren( parent ) const;
-  bool canFetchMore( parent ) const;
-  void fetchMore( parent );
-};    
-  \end{cpp}
-  \demo{modelview2/ex-treemodel} \footnotesize{ (\texttt{lazymodel.h})}
-\end{slide}
+    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 
-%----------------------------------------------------------------------
-\begin{slide}[fragile]{1300}
-  \frametitle{DnD Model}
-  \begin{cpp}
-class DndModel : public InsertRemoveModel {
-public:
-  ...
-  Qt::ItemFlags flags( index ) const;
-  Qt::DropActions supportedDragActions() const;
-  Qt::DropActions supportedDropActions() const;
-  QStringList mimeTypes() const;
-  QMimeData *mimeData( indexes ) const;
-
-  bool dropMimeData(data, dropAction, row, column, parent);
-  bool removeRows(row, count, parent);
-  bool insertRows(row, count, parent);
-};    
+    return item->data(index.column());
+}
   \end{cpp}
-  \demo{modelview2/ex-treemodel} \footnotesize{(\texttt{dndmodel.h})}
+  \medskip
+  \flushedImage{modelview2/images/simpletreemodel-example}
 \end{slide}
 
 %----------------------------------------------------------------------
