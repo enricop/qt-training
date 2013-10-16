@@ -30,7 +30,11 @@
     \item Called by \iCls{QGraphicsView} to determine what regions need to be redrawn
 
     \end{itemize}
-      
+\end{itemize}
+
+\iCls{QGraphicsItem} virtual methods (optional):
+
+\begin{itemize}
 \item \iCls{QPainterPath} \hClsFn{QGraphicsItem}{shape} - shape of item
 \begin{itemize}   
     \item Used by \hClsFn{QGraphicsItem}{contains} and \hClsFn{QGraphicsItem}{collidesWithPath} for collision detection
@@ -150,7 +154,7 @@ void PendulumItem::paint( QPainter* painter,
 \begin{slide}[fragile]{1743}
 \frametitle{QGraphicsItemGroup}
 \begin{itemize}
-\item Easier approach to making a Pendulum:
+\item Another approach to making a Pendulum:
     \begin{itemize}
     \item Extend \iCls{QGraphicsItemGroup}
 
@@ -251,8 +255,8 @@ void MyView::keyPressEvent(QKeyEvent *event) {
 \item \texttt{shape()}
     \begin{itemize}
     \item Returns \iCls{QPainterPath} used for collision detection
-
     \item Must be overridden properly
+    \item Be aware of performance issue for complex paths
     \end{itemize}
 \item \texttt{items()}
     \begin{itemize}
@@ -270,9 +274,9 @@ void MyView::keyPressEvent(QKeyEvent *event) {
 \begin{itemize}
 \item Define a \texttt{QGraphicsItem} which can display an image, and has at least 1 child item, that is a "corner drag" button, permitting the user to click and drag the button, to resize or rotate the image. 
 \item Start with the handout provided in \texttt{graphicsview/lab-cornerdrag}
-\flushedImage{graphicsview/images/cornerdrag}
 \item Further details are in the \texttt{readme.txt} in the same directory.
 \end{itemize}
+\flushedImage{graphicsview/images/cornerdrag}
 \end{slide}
 
 

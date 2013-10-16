@@ -23,19 +23,25 @@
 \begin{slide}{1974}
 \frametitle{Items are not widgets}
 \begin{itemize}
-\item \iCls{QGraphicsItem}:
+\item \iCls{QGraphicsItem}:
+
     \begin{itemize}
-    \item Lightweight compared to \iCls{QWidget}
+    \item Lightweight compared to \iCls{QWidget}
+
     \item No signals/slots/properties
     \item Scenes can easily contain thousands of Items
-    \item Uses different \iCls{QEvent} sub-hierarchy (derived from \iCls{QGraphicsSceneEvent})
+    \item Uses different \iCls{QEvent} sub-hierarchy (derived from \iCls{QGraphicsSceneEvent})
+
     \item Supports transformations directly
     \end{itemize}
-\item \iCls{QWidget}:
+\item \iCls{QWidget}:
+
     \begin{itemize}
-    \item Derived from \iCls{QObject} (less light-weight)
+    \item Derived from \iCls{QObject} (less light-weight)
+
     \item supports signals, slots, properties, etc
-    \item can be embedded in a \iCls{QGraphicsScene} with a \iCls{QGraphicsProxyWidget}
+    \item can be embedded in a \iCls{QGraphicsScene} with a \iCls{QGraphicsProxyWidget}
+
     \end{itemize}
 \end{itemize}
 \end{slide}
@@ -58,25 +64,29 @@
 \frametitle{QGraphicsProxyWidget}
 \begin{itemize}
 \item \texttt{QGraphicsItem} that can embed a \texttt{QWidget} in a \texttt{QGraphicsScene}
+\item \textit{Still} not a \texttt{QWidget}, just a proxy for a \texttt{QWidget}
 \item Handles complex widgets like \texttt{QFileDialog}
 \item Takes \textit{ownership} of related widget
     \begin{itemize}
     \item Synchronizes states/properties:
         \begin{itemize}
-        \item \texttt{visible}, \texttt{enabled}, \texttt{geometry}, \texttt{style}, \texttt{palette}, \texttt{font}, \texttt{cursor}, \texttt{sizeHint}, \texttt{windowTitle}, etc
+        \item \texttt{visible}, \texttt{enabled}, \texttt{geometry}, \texttt{style}, \texttt{palette}, \texttt{font}, \texttt{cursor}, \texttt{sizeHint}, etc
         \item Proxies events between Widget and GraphicsView
+        \item ... including the paint events
         \end{itemize}
     \item If either (widget or proxy) is deleted, the other is also!
     \end{itemize}
 \item Widget must not already have a parent
-    \begin{itemize}
-    \item Only top-level widgets can be added to a scene
-    \end{itemize}
+\item []
+\item \textit{Warning: Overuse can lead to performance problems}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1966}
+\begin{slide}[fragile]{1966}
+
+
 \frametitle{Embedded Widget Example}
 \begin{cpp}
 #include <QtGui>
@@ -127,5 +137,6 @@ int main(int argc, char **argv) {
 \item Make the mouse work like a "hand-grab" tool on drag, so we can see different zoomed areas. 
 \end{itemize}
 \centeredImage{graphicsview2/images/mapviewer}
-\end{slide}
+\end{slide}
+
 

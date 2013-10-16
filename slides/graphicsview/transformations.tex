@@ -36,7 +36,7 @@
     \begin{itemize}
     \item Logical coordinates, not pixels
     \item Floating point, not integer
-    \item Without transformations, 1 logical coordinate = 1 pixel.
+    \item Without transformations, 1 logical unit = 1 pixel.
     \end{itemize}   
 \item Items inherit position and transform from parent
 \item zValue is relative to parent
@@ -55,7 +55,7 @@
 \begin{slide}[fragile]{1756}
 
 
-\frametitle{QTransform}
+\frametitle{QTransform (revisited)}
 \begin{itemize}
 \item Coordinate systems can be transformed using \texttt{QTransform}
 \item \texttt{QTransform} is a $3x3$ matrix describing a linear transformation from (x,y) to (xt, yt)
@@ -90,30 +90,6 @@ if projected:
 \item \wiki{Affine_transformation}{Affine Transformations}
 \end{itemize}
 
-\end{slide}
-
-
-%----------------------------------------------------------------------
-\begin{slide}{1755}
-
-\frametitle{Common Transformations}
-\begin{itemize}
-
-\item Commonly-used convenience functions:
-    \begin{itemize}
-    \item \texttt{scale()}
-    \item \texttt{rotate()}
-    \item \texttt{shear()}
-    \item \texttt{translate()}
-    \end{itemize}
-\item Saves you the trouble of defining transformation matrices 
-\item \texttt{rotate()} takes optional 2nd argument: axis of rotation.
-    \begin{itemize}
-    \item Z axis is "simple 2D rotation"
-    \item Non-Z axis rotations are "perspective" projections. 
-    \end{itemize}
-\centeredImage{graphicsview/images/xyzaxis}
-\end{itemize}
 \end{slide}
 
 
@@ -167,7 +143,7 @@ The product of its own and all its ancestors' transformations
 
 \frametitle{Zooming}
 \begin{itemize}
-\item Zooming is done with \texttt{view->scale()}
+\item Simple zooming is done with \texttt{view->setScale()}
 \begin{cpp}
 void MyView::zoom(double factor)
 {
@@ -176,7 +152,7 @@ void MyView::zoom(double factor)
     width *= factor;
     if ((width < 0.05) || (width > 10)) return;
 
-    scale(factor, factor);
+    setScale(factor);
 }
 \end{cpp}
 \end{itemize}

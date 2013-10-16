@@ -171,8 +171,10 @@ int x, int y, const QString& text)
 \item \iCls{translate()}, \iCls{rotate()}, \iCls{scale()}, \iCls{shear()} are conveniences
 \item Perspective projections are also possible using \iCls{rotate()}
   \begin{itemize}
-  \item The second parameter specifies the axis of rotation
   \item \iClsFnPar{QTransform}{rotate}{double angle, Qt::Axis axis}
+  \item The second optional parameter specifies the axis of rotation
+  \item Z axis is "simple 2D rotation"
+  \item Non-Z axis rotations are "perspective" projections
   \end{itemize}
 \end{itemize}
 \end{slide}

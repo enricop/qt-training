@@ -16,11 +16,13 @@
 
 
 % ----------------------------------------------------------------------
-\begin{slide}{1982}
+\begin{slide}[fragile]{1982}
+
 \frametitle{Level of Detail}
 \begin{itemize}
 \item Don't draw what you can't see!
-\item \iCls{QStyleOptionGraphicsItem} passed to \texttt{paint()}
+\item \iCls{QStyleOptionGraphicsItem} passed to \texttt{paint()}
+
     \begin{itemize}
     \item Contains \texttt{palette}, \texttt{state}, \texttt{matrix
     } members
@@ -28,23 +30,33 @@
     \end{itemize}
 \item "levelOfDetail" is max width/height of the unity rectangle
 needed to draw this shape onto a QPainter with a QTransform of T.
-\item use \texttt{worldTransform()} of \texttt{painter} for current transform.
+\item use \texttt{QPainter::worldTransform()}for current transform.
     \begin{itemize}
+\begin{cpp}
+double levelOfDetail = 
+levelOfDetailFromTransform(painter->worldTransform());
+\end{cpp}
     \item Zoomed out: \texttt{levelOfDetail} < 1.0
     \item Zoomed in: \texttt{levelOfDetail} > 1.0
     \end{itemize}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1981}
+\begin{slide}[fragile]{1981}
+
+
 \frametitle{Level of detail: Chip demo}
 \centeredImage{graphicsview2/images/chips}
 
 \qtdemo{demos/chip}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1980}
+\begin{slide}[fragile]{1980}
+
+
 \frametitle{Level of detail: Chip demo 2}
 \begin{cpp}
 void Chip::paint(QPainter *painter, 
@@ -65,10 +77,13 @@ void Chip::paint(QPainter *painter,
     }
 \end{cpp}
 \qtdemo{demos/chip}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1979}
+\begin{slide}[fragile]{1979}
+
+
 \frametitle{Caching tips}
 \begin{itemize}
 \item Cache item painting into a pixmap
@@ -92,14 +107,19 @@ QPainterPath MyItem::shape() const {
 }
 \end{cpp}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1978}
+\begin{slide}[fragile]{1978}
+
+
 \frametitle{setCacheMode()}
 \begin{itemize}
-\item Property of \iCls{QGraphicsView} and \iCls{QGraphicsItem}
-\item Allows caching of pre-rendered content in a \iCls{QPixmap}
+\item Property of \iCls{QGraphicsView} and \iCls{QGraphicsItem}
+
+\item Allows caching of pre-rendered content in a \iCls{QPixmap}
+
     \begin{itemize}
     \item Drawn on the viewport
     \item Especially useful for gradient shape backgrounds
@@ -111,29 +131,38 @@ QPainterPath MyItem::shape() const {
  view.setCacheMode(QGraphicsView::CacheBackground);
 \end{cpp}
 \end{itemize}
-\end{slide}
+\end{slide}
+
 
 
 % ----------------------------------------------------------------------
-\begin{slide}{1977}
+\begin{slide}{1977}
+
 \frametitle{Tweaking}
 The following methods allow you to tweak performance of view/scene/items:
 \begin{itemize}
-\item \iClsFn{QGraphicsView}{setViewportUpdateMode}
-\item \iClsFn{QGraphicsView}{setOptimizationFlags}
-\item \iClsFn{QGraphicsScene}{setItemIndexMethod}
-\item \iClsFn{QGraphicsScene}{setBspTreeDepth}
-\item \iClsFn{QGraphicsItem}{setFlags}
+\item \iClsFn{QGraphicsView}{setViewportUpdateMode}
+
+\item \iClsFn{QGraphicsView}{setOptimizationFlags}
+
+\item \iClsFn{QGraphicsScene}{setItemIndexMethod}
+
+\item \iClsFn{QGraphicsScene}{setBspTreeDepth}
+
+\item \iClsFn{QGraphicsItem}{setFlags}
+
     \begin{itemize}
     \item \texttt{ItemDoesntPropagateOpacityToChildren} and \texttt{ItemIgnoresParentOpacity} especially recommended if your items are opaque! 
     \end{itemize}
 \end{itemize}
 See API documentation for details. 
-\end{slide}
+\end{slide}
+
 
 
 % ----------------------------------------------------------------------
-\begin{slide}{1976}
+\begin{slide}{1976}
+
 \frametitle{Tips for better performance}
 \begin{itemize}
    \item \texttt{boundingRect()} and \texttt{shape()} are called frequently so they should run fast!
@@ -153,6 +182,7 @@ See API documentation for details.
 
    
 \end{itemize} 
-\end{slide}
+\end{slide}
+
    
   
