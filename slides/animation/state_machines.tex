@@ -15,7 +15,7 @@
 
 \begin{slide}{46130}\frametitle{States and Animations}
 \vspace*{1.5em}
-Qt 4.6 and newer includes a state machine that can be used with animations:
+Qt includes a state machine that can be used with animations:
 \begin{itemize}
 \item Includes features specifically for animation.
 \item It can be used for other purposes.
@@ -63,7 +63,7 @@ the other.
 The state chart contains all the states the machine can be in.
 
 \begin{itemize}
-\item Each state can define values for Qt properties.
+\item Each state defines values for Qt properties.
 \item One state is defined to be the initial state.
 \item States can encapsulate other states (composite states).
 \item States can be saved and restored (history states).
@@ -282,7 +282,7 @@ runningState->setInitialState(stopState);
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{46165}\frametitle{Final Child States}
-States can contain final states
+Child states can contain final states
 
 \vspace*{1.0em}
 \centeredImage{animation/diagrams/statemachine-trafficlights-final-childstates.pdf}
@@ -303,7 +303,7 @@ runningState->setInitialState(stopState);
 %----------------------------------------------------------------------
 \begin{slide}{46166}\frametitle{Final Child States}
 \centeredImage{animation/diagrams/statemachine-trafficlights-final.pdf}
-\vfill
+
 When a final child state is entered:
 \begin{itemize}
 \item No more processing occurs in the state.
@@ -522,11 +522,6 @@ with property values.
 \item States define the start and end points of animations.
 \end{itemize}
 \end{itemize}
-\end{slide}
-
-%----------------------------------------------------------------------
-\begin{slide}{46210}\frametitle{Additional Material}
-
 \end{slide}
 
 %----------------------------------------------------------------------
