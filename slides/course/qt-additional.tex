@@ -1,0 +1,27 @@
+ % this is the driver for presentations
+\documentclass[t]{beamer}
+\input{config}
+\input{base}
+
+% General course title
+\title{Qt Additional Topics}
+
+\begin{document}
+
+\input{frontpage}
+
+\setcounter{tocdepth}{2} % Do not show subsubsection in TOC
+\begin{frame}
+  \frametitle{Additional Topics}
+  \tableofcontents[part=1]
+  \vspace{108pt}
+\end{frame}
+
+\setcounter{tocdepth}{3} % Show subsubsection in the overview slides 
+
+\part{XML Processing}
+\input{qtxmlpatterns/content}
+
+\input{disclaimer.tex}
+
+\end{document}

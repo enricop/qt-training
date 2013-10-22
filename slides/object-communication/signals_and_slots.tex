@@ -75,7 +75,7 @@ connect( slider, &QSlider::valueChanged,
 \item Using non-member functions:\\
 \begin{cpp}
 static void printValue(int value) {...}
-connect( slider, &QSignal::valueChanged, &printValue );
+connect( slider, &QSlider::valueChanged, &printValue );
 \end{cpp}\medskip
 
 \item Using C++11 lambda functions:\\
