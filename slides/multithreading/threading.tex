@@ -1,0 +1,385 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Copyright (c) 2013, Integrated Computer Solutions
+% All rights reserved.
+%
+% This work, unless otherwise expressly stated, is licensed under a
+% Creative Commons Attribution-ShareAlike 2.5.
+%
+% The full license document is available from
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Qt Multithreading}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Terminology}
+
+\begin{itemize}
+\item \textbf{Multi-tasking} - Multiple programs running on the same computer
+\item \textbf{Multi-threading} - Multiple threads running in the same program
+\item \textbf{Multi-processing} - Multiple threads running on multiple processors
+\vspace{1em}
+\item \textbf{Reentrant function}
+  \begin{itemize}
+  \item May be called simultaneously from multiple threads
+  \item ...but only if each invocation references unique data
+  \end{itemize}
+\item \textbf{Thread safe function}
+  \begin{itemize}
+  \item May be called simultaneously from multiple threads
+  \item ...even if each invocation references shared data
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Disclaimers}
+
+\begin{itemize}
+\item Multithreading is not yet mainstream
+  \begin{itemize}
+  \item Multi-processor systems are only recently commonplace
+  \item Programming classes tend not to cover multi-threading
+  \end{itemize}
+\item Most threading facilities are very low level
+\item Race conditions, thread starvation, and deadlocks, oh my!
+\item "Multi-threading is like chess"
+  \begin{itemize}
+  \item Easy to learn but hard to master
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{How Threads Work}
+
+\begin{itemize}
+\item Independent streams of instructions (threads of execution)
+\item Does not require multi-processors
+  \begin{itemize}
+  \item While one thread waits on IO, a second thread can use the CPU
+  \end{itemize}
+\item Each thread has its own context
+  \begin{itemize}
+  \item Stack, stack pointer, instruction pointer, registers
+  \end{itemize}
+\item Threads share resources with other threads
+  \begin{itemize}
+  \item Shared data, locks, conditions
+  \end{itemize}
+\vspace{1em}
+\item Modern operating systems use preemption to schedule threads
+  \begin{itemize}
+  \item Interrupt thread and save its context
+  \item Restore context of next thread and resume execution
+  \item Threads can also relinquish execution by waiting
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{How Threads Work}
+
+\vspace{3em}
+\centeredImage{multithreading/images/multithreaded_process}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Qt Threading Guidelines}
+
+\begin{itemize}
+\item The main thread is the GUI thread
+  \begin{itemize}
+  \item Only access QWidget and QPixmap objects from the main thread
+  \item It is safe to use \iCls{QPainter} with \iCls{QImage}, however
+  \end{itemize}
+\item Beware of blocking in the main thread
+  \begin{itemize}
+  \item Waiting in the main thread is inappropriate
+  \item But it's perfectly fine in other threads
+  \end{itemize}
+\item All implicitly shared Qt classes are \textit{reentrant}
+\item Do not mistake thread objects for the actual thread of execution
+  \begin{itemize}
+  \item Objects are data structures not instruction streams
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Simple Threading - QThreadPool}
+
+\begin{itemize}
+\item \iCls{QThreadPool} manages a collection of threads
+  \begin{itemize}
+  \item One thread per core (real or virtual) by default
+  \item On some system this may be as low as one thread
+  \end{itemize}
+\item Can change the number of available threads with:
+  \begin{itemize}
+  \item \iClsFn{QThreadPool}{setMaxThreadCount} - set the thread count
+  \item \iClsFn{QThreadPool}{reserveThread} - increment thread count
+  \item \iClsFn{QThreadPool}{releaseThread} - decrement thread count
+  \item \textit{A higher number of threads is not necessarily efficient}
+  \end{itemize}
+\item Suitable for CPU-bound tasks, not general purpose threading
+\item Each application has a global thread pool accessible with
+      \iClsFn{QThreadPool}{globalInstance}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+
+\begin{slide}[fragile]
+\frametitle{Thread Pool Tasks - QRunnable}
+
+\begin{itemize}
+\item Tasks are implemented by subclassing \iCls{QRunnable}
+\begin{cpp}
+class HelloWorldTask : public QRunnable
+{
+    void run() { qDebug() << "Hello world!"; }
+}
+\end{cpp}
+\item Start a \iCls{QRunnable} task using:
+  \begin{itemize}
+  \item \iClsFnPar{QThreadPool}{start}{QRunnable *task)}
+    \begin{itemize}
+    \item Will queue task of no thread is available
+    \end{itemize}
+  \item \iClsFnPar{QThreadPool}{tryStart}{QRunnable *task)}
+    \begin{itemize}
+    \item Will return false if no thread is available
+    \end{itemize}
+  \end{itemize}
+\item \iCls{QThreadPool} takes ownership of \iCls{QRunnable} tasks
+  \begin{itemize}
+  \item Task deleted by default when \hClsFn{QRunnable}{run} exits
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Thread Pool Notes}
+
+\begin{itemize}
+\item \iCls{QRunnable} is kept small and efficient
+  \begin{itemize}
+  \item No communication mechanisms
+  \item No way to cancel a running task
+  \item Won't be informed when task completes
+  \end{itemize}
+\item Do not block in tasks
+  \begin{itemize}
+  \item There are a limited number of threads in the pool
+  \end{itemize}
+\item Good for simple "Fire and Forget" style tasks
+\vspace{1em}
+\item \iCls{QThreadPool} is the foundation for \iCls{QtConcurrent} module
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Threading Workhorse - QThread}
+
+Two models for using QThread:
+\begin{itemize}
+\item Java model: subclass and re-implement the \hClsFn{QThread}{run} method
+  \begin{itemize}
+  \item Traditional model for using \iCls{QThread}
+  \item Using \iCls{QRunnable} is easier and less error prone
+  \end{itemize}
+\item Event-Driven model: manage threads through events and signals
+  \begin{itemize}
+  \item The new accepted model for using \iCls{QThread}
+  \item Requires an understanding of thread affinity and communications
+  \end{itemize}
+\end{itemize}
+
+\vspace{1em}
+How to use QThread has changed over the years \\
+\linkbutton{http://blog.qt.digia.com/blog/2010/06/17/youre-doing-it-wrong/}
+\linkbutton{http://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation/}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Threads, Objects, and Events}
+
+\begin{itemize}
+\item Every \iCls{QThread} has its own event loop
+  \begin{itemize}
+  \item The main thread event loop is the application event loop
+  \item Threads communicate with each other using events
+  \item Only the receiving thread needs to have a running event loop
+  \end{itemize}
+\item Every \iCls{QObject} is associated with a \iCls{QThread} ("thread affinity")
+  \begin{itemize}
+  \item A \iCls{QObject} has affinity to the thread that created it
+  \item Can be moved to another thread using \iClsFn{QObject}{moveToThread}
+  \item Event handling is performed in the context of the owning thread
+    \begin{itemize}
+    \item Events are delivered to the object's owning thread
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\imageFullWidth{multithreading/images/threadsandobjects}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Controlling the Thread}
+
+\begin{itemize}
+\item Control the associated thread with:
+  \begin{itemize}
+  \item \textbf{\hClsFn{QThread}{run}} - the starting point for the thread.
+  Contains the code to be run. The default implementation simply calls \hClsFn{QThread}{exec}.
+  \item \textbf{\hClsFn{QThread}{start}} - begin execution by calling \hClsFn{QThread}{run}
+  \item \textbf{\hClsFn{QThread}{quit}} - exit the thread's event loop
+  \item \textbf{\hClsFn{QThread}{wait}} - block the current thread until the
+  associated thread has finished, or an optional timeout expires
+  \end{itemize}
+\item \iCls{QThreads} signals:
+  \begin{itemize}
+  \item \textbf{\hClsFn{QThread}{started}} - when the associated thread starts
+  \item \textbf{\hClsFn{QThread}{finished}} - when the associated thread finishes
+  \end{itemize}
+\item \iCls{QThread} states:
+  \begin{itemize}
+  \item \textbf{\hClsFn{QThread}{isRunning}} - true if the thread is running
+  \item \textbf{\hClsFn{QThread}{isFinished}} - true if the thread has finished
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]
+\frametitle{Cross-Thread Signals and Slots}
+
+\begin{itemize}
+\item Connections can be queued, or asynchronous
+  \begin{itemize}
+  \item Signals are serialized into events and sent to the receiver's queue
+  \item Slots are executed in the context of the owning thread
+  \end{itemize}
+\item \begin{cpp}
+connect( sender, &Sender::signal, receiver, &Receiver::slot,
+         Qt::QueuedConnection );
+\end{cpp}
+\item The receiving thread must have a running event loop
+  \begin{itemize}
+  \item True in default implementation of \hClsFn{QThread}{run}
+  \end{itemize}
+\item \texttt{Qt::DirectConnection} - slot is invoked immediately
+\item \texttt{Qt::AutoConnection} - (default) makes a direct connection if the
+sender and receiver are on the same thread, otherwise makes a queued connection
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]
+\frametitle{Cross-Thread Signal Parameters}
+
+\begin{itemize}
+\item Queued parameters must be known to the meta-object system
+\item Use the \texttt{Q\_DECLARE\_METATYPE} macro
+\begin{cpp}
+// in the header file
+struct MyStruct
+{
+    ...
+};
+Q_DECLARE_METATYPE( MyStruct )
+
+// in the implementation file
+qRegisterMetaType<MyStruct>( "MyStruct" );
+\end{cpp}
+\item Note: Don't pass pointers that you do not own
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]
+\frametitle{QThread Example}
+
+\begin{cpp}
+QThread* thread = new QThread;
+Worker* worker = new Worker();
+worker->moveToThread(thread);
+
+connect(thread, SIGNAL(started()),  worker, SLOT(process()));
+connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+...
+connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+        
+thread->start();
+\end{cpp}
+
+%% TODO: need example app here
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{QThread Pitfalls}
+
+\begin{itemize}
+\item A \iCls{QThread} object never has affinity with itself!
+  \begin{itemize}
+  \item ...because it was not created in the context of its associated thread
+  \end{itemize}
+\item \iCls{Objects} must be created in their parent's thread
+  \begin{itemize}
+  \item Implies that \iCls{QThread} should rarely be a parent (see above)
+  \end{itemize}
+\item Event driven objects may only be used in a single thread
+  \begin{itemize}
+  \item Applies to \iCls{QTimer}, and \iCls{QAbstractSocket} subclasses
+  \item Start timers and connect sockets in their owning threads
+  \end{itemize}
+\item Objects created in a thread must be deleted before deleting that thread
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
