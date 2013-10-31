@@ -65,7 +65,7 @@
 
 \begin{itemize}
 \item Independent streams of instructions (threads of execution)
-\item Does not require multi-processors
+\item Does not require multiple processors
   \begin{itemize}
   \item While one thread waits on IO, a second thread can use the CPU
   \end{itemize}
@@ -95,6 +95,63 @@
 
 \vspace{3em}
 \centeredImage{multithreading/images/multithreaded_process}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Classic Threading Problem: Race Condition}
+
+\begin{itemize}
+\item Program behavior is dependent on the order of thread execution
+  \begin{itemize}
+  \item Producer thread increments count, consumer thread decrements count
+  \item But increments and decrements are \textbf{not} atomic operations!
+    \item [] \vspace{0.5em}
+    \begin{tabular}{l|l}
+    \footnotesize{producer fetches value} & \footnotesize{consumer fetches value} \\
+    \footnotesize{producer increments value} & \footnotesize{consumer decrements value} \\
+    \footnotesize{producer stores value} & \footnotesize{consumer stores value} \\
+    \end{tabular}
+  \item \vspace{0.5em} Final count value is dependent on order of operations
+  \end{itemize}
+
+\vspace{1em}
+\item Solution: Synchronization via locks
+  \begin{itemize}
+  \item Access to data is serialized
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Classic Threading Problem: Deadlock}
+
+\begin{itemize}
+\item Two or more threads wait on each other, thus neither can progress
+  \begin{itemize}
+  \item Alice and Bob transfer money to each other
+  \item Each dutifully tries to lock both bank accounts
+  \item [] \vspace{0.5em}
+  \footnotesize{Alice locks Alice's account} \\
+  \hspace{1cm}\footnotesize{Bob locks Bob's account} \\
+  \footnotesize{Alice waits on a lock for Bob's account} \\
+  \hspace{1cm}\footnotesize{Bob waits on a lock for Alice's account} \\
+  \end{itemize}
+  \begin{itemize}
+  \item Both will wait forever
+  \end{itemize}
+
+\vspace{1em}
+\item Solution: No general solution exists
+  \begin{itemize}
+  \item Requires good software design
+ \end{itemize}
+\end{itemize}
 
 \end{slide}
 
@@ -211,22 +268,24 @@ class HelloWorldTask : public QRunnable
 
 Two models for using QThread:
 \begin{itemize}
-\item Java model: subclass and re-implement the \hClsFn{QThread}{run} method
+\item Subclassing model: subclass and re-implement the \hClsFn{QThread}{run} method
   \begin{itemize}
   \item Traditional model for using \iCls{QThread}
+  \item Good for CPU-bound tasks
   \item Using \iCls{QRunnable} is easier and less error prone
   \end{itemize}
 \item Event-Driven model: manage threads through events and signals
   \begin{itemize}
-  \item The new accepted model for using \iCls{QThread}
-  \item Requires an understanding of thread affinity and communications
+  \item Newer model for using \iCls{QThread}
+  \item Good for communicating with threads
+  \item Requires an understanding of thread affinity
   \end{itemize}
 \end{itemize}
 
 \vspace{1em}
-How to use QThread has changed over the years \\
+The Great \iCls{QThread} Controversy: to subclass or not to subclass \\
 \linkbutton{http://blog.qt.digia.com/blog/2010/06/17/youre-doing-it-wrong/}
-\linkbutton{http://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation/}
+\linkbutton{http://woboq.com/blog/qthread-you-were-not-doing-so-wrong.html}
 
 \end{slide}
 
@@ -338,7 +397,33 @@ qRegisterMetaType<MyStruct>( "MyStruct" );
 %----------------------------------------------------------------------
 
 \begin{slide}[fragile]
-\frametitle{QThread Example}
+\frametitle{Subclassing Example}
+
+\begin{cpp}
+class WorkerThread : public QThread
+{
+    Q_OBJECT
+public:
+    void run() {
+        QString result;
+        // expensive or blocking operation
+        // ...
+        emit resultReady(result);
+    }
+    
+signals:
+    void resultReady(const QString &result);
+};\end{cpp}
+
+\vspace{1em}
+\demo{multithreading/ex-workqueue}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}[fragile]
+\frametitle{Event-Driven Example}
 
 \begin{cpp}
 QThread* thread = new QThread;
@@ -354,7 +439,8 @@ connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 thread->start();
 \end{cpp}
 
-%% TODO: need example app here
+\vspace{1em}
+\demo{multithreading/ex-mandelbrot}
 
 \end{slide}
 
@@ -364,11 +450,12 @@ thread->start();
 \frametitle{QThread Pitfalls}
 
 \begin{itemize}
-\item A \iCls{QThread} object never has affinity with itself!
+\item \iCls{QThread} methods are meant to be called from the creating thread
+\item A \iCls{QThread} object should never have affinity with itself!
   \begin{itemize}
   \item ...because it was not created in the context of its associated thread
   \end{itemize}
-\item \iCls{Objects} must be created in their parent's thread
+\item \iCls{QObjects} must be created in their parent's thread
   \begin{itemize}
   \item Implies that \iCls{QThread} should rarely be a parent (see above)
   \end{itemize}
