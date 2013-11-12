@@ -129,6 +129,27 @@ void MyWidget::closeEvent(QCloseEvent *event) {
 \end{slide}
 
 %----------------------------------------------------------------------
+\begin{slide}[fragile]{1083}
+\frametitle{Differences between Signals and Events}
+
+\begin{itemize}
+\item Signals ...
+  \begin{itemize}
+  \item Emitted by internal \iCls{QObject}s
+  \item High level of semantic meaning
+  \item Low level of information
+  \end{itemize}
+\item Events ...
+  \begin{itemize}
+  \item \textit{Typically} generated externally by the OS or user
+  \item Low level of semantic meaning
+  \item High level of information
+  \end{itemize}
+\item Signals are frequently emitted in response to events
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
 \begin{slide}{1029}\frametitle{Multi threaded object communication}
   \begin{itemize}
   \item Signal/slots between threads

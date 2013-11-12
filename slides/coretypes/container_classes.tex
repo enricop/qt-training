@@ -278,9 +278,8 @@ while (i != list.begin()) {
 \begin{slide}[fragile]{0298}\frametitle{The \texttt{foreach} Keyword}
 \xConcept{foreach keyword}                                                                     
 \xExample{Iterators!foreach}
-\begin{itemize}
+ \begin{itemize}
   \item It is a macro, feels like a keyword
-  \item[] \fbox{\texttt{foreach} ( \textit{variable}, \textit{container} ) \textit{statement} }  
   \item[] \begin{cpp}
 foreach (const QString& str, list) {
   if (str.isEmpty())
@@ -299,6 +298,8 @@ foreach (const QString& str, list) {
   	\item iterator variable is a const reference.
   \end{itemize}
 \end{itemize}
+\vspace{1em}
+\footnotesize\textit{C++11 expands the \texttt{for} keyword for iteration over containers}
 \end{slide}
 
 %----------------------------------------------------------------------

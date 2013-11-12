@@ -162,7 +162,9 @@
 \begin{slide}[fragile]{1698}\frametitle{Code Integration - Header File}
    \begin{cpp}
 // orderform.h
-class Ui::OrderForm;
+namespace Ui {
+   class OrderForm;
+}
 
 class OrderForm : public QDialog {
 private:
@@ -238,6 +240,30 @@ OrderForm::~OrderForm() {
 \end{slide}
 
 
+%----------------------------------------------------------------------
+\begin{slide}[fragile]\frametitle{Forms and Multiple Inheritance}
+Another way to integrate forms is through multiple inheritance
+\begin{itemize}
+\item Inherit from both a \iCls{QWidget} and the Form class
+\item Advantage: Simple and easy to use
+\item Disadvantage: Header dependent on Designer generated code
+\item Disadvantage: Not the default behavior of Qt Creator
+   \begin{cpp}
+// orderform.h
+#include "ui_orderform.h"
+
+class OrderForm : public QDialog, private Ui::OrderForm {
+    ...
+};
+
+// orderform.cpp
+OrderForm::OrderForm(QWidget *parent) : QDialog(parent) {
+  setupUi(this);
+}
+\end{cpp}
+\end{itemize}
+
+\end{slide}
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0442}\frametitle{Using Custom Widgets in Designer}\label{designer_plugins}
