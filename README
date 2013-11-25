@@ -11,7 +11,7 @@ The training slides are produced in Latex. The resulting PDF files can
 be displayed with any PDF viewer. On Ubuntu/Debian systems you have to
 install the following packages:
 
-apt-get install texlive-science texlive-pictures
+apt-get install texlive-xetex texlive-science texlive-pictures
 apt-get install texlive-latex-extra texlive-formats-extra
 apt-get install latex-beamer pdfjam transfig graphicsmagick
 
