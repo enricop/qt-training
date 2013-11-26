@@ -25,6 +25,7 @@
 QObject* root = view->rootObject();
 if (root != NULL) {
     QString color = root->property("color").toString();
+    int     width = root->property("width").toInt();
 }
 \end{cpp}
 \end{itemize}
@@ -55,7 +56,7 @@ if (root != NULL) {
   \medskip
   \item Note:
   \begin{itemize}
-    \item Q\_OBJECT macro is required for properties to work
+    \item Q\_OBJECT macro is required for \texttt{Q\_PROPERTY} to work
     \item \texttt{QMetaObject} knows nothing about dynamic properties
   \end{itemize}
 \end{itemize}
@@ -110,7 +111,7 @@ class Customer : public QObject
 \begin{slide}[fragile]{1423}
 \frametitle{Using Properties}
 \begin{itemize}
-\item \iCls{QMetaObject} support property introspection\smallskip
+\item \iCls{QMetaObject} supports property introspection\smallskip
   \begin{cpp}
   const QMetaObject *metaObject = object->metaObject();
   const QString className = metaObject->className();

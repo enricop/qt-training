@@ -118,18 +118,20 @@ int main(int argc, char* argv[])
 \frametitle{qRegisterMetaType}
 \begin{itemize}
   \item Q\_DECLARE\_METATYPE makes the type known to \iCls{QVariant} and template based functions
-  \item If instances of the type need to be marshalled or serialized they must be registered
+  \item If instances of the type need to be marshalled or serialized they must 
+        {\it also} be registered
   \item \iCls{qRegisterMetaType} will register the type
   \begin{itemize}
-    \item Instances can now be created dynamically at runtime
-    \item Type can now be used with the property system and \textit{queued} connections
+    \item Instances can be created dynamically at runtime
+    \item Type can be used with property system and as signal parameters in
+            \textit{queued} connections 
   \end{itemize}
 \end{itemize}
 \end{slide}
 
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1253}
-\frametitle{qRegisterMetaType}
+\frametitle{qRegisterMetaType Example}
 \begin{itemize}
 \item[]
 \begin{cpp}

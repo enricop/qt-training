@@ -121,7 +121,7 @@ connect( slider, SIGNAL(valueChanged(int)),
 \item[]\disadvantage need the Q\_OBJECT macro
 \item[]\disadvantage need to run \texttt{moc} on it
 \item[]\disadvantage only run time errors
-\item[]\advantage overloaded slot are easy
+\item[]\advantage overloaded slots are easy
 \item[]\advantage loose coupling of components
 \item[]\advantage Existing Qt 4 source code need not be rewritten
 \end{itemize}
@@ -164,13 +164,13 @@ static void printValue(int value) {
   qDebug( "value = %d", value );
 }
 
-connect( slider, &QSignal::valueChanged, &printValue );
+connect( slider, &QSlider::valueChanged, &printValue );
 \end{cpp}\medskip
 
 \item[] \advantage No slots syntax, no Q\_OBJECT, no moc
 \item[] \advantage Compile time errors
 \item[] \advantage Any global function
-\item[]\disadvantage connecting to overloaded functions is hard
+\item[]\disadvantage overloaded functions are tricky
 \end{itemize}
 \demo{object-communication/ex-connect-non-member}\bigskip\bigskip
 \end{slide}
