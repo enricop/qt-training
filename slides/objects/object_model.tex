@@ -172,11 +172,11 @@ QTimer* timer = new QTimer(this);
   \flushedImage{objects/images/widgetGrouping}
   \begin{cpp}
 // container (window) widget creation
-QWidget* container = new QWidget;
-QLabel* label = new QLabel("Note:", container);
-QTextEdit* edit = new QTextEdit(container);
-QPushButton* clear = new QPushButton("Clear", container);
-QPushButton* save = new QPushButton("Save", container);
+QWidget container;  // on stack, or managed by another object
+QLabel* label = new QLabel("Note:", &container);
+QTextEdit* edit = new QTextEdit(&container);
+QPushButton* clear = new QPushButton("Clear", &container);
+QPushButton* save = new QPushButton("Save", &container);
 
 // widget layout
 QVBoxLayout* outer = new QVBoxLayout();
@@ -186,7 +186,7 @@ QHBoxLayout* inner = new QHBoxLayout();
 inner->addWidget(clear);
 inner->addWidget(save);
 
-container->setLayout(outer);
+container.setLayout(outer);
 outer->addLayout(inner); // nesting layouts
     \end{cpp}
   \demo{coretypes/ex-simplelayout}
