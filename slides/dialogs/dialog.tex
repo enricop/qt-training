@@ -14,7 +14,8 @@
 \subsection{Dialogs}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1717}\frametitle{Dialog Windows - \iCls{QDialog}}
+\begin{slide}[fragile]{1717}
+\frametitle{Dialog Windows - \iCls{QDialog}}
   \begin{itemize}
   \item Base class of dialog window widgets
   \item General Dialogs can have 2 modes
@@ -42,7 +43,8 @@ if(dialog.exec() == Dialog::Accepted) {
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}\frametitle{Dialog Results}
+\begin{slide}
+\frametitle{Dialog Results}
   \begin{itemize}
   \item Dialogs are typically accepted by pressing \textit{Enter} or clicking \textit{OK}
   \item Dialogs are typically rejected by pressing \textit{Escape} or clicking \textit{Cancel}
@@ -63,7 +65,7 @@ if(dialog.exec() == Dialog::Accepted) {
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1716}
-  \frametitle{Modeless Dialog}
+\frametitle{Modeless Dialog}
   \begin{itemize}
  \item Use \texttt{show()}
     \begin{itemize}
@@ -238,7 +240,9 @@ dialog.setValue(count); // ensure set to maximum
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0180}\frametitle{Providing error messages - \iCls{QErrorMessage}}\label{qerrormessage}
+\begin{slide}[fragile]{0180} 
+\frametitle{Providing error messages - \iCls{QErrorMessage}}
+\label{qerrormessage}
   \begin{itemize}
   \flushedImage{dialogs/images/qerrormessage}
   \item Similar to QMessageBox with checkbox
@@ -284,9 +288,9 @@ m_error->showMessage(message, type);
   \end{itemize}
 \end{slide}
 
-
 %----------------------------------------------------------------------
-\begin{slide}{0181}\frametitle{Guiding the user - \iCls{QWizard}}
+\begin{slide}{0181}
+\frametitle{Guiding the user - \iCls{QWizard}}
 \flushedImage{dialogs/images/qwizard}
 \begin{itemize}
 \item Input dialog

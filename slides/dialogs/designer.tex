@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
-% All rights reserved.
+% Parts Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% Parts Copyright (c) 2009-2013, Integrated Computer Solutions, inc. 
 %
 % This work, unless otherwise expressly stated, is licensed under a
 % Creative Commons Attribution-ShareAlike 2.5.
@@ -17,7 +17,8 @@
 \label{qt_designer}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0431}\frametitle{Qt Designer}
+\begin{slide}[fragile]{0431}
+\frametitle{Qt Designer}
 \flushedImage{dialogs/images/designer}
   \begin{itemize}
 \item Design UI forms visually
@@ -37,13 +38,28 @@
 \end{itemize}
 \end{slide}
 
+\begin{slide}[fragile]{0432}
+\frametitle{Designer vs QtCreator}
+
+\begin{itemize}
+\item {\tt designer} is a standalone tool for editing .ui files
+\item An {\it enhanced} version is included in QtCreator
+\item Some features (.qrc files, C++ code integration) 
+    are not available in the standalone version. 
+\item Some shortcuts are different too. 
+\end{itemize}
+
+\end{slide}
+
 %----------------------------------------------------------------------
-\begin{slide}{1707}\frametitle{Designer Views}
+\begin{slide}{1707}
+\frametitle{Designer Views}
   \centeredImageDoubleWidth{dialogs/images/designer-views}
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}{1706}\frametitle{Designer's Editing Modes}
+\begin{slide}{1706}
+\frametitle{Designer's Editing Modes}
   \begin{itemize}
   \item \inlinedImage{dialogs/images/designer-widget-tool} Widget Editing 
     \begin{itemize}
@@ -70,7 +86,7 @@
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{1705}
-  \frametitle{Designer UI Form Files}
+\frametitle{Designer UI Form Files}
 \flushedImage{dialogs/images/ui-xml}
 \begin{itemize}
 \item Form stored in .ui file
@@ -159,7 +175,8 @@
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{1698}\frametitle{Code Integration - Header File}
+\begin{slide}[fragile]{1698}
+\frametitle{Code Integration - Header File}
    \begin{cpp}
 // orderform.h
 namespace Ui {
@@ -182,7 +199,8 @@ private:
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1697}\frametitle{Code Integration - Implementation File}
+\begin{slide}[fragile]{1697}
+\frametitle{Code Integration - Implementation File}
   \begin{itemize}
    \begin{cpp}
 // orderform.cpp
@@ -202,7 +220,8 @@ OrderForm::~OrderForm() {
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}{0441}\frametitle{Signals and Slots in Designer}
+\begin{slide}{0441}
+\frametitle{Signals and Slots in Designer}
   \begin{itemize}
   \item Widgets are available as public members
     \begin{itemize}
@@ -241,7 +260,8 @@ OrderForm::~OrderForm() {
 
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]\frametitle{Forms and Multiple Inheritance}
+\begin{slide}[fragile]
+\frametitle{Forms and Multiple Inheritance}
 Another way to integrate forms is through multiple inheritance
 \begin{itemize}
 \item Inherit from both a \iCls{QWidget} and the Form class
@@ -266,7 +286,8 @@ OrderForm::OrderForm(QWidget *parent) : QDialog(parent) {
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0442}\frametitle{Using Custom Widgets in Designer}\label{designer_plugins}
+\begin{slide}[fragile]{0442}
+\frametitle{Using Custom Widgets in Designer}\label{designer_plugins}
 \xConcept{Qt Designer!Handling your own classes}
 \xConcept{Qt Designer!Plug-ins}
 Choices for Custom Widgets
@@ -287,7 +308,8 @@ Choices for Custom Widgets
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}[fragile]{0445}\frametitle{Dynamically loading \texttt{.ui} files}
+\begin{slide}[fragile]{0445}
+\frametitle{Dynamically loading \texttt{.ui} files}
 \begin{itemize}
 \item Forms can be processed at runtime
   \begin{itemize}
@@ -333,7 +355,8 @@ ui_okButton = qFindChild<QPushButton*>(this, "okButton");
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}\frametitle{Lab: Upgrade editor to use a Designer UI file}
+\begin{slide}
+\frametitle{Lab: Upgrade editor to use a Designer UI file}
 \begin{itemize}
 \item Starting with your previous editor, rework it to use Designer UI files
   \begin{itemize}

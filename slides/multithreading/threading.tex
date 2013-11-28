@@ -38,29 +38,57 @@
 \end{slide}
 
 %----------------------------------------------------------------------
-
 \begin{slide}
-\frametitle{Disclaimers}
-
+\frametitle{High-Level or Low-Level?}
+There are many different ways to use threads in Qt: 
 \begin{itemize}
-\item Multithreading is not yet mainstream
-  \begin{itemize}
-  \item Multi-processor systems are only recently commonplace
-  \item Programming classes tend not to cover multi-threading
-  \end{itemize}
-\item Most threading facilities are very low level
-\item Race conditions, thread starvation, and deadlocks, oh my!
-\item "Multi-threading is like chess"
-  \begin{itemize}
-  \item Easy to learn but hard to master
-  \end{itemize}
+\item Manage threads yourself (Extending, Creating and Destroying QThread)
+    \begin{itemize}
+        \item Used in event-driven approaches, as well as in long-running
+        "server" tasks 
+        \item You must: Protect access to data using mutexes, etc.
+        \item You must: Worry about deadlocks, thread affinity, etc. 
+        \item Usually it is possible to rewrite such code using the event loop
+    \end{itemize} 
+\item Use threads from \iClsFn{QThreadPool}{globalInstance}
+    \begin{itemize}
+        \item Slightly simpler, but not much
+    \end{itemize}
+\item Define algorithms that can be run from QtConcurrent
+    \begin{itemize}
+    \item Also uses the \iClsFn{QThreadPool}{globalInstance} 
+    \item Don't write thread management code.
+    \item Jobs automatically use correct number of threads (cores) for CPU
+    \item No worries about mutexes, deadlocks, starvation, etc
+    \end{itemize}
 \end{itemize}
-
 \end{slide}
 
-%----------------------------------------------------------------------
-
 \begin{slide}
+\frametitle{Do I need threads?}
+\begin{itemize}
+    \item Not for driving animations. 
+    \begin{itemize}
+        \item \iCls{QTimeLine} or \iCls{QPropertyAnimation} are better
+    \end{itemize}
+    \item Not for playing audio.
+        \begin{itemize}
+        \item Use higher-level APIs like Qt Multimedia instead.
+        \end{itemize}
+    \item Not for GUI code
+        \begin{itemize}
+        \item \iCls{QWidget}, \iCls{QPixmap}, should only be used in main GUI thread
+        \end{itemize}
+    \item Not for network clients
+        \begin{itemize}
+        \item Use non-blocking APIs and signals/slots from main thread
+        \end{itemize}
+    \item Code that does not manage threads is simpler to understand and debug.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------
+\begin{slide}[fragile]
 \frametitle{How Threads Work}
 
 \begin{itemize}
@@ -80,8 +108,9 @@
 \vspace{1em}
 \item Modern operating systems use preemption to schedule threads
   \begin{itemize}
-  \item Interrupt thread and save its context
-  \item Restore context of next thread and resume execution
+  \item Schedule threads on different cores if available 
+  \item Interrupt threads and save their contexts
+  \item Restore contexts of next threads and resume execution
   \item Threads can also relinquish execution by waiting
   \end{itemize}
 \end{itemize}
@@ -183,6 +212,32 @@
 %----------------------------------------------------------------------
 
 \begin{slide}
+\frametitle{Threads, Objects, and Events}
+
+\begin{itemize}
+\item Every \iCls{QThread} has its own event loop
+  \begin{itemize}
+  \item The main thread event loop is the application event loop
+  \item Threads communicate with each other using events
+  \item Only the receiving thread needs to have a running event loop
+  \end{itemize}
+\item Every \iCls{QObject} is associated with a \iCls{QThread} ("thread affinity")
+  \begin{itemize}
+  \item A \iCls{QObject} has affinity to the thread that created it
+  \item Can be moved to another thread using \iClsFn{QObject}{moveToThread}
+  \item Event handling is performed in the context of the owning thread
+    \begin{itemize}
+    \item Events are delivered to the object's owning thread
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\imageFullWidth{multithreading/images/threadsandobjects}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
 \frametitle{Simple Threading - QThreadPool}
 
 \begin{itemize}
@@ -208,7 +263,7 @@
 %----------------------------------------------------------------------
 
 
-\begin{slide}[fragile]
+\begin{slide}[fragile] 
 \frametitle{Thread Pool Tasks - QRunnable}
 
 \begin{itemize}
@@ -289,31 +344,6 @@ The Great \iCls{QThread} Controversy: to subclass or not to subclass \\
 
 \end{slide}
 
-%----------------------------------------------------------------------
-
-\begin{slide}
-\frametitle{Threads, Objects, and Events}
-
-\begin{itemize}
-\item Every \iCls{QThread} has its own event loop
-  \begin{itemize}
-  \item The main thread event loop is the application event loop
-  \item Threads communicate with each other using events
-  \item Only the receiving thread needs to have a running event loop
-  \end{itemize}
-\item Every \iCls{QObject} is associated with a \iCls{QThread} ("thread affinity")
-  \begin{itemize}
-  \item A \iCls{QObject} has affinity to the thread that created it
-  \item Can be moved to another thread using \iClsFn{QObject}{moveToThread}
-  \item Event handling is performed in the context of the owning thread
-    \begin{itemize}
-    \item Events are delivered to the object's owning thread
-    \end{itemize}
-  \end{itemize}
-\end{itemize}
-\imageFullWidth{multithreading/images/threadsandobjects}
-
-\end{slide}
 
 %----------------------------------------------------------------------
 
