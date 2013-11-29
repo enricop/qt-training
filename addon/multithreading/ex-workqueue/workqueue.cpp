@@ -19,8 +19,8 @@ int worknumwaiting = 0;
 
 // WorkQueue //////////////////////////////////////////////////////////////////
 
-WorkQueue::WorkQueue(int max, QWidget *parent) : QTextEdit(parent)
-{
+WorkQueue::WorkQueue(int max, QWidget *parent) 
+: QTextEdit(parent) {
     setReadOnly(true);
 
     // start the producer thread
@@ -38,8 +38,7 @@ WorkQueue::WorkQueue(int max, QWidget *parent) : QTextEdit(parent)
     }
 }
 
-WorkQueue::~WorkQueue()
-{
+WorkQueue::~WorkQueue() {
     // tell all the consumer threads to exit
     workmutex.lock();
     workisdone = true;
@@ -48,29 +47,26 @@ WorkQueue::~WorkQueue()
 
     // wait for each thread to complete
     producer->wait();
-    delete producer;
+    producer->deleteLater();
     foreach (WorkConsumer *consumer, consumerlist) {
-	consumer->wait();
-	delete consumer;
+        consumer->wait();
+        consumer->deleteLater();
     }
 }
 
 // WorkProducer ///////////////////////////////////////////////////////////////
 
-WorkProducer::WorkProducer(int items)
-{
+WorkProducer::WorkProducer(int items) {
     numitems = items;
 }
 
-void WorkProducer::run()
-{
+void WorkProducer::run() {
     qsrand(QTime::currentTime().msec());
-
     for (int n = 0; n < numitems; n++) {
-	QMutexLocker locker(&workmutex);
+        QMutexLocker locker(&workmutex);
         WorkItem item;
         workqueue.enqueue(item);
-	if (worknumwaiting > 0) {
+        if (worknumwaiting > 0) {
             workcondition.wakeOne();
             worknumwaiting--;
         }

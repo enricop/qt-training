@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% :wrap=hard:maxLineLen=80:
+%
 % Copyright (c) 2013, Integrated Computer Solutions
 % All rights reserved.
 %
@@ -155,6 +155,23 @@ void removeFromCache(const QString &key) {
 \end{slide}
 %----------------------------------------------------------------------
 
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{QWaitCondition}
+\begin{itemize}
+\item \texttt{QWaitCondition::wait(QMutex* lockedMutex, int timeout)} releases a
+lock, waits for a \texttt{wake()}
+\item Can use \iCls{QReadWriteLock} or \iCls{QMutex} here
+\item When \texttt{wait()} returns \texttt{true}, the mutex is locked by your
+thread again
+\item Other threads wake a waiting thread with \iClsFn{QWaitCondition}{wakeOne}
+\item Wake all other threads with \iClsFn{QWaitCondition}{wakeAll}
+\end{itemize}
+See \iExample{addon/multithreading/ex-workqueue} for example using a wait
+condition.
+\end{slide}
+
+
 \begin{slide}
 \frametitle{Classic Threading Problem: Starvation}
 
@@ -201,7 +218,8 @@ returning \texttt{false}.
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}{0355}\frametitle{Mutexes vs. Semaphores: Summary}
+\begin{slide}
+\frametitle{Mutexes vs. Semaphores: Summary}
 \begin{center}
 \begin{tabular}{|l||c|c|}
 \hline
@@ -243,3 +261,4 @@ Solution: Test-And-Lock, with timeout or busy-waiting may be needed
 \end{slide}
 
 % ----------------------------------------------------------------------
+% :wrap=hard:maxLineLen=80:

@@ -12,3 +12,5 @@ HEADERS = workitem.h \
 SOURCES = main.cpp \
           workitem.cpp \
           workqueue.cpp
+
+QT += gui widgets
