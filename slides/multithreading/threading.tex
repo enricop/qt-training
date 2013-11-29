@@ -128,62 +128,6 @@ There are many different ways to use threads in Qt:
 \end{slide}
 
 %----------------------------------------------------------------------
-
-\begin{slide}
-\frametitle{Classic Threading Problem: Race Condition}
-
-\begin{itemize}
-\item Program behavior is dependent on the order of thread execution
-  \begin{itemize}
-  \item Producer thread increments count, consumer thread decrements count
-  \item But increments and decrements are \textbf{not} atomic operations!
-    \item [] \vspace{0.5em}
-    \begin{tabular}{l|l}
-    \footnotesize{producer fetches value} & \footnotesize{consumer fetches value} \\
-    \footnotesize{producer increments value} & \footnotesize{consumer decrements value} \\
-    \footnotesize{producer stores value} & \footnotesize{consumer stores value} \\
-    \end{tabular}
-  \item \vspace{0.5em} Final count value is dependent on order of operations
-  \end{itemize}
-
-\vspace{1em}
-\item Solution: Synchronization via locks
-  \begin{itemize}
-  \item Access to data is serialized
-  \end{itemize}
-\end{itemize}
-
-\end{slide}
-
-%----------------------------------------------------------------------
-
-\begin{slide}
-\frametitle{Classic Threading Problem: Deadlock}
-
-\begin{itemize}
-\item Two or more threads wait on each other, thus neither can progress
-  \begin{itemize}
-  \item Alice and Bob transfer money to each other
-  \item Each dutifully tries to lock both bank accounts
-  \item [] \vspace{0.5em}
-  \footnotesize{Alice locks Alice's account} \\
-  \hspace{1cm}\footnotesize{Bob locks Bob's account} \\
-  \footnotesize{Alice waits on a lock for Bob's account} \\
-  \hspace{1cm}\footnotesize{Bob waits on a lock for Alice's account} \\
-  \end{itemize}
-  \begin{itemize}
-  \item Both will wait forever
-  \end{itemize}
-
-\vspace{1em}
-\item Solution: No general solution exists
-  \begin{itemize}
-  \item Requires good software design
- \end{itemize}
-\end{itemize}
-
-\end{slide}
-
 %----------------------------------------------------------------------
 
 \begin{slide}
@@ -212,14 +156,14 @@ There are many different ways to use threads in Qt:
 %----------------------------------------------------------------------
 
 \begin{slide}
-\frametitle{Threads, Objects, and Events}
+\frametitle{Thread Affinity}
 
 \begin{itemize}
-\item Every \iCls{QThread} has its own event loop
+\item Every \iCls{QThread} can have its own event loop
   \begin{itemize}
-  \item The main thread event loop is the application event loop
-  \item Threads communicate with each other using events
-  \item Only the receiving thread needs to have a running event loop
+  \item Started by \iClsFn{QThread}{exec}
+  \item Called by the default implementation of \iClsFn{QThread}{run}
+  \item Signal/Slot connections require an event loop running on the receiving thread.
   \end{itemize}
 \item Every \iCls{QObject} is associated with a \iCls{QThread} ("thread affinity")
   \begin{itemize}
@@ -241,20 +185,20 @@ There are many different ways to use threads in Qt:
 \frametitle{Simple Threading - QThreadPool}
 
 \begin{itemize}
-\item \iCls{QThreadPool} manages a collection of threads
+\item \iCls{QThreadPool} manages a collection of {\it n} threads
   \begin{itemize}
   \item One thread per core (real or virtual) by default
-  \item On some system this may be as low as one thread
+  \item On single core systems, {\it n}=1 
   \end{itemize}
-\item Can change the number of available threads with:
+\item Can change {\it n} via:
   \begin{itemize}
-  \item \iClsFn{QThreadPool}{setMaxThreadCount} - set the thread count
-  \item \iClsFn{QThreadPool}{reserveThread} - increment thread count
-  \item \iClsFn{QThreadPool}{releaseThread} - decrement thread count
-  \item \textit{A higher number of threads is not necessarily efficient}
+  \item \iClsFn{QThreadPool}{setMaxThreadCount} - sets n
+  \item \iClsFn{QThreadPool}{reserveThread} - increments n
+  \item \iClsFn{QThreadPool}{releaseThread} - decrements n
+  \item \textit{A higher number of threads is not necessarily better}
   \end{itemize}
 \item Suitable for CPU-bound tasks, not general purpose threading
-\item Each application has a global thread pool accessible with
+\item Each QApplication has a global thread pool accessible with
       \iClsFn{QThreadPool}{globalInstance}
 \end{itemize}
 
@@ -296,7 +240,7 @@ class HelloWorldTask : public QRunnable
 %----------------------------------------------------------------------
 
 \begin{slide}
-\frametitle{Thread Pool Notes}
+\frametitle{QRunnable Notes}
 
 \begin{itemize}
 \item \iCls{QRunnable} is kept small and efficient

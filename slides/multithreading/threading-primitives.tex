@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
+% :wrap=hard:maxLineLen=80:
 % Copyright (c) 2013, Integrated Computer Solutions
 % All rights reserved.
 %
@@ -13,4 +13,233 @@
 
 \subsection{Threading Primitives}
 
+
+
+\begin{slide}
+\frametitle{Classic Threading Problem: Race Condition}
+
+\begin{itemize}
+\item Program behavior is dependent on the order of thread execution
+  \begin{itemize}
+  \item Producer thread increments count, consumer thread decrements count
+  \item But increments and decrements are \textbf{not} atomic operations!
+    \item [] \vspace{0.5em}
+    \begin{tabular}{l|l}
+    \footnotesize{producer fetches value} & \footnotesize{consumer fetches value} \\
+    \footnotesize{producer increments value} & \footnotesize{consumer decrements value} \\
+    \footnotesize{producer stores value} & \footnotesize{consumer stores value} \\
+    \end{tabular}
+  \item \vspace{0.5em} Final count value is dependent on order of operations
+  \end{itemize}
+
+\vspace{1em}
+\item Solution: Synchronization via locks
+  \begin{itemize}
+  \item Access to data is serialized
+  \item Locking semantics provided by:
+  \begin{itemize}
+  \item \iCls{QMutex}, \iCls{QReadLock}, and \iCls{QReadWriteLock}.
+  \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{QMutex}
+\begin{itemize}
+\item Mutex (mututal exclusion) is implemented by \iCls{QMutex}
+\item Important methods: \iClsFn{QMutex}{lock} and \iClsFn{QMutex}{unlock}
+\begin{itemize}
+\item \texttt{lock()} waits indefinitely (non-busy) for the lock
+\end{itemize}
+\item \texttt{tryLock()} returns \texttt{false} immediately if already locked.
+\item Test-And-Lock: \texttt{tryLock(int timeOut)} waits milliseconds
+before returning \texttt{false} if locked.
+\end{itemize}
+
+\begin{cpp}
+void method2()
+{
+    mutex.lock();
+    number *= 3;
+    number /= 2;
+    mutex.unlock();
+}
+\end{cpp}
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{Automatically (Un)locking QMutex}
+
+\begin{itemize}
+\item Must ensure \texttt{unlock()} is called after each \texttt{lock()}
+\item In functions, this means checking for multiple exit points
+\item Instead, one can use \textbf{scoped mutex} \iCls{QMutexLocker}
+\item A \textbf{scoped mutex} unlocks its mutex in the destructor
+\item If created on the stack, limits the scope of mutex lock to a block
+\end{itemize}
+\begin{cpp}
+void method2()
+{
+    QMutexLocker locker(&mutex);  // locked here
+    number *= 3;
+    number /= 2;
+}                                 // unlocked on function return
+\end{cpp}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}
+\frametitle{Multiple Readers or One Writer}
+
+To support this locking semantic: \iCls{QReadWriteLock}
+\begin{itemize}
+\item \texttt{lockForRead()} and \texttt{lockForWrite} to acquire
+\item \texttt{unlock()} to release
+\item \texttt{tryLockForRead()} and \texttt{tryLockForWrite()} to test/acquire
+    \begin{itemize}
+    \item Optional \texttt{timeOut} in milliseconds
+    \end{itemize}
+\item \iCls{QReadLocker} and \iCls{QWriteLocker}: \textbf{scoped locker} objects
+    \begin{itemize}
+    \item Create on stack
+    \item Automatically acquire and release locks in a block
+    \end{itemize}
+\end{itemize}
+
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{Thread-local data}
+In General:
+\begin{itemize}
+\item Static variables are always "global"
+\item local variables are always "thread-local"
+\end{itemize}
+Sometimes you need to define data that is local to a thread but not local
+to a function.
+\begin{itemize}
+\item \iCls{QThreadStorage} can help
+\item Parametrized template class for value types
+\item In Qt4: restricted to pointer types.
+\end{itemize}
+\begin{cpp}
+QThreadStorage<int*> localIntPtr;
+QThreadStorage<QCache<QString, SomeClass> > threadCache;
+\end{cpp}
+
+\end{slide}
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{QThreadStorage methods}
+Similar to, but not really a smart-pointer.
+\begin{itemize}
+\item \texttt{setLocalData()} to store value (usually for pointers to heap
+    objects)
+\item \texttt{hasLocalData()} to check if value was set
+\item \texttt{localData()} to get it
+\end{itemize}
+\begin{cpp}
+QThreadStorage<QCache<QString, SomeClass> > caches;
+void cacheObject(const QString &key, SomeClass *object) {
+    caches.localData().insert(key, object);
+}
+void removeFromCache(const QString &key) {
+    if (!caches.hasLocalData())
+        return;
+    caches.localData().remove(key);
+}
+\end{cpp}
+\end{slide}
 %----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Classic Threading Problem: Starvation}
+
+\textbf{The Dining Philosophers Problem}
+\begin{itemize}
+\item 4 philosophers sit at a table.
+\item Each has 2 states: \textit{eating} and \textit{thinking}
+\item 4 bowls, and 4 chopsticks are on the table
+\item To switch from \textit{thinking} to \textit{eating},
+      each philosopher must "acquire" 2 chopsticks
+\end{itemize}
+Imagine each philosopher doing this:
+\begin{itemize}
+\item  Lock left chopstick
+\item  Lock right chopstick
+\item  Eat
+\end{itemize}
+
+A careful redesign is required
+\begin{itemize}
+\item \iCls{QSemaphore} can help here.
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}
+\frametitle{Semaphores}
+
+\iCls{QSemaphore} is a generalized mutex.
+\begin{itemize}
+\item In contrast to \iCls{QMutex}, which can only be locked once,
+\item \iCls{QSemaphore} can be locked \textit{n} times before it refuses further
+locks.
+\item The max number of locks, \textit{n}, is set in the constructor
+\item \texttt{QMutex::acquire(int i)} to acquire \textit{i} blocks waiting for
+locks on this semaphore
+\item \texttt{release()} releases the locks
+\item \texttt{tryAcquire(int n)} returns false immediately if \textit{n} locks
+are not available
+\item \texttt{tryAcquire(int n, int timeOut)} waits milliseconds before
+returning \texttt{false}.
+\item \texttt{available()} returns the number of locks available
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0355}\frametitle{Mutexes vs. Semaphores: Summary}
+\begin{center}
+\begin{tabular}{|l||c|c|}
+\hline
+& \iCls{Mutex} & \iCls{Semaphore}\\
+\hline
+Terminology & Locks & Resources\\
+At any time & one & many\\
+Locking & \hClsFn{QThread}{lock} & \hClsFn{QSemaphore}{acquire}\\
+Unlocking & \hClsFn{QThread}{unlock} & \hClsFn{QSemaphore}{release}\\
+Testing & \hClsFn{QThread}{tryLock} & \hClsFn{QSemaphore}{tryAcquire}\\
+\hline
+\end{tabular}
+\end{center}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}
+\frametitle{Classic Threading Problem: Deadlock}
+
+Two or more threads wait on each other, thus neither can progress
+  \begin{itemize}
+  \item Alice and Bob transfer money to each other
+  \item Each dutifully tries to lock both bank accounts
+  \item [] \vspace{0.5em}
+  \footnotesize{Alice locks Alice's account} \\
+  \hspace{1cm}\footnotesize{Bob locks Bob's account} \\
+  \footnotesize{Alice waits on a lock for Bob's account} \\
+  \hspace{1cm}\footnotesize{Bob waits on a lock for Alice's account} \\
+  \item Both will wait forever
+  \end{itemize}
+\vspace{1em}
+Solution: Test-And-Lock, with timeout or busy-waiting may be needed
+\begin{itemize}
+  \item \iClsFn{QMutex}{tryLock} can help
+  \item \iClsFn{QAtomicInt}{testAndSetAcquire},
+  \iClsFn{QAtomicInt}{testAndSetRelease}
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------------
