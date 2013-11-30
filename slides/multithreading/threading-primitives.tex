@@ -281,18 +281,33 @@ Testing & \hClsFn{QThread}{tryLock} & \hClsFn{QSemaphore}{tryAcquire}\\
 \begin{slide}[fragile]
 \frametitle{Lab: Finding Prime Numbers}
 Write a program that finds prime numbers utilizing multiple threads.
+\flushedImage{multithreading/images/primethreads}
+\vspace{5.0em}
 \begin{itemize}
-\item A single-threaded version is provided in
-\iExample{multithreading/lab-prime}
-\item Add a progress bar, cancel button, and workers 
-\item Distribute the work across multiple threads
-\item Try not to subclass QThread
-\item Report the elapsed time, and see if there is a speedup compared to using a
-single thread.  
+\item Start with \iExample{multithreading/lab-prime}
+\item Add a progress bar 
+\item Add a label + spinbox for number of threads. 
+\item Move calculation code into a separate QObject, PrimeFinder.
+\item Hide \texttt{Ok} and \texttt{Close} and show a \texttt{Cancel} button
+when it is finding primes.
 \end{itemize}
 
-\centeredImage{multithreading/images/primethreads}
 \end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}
+\frametitle{Lab: Finding Prime Numbers (step 2)}
+\begin{itemize}
+\item Create worker threads and distribute the calculation across them
+\item It is your choice whether to extend \icls{QThread}, or use
+\iCls{QRunnable} with \iCls{QThreadPool}.
+\item If you have \textit{n} cores, report the primes calculated per second when 
+using \textit{1}, \textit{n/2}, and \textit{n} threads. 
+\end{itemize}
+Is there a significant speedup?
+\end{slide}
+
+
 
 % ----------------------------------------------------------------------
 % :wrap=hard:maxLineLen=80:

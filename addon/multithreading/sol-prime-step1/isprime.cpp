@@ -7,7 +7,7 @@
  * therefore will be slower when used in more threads.
  */
 bool isPrime(qlonglong toCheck) {
-   qlonglong sqtocheck = qSqrt(toCheck) + 1;
+   qlonglong sqtocheck = qSqrt(toCheck);
    if (toCheck == 1) return false;
    if (toCheck == 2) return true;
    if (toCheck % 2 ==0) return false;

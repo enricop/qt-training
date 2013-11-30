@@ -3,25 +3,16 @@
 #include <QObject>
 #include <QList>
 #include <QRunnable>
-#include <QMutex>
-#include <QWaitCondition>
 
-class PrimeChecker : public QThread {
+class PrimeChecker : public QObject, public QRunnable {
     Q_OBJECT
 public:
-    explicit PrimeChecker(QObject* parent =0);
+    explicit PrimeChecker(qlonglong valueToCheck, QObject* parent =0);
     void run();
-public slots:
-    /** @param v if -1, then there are no more numbers to check */
-    void checkValue(qlonglong v);
-    void cancel();
 signals:
     void primeFound(qlonglong v);
 private:
-    bool m_aborted;
-    QList<qlonglong> m_queue;
-    QMutex m_mutex;
-    QWaitCondition m_waitCondition;
+    qlonglong m_value;
 };
 
 
@@ -44,7 +35,6 @@ private:
     bool m_Busy;
     int m_threadCount;
     QList<qlonglong> m_foundPrimes;
-    QList<PrimeChecker*> m_checkers;
     qlonglong maxValue;
     int percent;
 };

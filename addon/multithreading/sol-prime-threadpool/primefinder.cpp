@@ -2,40 +2,15 @@
 #include <QApplication>
 #include "isprime.h"
 #include <QThreadPool>
-
-PrimeChecker::PrimeChecker(QObject* parent) : QThread(parent) {
-    m_aborted = false;
+PrimeChecker::PrimeChecker(qlonglong valueToCheck, QObject* parent)
+    : QObject(parent), m_value(valueToCheck) {
+    setAutoDelete(true);
 }
-
 
 void PrimeChecker::run() {
-    while (!m_aborted) {
-
-       while (!m_queue.isEmpty()) {
-           m_mutex.lock();
-           qlonglong v = m_queue.front();
-           m_queue.pop_front();
-           m_mutex.unlock();
-           if (isPrime(v)) emit primeFound(v);
-       }
-       if (m_queue.isEmpty()) {
-           QMutexLocker locker(&m_mutex);
-           m_waitCondition.wait(&mutex, 1000);
-       }
-    }
+    if (isPrime(m_value))
+        emit primeFound(m_value);
 }
-
-void PrimeChecker::cancel() {
-   m_aborted = true;
-   m_queue.clear();
-}
-
-void PrimeChecker::checkValue(qlonglong v) {
-    QMutexLocker locker(&m_mutex);
-    m_queue << v;
-    m_waitCondition.wakeOne();
-}
-
 
 PrimeFinder::PrimeFinder()
 {
@@ -44,23 +19,10 @@ PrimeFinder::PrimeFinder()
 }
 
 void PrimeFinder::setNumThreads(int nThreads) {
-    m_threadCount = nThreads;
-    foreach (PrimeChecker* pc, m_checkers) {
-        pc->cancel();
-        pc->deleteLater();
-
-    }
-    m_checkers->clear();
-    for (int i=0; i<nThreads; ++i) {
-        PrimeChecker* c = new PrimeChecker();
-        m_checkers << c;
-        c->start();
-    }
+    QThreadPool::globalInstance()->setMaxThreadCount(nThreads);
 }
 
 void PrimeFinder::cancel() {
-    foreach (PrimeChecker* pc, m_checkers)
-        pc->cancel();
     m_Busy = false;
 }
 
@@ -74,7 +36,6 @@ void PrimeFinder::findPrimesUpTo(qlonglong v) {
     m_foundPrimes << 2;
     maxValue =v;
     percent = 0;
-
     for (qlonglong i=3; i<maxValue; i += 2) {
         PrimeChecker *pc = new PrimeChecker(i);
         connect (pc, SIGNAL(primeFound(qlonglong)), this, SLOT(foundPrime(qlonglong)));
