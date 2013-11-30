@@ -279,7 +279,7 @@ Testing & \hClsFn{QThread}{tryLock} & \hClsFn{QSemaphore}{tryAcquire}\\
 
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]
-\frametitle{Lab: Finding Prime Numbers}
+\frametitle{Lab: Finding Prime Numbers (Step 1)}
 Write a program that finds prime numbers utilizing multiple threads.
 \flushedImage{multithreading/images/primethreads}
 \vspace{5.0em}
@@ -287,9 +287,9 @@ Write a program that finds prime numbers utilizing multiple threads.
 \item Start with \iExample{multithreading/lab-prime}
 \item Add a progress bar 
 \item Add a label + spinbox for number of threads. 
-\item Move calculation code into a separate QObject, PrimeFinder.
-\item Hide \texttt{Ok} and \texttt{Close} and show a \texttt{Cancel} button
-when it is finding primes.
+\item Move calculation code into a separate \iCls{QObject}, \texttt{PrimeFinder}.
+\item Hide \texttt{Ok} and \texttt{Close} and show a working \texttt{Cancel} button
+while it is finding primes.
 \end{itemize}
 
 \end{slide}
@@ -306,7 +306,6 @@ using \textit{1}, \textit{n/2}, and \textit{n} threads.
 \end{itemize}
 Is there a significant speedup?
 \end{slide}
-
 
 
 % ----------------------------------------------------------------------

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
+    <width>433</width>
     <height>344</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Highest prime to check</string>
+        <string>Largest value to check:</string>
        </property>
       </widget>
      </item>
@@ -46,11 +46,45 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Check values from 10^</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="lowPowerBox">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>(10 raised to the</string>
+        <string>up to 10^</string>
        </property>
       </widget>
      </item>
@@ -116,7 +150,7 @@
    <item>
     <widget class="QProgressBar" name="progressBar">
      <property name="value">
-      <number>24</number>
+      <number>0</number>
      </property>
     </widget>
    </item>

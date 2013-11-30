@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Number of values to check:</string>
+        <string>Highest prime to check</string>
        </property>
       </widget>
      </item>
@@ -116,7 +116,7 @@
    <item>
     <widget class="QProgressBar" name="progressBar">
      <property name="value">
-      <number>0</number>
+      <number>24</number>
      </property>
     </widget>
    </item>
