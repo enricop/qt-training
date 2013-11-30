@@ -4,14 +4,12 @@ TEMPLATE = app
 # Input
 SOURCES += main.cpp \
     primefinderdialog.cpp \
-    isprime.cpp \
-    primefinder.cpp
-QT += gui widgets
+    isprime.cpp
+QT += gui widgets concurrent
 
 FORMS += \
     primefinderdialog.ui
 
 HEADERS += \
     primefinderdialog.h \
-    isprime.h \
-    primefinder.h
+    isprime.h

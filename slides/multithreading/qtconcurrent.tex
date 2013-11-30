@@ -189,17 +189,6 @@ struct Functor : std::unary_function<QString,int> {
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}
-\frametitle{Lab: Finding Prime Numbers (concurrent)}
-Start with previous primefinder lab or \iExample{multithreading/sol-prime-step1}
-\begin{itemize}
-\item Rewrite the prime number finder to use a QtConcurrent algorithm instead of
-QThread or QRunnable.
-\item If you have \textit{n} cores, report the primes calculated per second when 
-using \textit{1}, \textit{n/2}, and \textit{n} threads. 
-\end{itemize}
-Is there a significant speedup? How does it compare to the previous labs in performance?
-\end{slide}
 
 \begin{slide}{0336}
 \frametitle{Futures}
@@ -373,6 +362,27 @@ void slotSomeCalculation() {
 \end{cpp}
 \end{center}
 \end{slide}
+
+%----------------------------------------------------------------------
+
+\begin{slide}
+\frametitle{Lab: Finding Prime Numbers (concurrent)}
+Start with previous primefinder lab or \iExample{multithreading/sol-prime-step1}
+\begin{itemize}
+\item Rewrite the prime number finder to use a QtConcurrent algorithm instead of
+QThread or QRunnable.
+\item If you have \textit{n} cores, report the primes calculated per second when 
+using \textit{1}, \textit{n/2}, and \textit{n} threads. 
+\end{itemize}
+\centeredImage{multithreading/images/primethreads-concurrent}
+
+Is there a significant speedup? 
+
+How does it compare to the previous labs in performance?
+
+\end{slide}
+
+
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0343}
 \frametitle{QtConcurrent and Exceptions}
@@ -543,7 +553,7 @@ QStringList result = lower.\hClsFn{QFuture}{results};
 
 %----------------------------------------------------------------------
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Lab: The Game Of Life}
 See if you can improve the performance of Conway's Game of Life by using
 concurrent algorithms. 

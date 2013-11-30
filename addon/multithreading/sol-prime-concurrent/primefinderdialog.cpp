@@ -1,9 +1,11 @@
+#include <QtConcurrent>
 #include <QVariant>
 #include <QLabel>
 #include <QPushButton>
-#include <QTime>
 #include <qmath.h>
 #include <QDialogButtonBox>
+#include <QProgressBar>
+#include "isprime.h"
 #include "primefinderdialog.h"
 #include "ui_primefinderdialog.h"
 
@@ -11,8 +13,12 @@ PrimeFinderDialog::PrimeFinderDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PrimeFinderDialog)
 {
+    m_Busy = false;
     ui->setupUi(this);
-    connect (&m_finder, SIGNAL(progressValueChanged(int)), ui->progressBar, SLOT(setValue(int)));
+    connect (&m_watcher, SIGNAL(finished()), this, SLOT(handleWatcherFinished()));
+    connect (&m_watcher, SIGNAL(progressRangeChanged(int,int)), ui->progressBar, SLOT(setRange(int,int)));
+    connect (&m_watcher, SIGNAL(progressValueChanged(int)), ui->progressBar, SLOT(setValue(int)));
+    on_nThreadsSpinBox_valueChanged(1);
 }
 
 PrimeFinderDialog::~PrimeFinderDialog()
@@ -34,28 +40,41 @@ void PrimeFinderDialog::changeEvent(QEvent *e)
 
 void PrimeFinderDialog::on_powerBox_valueChanged(int arg1)
 {
-    qlonglong displayValue = qPow((qlonglong)10, (qlonglong)(ui->powerBox->value()));
+    qlonglong displayValue = qPow((qlonglong)10, (qlonglong)(arg1));
     QVariant var(displayValue);
     ui->valueLabel->setText(var.toString());
 }
 
 void PrimeFinderDialog::reject() {
-    if (m_finder.isBusy()) m_finder.cancel();
+    if (m_Busy) m_watcher.cancel();
     else QDialog::reject();
 }
 
-void PrimeFinderDialog::accept()
-{
+void PrimeFinderDialog::accept() {
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Cancel);
-    QTime startTime = QTime::currentTime();
+    m_startTime = QTime::currentTime();
     qlonglong maxValue = qPow((qlonglong)10, (qlonglong)(ui->powerBox->value()));
-    m_finder.findPrimesUpTo(maxValue);
+    m_primes.clear();
+    m_primes << 2;
+    qlonglong i;
+    for (i=3; i<=maxValue; i += 2)
+       m_primes << i;
+    m_watcher.setFuture( QtConcurrent::filter(m_primes, isPrime));
+}
+
+void PrimeFinderDialog::handleWatcherFinished() {
     QTime stopTime = QTime::currentTime();
-    int msecs = startTime.msecsTo(stopTime);
-    int nprimes = m_finder.foundPrimes().length();
+    int msecs = m_startTime.msecsTo(stopTime);
+    int nprimes = m_primes.length();
     double pps = nprimes * 1000.0 / msecs;
-    QString result = QString("found %1 primes in %2 miliseconds = %3 pps\n")
-            .arg(nprimes).arg(msecs).arg(pps);
+    int tc = QThreadPool::globalInstance()->maxThreadCount();
+    QString result = QString("%4 threads found %1 primes in %2 miliseconds = %3 pps")
+            .arg(nprimes).arg(msecs).arg(pps).arg(tc);
     ui->resultsArea->append(result);
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Close);
+    m_Busy = false;
+}
+
+void PrimeFinderDialog::on_nThreadsSpinBox_valueChanged(int tc) {
+    QThreadPool::globalInstance()->setMaxThreadCount(tc);
 }
