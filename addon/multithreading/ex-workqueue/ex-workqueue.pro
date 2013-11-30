@@ -13,4 +13,5 @@ SOURCES = main.cpp \
           workitem.cpp \
           workqueue.cpp
 
-QT += gui widgets
+QT += gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

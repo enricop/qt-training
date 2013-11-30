@@ -11,3 +11,5 @@ SOURCES += \
 HEADERS += \
     progresswindow.h \
     worker.h
+MOC_DIR = build
+OBJECTS_DIR = build

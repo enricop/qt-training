@@ -45,6 +45,32 @@
 
 \end{slide}
 
+%----------------------------------------------------------------------
+\begin{slide}
+\frametitle{Classic Threading Problem: Deadlock}
+
+Two or more threads wait on each other, thus neither can progress
+  \begin{itemize}
+  \item Alice and Bob transfer money to each other
+  \item Each dutifully tries to lock both bank accounts
+  \item [] \vspace{0.5em}
+  \footnotesize{Alice locks Alice's account} \\
+  \hspace{1cm}\footnotesize{Bob locks Bob's account} \\
+  \footnotesize{Alice waits on a lock for Bob's account} \\
+  \hspace{1cm}\footnotesize{Bob waits on a lock for Alice's account} \\
+  \item Both will wait forever
+  \end{itemize}
+\vspace{1em}
+Solution: Test-And-Lock, with timeout or busy-waiting may be needed
+\begin{itemize}
+  \item \iClsFn{QMutex}{tryLock} can help
+  \item \iClsFn{QAtomicInt}{testAndSetAcquire},
+  \iClsFn{QAtomicInt}{testAndSetRelease}
+\end{itemize}
+
+\end{slide}
+
+
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]
 \frametitle{QMutex}
@@ -167,7 +193,7 @@ thread again
 \item Other threads wake a waiting thread with \iClsFn{QWaitCondition}{wakeOne}
 \item Wake all other threads with \iClsFn{QWaitCondition}{wakeAll}
 \end{itemize}
-See \iExample{addon/multithreading/ex-workqueue} for example using a wait
+See \iExample{multithreading/ex-workqueue} for example using a wait
 condition.
 \end{slide}
 
@@ -234,30 +260,38 @@ Testing & \hClsFn{QThread}{tryLock} & \hClsFn{QSemaphore}{tryAcquire}\\
 \end{tabular}
 \end{center}
 \end{slide}
+% ----------------------------------------------------------------------
+% \begin{slide}[fragile]
+% \frametitle{Lab: Threaded Progress Bar}
+% Write a program that displays the progress of a running thread:
+% \begin{itemize}
+% \item A partial program is provided in
+% \iExample{multithreading/lab-threaded-progress}
+% \item The thread should perform a CPU intensive task one thousand times,
+% reporting the progress back to the main GUI thread. 
+% \item The function busy\_work() is provided in file work.cpp as the task to be
+% performed. 
+% \item QThread should not be subclassed.
+% \end{itemize}
+% \centeredImage{multithreading/images/multithreaded_progress}
+% 
+% \end{slide}
 
-%----------------------------------------------------------------------
-\begin{slide}
-\frametitle{Classic Threading Problem: Deadlock}
-
-Two or more threads wait on each other, thus neither can progress
-  \begin{itemize}
-  \item Alice and Bob transfer money to each other
-  \item Each dutifully tries to lock both bank accounts
-  \item [] \vspace{0.5em}
-  \footnotesize{Alice locks Alice's account} \\
-  \hspace{1cm}\footnotesize{Bob locks Bob's account} \\
-  \footnotesize{Alice waits on a lock for Bob's account} \\
-  \hspace{1cm}\footnotesize{Bob waits on a lock for Alice's account} \\
-  \item Both will wait forever
-  \end{itemize}
-\vspace{1em}
-Solution: Test-And-Lock, with timeout or busy-waiting may be needed
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{Lab: Finding Prime Numbers}
+Write a program that finds prime numbers utilizing multiple threads.
 \begin{itemize}
-  \item \iClsFn{QMutex}{tryLock} can help
-  \item \iClsFn{QAtomicInt}{testAndSetAcquire},
-  \iClsFn{QAtomicInt}{testAndSetRelease}
+\item A single-threaded version is provided in
+\iExample{multithreading/lab-prime}
+\item Add a progress bar, cancel button, and workers 
+\item Distribute the work across multiple threads
+\item Try not to subclass QThread
+\item Report the elapsed time, and see if there is a speedup compared to using a
+single thread.  
 \end{itemize}
 
+\centeredImage{multithreading/images/primethreads}
 \end{slide}
 
 % ----------------------------------------------------------------------
