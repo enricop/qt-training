@@ -120,9 +120,18 @@ void method2()
 \begin{slide}
 \frametitle{Multiple Readers or One Writer}
 
-To support this locking semantic: \iCls{QReadWriteLock}
+\iCls{QReadWriteLock} supports the use case of many readers and few writers
 \begin{itemize}
-\item \texttt{lockForRead()} and \texttt{lockForWrite} to acquire
+\item Multiple readers may safely access the data at the same time
+    \begin{itemize}
+    \item Only if the data is not locked for writing
+    \end{itemize}
+\item Only one writer may access the data at a time
+    \begin{itemize}
+    \item Only if the data is not locked for reading or writing
+    \end{itemize}
+
+\item \texttt{lockForRead()} and \texttt{lockForWrite()} to acquire
 \item \texttt{unlock()} to release
 \item \texttt{tryLockForRead()} and \texttt{tryLockForWrite()} to test/acquire
     \begin{itemize}
@@ -142,14 +151,14 @@ To support this locking semantic: \iCls{QReadWriteLock}
 In General:
 \begin{itemize}
 \item Static variables are always "global"
-\item local variables are always "thread-local"
+\item Local variables are always "thread-local"
 \end{itemize}
 Sometimes you need to define data that is local to a thread but not local
 to a function.
 \begin{itemize}
 \item \iCls{QThreadStorage} can help
 \item Parametrized template class for value types
-\item In Qt4: restricted to pointer types.
+\item \textit{In Qt 4: restricted to pointer types}
 \end{itemize}
 \begin{cpp}
 QThreadStorage<int*> localIntPtr;
@@ -193,8 +202,7 @@ thread again
 \item Other threads wake a waiting thread with \iClsFn{QWaitCondition}{wakeOne}
 \item Wake all other threads with \iClsFn{QWaitCondition}{wakeAll}
 \end{itemize}
-See \iExample{multithreading/ex-workqueue} for example using a wait
-condition.
+\demo{multithreading/ex-workqueue}
 \end{slide}
 
 
@@ -228,18 +236,17 @@ A careful redesign is required
 
 \iCls{QSemaphore} is a generalized mutex.
 \begin{itemize}
-\item In contrast to \iCls{QMutex}, which can only be locked once,
-\item \iCls{QSemaphore} can be locked \textit{n} times before it refuses further
-locks.
-\item The max number of locks, \textit{n}, is set in the constructor
-\item \texttt{QMutex::acquire(int i)} to acquire \textit{i} blocks waiting for
-locks on this semaphore
-\item \texttt{release()} releases the locks
-\item \texttt{tryAcquire(int n)} returns false immediately if \textit{n} locks
-are not available
+\item \iCls{QSemaphore} guards multiple resources (in contrast to \iCls{QMutex}
+      which can only be locked once)
+\item The maximum number of resources is set in the constructor
+\item \texttt{QMutex::acquire(int n)} to acquire \textit{n} resources guarded
+      by the semaphore
+\item \texttt{release()} releases the resources
+\item \texttt{tryAcquire(int n)} returns false immediately if \textit{n} resources
+      are not available
 \item \texttt{tryAcquire(int n, int timeOut)} waits milliseconds before
-returning \texttt{false}.
-\item \texttt{available()} returns the number of locks available
+      returning \texttt{false}.
+\item \texttt{available()} returns the number of resources available
 \end{itemize}
 \end{slide}
 
@@ -299,7 +306,7 @@ while it is finding primes.
 \frametitle{Lab: Finding Prime Numbers (step 2)}
 \begin{itemize}
 \item Create worker threads and distribute the calculation across them
-\item It is your choice whether to extend \icls{QThread}, or use
+\item It is your choice whether to extend \iCls{QThread}, or use
 \iCls{QRunnable} with \iCls{QThreadPool}.
 \item If you have \textit{n} cores, report the primes calculated per second when 
 using \textit{1}, \textit{n/2}, and \textit{n} threads. 

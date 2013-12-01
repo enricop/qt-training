@@ -23,8 +23,10 @@
     threads, determined at runtime.
   \item Currently supported are combinations of the following:
     \begin{itemize}
-    \item \hNsFn{QtConcurrent}{map} (\hNsFn{std}{transform} in STL speak) or
-      \hNsFn{QtConcurrent}{filter} (\hNsFn{std}{copy\_if})
+    \item \hNsFn{QtConcurrent}{map} or \hNsFn{QtConcurrent}{filter}
+          (\textit{transform} and \textit{copy\_if} in STL)
+
+    
     \item in-place (\hNsFn{QtConcurrent}{map},
       \hNsFn{QtConcurrent}{filter}) or\\
       copying (\hNsFn{QtConcurrent}{mapped}, \hNsFn{QtConcurrent}{filtered}) or\\
@@ -57,7 +59,7 @@
   \item The mapping function either takes one element of the sequence
     as an argument and returns the modified element
     (\hNsFn{QtConcurrent}{mapped}), or modifies the argument directly
-    (\hNsFn{QtConcurrent}{map}),
+    (\hNsFn{QtConcurrent}{map})
   \item The order in which elements are processed is undefined, though
     the sequence is never reordered.
   \item See \qtexample{qtconcurrent/map}.
