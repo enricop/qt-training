@@ -1,0 +1,9 @@
+blowfish.h,blowfish.cpp
+-----------------------
+Copyright 1993, Bruce Schneier
+https://www.schneier.com/blowfish.html
+
+Blowfish was designed in 1993 by Bruce Schneier as a fast, free alternative
+to existing encryption algorithms. Blowfish is unpatented and license-free,
+and is available free for all uses. The source code for Blowfish has been
+provided license free by Bruce Schneier.
