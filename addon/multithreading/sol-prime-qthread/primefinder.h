@@ -5,6 +5,8 @@
 #include <QWaitCondition>
 #include <QThread>
 
+
+// Worker thread created by PrimeFinder.
 class PrimeChecker : public QThread {
     Q_OBJECT
 public:
@@ -19,13 +21,13 @@ signals:
     void primeFound(qlonglong v);
 private:
     bool m_aborted;
-    bool m_noMoreWork;
+    bool m_stopWhenDone;
     QList<qlonglong> m_queue;
     QMutex m_mutex;
     QWaitCondition m_waitCondition;
 };
 
-
+// Runs in the main thread
 class PrimeFinder: public QObject
 {
     Q_OBJECT
