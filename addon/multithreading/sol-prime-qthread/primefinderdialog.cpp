@@ -60,3 +60,8 @@ void PrimeFinderDialog::accept()
     ui->resultsArea->append(result);
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Close);
 }
+
+void PrimeFinderDialog::on_nThreadsSpinBox_valueChanged(int tc)
+{
+    m_finder.setNumThreads(tc);
+}

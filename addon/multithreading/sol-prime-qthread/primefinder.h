@@ -1,10 +1,9 @@
 #ifndef PRIMEFINDER_H
 #define PRIMEFINDER_H
-#include <QObject>
 #include <QList>
-#include <QRunnable>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QThread>
 
 class PrimeChecker : public QThread {
     Q_OBJECT
@@ -15,10 +14,12 @@ public slots:
     /** @param v if -1, then there are no more numbers to check */
     void checkValue(qlonglong v);
     void cancel();
+    void stopWhenDone();
 signals:
     void primeFound(qlonglong v);
 private:
     bool m_aborted;
+    bool m_noMoreWork;
     QList<qlonglong> m_queue;
     QMutex m_mutex;
     QWaitCondition m_waitCondition;

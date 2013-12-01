@@ -51,6 +51,7 @@ void PrimeFinderDialog::reject() {
 }
 
 void PrimeFinderDialog::accept() {
+    m_Busy = true;
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Cancel);
     m_startTime = QTime::currentTime();
     qlonglong maxValue = qPow((qlonglong)10, (qlonglong)(ui->powerBox->value()));

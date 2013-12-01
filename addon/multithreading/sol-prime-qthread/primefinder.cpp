@@ -5,8 +5,12 @@
 
 PrimeChecker::PrimeChecker(QObject* parent) : QThread(parent) {
     m_aborted = false;
+    m_noMoreWork = false;
 }
 
+void PrimeChecker::stopWhenDone() {
+    m_noMoreWork = true;
+}
 
 void PrimeChecker::run() {
     while (!m_aborted) {
@@ -18,9 +22,10 @@ void PrimeChecker::run() {
            m_mutex.unlock();
            if (isPrime(v)) emit primeFound(v);
        }
+       if (m_noMoreWork) return;
        if (m_queue.isEmpty()) {
            QMutexLocker locker(&m_mutex);
-           m_waitCondition.wait(&mutex, 1000);
+           m_waitCondition.wait(&m_mutex, 1000);
        }
     }
 }
@@ -45,17 +50,6 @@ PrimeFinder::PrimeFinder()
 
 void PrimeFinder::setNumThreads(int nThreads) {
     m_threadCount = nThreads;
-    foreach (PrimeChecker* pc, m_checkers) {
-        pc->cancel();
-        pc->deleteLater();
-
-    }
-    m_checkers->clear();
-    for (int i=0; i<nThreads; ++i) {
-        PrimeChecker* c = new PrimeChecker();
-        m_checkers << c;
-        c->start();
-    }
 }
 
 void PrimeFinder::cancel() {
@@ -71,25 +65,40 @@ bool PrimeFinder::isBusy() const {
 void PrimeFinder::findPrimesUpTo(qlonglong v) {
     m_Busy = true;
     m_foundPrimes.clear();
+    qDeleteAll(m_checkers);
+    m_checkers.clear();
     m_foundPrimes << 2;
     maxValue =v;
     percent = 0;
 
-    for (qlonglong i=3; i<maxValue; i += 2) {
-        PrimeChecker *pc = new PrimeChecker(i);
+    for (int t=0; t<m_threadCount; ++t) {
+        PrimeChecker *pc = new PrimeChecker();
         connect (pc, SIGNAL(primeFound(qlonglong)), this, SLOT(foundPrime(qlonglong)));
-        QThreadPool::globalInstance()->start(pc);
-        qApp->processEvents();
+        m_checkers << pc;
+        pc->start();
+    }
+
+    int idx = 0;
+    for (qlonglong i=3; i<maxValue; i += 2) {
+        m_checkers.at(idx)->checkValue(i);
+        idx = ++idx % m_threadCount;
+        if (idx == 0) qApp->processEvents();
         if (!m_Busy) break;
     }
-    QThreadPool::globalInstance()->waitForDone();
+    foreach (PrimeChecker* pc, m_checkers)
+        pc->stopWhenDone();
     qApp->processEvents();
+    foreach (PrimeChecker* pc, m_checkers) {
+        qApp->processEvents();
+        pc->wait();
+    }
     m_Busy = false;
 }
 
 void PrimeFinder::foundPrime(qlonglong pv) {
     m_foundPrimes << pv;
     int newPercent = 100 * (double) pv / maxValue;
+
     if (newPercent > percent) {
         emit progressValueChanged(newPercent);
         percent = newPercent;
