@@ -46,16 +46,17 @@ void PrimeFinderDialog::reject() {
 
 void PrimeFinderDialog::accept()
 {
+    m_finder.clear();
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Cancel);
     QTime startTime = QTime::currentTime();
     qlonglong maxValue = qPow((qlonglong)10, (qlonglong)(ui->powerBox->value()));
     m_finder.findPrimesUpTo(maxValue);
     QTime stopTime = QTime::currentTime();
-    int msecs = startTime.msecsTo(stopTime);
+    double msecs = startTime.msecsTo(stopTime);
     int nprimes = m_finder.foundPrimes().length();
-    double pps = nprimes * 1000.0 / msecs;
-    QString result = QString("found %1 primes in %2 miliseconds = %3 pps\n")
-            .arg(nprimes).arg(msecs).arg(pps);
+    double kpps = nprimes / msecs;
+    QString result = QString("found %1 primes in %2 seconds = %3 kpps\n")
+            .arg(nprimes).arg(msecs/1000).arg(kpps);
     ui->resultsArea->append(result);
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Close);
 }

@@ -1,10 +1,10 @@
-This solution of the multithreaded prime number finder lab, 
-using QRunnable and QThreadPool, does not show much of a speedup 
-when adding threads.
+This is a "how not to" solution of the multithreaded prime number finder lab,
+while it does properly use QRunnable and QThreadPool, 
+does not perform well. 
 
 This is probably because the overhead of processEvents combined
-with the short lifetime of each QRunnable outweighs
-the benefits of having multiple threads. 
+with the short lifetime of each QRunnable, which is also a QObject,
+creates too much overhead per calculation.  
 
-The work function has to be longer-running to show a significant speedup. 
-Perhaps if each QRunnable took 5-10 numbers to check, instead of just 1...
+The work function, or the lifetime of the QRunnable, has to be longer lasting.
+

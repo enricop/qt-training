@@ -51,12 +51,12 @@ void PrimeFinderDialog::accept()
     qlonglong maxValue = qPow((qlonglong)10, (qlonglong)(ui->powerBox->value()));
     m_finder.findPrimesUpTo(maxValue);
     QTime stopTime = QTime::currentTime();
-    int msecs = startTime.msecsTo(stopTime);
+    double secs = startTime.msecsTo(stopTime) / 1000.0;
     int nthreads = ui->nThreadsSpinBox->value();
     int nprimes = m_finder.foundPrimes().length();
-    double pps = nprimes * 1000.0 / msecs;
-    QString result = QString("%3 threads found %1 primes in %2 miliseconds = %4 pps\n")
-            .arg(nprimes).arg(msecs).arg(nthreads).arg(pps);
+    double kpps = nprimes / (1000.0 *secs);
+    QString result = QString("%3 threads found %1 primes in %2 seconds = %4 kpps\n")
+            .arg(nprimes).arg(secs).arg(nthreads).arg(kpps);
     ui->resultsArea->append(result);
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Close);
 }

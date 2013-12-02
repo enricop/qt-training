@@ -95,6 +95,7 @@ void PrimeFinder::findPrimesUpTo(qlonglong v) {
     }
     qDeleteAll(m_checkers);
     m_checkers.clear();
+    emit progressValueChanged(100);
     m_Busy = false;
 }
 

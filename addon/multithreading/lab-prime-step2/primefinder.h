@@ -10,6 +10,7 @@ public:
     PrimeFinder();
 
 public slots:
+    void clear() {m_foundPrimes.clear();}
     void findPrimesUpTo(qlonglong v);
     void cancel();
     bool isBusy() const;

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Prime Number Finder</string>
+   <string>Concurrent Prime Number Finder</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

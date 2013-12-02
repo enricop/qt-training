@@ -41,9 +41,6 @@ void PrimeFinderDialog::on_powerBox_valueChanged(int arg1)
 
 void PrimeFinderDialog::accept()
 {
-    // NOTE: You should probably move all the prime calculation code out of this
-    // class and into a separate QObject-derived class (PrimeFinder), so it can more easily
-    // be parallelized.
     ui->buttonBox->setEnabled(false);
     m_foundPrimes.clear();
 
@@ -54,11 +51,11 @@ void PrimeFinderDialog::accept()
     for (qlonglong i=3; i<maxValue; i += 2)
         if (isPrime(i)) m_foundPrimes << i;
     QTime stopTime = QTime::currentTime();
-    int msecs = startTime.msecsTo(stopTime);
+    double secs = (double) startTime.msecsTo(stopTime) / 1000.0;
     int nprimes = m_foundPrimes.length();
-    double pps = nprimes * 1000.0 / msecs;
-    QString result = QString("found %1 primes in %2 miliseconds = %3 pps\n")
-            .arg(m_foundPrimes.length()).arg(msecs).arg(pps);
+    double kpps = nprimes / (1000.0 * secs);
+    QString result = QString("found %1 primes in %2 seconds = %3 kpps\n")
+            .arg(m_foundPrimes.length()).arg(secs).arg(kpps);
     ui->resultsArea->append(result);
     ui->buttonBox->setEnabled(true);
 }
