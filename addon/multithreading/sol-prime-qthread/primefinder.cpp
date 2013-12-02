@@ -13,20 +13,20 @@ void PrimeChecker::stopWhenDone() {
 }
 
 void PrimeChecker::run() {
+    QMutexLocker locker(&m_mutex);
     forever {
-       while (!m_queue.isEmpty()) {
-           if (m_aborted) return;
-           m_mutex.lock();
-           qlonglong v = m_queue.front();
-           m_queue.pop_front();
-           m_mutex.unlock();
-           // unlock mutex before doing the calculation!
-           if (isPrime(v)) emit primeFound(v);
-       }
        if (m_queue.isEmpty()) {
            if (m_stopWhenDone) return;
-           QMutexLocker locker(&m_mutex);
            m_waitCondition.wait(&m_mutex, 1000);
+       }
+       else {
+           if (m_aborted) return;
+           qlonglong v = m_queue.front();
+           m_queue.pop_front();
+           // unlock mutex before doing the calculation!
+           m_mutex.unlock();
+           if (isPrime(v)) emit primeFound(v);
+           m_mutex.lock();
        }
     }
 }

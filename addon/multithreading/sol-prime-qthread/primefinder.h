@@ -13,7 +13,6 @@ public:
     explicit PrimeChecker(QObject* parent =0);
     void run();
 public slots:
-    /** @param v if -1, then there are no more numbers to check */
     void checkValue(qlonglong v);
     void cancel();
     void stopWhenDone();
