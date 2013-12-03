@@ -1,12 +1,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Copyright (c) 2008-2013, Nokia, Integrated Computer Solutions
+% Parts Copyright (c) 2008-2011 Nokia
+% Parts Copyright (c) 2010-2013 Integrated Computer Solutions
 %
 % This work, unless otherwise expressly stated, is licensed under a
 % Creative Commons Attribution-ShareAlike 2.5.
 %
 % The full license document is available from
-% http://creativecommons.org/licenses/by-sa/2.5/legalcode .
+% http://creativecommons.org/licenses/by-sa/2.5/legalcode.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -26,7 +27,7 @@
     \item \hNsFn{QtConcurrent}{map} or \hNsFn{QtConcurrent}{filter}
           (\textit{transform} and \textit{copy\_if} in STL)
 
-    
+
     \item in-place (\hNsFn{QtConcurrent}{map},
       \hNsFn{QtConcurrent}{filter}) or\\
       copying (\hNsFn{QtConcurrent}{mapped}, \hNsFn{QtConcurrent}{filtered}) or\\
@@ -68,7 +69,7 @@
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0331}
-\frametitle{QtConcurrent~\textemdash~Blocking Operation}
+\frametitle{QtConcurrent~\textemdash~Blocking Operations}
   \xConcept{QtConcurrent!Filtering!Blocking}
   \xConcept{QtConcurrent!Blocking!Filtering}
   \xConcept{Multithreading!QtConcurrent!Filtering!Blocking}
@@ -87,7 +88,7 @@
     \xExample{blockingMapped (QtConcurrent)}
 \begin{cpp}
 QStringList input = ...;
-QStringList lower = 
+QStringList lower =
   QtConcurrent::blockingMapped(input, &QString::toLower);
 \end{cpp}
   \item Filtering and mapping are very similar, so in the following,
@@ -96,7 +97,7 @@ QStringList lower =
 \end{slide}
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0332}
-\frametitle{QtConcurrent~\textemdash~Blocking Operation}
+\frametitle{QtConcurrent~\textemdash~Blocking Operations}
   \xConcept{QtConcurrent!Map-Reduce!Blocking}
   \xConcept{QtConcurrent!Blocking!Map-Reduce}
   \xConcept{QtConcurrent!Filter-Reduce!Blocking}
@@ -196,15 +197,21 @@ struct Functor : std::unary_function<QString,int> {
 \frametitle{QFuture}\label{QFuture}
   \begin{itemize}
   \item \iCls{QFuture} is Qt's implementation of the Future concept.
-  \item You cannot create \iCls{QFuture}s yourself, they are returned
-    from the \emph{non-blocking} \iNs{QtConcurrent} functions.
-  \item Once you have a \iCls{QFuture} instance, you can: copy it,
-    pass it around, ask it for progress, pause and cancel it, or get
-    its value (which might block, if it is not available yet).
-  \item A \iCls{QFuture} can be \emph{single-valued}, or
-    \emph{multi-valued}.
+  \item You can't create \iCls{QFuture}s yourself.
+  \item They're returned from \emph{non-blocking} \iNs{QtConcurrent} functions.
+  \item With \iCls{QFuture}, you can:
+      \begin{itemize}
+      \item copy
+      \item pass by value,
+      \item ask for progress
+      \item pause
+      \item cancel it
+      \end{itemize}
+  \item Can be \emph{single-valued}, or \emph{multi-valued}.
+  \item A template proxy for an actual value containing the result.
   \end{itemize}
 \end{slide}
+
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0338}
 \frametitle{QFuture Example}
@@ -233,27 +240,15 @@ int someCalculation() {
 \frametitle{QFuture (Single-Valued)}
   \xConcept{QFuture!single-valued}
   \begin{itemize}
-  \item A \iCls{QFuture} is \emph{single-valued} if 
-    $\hbox{\hClsFn{QFuture}{resultCount}}==1$. %PENDING(marc) review that it's not 0
-  \item A single-valued \iCls{QFuture} acts much like the value
-    itself, but using it as a non-future might block, waiting for the
-    actual result to become available.
+  \item A single-valued \iCls{QFuture} acts much like the value itself
+  \item Can be used in arithmetic with other compatible QFuture types without blocking.
   \item Check for the result with
     \begin{itemize}
     \item \hClsFn{QFuture}{isFinished}
-    \item \hClsFn{QFuture}{waitForFinished}, \hClsFn{QFuture}{result} (might block)
-    \item \emph{implicit} conversion of \texttt{QFuture<T>} to
-      \texttt{T} (calls \hClsFn{QFuture}{result})
+    \item \hClsFn{QFuture}{waitForFinished},
+    \item \hClsFn{QFuture}{result} (might block)
+    \item \emph{implicit} conversion of \texttt{QFuture<T>} to \texttt{T} (calls \hClsFn{QFuture}{result})
     \end{itemize}
-  \item Check for progress with
-    \begin{itemize}
-    \item \hClsFn{QFuture}{progressMinimum}, \hClsFn{QFuture}{progressMaximum}
-    \item \hClsFn{QFuture}{progressValue}
-    \item \hClsFn{QFuture}{progressText}
-    \end{itemize}
-  \item Cancel (\hClsFn{QFuture}{cancel}), pause
-    (\hClsFn{QFuture}{pause}), and resume (\hClsFn{QFuture}{resume})
-    the task.
   \end{itemize}
 \end{slide}
 %----------------------------------------------------------------------
@@ -263,12 +258,19 @@ int someCalculation() {
   \xConcept{Iterators!Java style!QFuture}
   \xConcept{Iterators!STL style!QFuture}
   \begin{itemize}
-  \item A \iCls{QFuture} is \emph{multi-valued} if 
+  \item A \iCls{QFuture} is \emph{multi-valued} if
     $\hbox{\hClsFn{QFuture}{resultCount}}>1$.
   \item A multi-valued \iCls{QFuture} acts much like a
     \iCls{QList}, but iteration might block, waiting for more elements
     to become available.
-  \item Check for the result with
+  \item Check for progress:
+    \begin{itemize}
+    \item \hClsFn{QFuture}{progressValue}, \hClsFn{QFuture}{progressRangeChanged}
+    \end{itemize}
+  \item Cancel (\hClsFn{QFuture}{cancel}), pause
+    (\hClsFn{QFuture}{pause}), and resume (\hClsFn{QFuture}{resume})
+    the task.
+  \item Check results:
     \begin{itemize}
     \item \hClsFn{QFuture}{resultCount}, \hClsFn{QFuture}{isFinished},
       \hClsFnPar{QFuture}{isResultReadyAt}{int}
@@ -276,7 +278,7 @@ int someCalculation() {
         index} (might block)
     \end{itemize}
   \item For iteration, both Java-style \iCls{QFutureIterator}, and
-    STL-style \iClsTypedef{QFuture}{const\_iterator} are available.    
+    STL-style \iClsTypedef{QFuture}{const\_iterator} are available.
 \end{itemize}
 \end{slide}
 %----------------------------------------------------------------------
@@ -295,8 +297,8 @@ int someCalculation() {
   \item%
     \hClsSigPar{QFutureWatcher}{resultReadyAt}{int~index},
     \hClsSigPar{QFutureWatcher}{resultReadyAt}{int~begin,~int~end}
-    
-  \item Useful for connecting to \iCls{QProgressBar}: 
+
+  \item Useful for connecting to \iCls{QProgressBar}:
     \hClsSig{QFutureWatcher}{progressValueChanged},
     \hClsSig{QFutureWatcher}{progressRangeChanged},
     \hClsSig{QFutureWatcher}{progressTextChanged}
@@ -352,12 +354,12 @@ You can start with \iExample{multithreading/lab-prime}
 \begin{itemize}
 \item Rewrite the prime number finder to use a QtConcurrent algorithm instead of
 QThread or QRunnable.
-\item If you have \textit{n} cores, report the primes calculated per second when 
-using \textit{1}, \textit{n/2}, and \textit{n} threads. 
+\item If you have \textit{n} cores, report the primes calculated per second when
+using \textit{1}, \textit{n/2}, and \textit{n} threads.
 \end{itemize}
 \centeredImage{multithreading/images/primethreads-concurrent}
 
-Is there a significant speedup? 
+Is there a significant speedup?
 
 How does it compare to the previous labs in performance?
 
@@ -376,8 +378,6 @@ How does it compare to the previous labs in performance?
   \item What happens when one of the mapping or filtering functions
     throws an exception? How will it travel back to the calling
     thread?
-  \item Standard C++ does not (yet) have a mechanism for this, so Qt
-    solves it as follows:
   \item Exceptions inheriting \iNsCls{QtConcurrent}{Exception} can
     travel across thread boundaries to be delivered to the calling
     thread.
@@ -443,7 +443,7 @@ class MyException : public QtConcurrent::Exception {
 
 %----------------------------------------------------------------------
 \begin{slide}[fragile]{0346}
-\frametitle{QtConcurrent~\textemdash~Asynchronous Operation}
+\frametitle{QtConcurrent~\textemdash~Asynchronous Operations}
   \xConcept{Multithreading!Non-Blocking QtConcurrent}
   \xConcept{Multithreading!QtConcurrent!Non-Blocking}
   \xConcept{QtConcurrent!Asynchronous!Filter-Reduce}
@@ -455,10 +455,8 @@ class MyException : public QtConcurrent::Exception {
   \xConcept{QtConcurrent!Map-Reduce!Asynchronous}
   \xConcept{QtConcurrent!Mapping!Asynchronous}
   \begin{itemize}
-  \item All of the blocking operations in \iNs{QtConcurrent} are also
-    available in asynchronous variants.
-  \item Whereas the blocking operations return the result directly,
-    the asynchronous ones return a future.
+  \item All blocking operations in \iNs{QtConcurrent} are also available in asynchronous form
+  \item Asynchronous versions return a future instead of the value
   \item Example:%
     \xExample{Multithreading!QtConcurrent!mapped}
     \xExample{QtConcurrent!mapped}
@@ -472,22 +470,6 @@ QStringList result = lower.\hClsFn{QFuture}{results};
     \end{alltt}
   \end{itemize}
 \end{slide}
-% %----------------------------------------------------------------------
-% \begin{slide}{0347}
-% \frametitle{Project Task:\iProject{Parallelizing sequential tasks (II)}}
-% \begin{itemize}
-% \item Start with your solution from the previous project task, or
-% with \projectsolution{multithreading/lab-sequential}.
-% \item Port from using blocking to using non-blocking
-% \iNs{QtConcurrent} algorithms
-% \item Adjust the structure of the program to maximize concurrency.
-% \item Discuss the timing results.
-% %PENDING(marc): add solution
-% \item Optional: As before, measure the difference between in-place
-% and copying variants.
-% \end{itemize}
-% \end{slide}
-% %PENDING(marc): find out about and then describe expected bahaviour.
 %----------------------------------------------------------------------
 \begin{slide}{0348}
 \frametitle{QtConcurrent::run}
