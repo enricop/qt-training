@@ -4,6 +4,8 @@
 #include <QList>
 #include <QRunnable>
 
+
+/** A QRunnable that checks a batch of numbers for prime-hood. */
 class PrimeChecker : public QObject, public QRunnable {
     Q_OBJECT
 public:
@@ -36,7 +38,7 @@ signals:
 private:
     int m_granularity;
     bool m_Busy;
-    int m_threadCount;
+
     QList<qlonglong> m_foundPrimes;
     qlonglong maxValue;
     int percent;

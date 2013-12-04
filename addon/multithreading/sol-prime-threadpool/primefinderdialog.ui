@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Slow QRunnable Prime Number Finder</string>
+   <string>QRunnable Prime Number Finder</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Number of values to check:</string>
+        <string>Highest value to check:</string>
        </property>
       </widget>
      </item>
@@ -91,7 +91,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Number of threads:</string>
+        <string>Size of Thread Pool</string>
        </property>
       </widget>
      </item>
@@ -108,20 +108,23 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Values to check per QRunnable</string>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
       <widget class="QSpinBox" name="granularitySpinBox">
        <property name="minimum">
         <number>1</number>
        </property>
        <property name="singleStep">
-        <number>1</number>
+        <number>5</number>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Granularity:</string>
+       <property name="value">
+        <number>5</number>
        </property>
       </widget>
      </item>

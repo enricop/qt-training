@@ -1,29 +1,35 @@
 #include "primefinder.h"
-#include <QApplication>
 #include "isprime.h"
+#include <QApplication>
 #include <QThreadPool>
+#include <QThread>
+
+// PrimeChecker methods
+
 PrimeChecker::PrimeChecker(qlonglong valueToCheck, QObject* parent)
-    : QObject(parent) {
+: QObject(parent) {
     setAutoDelete(true);
     m_values << valueToCheck;
 }
 
 PrimeChecker::PrimeChecker(QList<qlonglong> values, QObject* parent)
-    : QObject(parent) {
+: QObject(parent) {
     setAutoDelete(true);
     m_values = values;
 }
 
 
 void PrimeChecker::run() {
-    foreach (qlonglong v, m_values)        
+    foreach (qlonglong v, m_values)
         if (isPrime(v)) emit primeFound(v);
 }
 
-PrimeFinder::PrimeFinder()
-{
+// -------------------------------------------------------------------------------
+// PrimeFinder methods
+
+PrimeFinder::PrimeFinder() {
     m_Busy = false;
-    m_threadCount = 1;
+    setNumThreads(1);
     m_granularity = 1;
 }
 
@@ -52,17 +58,18 @@ void PrimeFinder::findPrimesUpTo(qlonglong v) {
     QList<qlonglong> values;
     for (qlonglong i=3; i<maxValue; i += 2) {
         values << i;
-        if (values.size() > m_granularity) {
+        if ((i == maxValue - 2) || (values.size() > m_granularity)) {
            PrimeChecker *pc = new PrimeChecker(values);
            connect (pc, SIGNAL(primeFound(qlonglong)), this, SLOT(foundPrime(qlonglong)));
            QThreadPool::globalInstance()->start(pc);
-           qApp->processEvents();
            values.clear();
+           qApp->processEvents();
         }
         if (!m_Busy) break;
     }
-    QThreadPool::globalInstance()->waitForDone();
-    qApp->processEvents();
+    while (!QThreadPool::globalInstance()->waitForDone(200))
+        qApp->processEvents();
+    if (m_Busy) emit progressValueChanged(100);
     m_Busy = false;
 }
 

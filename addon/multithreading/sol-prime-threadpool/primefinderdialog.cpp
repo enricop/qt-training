@@ -47,6 +47,7 @@ void PrimeFinderDialog::reject() {
 void PrimeFinderDialog::accept()
 {
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Cancel);
+    ui->nThreadsSpinBox->setEnabled(false);
     QTime startTime = QTime::currentTime();
     qlonglong maxValue = qPow((qlonglong)10, (qlonglong)(ui->powerBox->value()));
     m_finder.findPrimesUpTo(maxValue);
@@ -59,9 +60,15 @@ void PrimeFinderDialog::accept()
             .arg(nprimes).arg(secs).arg(nthreads).arg(kpps);
     ui->resultsArea->append(result);
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Close);
+    ui->nThreadsSpinBox->setEnabled(true);
 }
 
 void PrimeFinderDialog::on_granularitySpinBox_valueChanged(int arg1)
 {
     m_finder.setGranularity(arg1);
+}
+
+void PrimeFinderDialog::on_nThreadsSpinBox_valueChanged(int arg1)
+{
+    m_finder.setNumThreads(arg1);
 }

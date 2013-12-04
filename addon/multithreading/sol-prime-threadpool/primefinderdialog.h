@@ -25,6 +25,7 @@ private slots:
     void accept();
 
     void on_granularitySpinBox_valueChanged(int arg1);
+    void on_nThreadsSpinBox_valueChanged(int arg1);
 
 private:
     Ui::PrimeFinderDialog *ui;
