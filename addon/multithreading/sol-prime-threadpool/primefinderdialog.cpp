@@ -60,3 +60,8 @@ void PrimeFinderDialog::accept()
     ui->resultsArea->append(result);
     ui->buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Close);
 }
+
+void PrimeFinderDialog::on_granularitySpinBox_valueChanged(int arg1)
+{
+    m_finder.setGranularity(arg1);
+}

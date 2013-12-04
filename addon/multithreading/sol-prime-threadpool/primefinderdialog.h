@@ -24,6 +24,8 @@ private slots:
     void reject();
     void accept();
 
+    void on_granularitySpinBox_valueChanged(int arg1);
+
 private:
     Ui::PrimeFinderDialog *ui;
     PrimeFinder m_finder;
