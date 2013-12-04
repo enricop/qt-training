@@ -21,9 +21,9 @@ void PrimeFinder::setGranularity(int numValues) {
 }
 
 void PrimeFinder::cancel() {
-    m_Busy = false;
+    m_Busy = false;    
     foreach (PrimeChecker* checker, findChildren<PrimeChecker*>()) {
-       checker->cancel();
+       if (checker) checker->cancel();
     }
 
 }

@@ -13,7 +13,7 @@
 
 \subsection{Custom Models}
 
-%----------------------------------------------------------------------                                                                                                         
+%----------------------------------------------------------------------
 \begin{slide}{1593}\frametitle{Implementing a Model}
 \begin{itemize}
 \item Variety of classes to choose from
@@ -54,9 +54,9 @@ public:
   // return row count for given parent
   int rowCount( const QModelIndex &parent) const;
   // return data, based on current index and requested role
-  QVariant data( const QModelIndex &index, 
+  QVariant data( const QModelIndex &index,
                  int role = Qt::DisplayRole) const;
-};    
+};
   \end{cpp}
 \demo{modelview/ex-stringlistmodel}
 \end{slide}
@@ -65,8 +65,8 @@ public:
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]{1591}\frametitle{Step 2: Suppling Header Information}
  \begin{cpp}
-QVariant MyModel::headerData(int section, 
-                             Qt::Orientation orientation, 
+QVariant MyModel::headerData(int section,
+                             Qt::Orientation orientation,
                              int role) const
 {
     // return column or row header based on orientation
@@ -80,14 +80,14 @@ QVariant MyModel::headerData(int section,
 \begin{slide}[fragile]{1590}\frametitle{Step 3: Enabling Editing}
   \begin{cpp}
 // should contain Qt::ItemIsEditable
-Qt::ItemFlags MyModel::flags(const QModelIndex &index) const 
+Qt::ItemFlags MyModel::flags(const QModelIndex &index) const
 {
     return QAbstractListModel::flags() | Qt::ItemIsEditable;
 }
 
 // set data for item at index to value
-bool MyModel::setData( const QModelIndex & index, 
-                       const QVariant & value, 
+bool MyModel::setData( const QModelIndex & index,
+                       const QVariant & value,
                        int role = Qt::EditRole)
 {
     ... = value; // set data to your backend
@@ -102,7 +102,7 @@ bool MyModel::setData( const QModelIndex & index,
 \begin{slide}[fragile]{1589}\frametitle{Step 4: Row Manipulation}
     \begin{cpp}
 // insert count rows into model before row
-bool MyModel::insertRows(int row, int count, parent) {      
+bool MyModel::insertRows(int row, int count, parent) {
    beginInsertRows(parent, first, last);
    // insert data into your backend
    // ...
@@ -115,7 +115,7 @@ bool MyModel::removeRows(int row, int count, parent) {
    // remove data from your backend
    // ...
    endRemoveRows();
-}      
+}
     \end{cpp}
 \demo{modelview/ex-stringlistmodel-4}
 \end{slide}
@@ -133,14 +133,14 @@ int MyModel::columnCount ( parent ) const {
 }
 QVariant MyModel::data( index, role ) const {
     // adapt to react on requested column from index
-}    
+}
     \end{cpp}
   \end{itemize}
   \demo{modelview/ex-tablemodel}
 \end{itemize}
 \end{slide}
 
- 
+
 % ----------------------------------------------------------------------
 \begin{slide}{1587}\frametitle{Lab: Color Model}
   \flushedImage{modelview/images/colormodel}
@@ -181,6 +181,23 @@ QVariant MyModel::data( index, role ) const {
 \lab{modelview/lab-citymodel}
 \end{slide}
 
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{Lab: Friends List}
+Implement a GUI for showing friendslists, or a bidirectional relationship between symbols.
+It should show two \iCls{QListView}s side by side, like the figure below:
 
+\centeredImage{modelview/images/friendslist}
+
+\begin{itemize}
+\item  Both lists should show the same set of symbols available.
+\item  Friends are shown as checked, strangers as un-checked.
+\item  To add/drop friends, toggle the checkbox-state.
+\item  If A is friends with B, then B is friends with A.
+\item  One can't add/drop oneself. Do not allow it. Show oneself as already checked and disabled.
+\item  Click \texttt{Add} to add a new symbol to both lists.
+
+\end{itemize}
+\end{slide}
 
 
