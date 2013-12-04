@@ -8,7 +8,7 @@
 FriendsLists::FriendsLists(QWidget *parent) 
 : QDialog(parent), ui(new Ui::FriendsLists) {
     ui->setupUi(this);
-    m_cmodel = new FriendsListModel(m_friendsList, this);
+    m_cmodel = new FriendsListModel(this);
     m_cmodel->add("a");
     m_cmodel->add("z");
     m_cmodel->add("m");

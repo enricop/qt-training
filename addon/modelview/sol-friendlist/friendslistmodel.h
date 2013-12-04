@@ -22,14 +22,14 @@ class FriendsListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit FriendsListModel(FriendsList& fl, QObject *parent = 0);
+    explicit FriendsListModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QModelIndex indexOf(QString key) ;
 
-    void add(QString k);    
+    void add(QString k);
     void set(QString k1, QString k2);
     void unset(QString k1, QString k2);
 
@@ -38,7 +38,7 @@ public slots:
 
 protected:
     QString m_contact;
-    FriendsList& m_friendsList;
+    FriendsList m_friendsList;
     QStringList m_allPeople;
 };
 

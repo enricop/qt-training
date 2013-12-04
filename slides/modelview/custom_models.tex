@@ -15,7 +15,8 @@
 \subsection{Custom Models}
 
 %----------------------------------------------------------------------
-\begin{slide}{1593}\frametitle{Implementing a Model}
+\begin{slide}{1593}
+\frametitle{Implementing a Model}
 \begin{itemize}
 \item Variety of classes to choose from
   \begin{itemize}
@@ -48,7 +49,8 @@
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1592}\frametitle{Step 1: Read Only List Model}
+\begin{slide}[fragile]{1592}
+\frametitle{Step 1: Read Only List Model}
   \begin{cpp}
 class MyModel: public QAbstractListModel {
 public:
@@ -64,7 +66,8 @@ public:
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1591}\frametitle{Step 2: Suppling Header Information}
+\begin{slide}[fragile]{1591}
+\frametitle{Step 2: Suppling Header Information}
  \begin{cpp}
 QVariant MyModel::headerData(int section,
                              Qt::Orientation orientation,
@@ -78,7 +81,8 @@ QVariant MyModel::headerData(int section,
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1590}\frametitle{Step 3: Enabling Editing}
+\begin{slide}[fragile]{1590}
+\frametitle{Step 3: Enabling Editing}
   \begin{cpp}
 // should contain Qt::ItemIsEditable
 Qt::ItemFlags MyModel::flags(const QModelIndex &index) const
@@ -100,7 +104,8 @@ bool MyModel::setData( const QModelIndex & index,
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1589}\frametitle{Step 4: Row Manipulation}
+\begin{slide}[fragile]{1589}
+\frametitle{Step 4: Row Manipulation}
     \begin{cpp}
 // insert count rows into model before row
 bool MyModel::insertRows(int row, int count, parent) {
@@ -122,7 +127,8 @@ bool MyModel::removeRows(int row, int count, parent) {
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{}\frametitle{A table Model}
+\begin{slide}[fragile]{}
+\frametitle{A table Model}
 \begin{itemize}
   \item 2-dimensional model (rows x columns)
   \item \texttt{int columnCount(parent)}
@@ -143,7 +149,8 @@ QVariant MyModel::data( index, role ) const {
 
 
 % ----------------------------------------------------------------------
-\begin{slide}{1587}\frametitle{Lab: Color Model}
+\begin{slide}{1587}
+\frametitle{Lab: Color Model}
   \flushedImage{modelview/images/colormodel}
   \begin{itemize}
   \item Implement a model of colors
@@ -162,7 +169,8 @@ QVariant MyModel::data( index, role ) const {
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}{1587}\frametitle{Lab: City List Model}
+\begin{slide}{1587}
+\frametitle{Lab: City List Model}
   \begin{itemize}
   \item Please implement a City List Model
   \item Given:
@@ -192,21 +200,23 @@ It should show two \iCls{QListView}s side by side, like the figure below:
 
 \begin{itemize}
 \item  Both lists should show the same set of symbols available.
+\item  Clicking an item on the left list updates the checkstates of the right list.
 \item  Friends are shown as checked, strangers as un-checked.
-\item  To add/drop friends, toggle the checkbox-state.
-\item  If A is friends with B, then B is friends with A.
 \end{itemize}
 \end{slide}
 
 % ----------------------------------------------------------------------
 \begin{slide}
-\frametitle{Lab: Friends List}
+\frametitle{Lab: Friends List cont'd}
+\begin{itemize}
+\item  To add/drop friends, toggle the checkbox-state.
+\item  If A is friends with B, then B is friends with A.
 \begin{itemize}
 \item  One can't add/drop oneself. Do not allow it. 
-\begin{itemize}
 \item Show oneself as already checked and disabled.
 \end{itemize}
-\item  Click \texttt{Add} to add a new symbol to both lists.
+\item  Allow \texttt{Add} to add a new symbol to both lists.
+\item  \texttt{Ok} or \texttt{Close} simply close the dialog. 
 \end{itemize}
 Hint: \iCls{QMultiMap} can help reduce grately the amount of code you need to write to keep track of who is friends with who.
 \end{slide}

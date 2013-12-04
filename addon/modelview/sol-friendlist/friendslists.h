@@ -25,7 +25,6 @@ private slots:
 private:
     QString m_lastSelected;
     Ui::FriendsLists *ui;
-    FriendsList m_friendsList;
     // list on right:
     FriendsListModel *m_cmodel;
     // list on left:

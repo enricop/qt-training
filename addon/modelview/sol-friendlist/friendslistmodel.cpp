@@ -16,9 +16,9 @@ bool FriendsList::friendsWith(QString a, QString b) const {
     return constFind(a, b) != constEnd();
 }
 
-FriendsListModel::FriendsListModel(FriendsList& fl, QObject *parent)
-    : QAbstractListModel(parent), m_friendsList(fl) {
-    // updateAllPeople();
+FriendsListModel::FriendsListModel(QObject *parent)
+: QAbstractListModel(parent) {
+    
 }
 
 Qt::ItemFlags FriendsListModel::flags(const QModelIndex &index) const {
