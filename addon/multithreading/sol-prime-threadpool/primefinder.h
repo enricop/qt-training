@@ -3,19 +3,21 @@
 #include <QObject>
 #include <QList>
 #include <QRunnable>
-
+#include <QMutex>
 
 /** A QRunnable that checks a batch of numbers for prime-hood. */
 class PrimeChecker : public QObject, public QRunnable {
     Q_OBJECT
 public:
-    explicit PrimeChecker(qlonglong valueToCheck, QObject* parent =0);
     explicit PrimeChecker(QList<qlonglong> valuesToCheck, QObject* parent=0);
     void run();
+    void cancel();
 signals:
     void primeFound(qlonglong v);
 private:
+    volatile bool isCancelled;
     QList<qlonglong> m_values;
+
 };
 
 
@@ -37,7 +39,7 @@ signals:
     void progressValueChanged(int);
 private:
     int m_granularity;
-    bool m_Busy;
+    volatile bool m_Busy;
 
     QList<qlonglong> m_foundPrimes;
     qlonglong maxValue;

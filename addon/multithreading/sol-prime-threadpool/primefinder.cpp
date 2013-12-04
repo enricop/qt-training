@@ -4,27 +4,6 @@
 #include <QThreadPool>
 #include <QThread>
 
-// PrimeChecker methods
-
-PrimeChecker::PrimeChecker(qlonglong valueToCheck, QObject* parent)
-: QObject(parent) {
-    setAutoDelete(true);
-    m_values << valueToCheck;
-}
-
-PrimeChecker::PrimeChecker(QList<qlonglong> values, QObject* parent)
-: QObject(parent) {
-    setAutoDelete(true);
-    m_values = values;
-}
-
-
-void PrimeChecker::run() {
-    foreach (qlonglong v, m_values)
-        if (isPrime(v)) emit primeFound(v);
-}
-
-// -------------------------------------------------------------------------------
 // PrimeFinder methods
 
 PrimeFinder::PrimeFinder() {
@@ -43,6 +22,10 @@ void PrimeFinder::setGranularity(int numValues) {
 
 void PrimeFinder::cancel() {
     m_Busy = false;
+    foreach (PrimeChecker* checker, findChildren<PrimeChecker*>()) {
+       checker->cancel();
+    }
+
 }
 
 bool PrimeFinder::isBusy() const {
@@ -57,15 +40,15 @@ void PrimeFinder::findPrimesUpTo(qlonglong v) {
     percent = 0;
     QList<qlonglong> values;
     for (qlonglong i=3; i<maxValue; i += 2) {
+        if (!m_Busy) break;
         values << i;
         if ((i == maxValue - 2) || (values.size() > m_granularity)) {
-           PrimeChecker *pc = new PrimeChecker(values);
+           PrimeChecker *pc = new PrimeChecker(values, this);
            connect (pc, SIGNAL(primeFound(qlonglong)), this, SLOT(foundPrime(qlonglong)));
            QThreadPool::globalInstance()->start(pc);
            values.clear();
            qApp->processEvents();
-        }
-        if (!m_Busy) break;
+        }        
     }
     while (!QThreadPool::globalInstance()->waitForDone(200))
         qApp->processEvents();
@@ -81,4 +64,27 @@ void PrimeFinder::foundPrime(qlonglong pv) {
         percent = newPercent;
         qApp->processEvents();
     }
+}
+
+// -------------------------------------------------------------------------------
+// PrimeChecker methods
+
+PrimeChecker::PrimeChecker(QList<qlonglong> values, QObject* parent)
+: QObject(parent) {
+    setAutoDelete(true);
+    isCancelled=false;
+    m_values = values;
+}
+
+void PrimeChecker::run() {
+    foreach (qlonglong v, m_values) {
+        if (isCancelled) return;
+        if (isPrime(v)) emit primeFound(v);
+    }
+}
+
+void PrimeChecker::cancel() {
+    disconnect();
+    isCancelled=true;
+    m_values.clear();
 }
