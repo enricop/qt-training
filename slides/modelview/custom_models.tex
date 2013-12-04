@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+%       Copyright (c) 2008-2011, Nokia Corporation and/or its subsidiary(-ies).
+% Parts Copyright (c) 2010-2013, Integrated Computer Solutions
 % All rights reserved.
 %
 % This work, unless otherwise expressly stated, is licensed under a
@@ -184,7 +185,7 @@ QVariant MyModel::data( index, role ) const {
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]
 \frametitle{Lab: Friends List}
-Implement a GUI for showing friendslists, or a bidirectional relationship between symbols.
+Implement a GUI for showing friends lists, or a bidirectional relationship between symbols.
 It should show two \iCls{QListView}s side by side, like the figure below:
 
 \centeredImage{modelview/images/friendslist}
@@ -194,10 +195,20 @@ It should show two \iCls{QListView}s side by side, like the figure below:
 \item  Friends are shown as checked, strangers as un-checked.
 \item  To add/drop friends, toggle the checkbox-state.
 \item  If A is friends with B, then B is friends with A.
-\item  One can't add/drop oneself. Do not allow it. Show oneself as already checked and disabled.
-\item  Click \texttt{Add} to add a new symbol to both lists.
-
 \end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}
+\frametitle{Lab: Friends List}
+\begin{itemize}
+\item  One can't add/drop oneself. Do not allow it. 
+\begin{itemize}
+\item Show oneself as already checked and disabled.
+\end{itemize}
+\item  Click \texttt{Add} to add a new symbol to both lists.
+\end{itemize}
+Hint: \iCls{QMultiMap} can help reduce grately the amount of code you need to write to keep track of who is friends with who.
 \end{slide}
 
 
