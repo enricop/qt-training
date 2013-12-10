@@ -1,0 +1,12 @@
+TODO:
+
+  Network Programming
+  Drag-n-Drop
+    (lots of stuff in basic course refers to it, but there's nothing there about standard DnD usage),
+  Multimedia
+  Event handling
+    (advanced events, such as creating events, event filters, etc),
+  signal mapper
+  qtimer
+  qprocess
+
