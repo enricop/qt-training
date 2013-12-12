@@ -15,15 +15,16 @@
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1680}\frametitle{Anchors}
+\begin{slide}{1680}
+\frametitle{Anchors}
 
 \begin{itemize}
 \item Used to position and align items
-\item Line up the edges or central lines of items
-\item Anchors refer to
+\item Line up edges or central lines of items
+\item \texttt{anchors}, an attached property, can specify
 \begin{itemize}
-\item Another item: (\qic{type}{centerIn}, \qic{type}{fill})
-\item An \qic{type}{AnchorLine} of another item: (\qic{type}{left}, \qic{type}{top})
+\item A position in another item: (\texttt{centerIn}, \texttt{fill})
+\item An \qic{type}{AnchorLine} of another item: (\texttt{left}, \texttt{top})
 \end{itemize}
 \end{itemize}
 \begin{flushright}
@@ -35,17 +36,18 @@ AnchorLines: \hspace{1in} \\
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1679}\frametitle{Anchors}
+\begin{slide}{1679}
+\frametitle{\texttt{anchors.centerIn}}
 
 \flushedImage{qml-composing-uis/images/anchors.pdf}
 % declarative-uis/composing-uis/anchors.qml
 \inputqml{qml-composing-uis/colorized/anchors}
 
 \begin{itemize}
-\item \qic{type}{anchors.centerIn} centers the \qic{class}{Text}
+\item \texttt{anchors.centerIn} centers the \qic{class}{Text}
 element in the \qic{class}{Rectangle}
   \begin{itemize}
-  \item refers to an item not an anchor
+  \item refers to an Item, not an AnchorLine
   \end{itemize}
 \end{itemize}                              
 \demo{qml-composing-uis/ex-anchor-layout/anchors.qml}
@@ -53,7 +55,8 @@ element in the \qic{class}{Rectangle}
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1678}\frametitle{Anchors}
+\begin{slide}{1678}
+\frametitle{Anchors and \texttt{parent}}
 
 \flushedImage{qml-composing-uis/images/anchors.pdf}
 % declarative-uis/composing-uis/anchors2.qml
@@ -73,18 +76,21 @@ element in the \qic{class}{Rectangle}
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1677}\frametitle{Anchors}
+\begin{slide}{1677}
+\frametitle{Connecting AnchorLines together}
 
 \flushedImage{qml-composing-uis/images/anchor-to-anchor.pdf}
 % declarative-uis/composing-uis/anchor-to-anchor.qml
 \inputqml{qml-composing-uis/colorized/anchor-to-anchor}
 
 \begin{itemize}
-\item Connecting anchors together
-\item Anchors of other items are referred to directly
+\item AnchorLines must be parallel
   \begin{itemize}
-  \item use \qtt{parent.right}
-  \item not \qtt{parent.anchors.right}
+  \item \texttt{right} to \texttt{left} but not \texttt{bottom}
+  \end{itemize}
+\item AnchorLines of other items are referred to directly:
+  \begin{itemize}
+  \item use \qtt{parent.right}, not \qtt{parent.anchors.right}
   \end{itemize}
 \end{itemize}
 \demo{qml-composing-uis/ex-anchor-layout/anchor-to-anchor.qml}
@@ -92,7 +98,8 @@ element in the \qic{class}{Rectangle}
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1668}\frametitle{Margins}
+\begin{slide}{1668}
+\frametitle{Margins}
 
 \begin{itemize}
 \item Used with anchors to add space
@@ -109,8 +116,11 @@ element in the \qic{class}{Rectangle}
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1667}\frametitle{Margins}
-
+\begin{slide}{1667}
+\frametitle{Margins and \texttt{baseLine}}
+\begin{itemize}
+\item \texttt{baseLine} is another AnchorLine
+\end{itemize}
 \flushedImage{qml-composing-uis/images/alignment}
 % declarative-uis/composing-uis/alignment.qml
 \inputqml{qml-composing-uis/colorized/alignment}
@@ -120,7 +130,8 @@ element in the \qic{class}{Rectangle}
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1666}\frametitle{Hints and Tips~\textendash~Anchors}
+\begin{slide}{1666}
+\frametitle{Hints and Tips~\textendash~Anchors}
 
 \begin{itemize}
 \item Anchors can only be used with parent and sibling items
@@ -147,19 +158,20 @@ element in the \qic{class}{Rectangle}
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1665}\frametitle{Strategies for Use~\textendash~Anchors}
+\begin{slide}{1665}
+\frametitle{Strategies for Use~\textendash~Anchors}
 
-Identify item with different roles in the user interface:
+Identify Items with different roles in the user interface:
 
 \begin{itemize}
 \item Fixed items
   \begin{itemize}
-  \item make sure these have \qic{type}{id} properties defined
+  \item make sure these have \qic{type}{id} defined
   \item unless these items can easily be referenced as parent items
   \end{itemize}
 \item Items that dominate the user interface
   \begin{itemize}
-  \item make sure these have \qic{type}{id} properties defined
+  \item make sure these have \qic{type}{id} defined
   \end{itemize}
 \item Items that react to size changes of the dominant items
   \begin{itemize}
@@ -170,7 +182,8 @@ Identify item with different roles in the user interface:
 \end{slide}      
 
 %----------------------------------------------------------------------
-\begin{slide}{7980}\frametitle{Exercise~\textendash~Colors and Gradients}
+\begin{slide}{7980}
+\frametitle{Exercise~\textendash~Colors and Gradients}
 
 \begin{enumerate}
 \item How else can you write these colors?
@@ -188,7 +201,8 @@ Identify item with different roles in the user interface:
 \end{slide}
 
 %----------------------------------------------------------------------
-\begin{slide}{1663}\frametitle{Exercise~\textendash~Images and Text}
+\begin{slide}{1663}
+\frametitle{Exercise~\textendash~Images and Text}
 
 \begin{enumerate}
 \item When creating an \qic{class}{Image}, how do you specify the location of
