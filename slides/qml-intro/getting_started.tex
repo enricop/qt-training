@@ -251,21 +251,22 @@ Elements are described by properties:
 
 \begin{slide}{2010}\frametitle{Identifying Elements}
 
-% id is an especially important property because it provides a name
-% for an element
-% Coding convention - always first property?
-
-The \qic{type}{id} property defines an identity for an element
-
+The \qic{type}{id} defines an identity of an element
 \begin{itemize}
 \item Lets other elements refer to it
   \begin{itemize}
   \item for relative alignment and positioning
-  \item to use its properties
-  \item to change its properties (e.g., for animation)
-  \item for re-use of common elements (e.g., gradients, images)
+  \item to access or modify an Item's properties
+  \item to re-use common elements (e.g., gradients, images)
   \end{itemize}
 \item Used to \textit{create relationships} between elements
+\item \qic{type}{id} is not a property. 
+    \begin{itemize}
+    \item More like a "label"
+    \item It is not stored in the Item
+    \item A single \qic{type}{Item} can have different identities in other scopes. 
+    \end{itemize}
+\item \texttt{parent} is a special \texttt{id} referring to the relative parent \qic{type}{Item}
 \end{itemize}
 
 %%% Show Qt Creator id highlighting feature
@@ -314,7 +315,6 @@ The \qic{type}{id} property defines an identity for an element
 \item Try using \qic{class}{TextInput} instead of \qic{class}{Text}
 \end{itemize}
 
-%%% Can identities be changed/reassigned?
 %%% Restrictions on IDs? Can we use "parent"?
 
 \end{slide}
@@ -324,8 +324,7 @@ The \qic{type}{id} property defines an identity for an element
 
 \begin{itemize}
 \item Most features are accessed via properties
-\item Some actions cannot be exposed as properties
-\item Elements have methods to perform actions:
+\item Methods are also used, to perform actions
   \begin{itemize}
   \item \qic{class}{TextInput} has a \qic{type}{selectAll()} method
   \item \qic{class}{Timer} has \qic{type}{start()}, \qic{type}{stop()}
