@@ -22,14 +22,12 @@
 \vspace*{1em}
 \item Two types of shader are available in Qt Quick
   \begin{itemize}
-  \vspace*{0.5em}
   \item Fragment shaders
     \begin{itemize}
     \item Operate on each pixel
     \item Cannot be complex as it has no knowledge of the scene geometry
     \item Used for color manipulation, bump mapping, shadows, etc.
     \end{itemize}
-  \vspace*{0.5em}
   \item Vertex shaders
     \begin{itemize}
     \item Operate on each vertex
@@ -37,7 +35,6 @@
     \item Cannot create new vertices
     \end{itemize}
   \end{itemize}
-\vspace*{1em}
 \item Their execution is heavily parallelized in the GPU pipeline
 \item Extremely efficient
 \item Written using OpenGL Shading Language (GLSL)

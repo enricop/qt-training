@@ -13,7 +13,8 @@
 
 \subsection{Components}
 
-\begin{slide}{1627}\frametitle{Custom Items and Components}
+\begin{slide}{1627}
+\frametitle{Custom Items and Components}
 
 Two ways to create reusable user interface components:
 
@@ -38,7 +39,8 @@ Two ways to create reusable user interface components:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1626}\frametitle{Defining a Custom Item}
+\begin{slide}{1626}
+\frametitle{Defining a Custom Item}
 
 \flushedImage{qml-structures/images/lineedit-focused}
 % declarative-uis/modules-components/items/LineEdit.qml
@@ -58,7 +60,8 @@ Two ways to create reusable user interface components:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1625}\frametitle{Using a Custom Item}
+\begin{slide}{1625}
+\frametitle{Using a Custom Item}
 
 % declarative-uis/modules-components/lineedit/use-lineedit.qml
 \inputqml{qml-structures/colorized/use-lineedit}
@@ -77,7 +80,8 @@ Two ways to create reusable user interface components:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1624}\frametitle{Adding Custom Properties}
+\begin{slide}{1624}
+\frametitle{Adding Custom Properties}
 
 \begin{itemize}
 \item \qtt{LineEdit} does not expose a \qic{type}{text} property
@@ -110,7 +114,8 @@ Examples:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1623}\frametitle{Custom Property Example}
+\begin{slide}{1623}
+\frametitle{Custom Property Example}
 
 % declarative-uis/modules-components/custom-property/NewLineEdit.qml
 \begin{qml}
@@ -144,7 +149,8 @@ Examples:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1622}\frametitle{Property Aliases}
+\begin{slide}{1622}
+\frametitle{Property Aliases}
 
 % declarative-uis/modules-components/alias-property/AliasLineEdit.qml
 \begin{qml}
@@ -179,7 +185,8 @@ Examples:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1621}\frametitle{Adding Custom Signals}
+\begin{slide}{1621}
+\frametitle{Adding Custom Signals}
 
 \begin{itemize}
 \item Standard items define signals and handlers
@@ -217,7 +224,8 @@ Examples of signals and handlers:
 
 %----------------------------------------------------------------------
 
-\begin{slide}{1620}\frametitle{Defining a Custom Signal}
+\begin{slide}{1620}
+\frametitle{Defining a Custom Signal}
 
 % declarative-uis/modules-components/items/NewCheckBox.qml
 \begin{qml}
@@ -257,10 +265,10 @@ Examples of signals and handlers:
 \qtt{~~~~~~~~...}\\
 \qtt{~~~~~~~~\qc{type}{onClicked}:~\qc{keyword}{if}~(parent.state~\qc{operator}{==}~\qc{string}{"checked"})~\{}\\
 \qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.state~\qc{operator}{=}~\qc{string}{"unchecked"};}\\
-\qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.checked(\qc{number}{false});}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\textbf{parent.checked(\qc{number}{false});}}\\
 \qtt{~~~~~~~~~~~~~~~~~~~\}~\qc{keyword}{else}~\{}\\
 \qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.state~\qc{operator}{=}~\qc{string}{"checked"};}\\
-\qtt{~~~~~~~~~~~~~~~~~~~~~~~parent.checked(\qc{number}{true});}\\
+\qtt{~~~~~~~~~~~~~~~~~~~~~~~\textbf{parent.checked(\qc{number}{true});}}\\
 \qtt{~~~~~~~~~~~~~~~~~~~\}}\\
 \qtt{~~~~\}}\\
 \vspace*{0.5em}

@@ -70,7 +70,7 @@ class Customer : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString id READ getId WRITE setId NOTIFY idChanged);
+    Q_PROPERTY(QString custId READ getId WRITE setId NOTIFY idChanged);
 
   public:
      QString getId() const;
