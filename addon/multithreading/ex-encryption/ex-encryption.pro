@@ -14,3 +14,12 @@ SOURCES += main.cpp\
 HEADERS  += window.h \
     encrypter.h \
     encryption/blowfish.h
+# place auto-generated files in "invisible" subdirectories
+
+win32 {
+    MOC_DIR = _moc
+    OBJECTS_DIR = _obj
+} else {
+    MOC_DIR = .moc
+    OBJECTS_DIR = .obj
+}

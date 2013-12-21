@@ -5,11 +5,14 @@ TODO:
   Multimedia
   Event handling
     (advanced events, such as creating events, posting vs sending, event filters, etc),
-  signal mapper
+  signal mapper example - show modelview/libobjectbrowser example
+  deleteLater(), qDeleteAll()
   qtimer
   QImage vs QPixmap vs QIcon
-  standard pixmaps from the theme, standard icons from the style
+    QStyle::standardIcon(), and QStyle::StandardPixmap
+    Also standard icons: QIcon::fromTheme
   modelview - add a lab step for the cityengine for implementing the filter
+    delegates and itemfactory - show different-typed standard items
   graphicsview - add another example using QGraphicsWidget and QGraphicsLayoutItem
     investigate why the pendulum example's bounding rect is not correct
     Drop on an item: Replace the DiagramScene:: method with the correct dropEvent() method from DiagramItem
@@ -22,3 +25,4 @@ TODO:
       Don't pass pointers at all, if you can avoid it!
     Slide 22: "Event driven objects may only be used in a single thread"
       this slide needs to be rewritten
+   

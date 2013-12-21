@@ -31,6 +31,7 @@ private:
     int m_numGenerations;
     QTime m_timer;
     bool m_running;
+    int m_interval;
 
 private slots:
     void on_actionAbout_Qt_triggered();

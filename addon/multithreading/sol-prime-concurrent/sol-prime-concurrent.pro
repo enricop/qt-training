@@ -13,3 +13,7 @@ FORMS += \
 HEADERS += \
     primefinderdialog.h \
     isprime.h
+
+OTHER_FILES += \
+    README.txt
+    

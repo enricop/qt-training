@@ -22,7 +22,7 @@ LifeMainWindow::LifeMainWindow(QWidget *parent) :
     if (!bs.isNull()) {
         boardSize = bs.toSize();
     }
-    m_current = QImage(boardSize, QImage::Format_Mono);
+    m_current = QImage(boardSize, QImage::Format_Mono);    
     m_lifeWidget->setImage(m_current);
 }
 
@@ -124,6 +124,7 @@ void LifeMainWindow::calculate() {
     int segments = QThreadPool::globalInstance()->maxThreadCount() * 2; 
     int ws = w/segments;                    /* Width of a segment. */
     LifeFunctor functor;                    /* Map functor. */
+
     while (m_running) {
         qApp->processEvents();              /* Ensure GUI is still responsive. */
         m_numGenerations++;
@@ -139,7 +140,8 @@ void LifeMainWindow::calculate() {
                     stitchReduce, QtConcurrent::UnorderedReduce );  /* Do the 
             work in parallel. stitchReduce can be called on each piece as it 
             is ready. */
-        m_lifeWidget->setImage(m_current);
+        if (m_numGenerations % ui->intervalSpinBox->value() == 0)
+            m_lifeWidget->setImage(m_current);
     }
 }
 //end
