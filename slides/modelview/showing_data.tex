@@ -15,7 +15,8 @@
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{1584}\frametitle{Convenience Model - \iCls{QStandardItemModel}}
+\begin{slide}[fragile]{1584}
+\frametitle{Convenience Model - \iCls{QStandardItemModel}}
 \flushedImage{modelview/images/standarditemmodel.png}
   \begin{itemize}
   \item \iCls{QStandardItemModel}
@@ -37,7 +38,8 @@ item->appendRow(new QStandardItem("C (0,0)"));
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}\frametitle{Other Ready-Made Models}
+\begin{slide}
+\frametitle{Other Ready-Made Models}
 \begin{itemize}
 \item \iCls{QStringListModel} - Provides a model of a \iCls{QStringList}
 \item \iCls{QFileSystemModel} - Provides a model of a local filesystem
@@ -49,7 +51,8 @@ item->appendRow(new QStandardItem("C (0,0)"));
 
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{}\frametitle{Sharing Models and Selection}
+\begin{slide}[fragile]{}
+\frametitle{Sharing Models and Selection}
   \flushedImage{modelview/images/simpleviews}
   \begin{cpp}// create a model
 model = ... // with some items
@@ -66,7 +69,8 @@ table->setSelectionModel(tree->selectionModel());
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}[fragile]{}\frametitle{Finishing Touch}
+\begin{slide}[fragile]{}
+\frametitle{Finishing Touch}
 \begin{itemize}
   \item Customizing view headers
   \begin{cpp}// set horizontal headers
@@ -92,7 +96,8 @@ table->setSelectionMode(QAbstractItemView::SingleSelection);
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}{}\frametitle{Selections - \iCls{QItemSelectionModel}}
+\begin{slide}{}
+\frametitle{Selections - \iCls{QItemSelectionModel}}
 \begin{itemize}
   \item Keeps track of selected items in a views
   \item Not a \iCls{QAbstractItemModel}, just \iCls{QObject}
@@ -111,7 +116,8 @@ table->setSelectionMode(QAbstractItemView::SingleSelection);
 
 
 % ----------------------------------------------------------------------
-\begin{slide}{1580}\frametitle{Meet the City Engine}
+\begin{slide}{1580}
+\frametitle{Meet the City Engine}
   \flushedImage{modelview/images/citymodelcsv}
   \begin{itemize}
   \item Sample Model Data
@@ -132,7 +138,8 @@ table->setSelectionMode(QAbstractItemView::SingleSelection);
  \end{itemize}
 \end{slide}
 
-\begin{slide}[fragile]{1579}\frametitle{The Backend CityEngine API}
+\begin{slide}[fragile]{1579}
+\frametitle{The Backend CityEngine API}
  \begin{cpp}
 class CityEngine : public QObject {
   // returns all city names
@@ -154,7 +161,8 @@ class CityEngine : public QObject {
 \end{slide}
 
 % ----------------------------------------------------------------------
-\begin{slide}{1578}\frametitle{Lab: Tree Model for CityEngine}
+\begin{slide}{1578}
+\frametitle{Lab: Tree Model for CityEngine}
   \begin{itemize}
     \item Using \iCls{QStandardItemModel}:
     \begin{itemize}
