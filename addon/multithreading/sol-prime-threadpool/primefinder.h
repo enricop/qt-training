@@ -14,6 +14,7 @@ public:
     void cancel();
 signals:
     void primeFound(qlonglong v);
+    void finished();
 private:
     volatile bool isCancelled;
     QList<qlonglong> m_values;

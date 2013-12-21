@@ -1,6 +1,5 @@
 TODO:
-
-  Network Programming
+  qprocess, inter process communication, sockets, Network Programming
   Drag-n-Drop
     (there is modelview and graphicsview dnd - but we need slides on mimetypes and mimedata, and the dnd basics),
   Multimedia
@@ -8,37 +7,18 @@ TODO:
     (advanced events, such as creating events, posting vs sending, event filters, etc),
   signal mapper
   qtimer
-  qprocess
   QImage vs QPixmap vs QIcon
-  
   standard pixmaps from the theme, standard icons from the style
-
   modelview - add a lab step for the cityengine for implementing the filter
-  	
-  graphicsview - add another example using QGraphicsWidget and
-  QGraphicsLayoutItem
-  
-  graphicsview -investigate why the pendulum example's bounding rect is not correct 
-  
-Drop on an item: Replace the DiagramScene:: method with the correct
-dropEvent() method from DiagramItem
-
-threads slide 33: s/QMutex/QSemaphore
-
-Move QRunnable slides until after we talk about QThread
-
-Clarify slide 19: "Note: Don't pass pointers that you do not own"
-	Don't pass pointers at all, if you can avoid it!
-
-Slide 22: "Event driven objects may only be used in a single thread"
-	this slide needs to be rewritten
-	
-Slide 20: simpler subclassing example needed that does not use mutex or waitcondition
-
-sol-prime-runnable - get rid of autoDelete() and delete the runnables yourself. 
-
-graphicsview dnd example: don't store pointers as qlonglong - use something else that allows
-for cross-app dnd
-
-sol-prime-runnable - get rid of autodelete
-
+  graphicsview - add another example using QGraphicsWidget and QGraphicsLayoutItem
+    investigate why the pendulum example's bounding rect is not correct
+    Drop on an item: Replace the DiagramScene:: method with the correct dropEvent() method from DiagramItem
+    dnd example: don't store pointers as qlonglong - use something else that allows for cross-app dnd
+  threads:
+    Slide 20: simpler subclassing example needed that does not use mutex or waitcondition
+    slide 33: s/QMutex/QSemaphore
+    Move QRunnable slides until after we talk about QThread
+    Clarify slide 19: "Note: Don't pass pointers that you do not own"
+      Don't pass pointers at all, if you can avoid it!
+    Slide 22: "Event driven objects may only be used in a single thread"
+      this slide needs to be rewritten

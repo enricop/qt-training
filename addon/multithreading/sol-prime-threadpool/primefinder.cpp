@@ -43,8 +43,9 @@ void PrimeFinder::findPrimesUpTo(qlonglong v) {
         if (!m_Busy) break;
         values << i;
         if ((i == maxValue - 2) || (values.size() > m_granularity)) {
-           PrimeChecker *pc = new PrimeChecker(values, this);
+           PrimeChecker *pc = new PrimeChecker(values);
            connect (pc, SIGNAL(primeFound(qlonglong)), this, SLOT(foundPrime(qlonglong)));
+           connect (pc, SIGNAL(finished()), pc, SLOT(deleteLater()));
            QThreadPool::globalInstance()->start(pc);
            values.clear();
            qApp->processEvents();
@@ -71,7 +72,7 @@ void PrimeFinder::foundPrime(qlonglong pv) {
 
 PrimeChecker::PrimeChecker(QList<qlonglong> values, QObject* parent)
 : QObject(parent) {
-    setAutoDelete(true);
+    setAutoDelete(false);
     isCancelled=false;
     m_values = values;
 }
@@ -81,10 +82,11 @@ void PrimeChecker::run() {
         if (isCancelled) return;
         if (isPrime(v)) emit primeFound(v);
     }
+    emit finished();
 }
 
 void PrimeChecker::cancel() {
-    disconnect();
     isCancelled=true;
     m_values.clear();
+    emit finished();
 }
