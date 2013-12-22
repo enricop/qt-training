@@ -10,9 +10,13 @@
 #ifndef BARGRAPHDELEGATE_H
 #define BARGRAPHDELEGATE_H
 
-#include <QtWidgets>
+#include <QStyledItemDelegate>
 
-class BarGraphDelegate : public QAbstractItemDelegate
+/** Editable Delegate Example which shows custom painting for 
+    certain typed items, and preferred editors for others. 
+
+*/
+class BarGraphDelegate : public QStyledItemDelegate
 {
 public:
     explicit BarGraphDelegate(QObject *parent = 0);

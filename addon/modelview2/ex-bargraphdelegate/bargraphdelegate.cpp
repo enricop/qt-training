@@ -8,18 +8,19 @@
  *************************************************************************/
 
 #include "bargraphdelegate.h"
+#include <QPainter>
 
 
 const int MAX_VALUE = 100;
 const int MIN_BAR_WIDTH = 64;
 
 BarGraphDelegate::BarGraphDelegate(QObject *parent) :
-    QAbstractItemDelegate(parent)
+    QStyledItemDelegate(parent)
 {
 }
 
 void BarGraphDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
+{      
     if(index.data(Qt::EditRole).userType() == QVariant::Int) {
         int value = index.data(Qt::EditRole).toInt();
 
@@ -35,10 +36,12 @@ void BarGraphDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         // draw value text centered
         painter->drawText(option.rect, text, QTextOption(Qt::AlignCenter));
     }
+    else QStyledItemDelegate::paint(painter, option, index);
 }
 
 QSize BarGraphDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED(index)
-    return QSize(MIN_BAR_WIDTH, option.fontMetrics.height());
+    if(index.data(Qt::EditRole).userType() == QVariant::Int) 
+        return QSize(MIN_BAR_WIDTH, option.fontMetrics.height());
+    else return QStyledItemDelegate::sizeHint(option, index);
 }
