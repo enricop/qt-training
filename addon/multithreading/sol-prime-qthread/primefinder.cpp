@@ -82,8 +82,9 @@ void PrimeFinder::findPrimesUpTo(qlonglong v) {
 
     int idx = 0;
     for (qlonglong i=3; i<maxValue; i += 2) {
+        ++idx;
         m_checkers.at(idx)->checkValue(i);
-        idx = (++idx) % m_threadCount;
+        idx %= m_threadCount;
         if (idx == 0) qApp->processEvents();
         if (!m_Busy) break;
     }

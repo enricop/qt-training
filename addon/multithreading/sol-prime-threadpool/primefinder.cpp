@@ -21,11 +21,8 @@ void PrimeFinder::setGranularity(int numValues) {
 }
 
 void PrimeFinder::cancel() {
-    m_Busy = false;    
-    foreach (PrimeChecker* checker, findChildren<PrimeChecker*>()) {
-       if (checker) checker->cancel();
-    }
-
+    m_Busy = false;
+    emit cancelled();
 }
 
 bool PrimeFinder::isBusy() const {
@@ -45,11 +42,11 @@ void PrimeFinder::findPrimesUpTo(qlonglong v) {
         if ((i == maxValue - 2) || (values.size() > m_granularity)) {
            PrimeChecker *pc = new PrimeChecker(values);
            connect (pc, SIGNAL(primeFound(qlonglong)), this, SLOT(foundPrime(qlonglong)));
-           connect (pc, SIGNAL(finished()), pc, SLOT(deleteLater()));
+           connect (this, SIGNAL(cancelled()), pc, SLOT(cancel()));
            QThreadPool::globalInstance()->start(pc);
            values.clear();
            qApp->processEvents();
-        }        
+        }
     }
     while (!QThreadPool::globalInstance()->waitForDone(200))
         qApp->processEvents();
@@ -72,7 +69,7 @@ void PrimeFinder::foundPrime(qlonglong pv) {
 
 PrimeChecker::PrimeChecker(QList<qlonglong> values, QObject* parent)
 : QObject(parent) {
-    setAutoDelete(false);
+    setAutoDelete(true);
     isCancelled=false;
     m_values = values;
 }
@@ -82,11 +79,9 @@ void PrimeChecker::run() {
         if (isCancelled) return;
         if (isPrime(v)) emit primeFound(v);
     }
-    emit finished();
 }
 
 void PrimeChecker::cancel() {
     isCancelled=true;
     m_values.clear();
-    emit finished();
 }

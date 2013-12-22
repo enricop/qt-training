@@ -1,7 +1,10 @@
 TODO:
   qprocess, inter process communication, sockets, Network Programming
+  QtTestLib and unit-based test cases. Show some tests in the qt src tree
+    data-driven tests
+    simulating GUI events
   Drag-n-Drop
-    (there is modelview and graphicsview dnd - but we need slides on mimetypes and mimedata, and the dnd basics),
+    (there is modelview and graphicsview dnd - but we need slides on the basics, mimetypes and mimedata)
   Multimedia
   Event handling
     (advanced events, such as creating events, posting vs sending, event filters, etc),
@@ -9,12 +12,11 @@ TODO:
   deleteLater(), qDeleteAll()
   qtimer
   QImage vs QPixmap vs QIcon
-    QStyle::standardIcon(), and QStyle::StandardPixmap
-    Also standard icons: QIcon::fromTheme
+    QStyle::standardIcon() vs QIcon::fromTheme()
   modelview - add a lab step for the cityengine for implementing the filter
     delegates and itemfactory - show different-typed standard items
+    mention the qt modeltest which is now included in the qt 5.2 src under qtbase/tests/auto/other/modeltest
   graphicsview - add another example using QGraphicsWidget and QGraphicsLayoutItem
-    investigate why the pendulum example's bounding rect is not correct
     Drop on an item: Replace the DiagramScene:: method with the correct dropEvent() method from DiagramItem
     dnd example: don't store pointers as qlonglong - use something else that allows for cross-app dnd
   threads:
@@ -25,4 +27,3 @@ TODO:
       Don't pass pointers at all, if you can avoid it!
     Slide 22: "Event driven objects may only be used in a single thread"
       this slide needs to be rewritten
-   

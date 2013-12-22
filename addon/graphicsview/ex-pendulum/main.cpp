@@ -7,10 +7,10 @@
  *
  *************************************************************************/
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QGraphicsScene>
-#include <QtWidgets/QGraphicsView>
-#include <QtCore/QTimeLine>
+#include <QApplication>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QTimeLine>
 
 #include "pendulumitem.h"
 

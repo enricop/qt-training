@@ -9,27 +9,52 @@
 
 #include "pendulumitem.h"
 
-#include <QtWidgets/QGraphicsLineItem>
-#include <QtWidgets/QGraphicsEllipseItem>
-#include <QtGui/QPen>
-#include <QtGui/QRadialGradient>
-#include <QtGui/QPainter>
+#include <QGraphicsLineItem>
+#include <QPainterPath>
+#include <QGraphicsEllipseItem>
+#include <QPen>
+#include <QRadialGradient>
+#include <QPainter>
 
 static const int PENWIDTH = 3;
 
 PendulumItem::PendulumItem(QGraphicsItem* parent)
   : QGraphicsItemGroup(parent) { 
   m_rod = new QGraphicsLineItem( 0,0,0,100, this);
-  m_rod->setPen( QPen( Qt::black, 3 ) );
+  m_rod->setPen( QPen( Qt::black, PENWIDTH ) );
   m_weight = new QGraphicsEllipseItem( -20, 100, 40, 40, this );
-  m_weight->setPen( QPen(Qt::black, 3 ));
+  m_weight->setPen( QPen(Qt::black, PENWIDTH ));
 
   QRadialGradient g( 0, 120, 20, -10, 110 );
   g.setColorAt( 0.0, Qt::white );
   g.setColorAt( 0.5, Qt::yellow );
   g.setColorAt( 1.0, Qt::black );
-  m_weight->setBrush(g);  
+  m_weight->setBrush(g);
+
+  // join 2 QPainterPaths together to get the larger bounding rect:
+  m_shape = m_rod->shape() + m_weight->shape();
+  double bradj = (PENWIDTH / 2.0) + 4.0;
+  m_boundingRect = m_shape.controlPointRect().adjusted(-bradj, -bradj, bradj, bradj);
 }
 
 PendulumItem::~PendulumItem() { }
 
+void PendulumItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QGraphicsItemGroup::paint(painter, option, widget);
+
+    QRectF rect = shape().controlPointRect().adjusted(-4,-4, 4, 4);
+    QPen p = painter->pen();
+    p.setStyle(Qt::DashLine);
+    p.setColor(Qt::blue);
+    painter->setPen(p);
+    painter->drawRect(rect);
+}
+
+QRectF PendulumItem::boundingRect() const {
+    return m_boundingRect;
+}
+
+QPainterPath PendulumItem::shape() const {
+    return m_shape;
+}

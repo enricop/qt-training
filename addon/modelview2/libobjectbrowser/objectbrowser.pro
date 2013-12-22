@@ -16,3 +16,10 @@ win32 {
 }
 
 OTHER_FILES += README.txt
+win32 {
+    MOC_DIR = _moc
+    OBJECTS_DIR = _obj
+} else {
+    MOC_DIR = .moc
+    OBJECTS_DIR = .obj
+}

@@ -11,10 +11,10 @@ class PrimeChecker : public QObject, public QRunnable {
 public:
     explicit PrimeChecker(QList<qlonglong> valuesToCheck, QObject* parent=0);
     void run();
+public slots:
     void cancel();
 signals:
     void primeFound(qlonglong v);
-    void finished();
 private:
     volatile bool isCancelled;
     QList<qlonglong> m_values;
@@ -38,6 +38,7 @@ public slots:
     void foundPrime(qlonglong pv);
 signals:
     void progressValueChanged(int);
+    void cancelled();
 private:
     int m_granularity;
     volatile bool m_Busy;
