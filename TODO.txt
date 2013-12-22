@@ -1,24 +1,24 @@
 TODO:
-  qprocess, inter process communication, sockets, Network Programming
-  QtTestLib and unit-based test cases. Show some tests in the qt src tree
-    data-driven tests
-    simulating GUI events
-    model tester is now a proper unit test.
-  Drag-n-Drop
-    (there is modelview and graphicsview dnd - but we need slides on the basics, mimetypes and mimedata)
-  Multimedia
   Event handling
     (advanced events, such as creating events, posting vs sending, event filters, etc),
   objects: deleteLater(), qDeleteAll(), qtimer, qtimeline?
     signal mapper example - show modelview/libobjectbrowser example
+  QtTestLib and unit-based test cases. Show some tests in the qt src tree
+    data-driven tests
+    simulating GUI events
+    model tester is now a proper unit test.
+  qprocess, inter process communication, sockets, Network Programming
+  Drag-n-Drop
+    (there is modelview and graphicsview dnd - but we need slides on the basics, mimetypes and mimedata)
+  Multimedia
   Painting: QImage vs QPixmap vs QIcon
     QStyle::standardIcon() vs QIcon::fromTheme()
   modelview - add a lab step for the cityengine for implementing the filter
-    slide on extending QStyledItemDelegate before showing the ex-bargraphdelegate
+    new slide on extending QStyledItemDelegate before showing the ex-bargraphdelegate
     mention the qt modeltest which is now included in the qt 5.2 src under qtbase/tests/auto/other/modeltest
     widgetmodel can be rewritten to use libobjectbrowser
   graphicsview - Need another example using QGraphicsWidget and QGraphicsLayoutItem
-    Show how to compose 2 QPainterPaths from ex-pendulum for extending QGraphicsItemGroup
+    new slide on QPainterPath. Show how to compose 2 QPainterPaths from ex-pendulum for extending QGraphicsItemGroup
     rewrite ex-dragdrop: don't store pointers as qlonglong - use typeid and factory method for cross-app dnd.
   threads:
     Slide 19: Clarify "Note: Don't pass pointers that you do not own"
