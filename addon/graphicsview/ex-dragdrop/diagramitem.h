@@ -10,7 +10,7 @@
 #ifndef DIAGRAMITEM_H
 #define DIAGRAMITEM_H
 
-#include <QtWidgets/QGraphicsPolygonItem>
+#include <QGraphicsPolygonItem>
 
 class DiagramItem : public QGraphicsPolygonItem {
 public:

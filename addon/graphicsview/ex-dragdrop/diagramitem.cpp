@@ -7,14 +7,12 @@
  *
  *************************************************************************/
 
-#include <QtWidgets/QGraphicsSceneDragDropEvent>
-#include <QtCore/QMimeData>
-#include <QtGui/QBrush>
-#include <QtGui/QPainter>
-#include <QtGui/QCursor>
-
-#include <QtCore/QDebug>
-
+#include <QGraphicsSceneDragDropEvent>
+#include <QMimeData>
+#include <QBrush>
+#include <QPainter>
+#include <QCursor>
+#include <QDebug>
 #include <cmath>
 #include <cassert>
 

@@ -239,7 +239,7 @@ A careful redesign is required
 \item \iCls{QSemaphore} guards multiple resources (in contrast to \iCls{QMutex}
       which can only be locked once)
 \item The maximum number of resources is set in the constructor
-\item \texttt{QMutex::acquire(int n)} to acquire \textit{n} resources guarded
+\item \texttt{QSemaphore::acquire(int n)} to acquire \textit{n} resources guarded
       by the semaphore
 \item \texttt{release()} releases the resources
 \item \texttt{tryAcquire(int n)} returns false immediately if \textit{n} resources

@@ -7,7 +7,7 @@
  *
  *************************************************************************/
 
-#include <QtWidgets/QGraphicsView>
+#include <QGraphicsView>
 
 #include "mainwindow.h"
 #include "toolbox.h"

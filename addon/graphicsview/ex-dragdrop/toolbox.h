@@ -11,7 +11,7 @@
 #ifndef TOOLBOX_H
 #define TOOLBOX_H
 
-#include <QtWidgets/QDockWidget>
+#include <QDockWidget>
 
 class ToolBox : public QDockWidget {
 public:

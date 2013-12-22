@@ -7,16 +7,16 @@
  *
  *************************************************************************/
 
-#include <QtWidgets/QListWidget>
-#include <QtGui/QDrag>
-#include <QtCore/QMimeData>
-#include <QtWidgets/QGraphicsPolygonItem>
-#include <QtWidgets/QGraphicsEllipseItem>
-#include <QtWidgets/QGraphicsTextItem>
-#include <QtWidgets/QStyleOptionGraphicsItem>
-#include <QtGui/QPixmap>
-#include <QtGui/QPainter>
-#include <QtWidgets/QVBoxLayout>
+#include <QListWidget>
+#include <QDrag>
+#include <QMimeData>
+#include <QGraphicsPolygonItem>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsTextItem>
+#include <QStyleOptionGraphicsItem>
+#include <QPixmap>
+#include <QPainter>
+#include <QVBoxLayout>
 
 #include "toolbox.h"
 #include "diagramitem.h"

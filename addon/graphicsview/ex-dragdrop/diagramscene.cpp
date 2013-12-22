@@ -7,9 +7,9 @@
  *
  *************************************************************************/
 
-#include <QtWidgets/QGraphicsSceneDragDropEvent>
-#include <QtCore/QMimeData>
-#include <QtWidgets/QGraphicsPolygonItem>
+#include <QGraphicsSceneDragDropEvent>
+#include <QMimeData>
+#include <QGraphicsPolygonItem>
 
 #include "diagramscene.h"
 

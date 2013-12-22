@@ -7,11 +7,10 @@
  *
  *************************************************************************/
 
-/* -*-C++-*- */
 #ifndef DIAGRAMSCENE_H
 #define DIAGRAMSCENE_H
 
-#include <QtWidgets/QGraphicsScene>
+#include <QGraphicsScene>
 
 class DiagramScene : public QGraphicsScene {
 public:

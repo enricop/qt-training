@@ -9,23 +9,20 @@ TODO:
   Multimedia
   Event handling
     (advanced events, such as creating events, posting vs sending, event filters, etc),
-  signal mapper example - show modelview/libobjectbrowser example
-  deleteLater(), qDeleteAll()
-  qtimer
-  QImage vs QPixmap vs QIcon
+  objects: deleteLater(), qDeleteAll(), qtimer, qtimeline?
+    signal mapper example - show modelview/libobjectbrowser example
+  Painting: QImage vs QPixmap vs QIcon
     QStyle::standardIcon() vs QIcon::fromTheme()
   modelview - add a lab step for the cityengine for implementing the filter
-    talk about QStyledItemDelegate before showing the ex-bargraphdelegate
+    slide on extending QStyledItemDelegate before showing the ex-bargraphdelegate
     mention the qt modeltest which is now included in the qt 5.2 src under qtbase/tests/auto/other/modeltest
     widgetmodel can be rewritten to use libobjectbrowser
-  graphicsview - add another example using QGraphicsWidget and QGraphicsLayoutItem
-    Drop on an item: Replace the DiagramScene:: method with the correct dropEvent() method from DiagramItem
-    dnd example: don't store pointers as qlonglong - use something else that allows for cross-app dnd
+  graphicsview - Need another example using QGraphicsWidget and QGraphicsLayoutItem
+    Show how to compose 2 QPainterPaths from ex-pendulum for extending QGraphicsItemGroup
+    rewrite ex-dragdrop: don't store pointers as qlonglong - use typeid and factory method for cross-app dnd.
   threads:
-    Slide 20: simpler subclassing example needed that does not use mutex or waitcondition
-    slide 33: s/QMutex/QSemaphore
-    Move QRunnable slides until after we talk about QThread
-    Clarify slide 19: "Note: Don't pass pointers that you do not own"
+    Slide 19: Clarify "Note: Don't pass pointers that you do not own"
       Don't pass pointers at all, if you can avoid it!
-    Slide 22: "Event driven objects may only be used in a single thread"
-      this slide needs to be rewritten
+    Slide 20: simpler subclassing example needed that does not use mutex or waitcondition
+    Slide 22: "Event driven objects may only be used in a single thread" this slide needs to be rewritten
+    Move QRunnable slides until after we talk about QThread

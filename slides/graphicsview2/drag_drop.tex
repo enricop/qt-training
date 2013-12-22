@@ -147,23 +147,21 @@ void DiagramScene::dropEvent( QGraphicsSceneDragDropEvent* event ) {
 \begin{itemize}
 \item To drop into an item:
     \begin{itemize}
-    \item Override \texttt{dragEnterEvent()}
+    \item Override \texttt{dragEnterEvent()} and \texttt{dropEvent()}
     \item Optional override: \texttt{dragMoveEvent()} 
        (if the item can only accept drops in some parts of its area)
     \end{itemize}
 
 \begin{cpp}
-void DiagramItem::dragEnterEvent(QGraphicsSceneDragDropEvent* e){
+void DiagramItem::dragEnterEvent(QGraphicsSceneDragDropEvent* e) {
     if ( e->mimeData()->hasColor() )
         e->acceptProposedAction();
 }
-
-void DiagramScene::dragEnterEvent(QGraphicsSceneDragDropEvent* e){
-     if (e->mimeData()->hasFormat(
-     "application/x-qgraphicsitem-ptr"))
-         e->acceptProposedAction();
-     else
-         QGraphicsScene::dragEnterEvent(e);
+void DiagramItem::dropEvent(QGraphicsSceneDragDropEvent* event) {
+    if ( event->mimeData()->hasColor() ) {
+        setBrush( event->mimeData()->colorData().value<QColor>() );
+        event->acceptProposedAction();
+    }
 }
 \end{cpp}
 \demo{graphicsview/ex-dragdrop}
