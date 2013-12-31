@@ -2,10 +2,11 @@
 #define OBJECTBROWSERTESTERMAINWINDOW_H
 
 #include <QMainWindow>
-#include "ui_gallery.h"
+
 
 namespace Ui {
-class ObjectBrowserTesterMainWindow;
+    class ObjectBrowserTesterMainWindow;
+    class Gallery;
 }
 
 class ObjectBrowserTesterMainWindow : public QMainWindow
@@ -19,10 +20,13 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+private slots:
+    void on_actionQuit_triggered();
+
 private:
     Ui::ObjectBrowserTesterMainWindow *ui;
     Ui::Gallery *gallery;
-    QWidget *hostWidget;
+
 };
 
 #endif // OBJECTBROWSERTESTERMAINWINDOW_H

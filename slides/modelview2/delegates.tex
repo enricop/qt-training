@@ -24,9 +24,8 @@
    \end{itemize}
   \item \iCls{QItemDelegate}, \iCls{QStyledItemDelegate} (preferred)
     \begin{itemize}
-    \item Default delegates
-    \item Suitable in most cases
-    \item Model needs to provide appropriate data
+    \item Default editors for dates, times and numbers 
+    \item Easy to extend with custom editors for other types
     \end{itemize}
     \medskip
   \item When to go for Custom Delegates?
@@ -37,18 +36,18 @@
 \end{slide}
 
 \begin{slide}{1319}
-  \frametitle{Item Appearance}
+  \frametitle{Item Appearance via Data Roles}
   \flushedImage{modelview2/images/itemappearance}
   \textit{Data table shown has no custom delegate}
   \vskip 10em
   \begin{itemize}
   \item No need for custom delegate!
-  \item Use \texttt{Qt::ItemRole} to customize appearance
+  \item Use \texttt{Qt::ItemDataRole} to customize appearance
   \end{itemize}
 \end{slide}
 
 \begin{slide}[fragile]{1318}
-  \frametitle{Delegate from \iCls{QAbstractItemDelegate}}
+  \frametitle{Required overrides of \iCls{QAbstractItemDelegate}}
   \begin{cpp}
 class BarGraphDelegate : public QAbstractItemDelegate {
 public:
@@ -67,7 +66,7 @@ public:
 \end{slide}
 
 \begin{slide}[fragile]{1317}
-  \frametitle{Integer Value - Bar Graph Delegate}
+  \frametitle{Custom painting from Delegates}
   \begin{cpp}
 void BarGraphDelegate::paint(painter, option, index) const {
   if(index.data(Qt::EditRole).userType() == QVariant::Int) {
@@ -91,8 +90,27 @@ QSize BarGraphDelegate::sizeHint(option, index) const {
 
 \subsection{Editing item data}
 
+\begin{slide}[fragile]{13171}
+\frametitle{Editing Dates, Times, and Numbers}
+
+\begin{itemize}
+\item The \iCls{QStyledItemDelegate} has an \iCls{QItemEditorFactory}
+\item Creates default editors based on type of the item \texttt{data()}.
+\begin{itemize}
+\item \iCls{QDateEdit} for \iCls{QDate}
+\item \iCls{QTimeEdit} for \iCls{QTime}
+\item \iCls{QDateTimeEdit} for \iCls{QDateTime}
+\item \iCls{QSpinBox} for \texttt{int}
+\item \iCls{QDoubleSpinBox} for \texttt{double}
+\end{itemize}
+\end{itemize}
+\demo{modelview2/ex-bargraphdelegate}
+
+
+\end{slide}
+
 \begin{slide}[fragile]{1316}
-  \frametitle{An Editor Delegate}
+  \frametitle{Custom Editing from Delegate}
   \flushedImage{modelview2/images/editordelegate}
  \begin{itemize}
   \item Provides \iCls{QComboBox}
@@ -121,7 +139,7 @@ public:
 \end{slide}
 
 \begin{slide}[fragile]{1315}
-  \frametitle{Providing an editor}
+  \frametitle{Providing a custom editor}
   \begin{itemize}
   \item Create editor by index
  \begin{cpp}

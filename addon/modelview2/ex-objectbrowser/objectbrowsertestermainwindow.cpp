@@ -1,4 +1,5 @@
 #include "objectbrowsertestermainwindow.h"
+#include "ui_gallery.h"
 #include "ui_objectbrowsertestermainwindow.h"
 #include "qobjectbrowseraction.h"
 
@@ -8,10 +9,10 @@ ObjectBrowserTesterMainWindow::ObjectBrowserTesterMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     gallery = new Ui::Gallery();
-    hostWidget = new QWidget();
+    QWidget* hostWidget = new QWidget();
     gallery->setupUi(hostWidget);
     setCentralWidget(hostWidget);
-    ui->menuFile->addAction(new QObjectBrowserAction(this));
+    ui->menuView->addAction(new QObjectBrowserAction(this));
 
 
 }
@@ -31,4 +32,9 @@ void ObjectBrowserTesterMainWindow::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void ObjectBrowserTesterMainWindow::on_actionQuit_triggered()
+{
+    qApp->quit();
 }

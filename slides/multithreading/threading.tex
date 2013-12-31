@@ -158,12 +158,6 @@ There are many different ways to use threads in Qt:
 \frametitle{Thread Affinity}
 
 \begin{itemize}
-\item Every \iCls{QThread} can have its own event loop
-  \begin{itemize}
-  \item Started by \iClsFn{QThread}{exec}
-  \item Called by the default implementation of \iClsFn{QThread}{run}
-  \item Signal/Slot connections require an event loop running on the receiving thread.
-  \end{itemize}
 \item Every \iCls{QObject} is associated with a \iCls{QThread} ("thread affinity")
   \begin{itemize}
   \item A \iCls{QObject} has affinity to the thread that created it
@@ -174,8 +168,13 @@ There are many different ways to use threads in Qt:
     \end{itemize}
   \end{itemize}
 \end{itemize}
+\item Every \iCls{QThread} can have its own event loop
+  \begin{itemize}
+  \item Started by \iClsFn{QThread}{exec}
+  \item Called by the default implementation of \iClsFn{QThread}{run}
+  \item Signal/Slot connections require an event loop running on the receiving thread.
+  \end{itemize}
 \imageFullWidth{multithreading/images/threadsandobjects}
-
 \end{slide}
 
 %----------------------------------------------------------------------
@@ -349,7 +348,7 @@ sender and receiver are on the same thread, otherwise makes a queued connection
 \frametitle{Cross-Thread Signal Parameters}
 
 \begin{itemize}
-\item Queued parameters must be known to the meta-object system
+\item Queued parameters must be value types, known to the meta-object system
 \item Use the \texttt{Q\_DECLARE\_METATYPE} macro
 \begin{cpp}
 // in the header file
@@ -364,7 +363,6 @@ qRegisterMetaType<MyStruct>( "MyStruct" );
 \end{cpp}
 \item Note: Don't pass pointers that you do not own
 \end{itemize}
-
 \end{slide}
 
 %----------------------------------------------------------------------

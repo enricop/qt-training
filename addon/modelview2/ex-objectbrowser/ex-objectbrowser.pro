@@ -15,5 +15,6 @@ SOURCES += \
     objectbrowsertestermainwindow.cpp \
     main.cpp
 
+# add this to your project if you want to use libobjectbrowser:
 LIBS += -L../libobjectbrowser -lobjectbrowser
 INCLUDEPATH += ../libobjectbrowser

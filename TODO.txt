@@ -1,28 +1,26 @@
 TODO:
-  Event handling
-    (advanced events, such as creating events, posting vs sending, event filters, etc),
-  objects: deleteLater(), qDeleteAll(), qtimer, qtimeline?
-    signal mapper example - show modelview/libobjectbrowser example
-  QtTestLib and unit-based test cases. Show some tests in the qt src tree
-    data-driven tests
-    simulating GUI events
-    model tester is now a proper unit test.
+  objects: deleteLater(), qDeleteAll()
+    Event handling - ex-allevents creating events, posting vs sending, event filters,
+    QSignalMapper example - show modelview/libobjectbrowser example
+    QTimer
+  QtTestLib and unit-based test cases. 
+    Show some tests in the qt src tree as examples
+      data-driven tests
+      simulating GUI events
+      qt modeltest, now a QtTest case included in the qt 5.2 src under qtbase/tests/auto/other/modeltest 
   qprocess, inter process communication, sockets, Network Programming
   Drag-n-Drop
-    (there is modelview and graphicsview dnd - but we need slides on the basics, mimetypes and mimedata)
-  Multimedia
+    there is modelview and graphicsview section on dnd - but we need slides on the basics, incl. mimetypes and mimedata and a drop on a widget example. 
+  Multimedia - audio, video, playlists
   Painting: QImage vs QPixmap vs QIcon
     QStyle::standardIcon() vs QIcon::fromTheme()
-  modelview - add a lab step for the cityengine for implementing the filter
-    new slide on extending QStyledItemDelegate before showing the ex-bargraphdelegate
-    mention the qt modeltest which is now included in the qt 5.2 src under qtbase/tests/auto/other/modeltest
-    widgetmodel can be rewritten to use libobjectbrowser
-  graphicsview - Need another example using QGraphicsWidget and QGraphicsLayoutItem
+  modelview 
+    add a lab step for the cityengine for implementing the filter
+  graphicsview - 
+    Need another example (perhaps a rewritten ex-concreteitems) using QGraphicsWidget and QGraphicsLayoutItem
     new slide on QPainterPath. Show how to compose 2 QPainterPaths from ex-pendulum for extending QGraphicsItemGroup
     rewrite ex-dragdrop: don't store pointers as qlonglong - use typeid and factory method for cross-app dnd.
   threads:
-    Slide 19: Clarify "Note: Don't pass pointers that you do not own"
-      Don't pass pointers at all, if you can avoid it!
     Slide 20: simpler subclassing example needed that does not use mutex or waitcondition
-    Slide 22: "Event driven objects may only be used in a single thread" this slide needs to be rewritten
-    Move QRunnable slides until after we talk about QThread
+    Slide 22: "Event driven objects may only be used in a single thread" this slide needs to be clarified
+    Move QRunnable slides until after we talk about QThread?
