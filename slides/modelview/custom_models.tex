@@ -172,10 +172,10 @@ QVariant MyModel::data( index, role ) const {
 \begin{slide}{1587}
 \frametitle{Lab: City List Model}
   \begin{itemize}
-  \item Please implement a City List Model
+  \item Implement a City model for displaying lists, tables of cities. 
   \item Given:
     \begin{itemize}
-    \item Start with solution of \texttt{modelview/lab-cities-standarditem}
+    \item Start with \texttt{modelview/lab-cities-standarditem}
     \end{itemize}
   \item Your Task:
     \begin{itemize}
@@ -185,6 +185,7 @@ QVariant MyModel::data( index, role ) const {
     \begin{itemize}
     \item Make the model editable
     \item Enable adding/removing cities
+    \item Add a QLineEdit field for a filter and implement filtering.
    \end{itemize}
  \end{itemize}
 \lab{modelview/lab-citymodel}
@@ -193,15 +194,15 @@ QVariant MyModel::data( index, role ) const {
 % ----------------------------------------------------------------------
 \begin{slide}[fragile]
 \frametitle{Lab: Friends List}
-Implement a GUI for showing friends lists, or a bidirectional relationship between symbols.
+Implement a GUI for showing friends lists, or a bidirectional relationship between people.
 It should show two \iCls{QListView}s side by side, like the figure below:
 
 \centeredImage{modelview/images/friendslist}
 
 \begin{itemize}
-\item  Both lists should show the same set of symbols available.
-\item  Clicking an item on the left list updates the checkstates of the right list.
-\item  Friends are shown as checked, strangers as un-checked.
+\item  Both listviews should show the same model or list of people.
+\item  Clicking a person on the left list updates the checkstates of the right list.
+\item  Friends are shown as checked, strangers as un-checked. 
 \end{itemize}
 \end{slide}
 
@@ -215,10 +216,8 @@ It should show two \iCls{QListView}s side by side, like the figure below:
 \item  One can't add/drop oneself. Do not allow it. 
 \item Show oneself as already checked and disabled.
 \end{itemize}
-\item  Allow \texttt{Add} to add a new symbol to both lists.
-\item  \texttt{Ok} or \texttt{Close} simply close the dialog. 
+\item  Allow \texttt{Add} to add a new person to both lists.
+\item  \texttt{Ok} or \texttt{Close} should close the dialog. 
 \end{itemize}
-Hint: \iCls{QMultiMap} can help reduce grately the amount of code you need to write to keep track of who is friends with who.
+Hint: \iCls{QMultiMap} can help reduce greatly the amount of code you need to write to keep track of who is friends with whom.
 \end{slide}
-
-

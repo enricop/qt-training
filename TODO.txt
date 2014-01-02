@@ -13,11 +13,8 @@ TODO:
     there is modelview and graphicsview section on dnd - but we need slides on the basics, incl. mimetypes and mimedata and a drop on a widget example. 
   Multimedia - audio, video, playlists
   Painting: QImage vs QPixmap vs QIcon
-    QStyle::standardIcon() vs QIcon::fromTheme()
-  modelview 
-    add a lab step for the cityengine for implementing the filter
+    QStyle::standardIcon() (style) vs QIcon::fromTheme() (look and feel)
   graphicsview - 
-    Need another example (perhaps a rewritten ex-concreteitems) using QGraphicsWidget and QGraphicsLayoutItem
     new slide on QPainterPath. Show how to compose 2 QPainterPaths from ex-pendulum for extending QGraphicsItemGroup
     rewrite ex-dragdrop: don't store pointers as qlonglong - use typeid and factory method for cross-app dnd.
   threads:
