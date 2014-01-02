@@ -120,9 +120,10 @@ void DiagramItem::dropEvent(QGraphicsSceneDragDropEvent* event)
 }
 
 
-DiagramItem* DiagramItem::createItem( int type )
+DiagramItem* DiagramItem::createItem( DiagramItem::ItemType type )
 {
     DiagramItem* item = 0;
+
     switch( type ) {
     case TYPE_BOX:
         item = new DiagramItem( QRectF( -50,-50,100,100 ) );
@@ -143,6 +144,7 @@ DiagramItem* DiagramItem::createItem( int type )
     default:
         assert( 0 );
     }
+    item->m_type = type;
     return item;
 }
 

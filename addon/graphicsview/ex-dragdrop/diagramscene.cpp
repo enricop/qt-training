@@ -12,6 +12,7 @@
 #include <QGraphicsPolygonItem>
 
 #include "diagramscene.h"
+#include "diagramitem.h"
 
 
 DiagramScene::DiagramScene( QObject* parent )
@@ -21,7 +22,7 @@ DiagramScene::DiagramScene( QObject* parent )
 
 void DiagramScene::dragMoveEvent( QGraphicsSceneDragDropEvent* event )
 {
-     if (event->mimeData()->hasFormat("application/x-qgraphicsitem-ptr"))
+     if (event->mimeData()->hasFormat("application/x-qgraphicsitem-typeid"))
          event->acceptProposedAction();
      else
          /* Call baseclass to allow per-item dragMoveEvent */
@@ -30,8 +31,9 @@ void DiagramScene::dragMoveEvent( QGraphicsSceneDragDropEvent* event )
 
 void DiagramScene::dropEvent( QGraphicsSceneDragDropEvent* event )
 {
-    if (event->mimeData()->hasFormat("application/x-qgraphicsitem-ptr")) {
-         QGraphicsItem* item = reinterpret_cast<QGraphicsItem*>( event->mimeData()->data("application/x-qgraphicsitem-ptr").toULongLong() );
+    if (event->mimeData()->hasFormat("application/x-qgraphicsitem-typeid")) {
+         DiagramItem::ItemType typeId = (DiagramItem::ItemType) event->mimeData()->data("application/x-qgraphicsitem-typeid").toInt() ;
+         DiagramItem *item = DiagramItem::createItem(typeId);
          if ( item ) {
              addItem( item );
              item->setFlag( QGraphicsItem::ItemIsMovable );

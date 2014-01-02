@@ -15,11 +15,15 @@
 class DiagramItem : public QGraphicsPolygonItem {
 public:
     typedef QGraphicsPolygonItem BASE;
-    enum { TYPE_BOX, TYPE_TRIANGLE, TYPE_PENTAGON, TYPE_ELLIPSE, TYPE_TEXT };
+    enum ItemType { TYPE_BOX, TYPE_TRIANGLE, TYPE_PENTAGON, TYPE_ELLIPSE, TYPE_TEXT } ;
 
     explicit DiagramItem( const QRectF& );
     explicit DiagramItem( const QPolygonF& );
-    static DiagramItem* createItem( int type );
+    static DiagramItem* createItem( DiagramItem::ItemType type );
+
+    ItemType itemType() const {
+        return m_type;
+    }
 
 protected:
     /*** Event handlers used for resizing the item ***/
@@ -38,6 +42,8 @@ private:
 
     QPointF m_pressPos;
     QPolygonF m_polygon;
+
+    ItemType m_type;
 };
 
 #endif /* DIAGRAMITEM_H */

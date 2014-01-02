@@ -23,19 +23,19 @@
 
 class ToolListWidgetItem : public QListWidgetItem {
 public:
-    ToolListWidgetItem( int type, const QString& name);
+    ToolListWidgetItem( DiagramItem::ItemType type, const QString& name);
 
     QVariant data( int role ) const;
-    int toolType() const { return m_type; }
+    DiagramItem::ItemType toolType() const { return m_type; }
 
 private:
     void init();
 
-    int m_type;
+    DiagramItem::ItemType m_type;
     QString m_name;
 };
 
-ToolListWidgetItem::ToolListWidgetItem( int type, const QString& name )
+ToolListWidgetItem::ToolListWidgetItem( DiagramItem::ItemType type, const QString& name )
     : QListWidgetItem( name ),
     m_type( type )
 {
@@ -80,9 +80,9 @@ protected:
             QDrag* drag = new QDrag( this );
             QMimeData *mimeData = new QMimeData;
             ToolListWidgetItem* item = static_cast<ToolListWidgetItem*>( items[0] );
-            QGraphicsItem* gitem = DiagramItem::createItem( item->toolType() );
-            mimeData->setData( "application/x-qgraphicsitem-ptr",
-                               QByteArray::number( ( qulonglong )gitem ) );
+            DiagramItem* gitem = DiagramItem::createItem( item->toolType() );
+            mimeData->setData( "application/x-qgraphicsitem-typeid",
+                               QByteArray::number((int)gitem->itemType()));
             drag->setMimeData( mimeData );
             QPixmap pix = item->icon().pixmap( 111,111 );
             drag->setPixmap( pix );
