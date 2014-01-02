@@ -15,7 +15,6 @@ TODO:
   Painting: QImage vs QPixmap vs QIcon
     QStyle::standardIcon() (style) vs QIcon::fromTheme() (look and feel)
   graphicsview - 
-    new slide on QPainterPath. Show how to compose 2 QPainterPaths from ex-pendulum for extending QGraphicsItemGroup
     rewrite ex-dragdrop: don't store pointers as qlonglong - use typeid and factory method for cross-app dnd.
   threads:
     Slide 20: simpler subclassing example needed that does not use mutex or waitcondition

@@ -102,9 +102,9 @@ private:
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    DrawingView *view =new DrawingView;
-    DrawingScene *scene = new DrawingScene(view);
-    view->setScene(scene);
+    DrawingView view;
+    DrawingScene *scene = new DrawingScene(&view);
+    view.setScene(scene);
 
     QPolygonF points;   
     points << QPointF(10,10) << QPointF(30,90) << QPointF(70,90) << QPointF(90,10);
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
 
 
 
-    view->show();
+    view.show();
     return app.exec();
 
 }

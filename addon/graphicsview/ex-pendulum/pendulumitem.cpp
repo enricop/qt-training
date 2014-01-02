@@ -31,9 +31,11 @@ PendulumItem::PendulumItem(QGraphicsItem* parent)
   g.setColorAt( 1.0, Qt::black );
   m_weight->setBrush(g);
 
-  // join 2 QPainterPaths together to get the larger bounding rect:
+  // join QPainterPaths together to get the whole shape:
   m_shape = m_rod->shape() + m_weight->shape();
+  // Brush width adjustment:
   double bradj = (PENWIDTH / 2.0) + 4.0;
+  // Pre-calculate the bounding rect too:
   m_boundingRect = m_shape.controlPointRect().adjusted(-bradj, -bradj, bradj, bradj);
 }
 
@@ -43,6 +45,7 @@ void PendulumItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 {
     QGraphicsItemGroup::paint(painter, option, widget);
 
+    // Show the control point rectangle in blue-dashes. 
     QRectF rect = shape().controlPointRect().adjusted(-4,-4, 4, 4);
     QPen p = painter->pen();
     p.setStyle(Qt::DashLine);

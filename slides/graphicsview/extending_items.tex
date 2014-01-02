@@ -26,7 +26,7 @@
     \end{itemize}
 \item \iCls{QRectF} \hClsFn{QGraphicsItem}{boundingRect}
     \begin{itemize}
-    \item Returns outer bounds of item as a rectangle 
+    \item Returns outer bounds of item as a rectangle
     \item Called by \iCls{QGraphicsView} to determine what regions need to be redrawn
 
     \end{itemize}
@@ -36,7 +36,7 @@
 
 \begin{itemize}
 \item \iCls{QPainterPath} \hClsFn{QGraphicsItem}{shape} - shape of item
-\begin{itemize}   
+\begin{itemize}
     \item Used by \hClsFn{QGraphicsItem}{contains} and \hClsFn{QGraphicsItem}{collidesWithPath} for collision detection
     \item Defaults to \hClsFn{QGraphicsItem}{boundingRect} if not implemented
     \end{itemize}
@@ -63,14 +63,14 @@
 \item Use standard \iCls{QPainter} drawing methods
 
     \begin{itemize}
-    \item \iCls{QPen}, \iCls{QBrush}, pixmaps, gradients, text, etc. 
+    \item \iCls{QPen}, \iCls{QBrush}, pixmaps, gradients, text, etc.
 
     \end{itemize}
 \item No background to draw
 
 \item Dynamic boundary and arbitrary shape
     \begin{itemize}
-    \item Polygon, curved, non-contiguous, etc. 
+    \item Polygon, curved, non-contiguous, etc.
     \end{itemize}
 \end{itemize}
 
@@ -100,7 +100,7 @@ public:
 \centeredImage{graphicsview/images/pendulum}
 \end{column}
 \begin{column}{10mm}
-\centeredImage{graphicsview/images/pendulum-schema} 
+\centeredImage{graphicsview/images/pendulum-schema}
 \end{column}
 \end{columns}
 \end{slide}
@@ -135,7 +135,7 @@ void PendulumItem::paint( QPainter* painter,
 \begin{slide}{1421}
 \frametitle{Choosing a \texttt{boundingRect()}}
 \begin{itemize}
-\item \texttt{boundingRect()} 
+\item \texttt{boundingRect()}
     \begin{itemize}
     \item Influences drawing code
     \item Influences "origin" of item transforms
@@ -143,7 +143,7 @@ void PendulumItem::paint( QPainter* painter,
 \item i.e. for Pendulum that swings:
     \begin{itemize}
     \item Good origin is non-weighted end of line
-    \item Can rotate around (0,0) without translation 
+    \item Can rotate around (0,0) without translation
     \end{itemize}
 \end{itemize}
 \centeredImage{graphicsview/images/boundingRect-implications}
@@ -157,28 +157,51 @@ void PendulumItem::paint( QPainter* painter,
 \item Another approach to making a Pendulum:
     \begin{itemize}
     \item Extend \iCls{QGraphicsItemGroup}
-
     \item Use other concrete items as elements, add as children
-    \item No need to override \texttt{paint()} or \texttt{shape()}
-    \end{itemize} 
+    \item Still must define \texttt{shape()} and \texttt{boundingRect()}
+    \item No need to override \texttt{paint()}
+    \end{itemize}
 \end{itemize}
 \begin{cpp}
-PendulumItem::PendulumItem(QGraphicsItem* parent)
-  : QGraphicsItemGroup(parent) { 
-  m_line = new QGraphicsLineItem( 0,0,0,100, this);
-  m_line->setPen( QPen( Qt::black, 3 ) );
-  m_circle = new QGraphicsEllipseItem( -20, 100, 40, 40, this );
-  m_circle->setPen( QPen(Qt::black, 3 ));
-  QRadialGradient g( 0, 120, 20, -10, 110 );
-  g.setColorAt( 0.0, Qt::white );
-  g.setColorAt( 0.5, Qt::yellow );
-  g.setColorAt( 1.0, Qt::black );
-  m_circle->setBrush(g);  
-}
+class PendulumItem : public QGraphicsItemGroup {
+public:
+  PendulumItem( QGraphicsItem* parent=0);
+  QPainterPath shape() const;
+  QRectF boundingRect() const;
+private:
+  QGraphicsLineItem* m_rod;
+  QGraphicsEllipseItem* m_weight;
+  QPainterPath m_shape;
+  QRectF m_boundingRect;
+};
 \end{cpp}
 \demo{graphicsview/ex-pendulum}
 \end{slide}
 
+% ----------------------------------------------------------------------
+\begin{slide}[fragile]
+\frametitle{Pre-calculate shape() and boundingRect()}
+\begin{cpp}
+PendulumItem::PendulumItem(QGraphicsItem* parent)
+  : QGraphicsItemGroup(parent) {
+  m_rod = new QGraphicsLineItem( 0,0,0,100, this);
+  m_rod->setPen( QPen( Qt::black, PENWIDTH ) );
+  m_weight = new QGraphicsEllipseItem( -20, 100, 40, 40, this );
+  m_weight->setPen( QPen(Qt::black, PENWIDTH ));
+  QRadialGradient g( 0, 120, 20, -10, 110 );
+  g.setColorAt( 0.0, Qt::white );
+  g.setColorAt( 0.5, Qt::yellow );
+  g.setColorAt( 1.0, Qt::black );
+  m_weight->setBrush(g);
+
+  // join QPainterPaths together to get the whole shape:
+  m_shape = m_rod->shape() + m_weight->shape();
+  double bradj = (PENWIDTH / 2.0) + epsilon;
+  m_boundingRect = m_shape.controlPointRect()
+                .adjusted(-bradj, -bradj, bradj, bradj);
+}
+\end{cpp}
+\end{slide}
 
 % ----------------------------------------------------------------------
 
@@ -191,7 +214,7 @@ PendulumItem::PendulumItem(QGraphicsItem* parent)
     \item Receives all events for an item
     \item Similar to \iClsFn{QWidget}{event}
 
-    \end{itemize} 
+    \end{itemize}
 \item Specific typed event handlers:
     \begin{itemize}
     \item \texttt{keyPressEvent(QKeyEvent*)}
@@ -272,7 +295,7 @@ void MyView::keyPressEvent(QKeyEvent *event) {
 \begin{slide}{1738}
 \frametitle{Lab: Corner drag button}
 \begin{itemize}
-\item Define a \texttt{QGraphicsItem} which can display an image, and has at least 1 child item, that is a "corner drag" button, permitting the user to click and drag the button, to resize or rotate the image. 
+\item Define a \texttt{QGraphicsItem} which can display an image, and has at least 1 child item, that is a "corner drag" button, permitting the user to click and drag the button, to resize or rotate the image.
 \item Start with the handout provided in \texttt{graphicsview/lab-cornerdrag}
 \item Further details are in the \texttt{readme.txt} in the same directory.
 \end{itemize}

@@ -1,7 +1,31 @@
 
 #include <QtWidgets>
 
-/** An example that uses QGraphicsGridLayout to lay out its items in a scene */
+/** A modified concreteitems example that uses QGraphicsGridLayout 
+    to lay out its items in a scene */
+
+class DrawingView : public QGraphicsView {
+public:
+
+    DrawingView(QWidget* parent=0) : QGraphicsView(parent) {
+        setGeometry(200,100,600,400);
+        setWindowTitle("Concrete Items");
+        setRenderHint(QPainter::Antialiasing);
+        setRenderHint(QPainter::HighQualityAntialiasing);
+        setRenderHint(QPainter::TextAntialiasing);
+        setRenderHint(QPainter::SmoothPixmapTransform);
+    }
+
+    void keyPressEvent ( QKeyEvent * e ) {
+        if (e->key() == Qt::Key_Escape)
+            qApp->exit();
+    }
+
+    QSize sizeHint() const {
+        return QSize(640, 490);
+    }
+
+};
 
 class LayoutScene : public QGraphicsScene {
 public:
@@ -15,13 +39,12 @@ public:
     }
 
     void putInTheRightPlace(QGraphicsItem* item) {
-
         QGraphicsWidget *litem = new QGraphicsWidget(gwidget);
         QRectF r = item->boundingRect();
-        litem->setMinimumSize(r.width(), r.height() + 50);
+        litem->setMinimumSize(r.width(), r.height() + 40);
         item->setParentItem(litem);
         gridLayout->addItem(litem, row, column);
-
+        nextPosition();
     }
 
     QGraphicsRectItem* createBox() {
@@ -30,7 +53,6 @@ public:
         putInTheRightPlace(rect);
         return rect;
     }
-
 
     void addBoxedItem(QGraphicsItem* item, QString title) {
         QGraphicsRectItem* box = createBox();
@@ -48,9 +70,6 @@ public:
         textItem->setTextWidth(WIDTH);
         textItem->setParentItem(box);
         textItem->moveBy(0, 105);
-
-
-        nextPosition();
     }
 
     void addBoxedShape(QAbstractGraphicsShapeItem *item, QString title) {
@@ -73,29 +92,6 @@ private:
     enum {COLS=4};
     enum {WIDTH=100, HEIGHT=150};
     int row, column;
-
-};
-
-class DrawingView : public QGraphicsView {
-public:
-
-    DrawingView(QWidget* parent=0) : QGraphicsView(parent) {
-        setGeometry(200,100,600,400);
-        setWindowTitle("Concrete Items");
-        setRenderHint(QPainter::Antialiasing);
-        setRenderHint(QPainter::HighQualityAntialiasing);
-        setRenderHint(QPainter::TextAntialiasing);
-        setRenderHint(QPainter::SmoothPixmapTransform);
-    }
-
-    void keyPressEvent ( QKeyEvent * e ) {
-        if (e->key() == Qt::Key_Escape)
-            qApp->exit();
-    }
-
-    QSize sizeHint() const {
-        return QSize(640, 490);
-    }
 
 };
 
