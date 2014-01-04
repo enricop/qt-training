@@ -8,13 +8,14 @@ TODO:
       data-driven tests
       simulating GUI events
       qt modeltest, now a QtTest case included in the qt 5.2 src under qtbase/tests/auto/other/modeltest 
-  qprocess, inter process communication, sockets, Network Programming
+  ipc: qprocess, shared memory, Network Programming
+    need new labs for qprocess and qnetworkaccessmanager
   Drag-n-Drop
     there is modelview and graphicsview section on dnd - but we need slides on the basics, incl. mimetypes and mimedata and a drop on a widget example. 
   Multimedia - audio, video, playlists
   Painting: QImage vs QPixmap vs QIcon
     QStyle::standardIcon() (style) vs QIcon::fromTheme() (look and feel)
-  threads:
+  Multithreading:
     Slide 20: simpler subclassing example needed that does not use mutex or waitcondition
     Slide 22: "Event driven objects may only be used in a single thread" this slide needs to be clarified
     Move QRunnable slides until after we talk about QThread?

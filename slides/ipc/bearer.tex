@@ -1,0 +1,84 @@
+\subsection{Bearer Management API}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1653}
+\frametitle{Bearer Management}
+Manages access to the network
+\begin{itemize}
+\item Starting and stopping interfaces
+\item Querying information about interfaces
+\item Setting priorities for different access methods
+\item Track connectivity state and status
+\item Transparent transition (roaming) between interfaces
+\item Desktop and mobile systems supported
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1652}
+  \frametitle{Bearer Management API}
+  \centeredImage{ipc/images/bearermonitor-screenshot}
+  \begin{itemize}
+    \item[] \qtdemo{examples/network/bearermonitor}
+  \end{itemize}
+\end{slide}
+
+
+% ----------------------------------------------------------------------
+\begin{slide}{1651}
+\frametitle{What does it mean to roam?}
+\begin{itemize}
+\item Switching to another network configuration in response to an event
+    \begin{itemize}
+    \item Use ethernet when available.
+    \item Switch to WIFI when it is not.
+    \item Switch to cellular when both are unavailable
+    \end{itemize}
+\item Roaming requires some capabilities of configuration manager:
+    \begin{itemize}
+    \item CanStartAndStopInterfaces, SystemSessionSupport,  
+    \item ApplicationLevelRoaming, ForcedRoaming
+    \item DirectConnectionRouting
+    \end{itemize}
+\item API can also be used read-only to get configuration info
+\end{itemize} 
+\end{slide}
+
+% ----------------------------------------------------------------------
+\begin{slide}{1650} 
+\frametitle{Access Points and Network Interfaces}
+\label{QNetworkInterface}
+\label{QNetworkConfiguration}
+An access point maps to a network interface
+\begin{itemize}
+\item Multiple access points can map to the same network interface
+\end{itemize}
+\textbf{QNetworkConfiguration}
+\begin{itemize}
+\item Provides state information about access point configurations
+\item Groups common access point service types
+\end{itemize}
+\textbf{QNetworkInterface}
+\begin{itemize}
+\item Can query for hardware address, capabilities, and human readable name. 
+\end{itemize}
+\end{slide}
+
+
+\begin{slide}
+\frametitle{Network Configurations and Sessions}
+
+\textbf{QNetworkConfigurationManager}
+\begin{itemize}
+\item Manages all network configurations
+\item \texttt{defaultConfiguration()} - identifies default
+\item Emits signals when configurations are added/removed/changed
+\item Keeps track of network capabilities
+\end{itemize}
+\textbf{QNetworkSession}
+\begin{itemize}
+\item Enables and activates access points
+\item Allows sharing of access points between applications
+\item Provides access to \texttt{QNetworkInterface}
+\end{itemize}
+\end{slide}

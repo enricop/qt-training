@@ -1,0 +1,162 @@
+\subsection{Shared Memory with Qt}\label{sharedMemory}
+
+%----------------------------------------------------------------------
+\begin{slide}{0255}
+\frametitle{Shared Memory Basics} \label{sharedmemory}
+\begin{itemize}
+  \item \iConcept{Shared memory} is a feature offered by modern OS'es for:
+  \begin{itemize}
+  \item \iConcept{Interprocess communication}, by allowing \iConcept{multiple processes} to share data efficiently.
+  \item Conserving memory, by allowing big chunks of data to be shared between processes while only keeping one copy in memory.
+  \end{itemize}
+  \end{itemize}
+\centeredImage{ipc/images/shared-memory-overview}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0256}
+\frametitle{Shared Memory with Qt}
+\xConcept{SharedMemory}
+\begin{itemize}
+  \item Qt provides access to OS-level shared memory functionality since version 4.4.
+  \item The central class is \iCls{QSharedMemory}.
+  \item Besides managing the shared memory itself, \iCls{QSharedMemory} provides synchronisation through an internal \iCls{QSystemSemaphore}.
+  \item The layer provided by Qt is fairly thin, so the programmer needs to be aware of the different ways shared memory works on different OS'es.
+  \item Think of \iCls{QSharedMemory} as a way to access shared memory, not as shared memory itself.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0257}
+\frametitle{Shared Memory with Qt}
+\xConcept{SharedMemory}
+\begin{itemize}
+  \item A shared memory segment is identified by a QString key. 
+  \item Set in the constructor or via \iClsFn{QSharedMemory}{setKey}.
+  \item An attempt to \hClsFn{QSharedMemory}{create} a shm segment that
+    already exists, or to \hClsFn{QSharedMemory}{attach} to a segment that
+    does not exist will result in an error.
+  \item Error in this context means that the methods in question return \texttt{false}.
+  \item The only way to check if a memory segment with a given key exists is to try to attach to it.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0258}
+\frametitle{OS differences, Linux/UNIX}
+\xConcept{SharedMemory}
+  \begin{itemize}
+  \item The shared memory segment is not owned by any process in particular, so even if all processes using a shm segment are destroyed, the shm segment memory is still allocated.
+  \item \iCls{QSharedMemory} takes ownership of the shared memory segment, and the last \iCls{QSharedMemory} instance attached to a shm segment will destroy it in its destructor.
+  \item This of course still doesn't prevent the process from leaking shm segments in case of a crash.
+  \item Use the command line tool \texttt{ipcs} to examine and destroy shm segments.
+  \end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0259}
+\frametitle{OS differences, Windows}
+\xConcept{SharedMemory}
+  \begin{itemize}
+  \item On Windows, a shared memory segment is owned collectively by all processes attached to it. The operating system deletes a segment when the last process attached to it exits.
+  \item \iCls{QSharedMemory} does not destroy anything in its destructor.
+  \item So, no resources can be leaked, but on the other hand, it is not possible to ``keep shared memory around'' in applications.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0261}
+\frametitle{Usage}
+\xConcept{SharedMemory}
+  \begin{itemize}
+  \item Creation:
+  \begin{center}
+\xExample{SharedMemory!create}
+\tiny
+\begin{alltt}
+QSharedMemory shm;
+shm.setKey("MyShm");
+if( !shm.create( 4242 /*bytes*/,
+                 QSharedMemory::ReadWrite ) ) \{
+    /* failure, error details available in
+       shm.error()/shm.errorString() */
+\}
+/* create() also attaches to memory, so we can
+use it right away */
+shm.lock();
+void* data = shm.data();
+/* ... do interesting stuff with data... */
+shm.unlock();
+\end{alltt}
+  \end{center}
+\item Destruction:
+  \begin{center}
+\xExample{SharedMemory!destroy}
+\tiny
+\begin{alltt}
+/* Detach from memory, if we're the last process to do so,
+the memory is released */
+shm.detach();
+\end{alltt}
+  \end{center}
+\item The \iCls{QSharedMemory} instance should be kept around as long as we want to keep the memory.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0262}
+\frametitle{Usage}
+\xConcept{SharedMemory}
+  \begin{itemize}
+  \item Attach to existing shared memory segment:
+  \begin{center}
+\xExample{SharedMemory!attach}
+\tiny
+\begin{alltt}
+QSharedMemory shm;
+shm.setKey("MyShm");
+if( !shm.attach( QSharedMemory::ReadWrite ) ) \{
+    /* failure, error details available in
+       shm.error()/shm.errorString() */
+\}
+shm.lock();
+void* data = shm.data();
+/* ... do interesting stuff with data... */
+shm.unlock();
+shm.detach();
+\end{alltt}
+  \end{center}
+  \end{itemize}
+\demo{inter-process-communication/ex-renderer}
+\demo{inter-process-communication/ex-viewer}\\
+(run one renderer and as many viewers as you like)
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0263}
+\frametitle{QSystemSemaphore}
+\begin{itemize}
+\item When sharing memory, it may be needed to lock the memory while doing
+  an operation on it.
+\item For that purpose the class \iCls{QSystemSemaphore} is a cross-process
+  semaphore.
+\item The \iCls{QSystemSemaphore} instance is created with a key that all
+  instances use to share the semaphore. Additionally, the available
+  semaphores can be specified as the second argument.
+\item \iClsFn{QSystemSemaphore}{acquire} and
+  \iClsFn{QSystemSemaphore}{release} are the main operations.
+\end{itemize}
+\end{slide}
+
+
+%----------------------------------------------------------------------
+\begin{slide}{0264}
+\frametitle{QSystemSemaphore}
+\begin{itemize}
+\item Windows owns the semaphore, Unix does not!
+\item On Windows, the first process to access the semaphore (e.g. the server) should
+  specify \iClsEnum{QSystemSemaphore}{Create}, as the optional argument to
+  the constructor, in order to clean up stale semaphores.
+\end{itemize}
+\end{slide}

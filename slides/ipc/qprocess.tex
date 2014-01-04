@@ -1,0 +1,166 @@
+\subsection{Running Processes}\label{qprocess}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0591}
+\frametitle{QProcess}
+\begin{itemize}
+\item \iCls{QProcess} executes external processes asynchronously
+\item Also offers a synchronous API
+\item Signals are emitted when
+\begin{itemize}
+\item data arrives on stdout
+\item data arrives on stderr
+\item process finishes
+\item process changes state
+\end{itemize}
+\item \hClsFn{QProcess}{start} to start it
+\item A \iCls{QProcess} can be used to start same process several times.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0592}
+\frametitle{Setting up the Process Call}
+\begin{itemize}
+\item The command to invoke as well as the arguments are specified in
+  the \hClsFn{QProcess}{start} call.
+\item Alternatively, you can specify the arguments (but not the
+  command) using the \texttt{<<} streaming operator.
+\item No escaping is required for the arguments.
+\item Set environment variables with \hClsFn{QProcess}{setEnvironment}.
+\item \hClsFn{QProcess}{setWorkingDirectory} to change working dir.
+\item If not specified, the environment and working dir of your process is used.
+
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0593}
+\frametitle{Process states}
+A process passes the following states during its lifetime; the current
+state can be queried with \hClsFn{QProcess}{state}:
+
+\centeredImageDoubleWidth{ipc/images/qprocessStates}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0594}
+\frametitle{Process Input}
+\xConcept{QProcess!Input}
+\begin{itemize}
+\item \iCls{QProcess} inherits \iCls{QIODevice}.
+\item \iCls{QTextStream} and \iCls{QDataStream} can therefore be used
+  (\iCls{QDataStream} is really only useful if the child process uses
+  \iCls{QDataStream} for its output as well.)
+\item You can also use \hClsFn{QIODevice}{write}, \hClsFn{QIODevice}{read},
+  \hClsFn{QIODevice}{readLine}, and \hClsFn{QIODevice}{getChar} directly.
+\item In order to provide \emph{input} to the external process, just
+  \hClsFn{QIODevice}{write} to it. (Writing \emph{from} the current process means  providing \emph{input} to the child process.)
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0595}
+\frametitle{Process Output}
+\xConcept{QProcess!Output}
+\begin{itemize}
+\item The \emph{output} of the external process is the \emph{input} to
+  the current process and is therefore \emph{read}, using
+  \hClsFn{QIODevice}{read}, \hClsFn{QIODevice}{readLine}, or similar methods.
+\item Since the process output can be on either of the two channels
+  \emph{stdout} and \emph{stderr}, you need to select the one you want
+  using \hClsFn{QProcess}{setReadChannel}.
+\item Alternatively, merge the output with\\
+  \hClsFnPar{QProcess}{setReadChannelMode}{QProcess::MergedChannels}\\
+  (careful that you are not mixing up information then!).
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0596}
+\frametitle{Process Output}
+\begin{itemize}
+\item You can also read everything from one channel with
+\hClsFn{QProcess}{readAllStandardOutput} and \hClsFn{QProcess}{readAllStandardError}.
+\item The signals \hClsFn{QProcess}{readyReadStandardOutput} and
+\hClsFn{QProcess}{readyReadStandardError} signal availability of data to be read.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0597}
+\frametitle{Process Output, Example}
+Example: Reading all of standard output as a string after process
+  \begin{itemize}
+  \item Example: Reading all of standard output as a string after process
+termination:
+\begin{alltt}
+QProcess process;
+process.start( "command"  );
+process.\hClsFn{QProcess}{waitForFinished};
+\iCls{QTextStream} stream( \&process );
+QString output = stream.readAll();
+\end{alltt}
+\demo{inter-process-communication/ex-findTool}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0598}
+\frametitle{Controlling the Process}
+\xConcept{QProcess!Controlling the process}
+\begin{itemize}
+\item The signal \hClsFnPar{QPorcess}{finished}{int} is emitted when the program
+terminates, passing the exit code. \hClsFn{QProcess}{exitCode} also provides
+the exit code.
+\item You can ask the external process to terminate with
+\hClsFn{QProcess}{terminate}, \hClsFn{QProcess}{kill} does the same, but more
+forceful, without leaving the process a chance to resist.
+\item \hClsFn{QProcess}{error} tells you which error occurred last (only useful
+if \hClsFn{QProcess}{state} returns \texttt{QProcess::NotRunning}).
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0599}
+\frametitle{Synchronous Process Invocation}
+\xConcept{QProcess!Synchronous invocation}
+\begin{itemize}
+\item \iCls{QProcess} has blocking methods to wait for a certain
+event in the lifecycle of a process:
+\begin{itemize}
+        \item \hClsFn[\textbf]{QProcess}{waitForStarted} returns when the
+        \hClsFn{QProcess}{started} signal has been emitted, i.e., the process has
+                started successfully (or has failed to start).
+        \item \hClsFn[\textbf]{QProcess}{waitForReadyRead} returns when data is
+                available for reading on the current channel (careful!).
+        \item \hClsFn[\textbf]{QProcess}{waitForBytesWritten} returns when certain
+                (unspecified) amount of data has been written.
+        \item \hClsFn[\textbf]{QProcess}{waitForFinished} returns when the
+                \hClsFn{QProcess}{finished} signal has been emitted, i.e., when the process has
+                finished its execution.
+\end{itemize}
+\item Remember that calling any of these methods in the main thread
+will freeze your user interface; use multithreading.
+\end{itemize}
+\end{slide}
+
+\begin{slide}[fragile]{0600}
+\frametitle{Simplified Synchronous Process Invocation}
+  \begin{itemize}
+\item If you are not interested in processing the output of the
+external process, nor in supplying input to it, use the static
+convenience method \iClsFn{QProcess}{execute} that starts the
+process, waits for its termination, and returns:
+\begin{alltt}
+\iCls{QStringList} arguments;
+arguments << "Argument1" << "Argument2";
+\iClsFnPar{QProcess}{execute}{"do_it_now", arguments};
+// won't get here until do_it_now terminates
+\end{alltt}
+\item Use \iClsFn{QProcess}{startDetached} instead if you want the child
+process to detach from the current one. This method will not wait for
+termination, and the child process will not be terminated
+when the current process terminates (``fire and forget'').
+  \end{itemize}
+\end{slide}

@@ -1,0 +1,74 @@
+\subsection{QNetworkAccessManager Request / Reply}
+
+%----------------------------------------------------------------------
+\begin{slide}{0510}
+\frametitle{QNetworkAccessManager} \label{QNetworkAccess}
+\begin{itemize}
+\item New in Qt 4.4 is a set of classes for handling http and ftp requests.
+\item The core class is \iCls{QNetworkAccessManager}, which offers:\\
+  \begin{itemize}
+  \item \hClsFn{QNetworkAccessManager}{get} - download.
+  \item \hClsFn{QNetworkAccessManager}{put} - upload.
+  \item \hClsFn{QNetworkAccessManager}{head} - fetch the header.
+  \item \hClsFn{QNetworkAccessManager}{post} - post a HTTP(S) request.
+\end{itemize}
+\item In addition \hClsFn{QNetworkAccessManager}{setProxy} and
+  \hClsFn{QNetworkAccessManager}{setCookieJar} configure proxies and cookie
+  handling. % FIXME(till) where does one get the cookiejar from?
+\end{itemize}
+\centeredImage{ipc/images/qnetworkaccessmanager}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0511}
+\frametitle{QNetworkRequest}
+\begin{itemize}
+\item The argument to the methods of \iCls{QNetworkAccessManager} are
+  instances of \iCls{QNetworkRequest}.
+\item In the simplest setup, \iCls{QNetworkRequest} is created with a
+  \iCls{QUrl} as argument.
+\item \iConcept{SSL} is configured using
+  \hClsFn{QNetworkRequest}{setSSLConfiguration}.
+\item Raw headers may be configured using:
+  \begin{itemize}
+  \item \hClsFnPar{QNetworkRequest}{setHeader}{KnownHeaders headerName,\\
+      \hspace{12ex}QVariant headerValue}
+  \item \hClsFnPar{QNetworkRequest}{setRawHeader}{QByteArray headerName,\\
+      \hspace{16ex}QByteArray headerValue}
+  \end{itemize}
+\end{itemize}
+\centeredImage{ipc/images/qnetworkrequest}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0512}
+\frametitle{QNetworkReply}
+\begin{itemize}
+\item The methods of \iCls{QNetworkAccessManager} are all asynchronous.
+\item The result of the calls are instances of a \iCls{QNetworkReply}.
+\item The signals \iClsFn{QNetworkReply}{finished} and
+  \iClsFnPar{QNetworkAccessManager}{finished}{QNetworkReply*} tells you
+  when the operation is done.
+\item The signal \hClsFnPar{QNetworkReply}{downloadProgress}{qint64,
+    qint64} respectively \hClsFn{QNetworkReply}{uploadProgress} informs
+  you about progress.
+\item Errors are signaled with
+  \hClsFnPar{QNetworkReply}{error}{NetworkError} - a printable string may
+  be obtained from \hClsFn{QIODevice}{errorString}
+\end{itemize}
+\centeredImage{ipc/images/qnetworkreply}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0513}
+\frametitle{QNetworkReply}
+\begin{itemize}
+\item \iCls{QNetworkReply} is a subclass of \iCls{QIODevice} which means
+  you may use it in similar ways to a \iCls{QFile}.
+\item \pleaseNote: It is your responsibility to delete the
+  \iCls{QNetworkReply} pointer. (the template shared\_ptr from \iNs{std::tr1} or
+  \iNs{boost} may be worth considering)
+\end{itemize}
+\demo{network-programming/ex-multi-download}
+\centeredImage{ipc/images/qnetworkreply}
+\end{slide}

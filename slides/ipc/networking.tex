@@ -1,0 +1,383 @@
+\subsection{Network Programming}
+
+%----------------------------------------------------------------------
+\begin{slide}{1744}
+\frametitle{Network Programming Overview}
+
+\begin{itemize}
+
+\item \textbf{High level access:} Network operations to handle data.
+\item \textbf{Bearer Management:} Network interfaces, online/offline status changes, roaming
+\item \textbf{Sockets:} Low level network programming.
+\item \textbf{Secure communication:} Using SSL and certificates.
+\item \textbf{Name lookup:} Using DNS to look up host names.
+\item \textbf{Proxying:} Networking via a proxy.
+\end{itemize}
+
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0744}
+\frametitle{Networking Classes} \label{network_programming}
+\xConcept{Network programming}
+  \begin{itemize}
+  \item Qt has a number of network programming tools:
+    \begin{itemize}
+          \item Deprecated APIs: \iCls{QHttp} and \iCls{QFtp}
+          \item \contentHyperlink{\iCls{QNetworkAccessManager},
+        \iCls{QNetworkRequest}, and \iCls{QNetworkReply}}{QNetworkAccess}.
+        \item \contentHyperlink{\iCls{QNetworkConfiguration} - querying network configuration}{QNetworkConfiguration}. 
+        
+        \item \contentHyperlink{TCP and
+        UDP sockets by means of \iCls{QTcpSocket}, \iCls{QTcpServer},
+        \iCls{QSslSocket}, and \iCls{QUdpSocket}}{tcp-sockets}.
+    \item \contentHyperlink{\iCls{QHostInfo} - resolving host names}{QHostInfo}.
+    \item \contentHyperlink{\iCls{QNetworkProxy}}{QNetworkProxy}.
+    \end{itemize}
+    \item In order to use the network support, add \verb!QT += network! to
+      your QMake files.
+  \end{itemize}
+\end{slide}
+
+\input{ipc/qnam}
+\input{ipc/bearer}
+
+\subsection{TCP/UDP Sockets}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0745}
+\frametitle{\iConcept{TCP Sockets}}\label{tcp-sockets}
+  \begin{itemize}
+  \item TCP connections of protocols other than HTTP and FTP can
+        easily be implemented using \iCls{QTcpSocket} (or
+        \iCls{QTcpServer}), even for the HTTP and FTP.
+  \item UDP connections are implemented using \iCls{QUdpSocket}.
+  \item TCP and UDP connections can be written in a non-blocking and a
+        blocking fashion.
+  \item \iCls{QTcpSocket} and \iCls{QUdpSocket} are (indirect)
+        subclasses of \iCls{QIODevice}. You can therefore read and
+        write data using \iCls{QTextStream} and \iCls{QDataStream}
+        (and the raw byte-oriented methods, of course).
+  \end{itemize}
+\end{slide}
+%----------------------------------------------------------------------
+\begin{slide}{0746}
+\frametitle{\iConcept{TCP Client} (Non-Blocking)}
+  \begin{itemize}
+  \item Create an instance of \iCls{QTcpSocket}.
+  \item Call \iClsFn{QAbstractSocket}{connectToHost}
+  \item Create a stream from the socket, and write data to the stream.
+  \item The signal \hClsFn{QTcpSocket}{readyRead} is emitted whenever data is
+    ready to be read on the socket.
+  \end{itemize}
+  \demo{network-programming/ex-sockets}\xExample{TCP client}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0747}
+\frametitle{TCP Client (Blocking)}
+  \begin{itemize}
+        \item The socket classes also have a blocking mode. In this
+        case, a local event loop is provided, you do not need a global
+        one.
+        \item Do not use the blocking mode from the GUI thread,
+        otherwise your UI will freeze. Use it from a separate thread
+          (see the \emph{Multithreading} section on
+          \pageHyperlink{multithreading} for more details),
+        or in non-GUI applications (e.g., command-line tools like
+        \textit{wget}).
+        \item For a blocking connect, call
+         \iClsFn{QAbstractSocket}{waitForConnected} \emph{after} the
+        call to \hClsFn{QAbstractSocket}{connectToHost}.
+        \item Then call either \hClsFn{QIODevice}{waitForReadyRead} or
+        \hClsFn{QIODevice}{waitForBytesWritten}, and read or write as usual.
+        \item Call \hClsFn{QAbstractSocket}{disconnectFromHost} and
+        \hClsFn{QAbstractSocket}{waitForDisconnected} at the end.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0748}
+\frametitle{\iConcept{TCP Server} (Non-Blocking)}
+  \begin{itemize}
+  \item Non-blocking TCP servers need an event loop (like non-blocking
+        TCP clients).
+  \item Create an object of class \iCls{QTcpServer}.
+  \item Call \hClsFn{QTcpServer}{listen} on that object. You can either specify
+        the port to listen to or let \iCls{QTcpServer} pick a free
+        one. \hClsFn{QTcpServer}{serverPort} will tell you the one it is using.
+  \item When a connection is made, the \hClsFn{QTcpServer}{newConnection} signal
+        is emitted. Upon this, call \hClsFn{QTcpServer}{nextPendingConnection}
+        to get a \iCls{QTcpSocket} that is already connected to the
+        client, and that you can then use for communication.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0749}
+\frametitle{TCP Server (Blocking)}
+  \begin{itemize}
+  \item Like blocking TCP clients, blocking TCP servers should not be
+        run in the GUI thread, as that would freeze the UI. Use a
+        separate thread or use this in command-line tools.
+  \item Start like in the previous example, but call
+        \hClsFn{QTcpServer}{waitForNewConnection} after the \hClsFn{QTcpServer}{listen}
+        call. When this method returns, you can call
+        \hClsFn{QTcpServer}{nextPendingConnection} and proceed as with the
+        non-blocking server. 
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0750}
+\frametitle{Local TCP Servers}
+\begin{itemize}
+\item The class \iCls{QLocalSocket} and \iCls{QLocalServer} are similar to
+  \iCls{QTcpSocket} respectively \iCls{QTcpServer}, with the exception
+  that they are accessible locally only.
+\item On Windows, they are implemented using a \iConcept{named pipe}
+\item On Unix (incl. MacOSX), they are implemented using a \iCls{local domain socket}
+\item Both classes allow blocking and non-blocking behavior.
+\item \iClsFn{QTcpSocket}{connectToHost} is replaced with
+  \iClsFnPar{QLocalSocket}{connectToServer}{QString serviceName, \ldots}
+\item \iClsFn{QLocalServer}{listen} takes a serviceName instead of a
+  host address, too.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0751}
+\frametitle{\iConcept{UDP Connection}}
+\xConcept{UDP socket}
+  \begin{itemize}
+  \item Create a \iCls{QUdpSocket} object and send data with
+        \hClsFn{QUdpSocket}{writeDatagram}. You need to specify the destination host and
+        port each time.
+  \item You can use \hClsFn{QAbstractSocket}{connectToHost} and then just use
+        \hClsFn{QIODevice}{read} and \hClsFn{QIODevice}{write}, but this is still not
+        connection-oriented, it just sets the values for host and port
+        for the subsequent calls.
+  \item If you want to read data as well, you need to call
+        \hClsFn{QUdpSocket}{bind}, specifying the port and host address. Like
+        \iClsFn{QTcpServer}{listen}, \iClsFn{QUdpSocket}{bind} can pick a
+        free port for you.
+  \item The signal \hClsFn{QIODevice}{readyRead} is emitted when data is
+        available for reading.
+  \end{itemize}
+\end{slide}
+
+\subsection{SSL Sockets}
+%----------------------------------------------------------------------
+\begin{slide}{0752}
+\frametitle{\iConcept{Secure Network Programming} using QSslSocket}
+\begin{itemize}
+\item The class \iCls{QSslSocket} supports secure network access using
+  either the \iConcept{SSLv3} protocol  or the \iConcept{TLSv1} protocol.
+\item \iCls{QSslSocket} inherits from \iCls{QTcpSocket}, and, after setup,
+  the communication is just like with a \iCls{QTcpSocket}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0753}
+\frametitle{QSslSocket clients}
+\begin{itemize}
+\item The common way for clients is to call
+  \iClsFn{QSslSocket}{connectToHostEncrypted}, which is similar to
+  \iClsFn{QTcpSocket}{connectToHost}, except that it will set up a secure
+  connection. 
+\item Next clients should either call \hClsFn{QSslSocket}{waitForEncrypted} or
+  connect to the \hClsFn{QSslSocket}{encrypted} signal.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0754}
+\frametitle{QSslSocket servers}
+\begin{itemize}
+\item The easiest way to implement a \iConcept{SSL server} is to inherit
+  from \iCls{QTcpServer}, and override
+  \hClsFnPar{QTcpServer}{incomingConnection}{int socketDescriptor}.
+\item A \iCls{QSslSocket} is then constructed based on the socket
+  descriptor.
+\item Once this is set up, handshaking is started using
+  \hClsFn{QSslSocket}{startServerEncryption}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0755}
+\frametitle{QSslSocket servers}
+\begin{verbatim}
+void SslServer::incomingConnection(int socketDescriptor)
+{
+  QSslSocket *serverSocket = new QSslSocket;
+  if (serverSocket->setSocketDescriptor(socketDescriptor)) 
+  {
+    connect(serverSocket, SIGNAL(encrypted()), 
+            this, SLOT(ready()));
+    serverSocket->startServerEncryption();
+  }
+}
+\end{verbatim}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0756}
+\frametitle{Certificates, keys, and ciphers}
+\begin{itemize}
+\item Ciphers, the socket's local certificate, and the private keys must be set
+  before the handshake starts.
+\item Ciphers are set using \hClsFn{QSslSocket}{setCiphers} and
+  \hClsFn{QSslSocket}{setDefaultCiphers}.
+\item The private key and certificate are set using
+  \hClsFn{QSslSocket}{setPrivateKey} and
+  \hClsFn{QSslSocket}{setLocalCertificate}
+\item The CA certificate database is manipulated with
+  \hClsFn{QSslSocket}{addCaCertificate},
+  \hClsFn{QSslSocket}{addCaCertificates},
+  \hClsFn{QSslSocket}{setCaCertificates},
+  \hClsFn{QSslSocket}{addDefaultCaCertificate},
+  \hClsFn{QSslSocket}{addDefaultCaCertificates}, and
+  \hClsFn{QSslSocket}{setDefaultCaCertificates}.
+\item \qtdemo{examples/network/securesocketclient}
+  \xExample{QSslSocket}
+\end{itemize}
+\end{slide}
+
+
+\subsection{DNS and Proxies}
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0757}
+\frametitle{\iConcept{Resolving Hostnames}}\label{QHostInfo}
+  \begin{itemize}
+    \item \iCls{QHostInfo} serves for resolving host names.
+    \item \iCls{QHostInfo} uses the underlying
+        \hClsFn{QHostInfo}{gethostbyname} call and therefore supports all
+        lookup schemes that the operating system supports (this could
+        e.g. be NIS).
+    \item In order to do a blocking lookup, call the static method
+        \iClsFn{QHostInfo}{fromName} and use the
+        \hClsFn{QHostInfo}{addresses} method to get all addresses for the named
+        host:
+\begin{alltt}\small
+QHostInfo info = QHostInfo::fromName( "www.trolltech.com" );
+QList<QHostAddress> addresses = info.addresses();
+if( addresses.count() > 0 )
+  qDebug() << "First address: " 
+           << addresses.first().toString();
+\end{alltt}
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0758}
+\frametitle{Resolving Hostnames}
+  \begin{itemize}
+     \item Do not do this in the GUI thread, or your UI will
+        freeze.
+     \item For a non-blocking lookup, call
+        \iClsFn{QHostInfo}{lookupHost}, providing the receiver object and
+        slot to be called when the lookup is finished (see the example
+        on the next slide).
+    \item You can abort a host lookup using \hClsFn{QHostInfo}{abortHostLookup}.
+  \end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0759}
+\frametitle{Resolving Hostnames: Example}
+\begin{lstlisting}
+MyClass::startLookup()
+{
+    QHostInfo::lookupHost( "qt.nokia.com", this,
+            SLOT( slotLookupDone( const QHostInfo& ) ) );
+}
+
+MyClass::slotLookupDone( const QHostInfo& info )
+{
+    QList<QHostAddress> addresses = info.addresses();
+    if( addresses.count() > 0 )
+        qDebug() << "First address: "
+                 << addresses.first().toString();
+}
+\end{lstlisting}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{0761}
+\frametitle{\iConcept{Proxies}}\label{QNetworkProxy}
+Proxies can be set up with the class \iCls{QNetworkProxy}.
+\begin{itemize}
+\item \iCls{QNetworkProxy} is used to identify HTTP, FTP and SOCKS5 proxies.
+\item HTTP and FTP proxies can perform caching.
+\end{itemize}
+To use a proxy:
+\begin{itemize}
+\item Create a \iCls{QNetworkProxy} object
+and populate it with hostname, port, etc.
+\item Assign the proxy globally with the static method
+\iClsFn{QNetworkProxy}{setApplicationProxy} or...
+\item ...just on one socket using \hClsFn{QAbstractSocket}{setProxy}.
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{45761}
+\frametitle{Customizing Proxies}
+Proxy factories are used to create policies for proxy use.
+\begin{itemize}
+  \item \iCls{QNetworkProxyFactory} supplies proxies based on queries for
+  specific proxy types.
+  \item Queries are encoded in \iCls{QNetworkProxyQuery} objects.
+  \item \hClsFn{QNetworkProxyFactory}{proxyForQuery} is used to query the factory
+  directly. 
+  \item To change the behavior, reimplement
+  \hClsFn{QNetworkProxyFactory}{queryProxy}.
+  \item To implement an application-wide policy with the factory, call
+  \hClsFn{QNetworkProxyFactory}{setApplicationProxyFactory}.
+  \begin{itemize}
+    \item This overrides any proxy set with
+          \iClsFn{QNetworkProxy}{setApplicationProxy}.
+    \item Querying \iClsFn{QNetworkProxy}{applicationProxy} causes the
+          factory to be queried.
+  \end{itemize}
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}{45762}
+\frametitle{Proxy Queries}
+Queries enable proxies to be selected based on key criteria:
+\begin{itemize}
+  \item The purpose of the proxy: TCP, UDP, TCP server, URL request
+  \item Local port, remote host and port
+  \item The protocol in use: such as HTTP or FTP
+  \item The URL being requested
+\end{itemize}
+\end{slide}
+
+%----------------------------------------------------------------------
+\begin{slide}[fragile]{0762}
+\frametitle{Error Handling}
+  \begin{itemize}
+      \item \iCls{QHttp} and \iCls{QFtp} indicate errors by means of a
+        boolean parameter in the \hClsFn{QFtp}{done}\xClsFn{QHttp}{done},
+        \iClsFn{QHttp}{requestFinished}, and \iClsFn{QFtp}{commandFinished}
+        signals.
+
+  \item \iCls{QTcpSocket} and \iCls{QUdpSocket} indicate errors
+        by means of the \hClsFn{QAbstractSocket}{error} signal.
+    \item \iCls{QTcpServer} and \iCls{QHostInfo} have no notification mechanism for
+        errors.
+    \item In any of these classes, you can then request an error code
+        with \hClsFn{QAbstractSocket}{error} (\hClsFn{QTcpServer}{serverError} for
+        \iCls{QTcpServer}).
+    \item \texttt{errorString()} provides (for all
+        classes) a human-readable error description.
+      \item \iCls{QSslSocket} emits an \hClsFn{QSslSocket}{sslErrors}
+        signal. This can be ignored using
+        \hClsFn{QSslSocket}{ignoreSslErrors}. If not ignored, the
+        connection is torn down.
+  \end{itemize}
+\end{slide}
+
