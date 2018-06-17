@@ -1,6 +1,5 @@
 Welcome to the opensource repository for qt-training material !
 
-================================
 Building the Presentations (PDF)
 ================================
 
@@ -39,7 +38,6 @@ labs and solutions used during the training.
 
 Please make yourself comfortable with the PDF and addon material before giving a training. Just knowing Qt will not be enough.
 
-====================
 Contributing Changes
 ====================
 
@@ -49,7 +47,6 @@ You can build it from the 'slides' subfolder:
 cd slides
 xelatex contributors-guide/contributors-guide.tex
 
-============
 Legal Notice
 ============
 
